@@ -2,51 +2,61 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, Database, Server, Monitor, X } from "lucide-react";
+import {
+  Github,
+  ExternalLink,
+  Database,
+  Server,
+  Monitor,
+  X,
+} from "lucide-react";
 
 const projectsData = [
   {
     id: "arcade",
     title: "ARCADE",
     subtitle: "Academic Resource & Career Assist Digital Environment",
-    description: "A centralized digital platform integrating academic materials, roadmap tracking, and career guidance for university students.",
+    description:
+      "A centralized digital platform integrating academic materials, roadmap tracking, and career guidance for university students.",
     tech: ["React", "Node.js", "Prisma", "MySQL"],
     arch: [
       { name: "Client UI", icon: Monitor, label: "React + Next.js" },
       { name: "API Gateway", icon: Server, label: "Node.js API" },
-      { name: "Database", icon: Database, label: "MySQL + Prisma" }
+      { name: "Database", icon: Database, label: "MySQL + Prisma" },
     ],
     github: "#",
-    live: "#"
+    live: "#",
   },
   {
     id: "brainbin",
     title: "BRAINBIN",
     subtitle: "Knowledge Management Ecosystem",
-    description: "A note-taking and knowledge management tool designed to connect thoughts visually and structurally.",
+    description:
+      "A note-taking and knowledge management tool designed to connect thoughts visually and structurally.",
     tech: ["Next.js", "Tailwind", "AI APIs"],
     arch: [
       { name: "Interface", icon: Monitor, label: "Next.js App Router" },
       { name: "Logic Engine", icon: Server, label: "AI Processors" },
-      { name: "Vector Store", icon: Database, label: "Embeddings" }
+      { name: "Vector Store", icon: Database, label: "Embeddings" },
     ],
     github: "#",
-    live: "#"
+    live: "#",
   },
   {
     id: "logic-commenter",
     title: "Logic Commenter",
     subtitle: "AI-Powered VS Code Extension",
-    description: "A development tool that uses AI to analyze codebase context and generate meaningful, standardized documentation.",
+    description:
+      "A development tool that uses AI to analyze codebase context and generate meaningful, standardized documentation.",
     tech: ["TypeScript", "VS Code API", "LLMs"],
     arch: [
       { name: "VS Code", icon: Monitor, label: "Editor Extension" },
       { name: "Parser", icon: Server, label: "AST Analyzer" },
-      { name: "AI Model", icon: Database, label: "LLM Inference" }
+      { name: "AI Model", icon: Database, label: "LLM Inference" },
     ],
     github: "#",
-    live: "#"
-  }
+    live: "#",
+  },
 ];
 
 // The animated node graph that proves system-level thinking
@@ -55,7 +65,7 @@ const ArchitectureFlow = ({ nodes }: { nodes: any[] }) => {
     <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-2xl mx-auto py-8 relative">
       {/* Animated Connecting Line */}
       <div className="absolute top-1/2 left-0 w-full h-0.5 bg-border -translate-y-1/2 hidden md:block z-0" />
-      <motion.div 
+      <motion.div
         className="absolute top-1/2 left-0 h-0.5 bg-primary -translate-y-1/2 hidden md:block z-0"
         initial={{ width: "0%" }}
         animate={{ width: "100%" }}
@@ -69,7 +79,7 @@ const ArchitectureFlow = ({ nodes }: { nodes: any[] }) => {
             key={i}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 + (i * 0.2) }}
+            transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
             className="relative z-10 flex flex-col items-center gap-3 bg-card p-4 rounded-xl border border-border shadow-lg"
           >
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
@@ -77,7 +87,9 @@ const ArchitectureFlow = ({ nodes }: { nodes: any[] }) => {
             </div>
             <div className="text-center">
               <p className="font-bold text-foreground text-sm">{node.name}</p>
-              <p className="text-xs text-muted-foreground font-mono mt-1">{node.label}</p>
+              <p className="text-xs text-muted-foreground font-mono mt-1">
+                {node.label}
+              </p>
             </div>
           </motion.div>
         );
@@ -88,15 +100,22 @@ const ArchitectureFlow = ({ nodes }: { nodes: any[] }) => {
 
 export function Projects() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selectedProject = projectsData.find(p => p.id === selectedId);
+  const selectedProject = projectsData.find((p) => p.id === selectedId);
 
   return (
-    <section className="w-full py-24 px-6 relative z-10" id="projects">
+    <section
+      className={`w-full py-24 px-6 relative transition-all duration-300 ${selectedId ? "z-[100]" : "z-10"}`}
+      id="projects"
+    >
+      {" "}
       <div className="max-w-6xl mx-auto">
-        
         <div className="mb-12">
-          <h2 className="text-primary font-mono text-sm tracking-widest uppercase mb-2">Lab Specimens</h2>
-          <h3 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">Active Deployments</h3>
+          <h2 className="text-primary font-mono text-sm tracking-widest uppercase mb-2">
+            Lab Specimens
+          </h2>
+          <h3 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
+            Active Deployments
+          </h3>
         </div>
 
         {/* Project Grid */}
@@ -109,17 +128,26 @@ export function Projects() {
               className="group cursor-pointer bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors h-full flex flex-col justify-between"
             >
               <div>
-                <motion.h4 layoutId={`title-${project.id}`} className="text-xl font-bold text-foreground mb-2">
+                <motion.h4
+                  layoutId={`title-${project.id}`}
+                  className="text-xl font-bold text-foreground mb-2"
+                >
                   {project.title}
                 </motion.h4>
-                <motion.p layoutId={`subtitle-${project.id}`} className="text-sm text-muted-foreground mb-4">
+                <motion.p
+                  layoutId={`subtitle-${project.id}`}
+                  className="text-sm text-muted-foreground mb-4"
+                >
                   {project.subtitle}
                 </motion.p>
               </div>
-              
+
               <div className="flex flex-wrap gap-2 mt-4">
                 {project.tech.slice(0, 3).map((t, i) => (
-                  <span key={i} className="px-2 py-1 text-xs font-mono bg-muted text-muted-foreground rounded-md">
+                  <span
+                    key={i}
+                    className="px-2 py-1 text-xs font-mono bg-muted text-muted-foreground rounded-md"
+                  >
                     {t}
                   </span>
                 ))}
@@ -128,6 +156,7 @@ export function Projects() {
           ))}
         </div>
 
+        {/* Expanded Project Modal */}
         {/* Expanded Project Modal */}
         <AnimatePresence>
           {selectedId && selectedProject && (
@@ -138,27 +167,35 @@ export function Projects() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSelectedId(null)}
-                className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+                className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100]" // Increased Z-index
               />
-              
+
               {/* Modal Content */}
-              <div className="fixed inset-0 flex items-center justify-center z-50 p-4 pointer-events-none">
+              <div className="fixed inset-0 flex items-center justify-center z-[110] p-4 pointer-events-none">
+                {" "}
+                {/* Increased Z-index */}
                 <motion.div
                   layoutId={`card-${selectedProject.id}`}
                   className="bg-card w-full max-w-4xl max-h-[90vh] overflow-y-auto custom-scrollbar rounded-3xl border border-border shadow-2xl pointer-events-auto"
                 >
                   <div className="p-8 md:p-12 relative">
-                    <button 
+                    <button
                       onClick={() => setSelectedId(null)}
                       className="absolute top-6 right-6 p-2 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
                     >
                       <X size={20} />
                     </button>
 
-                    <motion.h4 layoutId={`title-${selectedProject.id}`} className="text-3xl font-extrabold text-foreground mb-2">
+                    <motion.h4
+                      layoutId={`title-${selectedProject.id}`}
+                      className="text-3xl font-extrabold text-foreground mb-2"
+                    >
                       {selectedProject.title}
                     </motion.h4>
-                    <motion.p layoutId={`subtitle-${selectedProject.id}`} className="text-lg text-primary font-mono mb-8">
+                    <motion.p
+                      layoutId={`subtitle-${selectedProject.id}`}
+                      className="text-lg text-primary font-mono mb-8"
+                    >
                       {selectedProject.subtitle}
                     </motion.p>
 
@@ -167,19 +204,30 @@ export function Projects() {
                         <p>{selectedProject.description}</p>
                       </div>
                       <div className="flex flex-col gap-4">
-                        <h5 className="font-bold text-foreground">Tech Stack</h5>
+                        <h5 className="font-bold text-foreground">
+                          Tech Stack
+                        </h5>
                         <div className="flex flex-wrap gap-2">
                           {selectedProject.tech.map((t, i) => (
-                            <span key={i} className="px-3 py-1 text-sm font-mono bg-muted text-foreground rounded-lg border border-border">
+                            <span
+                              key={i}
+                              className="px-3 py-1 text-sm font-mono bg-muted text-foreground rounded-lg border border-border"
+                            >
                               {t}
                             </span>
                           ))}
                         </div>
                         <div className="flex gap-4 mt-4">
-                          <a href={selectedProject.github} className="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors">
+                          <a
+                            href={selectedProject.github}
+                            className="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors"
+                          >
                             <Github size={18} /> Code
                           </a>
-                          <a href={selectedProject.live} className="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors">
+                          <a
+                            href={selectedProject.live}
+                            className="flex items-center gap-2 text-sm font-bold hover:text-primary transition-colors"
+                          >
                             <ExternalLink size={18} /> Live Demo
                           </a>
                         </div>
@@ -187,17 +235,17 @@ export function Projects() {
                     </div>
 
                     <div className="mt-8 pt-8 border-t border-border">
-                      <h5 className="font-bold text-foreground mb-6 text-center">System Architecture</h5>
+                      <h5 className="font-bold text-foreground mb-6 text-center">
+                        System Architecture
+                      </h5>
                       <ArchitectureFlow nodes={selectedProject.arch} />
                     </div>
-
                   </div>
                 </motion.div>
               </div>
             </>
           )}
         </AnimatePresence>
-
       </div>
     </section>
   );

@@ -4,16 +4,13 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Telemetry } from "@/components/telemetry";
+import { XRayLens } from "@/components/x-ray";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 
-const inter = Inter({ 
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const firaCode = Fira_Code({
-  subsets: ["latin"],
-  variable: "--font-fira-code",
-});
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" });
 
 export const metadata: Metadata = {
   title: "Swayam Patel | Architect & Developer",
@@ -22,22 +19,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${firaCode.variable} font-sans antialiased overflow-x-hidden`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange={false} // We want that smooth 500ms CSS transition
-        >
+        <ThemeProvider>
           <SmoothScroll>
+            <Header />
             <ThemeToggle />
-            <main className="min-h-screen w-full relative">
+            <XRayLens />
+            <Telemetry />
+            <main className="min-h-screen w-full relative flex flex-col">
               {children}
+              <Footer />
             </main>
           </SmoothScroll>
         </ThemeProvider>

@@ -1,13 +1,15 @@
 import { Hero } from "@/components/hero";
+import { SkillsTree } from "@/components/skills-tree";
 import { Projects } from "@/components/projects";
+import { Blog } from "@/components/blog";
 
 export default function Home() {
   return (
     <div className="w-full flex flex-col items-center">
       <Hero />
+      <SkillsTree />
       <Projects />
-      {/* Next components will go here */}
-      <div className="h-40 w-full"></div> {/* Bottom spacer */}
+      <Blog />
     </div>
   );
 }

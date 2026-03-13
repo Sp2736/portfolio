@@ -2,30 +2,62 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Palette, X } from "lucide-react";
+
+const themes = [
+  { id: "dark", name: "Dark Angel" },
+  { id: "light", name: "White Devil" },
+  { id: "cyberpunk", name: "Neon Syndicate" },
+  { id: "solar", name: "Solar Flare" },
+  { id: "retro", name: "Retro Phosphor" },
+];
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Prevent hydration mismatch by only rendering after mount
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
-  const isDark = theme === "dark";
+  const currentThemeName = themes.find((t) => t.id === theme)?.name || "Dark Angel";
 
   return (
-    <button
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="fixed top-6 right-6 z-50 flex items-center gap-3 px-4 py-2 rounded-full border border-border bg-background/50 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-muted active:scale-95 overflow-hidden group"
-    >
-      <div className="relative flex items-center justify-center w-5 h-5">
-        <Moon className={`absolute w-4 h-4 transition-all duration-500 ${isDark ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"}`} />
-        <Sun className={`absolute w-4 h-4 transition-all duration-500 ${isDark ? "opacity-0 rotate-90" : "opacity-100 rotate-0"}`} />
-      </div>
-      <span className="font-mono text-xs font-semibold tracking-widest uppercase transition-colors">
-        {isDark ? "Dark Angel" : "White Devil"}
-      </span>
-    </button>
+    <div className="fixed top-6 right-6 z-50">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card/80 backdrop-blur-md transition-all duration-300 hover:bg-muted active:scale-95 group font-mono text-xs font-bold uppercase tracking-widest shadow-lg"
+      >
+        <Palette size={14} className="text-primary group-hover:rotate-12 transition-transform" />
+        {currentThemeName}
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            className="absolute top-12 right-0 w-48 bg-card border border-border rounded-xl shadow-2xl overflow-hidden flex flex-col"
+          >
+            {themes.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => {
+                  setTheme(t.id);
+                  setIsOpen(false);
+                }}
+                className={`text-left px-4 py-3 text-xs font-mono font-bold uppercase tracking-wider transition-colors ${
+                  theme === t.id ? "bg-primary/10 text-primary border-l-2 border-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground border-l-2 border-transparent"
+                }`}
+              >
+                {t.name}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

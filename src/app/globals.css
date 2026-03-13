@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -20,7 +19,7 @@
 }
 
 @layer base {
-  :root {
+  :root, .light {
     /* WHITE DEVIL (Light Mode) */
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
@@ -39,7 +38,6 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
   }
 
   .dark {
@@ -62,6 +60,69 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  .cyberpunk {
+    /* NEON SYNDICATE */
+    --background: 260 60% 5%;
+    --foreground: 320 100% 70%;
+    --card: 260 50% 8%;
+    --card-foreground: 320 100% 80%;
+    --popover: 260 50% 8%;
+    --popover-foreground: 320 100% 80%;
+    --primary: 150 100% 50%; /* Neon Green */
+    --primary-foreground: 260 60% 5%;
+    --secondary: 320 100% 50%; /* Hot Pink */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 260 40% 12%;
+    --muted-foreground: 320 50% 60%;
+    --accent: 320 100% 50%;
+    --accent-foreground: 210 40% 98%;
+    --border: 320 100% 50%;
+    --input: 260 40% 12%;
+    --ring: 150 100% 50%;
+  }
+
+  .solar {
+    /* SOLAR FLARE */
+    --background: 40 33% 96%;
+    --foreground: 20 20% 15%;
+    --card: 40 20% 98%;
+    --card-foreground: 20 20% 15%;
+    --popover: 40 20% 98%;
+    --popover-foreground: 20 20% 15%;
+    --primary: 15 80% 55%; /* Terracotta */
+    --primary-foreground: 40 33% 96%;
+    --secondary: 30 20% 85%;
+    --secondary-foreground: 20 20% 15%;
+    --muted: 30 20% 90%;
+    --muted-foreground: 20 10% 45%;
+    --accent: 15 80% 55%;
+    --accent-foreground: 40 33% 96%;
+    --border: 30 20% 85%;
+    --input: 30 20% 90%;
+    --ring: 15 80% 55%;
+  }
+
+  .retro {
+    /* RETRO PHOSPHOR */
+    --background: 0 0% 0%;
+    --foreground: 120 100% 45%; /* CRT Green */
+    --card: 0 0% 3%;
+    --card-foreground: 120 100% 45%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 120 100% 45%;
+    --primary: 120 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 120 100% 15%;
+    --secondary-foreground: 120 100% 45%;
+    --muted: 120 100% 8%;
+    --muted-foreground: 120 70% 30%;
+    --accent: 120 100% 20%;
+    --accent-foreground: 120 100% 50%;
+    --border: 120 100% 20%;
+    --input: 120 100% 10%;
+    --ring: 120 100% 50%;
+  }
 }
 
 @layer base {
@@ -71,11 +132,11 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    @apply transition-colors duration-500 ease-in-out antialiased overflow-x-hidden;
+    @apply transition-colors duration-700 ease-in-out antialiased overflow-x-hidden;
   }
 }
 
-/* Custom Scrollbar for Terminal aesthetic */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
