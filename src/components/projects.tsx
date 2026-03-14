@@ -104,7 +104,7 @@ export function Projects() {
 
   return (
     <section
-      className={`w-full py-24 px-6 relative transition-all duration-300 ${selectedId ? "z-[100]" : "z-10"}`}
+      className={`w-full py-12 px-6 relative transition-all duration-300 ${selectedId ? "z-[100]" : "z-10"}`}
       id="projects"
     >
       {" "}

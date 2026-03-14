@@ -1,14 +1,16 @@
 import { Hero } from "@/components/hero";
-import { SkillsTree } from "@/components/skills-tree";
+import { SkillsOrbit } from "@/components/skills-orbit"; // Updated Import
 import { Projects } from "@/components/projects";
+import { GithubActivity } from "@/components/github-activity";
 import { Blog } from "@/components/blog";
 
 export default function Home() {
   return (
     <div className="w-full flex flex-col items-center">
       <Hero />
-      <SkillsTree />
+      <SkillsOrbit /> {/* Updated Component */}
       <Projects />
+      <GithubActivity />
       <Blog />
     </div>
   );

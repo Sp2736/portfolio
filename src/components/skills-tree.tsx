@@ -62,7 +62,7 @@ export function SkillsTree() {
   };
 
   return (
-    <section className="w-full py-24 px-6 relative z-10 bg-background" id="skills">
+    <section className="w-full py-12 px-6 relative z-10 bg-background" id="skills">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         
         {/* Left Side: Narrative */}
