@@ -38,48 +38,28 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
   }
 
   .dark {
-    /* DARK ANGEL (Dark Mode) */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
-
-  .cyberpunk {
-    /* NEON SYNDICATE */
-    --background: 260 60% 5%;
-    --foreground: 320 100% 70%;
-    --card: 260 50% 8%;
-    --card-foreground: 320 100% 80%;
-    --popover: 260 50% 8%;
-    --popover-foreground: 320 100% 80%;
-    --primary: 150 100% 50%; /* Neon Green */
-    --primary-foreground: 260 60% 5%;
-    --secondary: 320 100% 50%; /* Hot Pink */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 260 40% 12%;
-    --muted-foreground: 320 50% 60%;
-    --accent: 320 100% 50%;
-    --accent-foreground: 210 40% 98%;
-    --border: 320 100% 50%;
-    --input: 260 40% 12%;
-    --ring: 150 100% 50%;
+    /* DARK ANGEL (Professional Zinc) */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
   }
 
   .solar {
@@ -90,7 +70,7 @@
     --card-foreground: 20 20% 15%;
     --popover: 40 20% 98%;
     --popover-foreground: 20 20% 15%;
-    --primary: 15 80% 55%; /* Terracotta */
+    --primary: 15 80% 55%; 
     --primary-foreground: 40 33% 96%;
     --secondary: 30 20% 85%;
     --secondary-foreground: 20 20% 15%;
@@ -103,25 +83,25 @@
     --ring: 15 80% 55%;
   }
 
-  .retro {
-    /* RETRO PHOSPHOR */
-    --background: 0 0% 0%;
-    --foreground: 120 100% 45%; /* CRT Green */
-    --card: 0 0% 3%;
-    --card-foreground: 120 100% 45%;
-    --popover: 0 0% 3%;
-    --popover-foreground: 120 100% 45%;
-    --primary: 120 100% 50%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 120 100% 15%;
-    --secondary-foreground: 120 100% 45%;
-    --muted: 120 100% 8%;
-    --muted-foreground: 120 70% 30%;
-    --accent: 120 100% 20%;
-    --accent-foreground: 120 100% 50%;
-    --border: 120 100% 20%;
-    --input: 120 100% 10%;
-    --ring: 120 100% 50%;
+  .cosmic {
+    /* COSMIC SPACE */
+    --background: 230 50% 4%; /* Deep Void Black */
+    --foreground: 210 40% 98%;
+    --card: 230 40% 6%;
+    --card-foreground: 210 40% 98%;
+    --popover: 230 40% 6%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%; /* Meteor Blue (#3b82f6) */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 230 30% 15%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 230 30% 12%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 210 40% 98%;
+    --border: 230 30% 18%;
+    --input: 230 30% 15%;
+    --ring: 217 91% 60%;
   }
 }
 

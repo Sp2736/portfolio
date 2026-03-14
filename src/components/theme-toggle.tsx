@@ -3,14 +3,13 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Palette, X } from "lucide-react";
+import { Palette } from "lucide-react";
 
 const themes = [
   { id: "dark", name: "Dark Angel" },
   { id: "light", name: "White Devil" },
-  { id: "cyberpunk", name: "Neon Syndicate" },
   { id: "solar", name: "Solar Flare" },
-  { id: "retro", name: "Retro Phosphor" },
+  { id: "cosmic", name: "Cosmic Space" },
 ];
 
 export function ThemeToggle() {

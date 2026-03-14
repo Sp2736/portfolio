@@ -5,9 +5,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Telemetry } from "@/components/telemetry";
-import { XRayLens } from "@/components/x-ray";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { DarkThemeEffects } from "@/components/dark-theme";
+import { CosmicThemeEffects } from "@/components/cosmic-theme";
+import { SolarThemeEffects } from "@/components/solar-theme"; 
+import { LightThemeEffects } from "@/components/light-theme"; // New Import
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" });
@@ -25,9 +28,15 @@ export default function RootLayout({
       <body className={`${inter.variable} ${firaCode.variable} font-sans antialiased overflow-x-hidden`}>
         <ThemeProvider>
           <SmoothScroll>
+            {/* Ambient Background & Cursor Physics Layers */}
+            <DarkThemeEffects />
+            <CosmicThemeEffects />
+            <SolarThemeEffects /> 
+            <LightThemeEffects /> {/* Added Light Mode Ash */}
+            
+            {/* UI Layer */}
             <Header />
             <ThemeToggle />
-            <XRayLens />
             <Telemetry />
             <main className="min-h-screen w-full relative flex flex-col">
               {children}
