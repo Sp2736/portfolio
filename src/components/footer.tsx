@@ -15,7 +15,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="w-full border-t border-border bg-card/30 backdrop-blur-md relative z-10 mt-20">
+    <footer className="w-full border-t border-border/50 bg-background/40 backdrop-blur-md relative z-10 mt-20">
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="font-mono text-sm text-muted-foreground flex items-center gap-2">
           <span>&copy; {new Date().getFullYear()} Swayam Patel.</span>

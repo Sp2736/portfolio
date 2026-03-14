@@ -2,167 +2,9 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
-import { Flame, RefreshCcw, AlertTriangle } from "lucide-react";
+import { Flame, RefreshCcw } from "lucide-react";
 
-// --- Global CSS Injection for the Slow Wax Meltdown ---
-const meltdownStyles = `
-  /* 1. Heat Shimmer (Pre-Melt) */
-  .heating-up > *:not(.easter-egg-safe) {
-    animation: heatShimmer 0.1s infinite alternate linear;
-  }
-
-  @keyframes heatShimmer {
-    0% { transform: skewX(0deg) translateY(0px); filter: contrast(1.05); }
-    100% { transform: skewX(0.5deg) translateY(-0.5px); filter: contrast(1.1); }
-  }
-
-  /* 2. Full Site Structural Collapse */
-  .meltdown-active > *:not(.easter-egg-safe) {
-    /* We use an SVG filter here to physically ripple and warp the pixels */
-    filter: url(#detailed-liquid-melt) saturate(1.3) contrast(1.1);
-    animation: detailedMeltSequence 15s forwards cubic-bezier(0.5, 0, 1, 1);
-    pointer-events: none !important;
-    transform-origin: top center;
-  }
-
-  @keyframes detailedMeltSequence {
-    0% {
-      transform: translateY(0) scaleY(1) scaleX(1);
-    }
-    15% {
-      /* Softening the structure */
-      transform: translateY(2px) scaleY(1.02) scaleX(0.99);
-    }
-    50% {
-      /* Dripping phase - elongating downwards */
-      transform: translateY(15vh) scaleY(1.4) scaleX(0.95);
-    }
-    100% {
-      /* The Wax Puddle - pooled at the bottom, squished but readable */
-      transform: translateY(85vh) scaleY(0.12) scaleX(1.08);
-      opacity: 0.85; 
-    }
-  }
-`;
-
-// --- 1. The Easter Egg Controller ---
-function MeltdownEasterEgg() {
-  const [meltState, setMeltState] = useState<"idle" | "heating" | "melting" | "melted">("idle");
-  const [temp, setTemp] = useState(38);
-
-  // Dynamic Temperature HUD
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (meltState === "heating" || meltState === "melting") {
-      interval = setInterval(() => {
-        setTemp(prev => {
-          // Increase faster during actual melt
-          const inc = meltState === "melting" ? Math.random() * 25 + 10 : Math.random() * 5 + 2;
-          return Math.floor(Math.min(prev + inc, 3400));
-        });
-      }, 100);
-    }
-    return () => clearInterval(interval);
-  }, [meltState]);
-
-  const triggerMeltdown = () => {
-    if (meltState !== "idle") return;
-    
-    setMeltState("heating");
-    document.body.classList.add("heating-up");
-    
-    // 3 seconds of intense heat shimmer before the melt begins
-    setTimeout(() => {
-      setMeltState("melting");
-      document.body.classList.remove("heating-up");
-      document.body.classList.add("meltdown-active");
-      
-      // The melt animation takes 15 seconds
-      setTimeout(() => {
-        setMeltState("melted");
-      }, 15000);
-    }, 3000);
-  };
-
-  const handleReload = () => {
-    window.location.reload();
-  };
-
-  return (
-    // The .easter-egg-safe class prevents these specific elements from melting!
-    <div className="easter-egg-safe">
-      
-      {/* THE MAGIC: SVG Displacement Filter that dynamically animates to warp the DOM */}
-      <svg className="fixed w-0 h-0 pointer-events-none">
-        <defs>
-          <filter id="detailed-liquid-melt" colorInterpolationFilters="sRGB">
-            <feTurbulence type="fractalNoise" baseFrequency="0.001 0.01" numOctaves="1" result="warp">
-              {/* Animates the frequency to make the waves tighter and faster as it melts */}
-              <animate attributeName="baseFrequency" values="0.001 0.01; 0.02 0.15" dur="15s" fill="freeze" />
-            </feTurbulence>
-            {/* Animates the scale of the displacement to rip the pixels apart over 15 seconds */}
-            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="0" in="SourceGraphic" in2="warp">
-              <animate attributeName="scale" values="0; 10; 40; 100" dur="15s" fill="freeze" />
-            </feDisplacementMap>
-          </filter>
-        </defs>
-      </svg>
-
-      {/* Temperature Alert HUD */}
-      {(meltState === "heating" || meltState === "melting" || meltState === "melted") && (
-        <div className="fixed top-24 right-10 z-[300] font-mono text-right pointer-events-none">
-          <div className={`text-xs tracking-tighter uppercase font-bold ${meltState === "melted" ? "text-blue-500" : "text-red-500 animate-pulse"}`}>
-            {meltState === "melted" ? "SYSTEM OFFLINE" : "CORE TEMPERATURE"}
-          </div>
-          <div className={`text-5xl font-black italic leading-none drop-shadow-lg ${meltState === "melted" ? "text-blue-600" : "text-orange-500"}`}>
-            {temp}°C
-          </div>
-        </div>
-      )}
-
-      {/* Ambient Heat Glow Overlay */}
-      <div 
-        className={`fixed inset-0 pointer-events-none z-[250] transition-opacity duration-[8000ms] ease-in mix-blend-overlay ${
-          meltState === "heating" || meltState === "melting" 
-            ? "bg-red-600/30 opacity-100" 
-            : "opacity-0"
-        }`} 
-      />
-
-      {/* The Controller Button */}
-      <button
-        onClick={meltState === "melted" ? handleReload : triggerMeltdown}
-        disabled={meltState === "heating" || meltState === "melting"}
-        className={`fixed bottom-6 left-6 z-[300] flex items-center gap-2 px-6 py-3 rounded-full border transition-all duration-500 font-mono text-xs uppercase tracking-widest font-bold shadow-2xl backdrop-blur-xl ${
-          meltState === "idle"
-            ? "bg-orange-600/20 text-orange-500 border-orange-500/50 hover:bg-orange-600 hover:text-white hover:shadow-[0_0_20px_rgba(234,88,12,0.6)]"
-            : meltState === "melted"
-            ? "bg-blue-600 text-white border-blue-400 hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.6)] animate-bounce"
-            : "bg-red-950/50 text-red-500 border-red-900 opacity-80 cursor-not-allowed" 
-        }`}
-      >
-        {meltState === "idle" && (
-          <>
-            <Flame size={16} className="animate-pulse" />
-            BRING ON THE FLARE!
-          </>
-        )}
-        {meltState === "heating" && "OVERLOADING..."}
-        {meltState === "melting" && "SYSTEM MELTDOWN"}
-        {meltState === "melted" && (
-          <>
-            <RefreshCcw size={16} />
-            COOL DOWN (RESET)
-          </>
-        )}
-      </button>
-
-    </div>
-  );
-}
-
-// --- 2. Foreground Interactive Cursor (Explosions only, NO DOM Shake) ---
-// --- 2. Foreground Interactive Cursor (Explosions only, NO DOM Shake, NO Rings) ---
+// --- 1. Foreground Interactive Cursor (Flares only, NO Rings, NO DOM Shake) ---
 function SolarCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -179,7 +21,7 @@ function SolarCursor() {
 
     const TRAIL_DECAY = 0.025; 
     const TRAIL_WIDTH = 5; 
-    const EMBER_COUNT = 40; // Increased to make the flare explosion look better without the rings
+    const EMBER_COUNT = 40; 
     const EMBER_SPEED_MIN = 4;
     const EMBER_SPEED_MAX = 14; 
     const COLORS = ["#fef08a", "#f97316", "#ea580c", "#dc2626", "#991b1b"];
@@ -196,7 +38,6 @@ function SolarCursor() {
     };
 
     const handleClick = (e: MouseEvent) => {
-      // Spawn violent flare burst only (Rings removed)
       for (let i = 0; i < EMBER_COUNT; i++) {
         embers.push(new Ember(e.clientX, e.clientY));
       }
@@ -248,7 +89,6 @@ function SolarCursor() {
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Render Trail
       for (let i = trail.length - 1; i >= 0; i--) {
         const point = trail[i];
         point.update();
@@ -278,7 +118,6 @@ function SolarCursor() {
         }
       }
 
-      // Render Flare Embers
       for (let i = embers.length - 1; i >= 0; i--) {
         const p = embers[i];
         p.update();
@@ -302,8 +141,63 @@ function SolarCursor() {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[100]" />;
 }
 
+// --- 2. Vintage Background (Transparent Canvas, relies on your CSS variables) ---
+function VintageBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let motes: { x: number, y: number, s: number, o: number, vy: number }[] = [];
+    
+    const setSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    setSize();
+    window.addEventListener("resize", setSize);
+
+    // Create warm, slow drifting dust/bokeh particles
+    for (let i = 0; i < 60; i++) {
+      motes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        s: Math.random() * 6 + 2,
+        o: Math.random() * 0.3 + 0.05,
+        vy: Math.random() * -0.4 - 0.1
+      });
+    }
+
+    const render = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      motes.forEach(m => {
+        m.y += m.vy;
+        if (m.y < -20) { m.y = canvas.height + 20; m.x = Math.random() * canvas.width; }
+        
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.s, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(251, 146, 60, ${m.o})`; // Soft warm glow
+        ctx.fill();
+      });
+      animationFrameId = requestAnimationFrame(render);
+    };
+    render();
+
+    return () => {
+      window.removeEventListener("resize", setSize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[-3]" />;
+}
+
 // --- 3. Apocalyptic Background (Orbital Strike & Rising Ash) ---
-function ApocalypticBackground() {
+function ApocalypticBackground({ isActive }: { isActive: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -405,6 +299,13 @@ function ApocalypticBackground() {
     for (let i = 0; i < ASH_COUNT; i++) ashParticles.push(new Ash());
 
     const render = () => {
+      // Pause drawing to save battery if layer is hidden
+      if (!isActive) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       ashParticles.forEach(a => { a.update(); a.draw(ctx); });
@@ -424,20 +325,21 @@ function ApocalypticBackground() {
       window.removeEventListener("resize", setSize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [isActive]);
 
   return (
-    <>
-      <div className="fixed inset-0 pointer-events-none z-[-3] bg-gradient-to-t from-red-900/40 via-orange-900/10 to-transparent" />
-      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[-2] opacity-90" />
-    </>
+    <div className={`fixed inset-0 pointer-events-none z-[-2] transition-opacity duration-1000 ${isActive ? "opacity-100" : "opacity-0"}`}>
+      <div className="absolute inset-0 bg-gradient-to-t from-red-900/40 via-orange-900/10 to-transparent" />
+      <canvas ref={canvasRef} className="absolute inset-0 opacity-90" />
+    </div>
   );
 }
 
-// --- 4. Main Export Component ---
+// --- 4. Main Export Component & State Controller ---
 export function SolarThemeEffects() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [isFlareActive, setIsFlareActive] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -445,10 +347,33 @@ export function SolarThemeEffects() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: meltdownStyles }} />
-      <ApocalypticBackground />
+      <VintageBackground />
+      <ApocalypticBackground isActive={isFlareActive} />
       <SolarCursor />
-      <MeltdownEasterEgg />
+
+      {/* Theme-Safe Easter Egg Button */}
+      <div className="fixed bottom-6 left-6 z-[300]">
+        <button
+          onClick={() => setIsFlareActive(!isFlareActive)}
+          className={`flex items-center gap-2 px-6 py-3 rounded-full border transition-all duration-500 font-mono text-xs uppercase tracking-widest font-bold shadow-xl backdrop-blur-md ${
+            !isFlareActive
+              ? "bg-card/50 text-foreground border-border hover:bg-card/80 hover:shadow-[0_0_15px_rgba(234,88,12,0.2)]"
+              : "bg-background/80 text-orange-500 border-orange-500/50 shadow-[0_0_20px_rgba(234,88,12,0.4)] hover:bg-background"
+          }`}
+        >
+          {!isFlareActive ? (
+            <>
+              <Flame size={16} className="text-orange-500" />
+              BRING ON THE FLARE!
+            </>
+          ) : (
+            <>
+              <RefreshCcw size={16} className="text-blue-400" />
+              COOL DOWN (VINTAGE)
+            </>
+          )}
+        </button>
+      </div>
     </>
   );
 }

@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, BookOpen, ExternalLink, Server } from "lucide-react";
 
-// You will replace these links with the actual deployed URLs from Wander-n-Wonder
 const externalLogs = [
   {
     id: "log-01",
@@ -33,10 +32,10 @@ const externalLogs = [
 
 export function Blog() {
   return (
-    <section className="w-full py-12 px-6 relative z-10 bg-background" id="blog">
+    // Purged: bg-background
+    <section className="w-full py-12 px-6 relative z-10" id="blog">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
         
-        {/* Left Side: The Platform Identity */}
         <div className="lg:col-span-5 flex flex-col gap-6" data-code="<ExternalGateway target='Wander-n-Wonder' />">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -56,9 +55,8 @@ export function Blog() {
               Instead of building a static blog here, I engineered a dedicated, scalable platform to house my thoughts.
             </p>
             
-            {/* Main CTA to launch the whole blog */}
             <a 
-              href="https://your-wander-n-wonder-domain.com" 
+              href="https://wander-n-wonder.vercel.app" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity font-mono text-sm font-semibold group shadow-[0_0_20px_rgba(var(--primary),0.3)]"
@@ -69,7 +67,6 @@ export function Blog() {
           </motion.div>
         </div>
 
-        {/* Right Side: Deep Links to Specific Posts */}
         <div className="lg:col-span-7 flex flex-col gap-4">
           <div className="text-sm font-mono text-muted-foreground mb-2 flex items-center gap-2">
             <BookOpen size={14} /> Featured Transmissions
@@ -84,7 +81,8 @@ export function Blog() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group block p-6 rounded-2xl border border-border bg-card hover:border-primary/50 transition-colors relative overflow-hidden"
+              // Applied Glassmorphism
+              className="group block p-6 rounded-2xl border border-border/50 bg-background/40 backdrop-blur-md shadow-xl hover:border-primary/50 hover:bg-background/60 transition-all relative overflow-hidden"
               data-code={`<Redirect to='${log.id}' />`}
             >
               <div className="absolute top-0 left-0 w-1 h-full bg-primary origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-300 ease-out" />
@@ -106,7 +104,7 @@ export function Blog() {
                   </p>
                 </div>
                 
-                <div className="hidden md:flex w-10 h-10 rounded-full border border-border items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground transition-all shrink-0">
+                <div className="hidden md:flex w-10 h-10 rounded-full border border-border/50 bg-background/50 items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground transition-all shrink-0">
                   <ArrowUpRight size={18} />
                 </div>
               </div>

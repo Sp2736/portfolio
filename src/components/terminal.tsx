@@ -120,14 +120,15 @@ export function Terminal() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
-      className="w-full max-w-lg rounded-xl border border-border bg-card/50 backdrop-blur-xl shadow-2xl overflow-hidden font-mono text-sm flex flex-col h-[350px]"
+      // Applied Glassmorphism
+      className="w-full max-w-lg rounded-xl border border-border/50 bg-background/40 backdrop-blur-md shadow-2xl overflow-hidden font-mono text-sm flex flex-col h-[350px]"
       onClick={() => inputRef.current?.focus({ preventScroll: true })} 
     >
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-border/50 bg-background/30">
         <div className="flex gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-          <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-          <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+          <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_5px_rgba(34,197,94,0.5)]"></div>
         </div>
         <div className="mx-auto text-xs text-muted-foreground select-none">swayam@ubuntu:~</div>
       </div>

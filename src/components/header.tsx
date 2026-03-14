@@ -10,7 +10,6 @@ export function Header() {
   const { scrollY } = useScroll();
   const lenis = useLenis();
 
-  // Trigger the morph when scrolling past 100px
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 100 && !isScrolled) setIsScrolled(true);
     if (latest <= 100 && isScrolled) setIsScrolled(false);
@@ -32,18 +31,16 @@ export function Header() {
     }
   };
 
-  // Update the array
   const navLinks = [
     { name: "init", id: "#hero", icon: Home },
     { name: "arsenal", id: "#skills", icon: Cpu },
-    { name: "chronology", id: "#chronology", icon: History }, // Added Timeline
+    { name: "chronology", id: "#chronology", icon: History }, 
     { name: "deployments", id: "#projects", icon: Layers },
     { name: "logs", id: "#blog", icon: BookOpen },
   ];
 
   return (
     <>
-      {/* Top Horizontal Header (Visible at top of page) */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: isScrolled ? -100 : 0, opacity: isScrolled ? 0 : 1 }}
@@ -73,16 +70,16 @@ export function Header() {
               </a>
             ))}
           </nav>
-          <div className="w-32"></div> {/* Spacer for ThemeToggle */}
+          <div className="w-32"></div> 
         </div>
       </motion.header>
 
-      {/* Floating Vertical Side Dock (Visible when scrolled) */}
       <motion.nav
         initial={{ x: 100, opacity: 0 }}
         animate={{ x: isScrolled ? 0 : 100, opacity: isScrolled ? 1 : 0 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="fixed top-1/2 -translate-y-1/2 right-6 z-50 hidden md:flex flex-col gap-6 py-6 px-3 bg-card/60 backdrop-blur-xl border border-border rounded-full shadow-2xl shadow-black/20"
+        // Applied Glassmorphism
+        className="fixed top-1/2 -translate-y-1/2 right-6 z-50 hidden md:flex flex-col gap-6 py-6 px-3 bg-background/40 backdrop-blur-md border border-border/50 rounded-full shadow-xl"
       >
         <a
           href="#hero"
@@ -90,11 +87,11 @@ export function Header() {
           className="p-2 rounded-full hover:bg-primary/20 hover:text-primary transition-colors group relative"
         >
           <Terminal size={20} />
-          <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background border border-border rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/80 backdrop-blur-sm border border-border/50 rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
             Home
           </span>
         </a>
-        <div className="w-full h-[1px] bg-border"></div>
+        <div className="w-full h-[1px] bg-border/50"></div>
         {navLinks.map((link) => {
           const Icon = link.icon;
           return (
@@ -105,7 +102,7 @@ export function Header() {
               className="p-2 rounded-full text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors group relative"
             >
               <Icon size={20} />
-              <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background border border-border rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none capitalize">
+              <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/80 backdrop-blur-sm border border-border/50 rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none capitalize shadow-lg">
                 {link.name}
               </span>
             </a>

@@ -627,9 +627,9 @@ function ZeroGEasterEgg() {
             "bg-red-50 text-red-400 border-red-200 cursor-not-allowed" 
           }`}
         >
-          {gravityState === "nominal" && <><Magnet size={16} className="text-slate-400 group-hover:text-white" /> // DISABLE GRAVITY</>}
+          {gravityState === "nominal" && <><Magnet size={16} className="text-slate-400 group-hover:text-white" /> DISABLE GRAVITY</>}
           {gravityState === "failing" && <><Zap size={14} className="animate-pulse" /> FIELD COLLAPSING...</>}
-          {gravityState === "zero-g" && <><RefreshCcw size={16} /> // RESTORE GRAVITY</>}
+          {gravityState === "zero-g" && <><RefreshCcw size={16} /> RESTORE GRAVITY</>}
         </button>
       </div>
     </div>

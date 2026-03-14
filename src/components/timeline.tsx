@@ -47,7 +47,8 @@ export function Timeline() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <section className="w-full py-16 px-6 relative z-10 bg-background overflow-hidden" id="chronology">
+    // Purged: bg-background
+    <section className="w-full py-16 px-6 relative z-10 overflow-hidden" id="chronology">
       <div className="max-w-4xl mx-auto">
         
         <div className="mb-16 text-center" data-code="<Timeline data={history} />">
@@ -56,14 +57,13 @@ export function Timeline() {
         </div>
 
         <div className="relative">
-          {/* The glowing center line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-border -translate-x-1/2 hidden sm:block" />
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-border/50 -translate-x-1/2 hidden sm:block" />
           
           <motion.div 
             className="absolute left-4 md:left-1/2 top-0 w-0.5 bg-primary -translate-x-1/2 hidden sm:block shadow-[0_0_10px_rgba(var(--primary),0.8)]"
             initial={{ height: "0%" }}
             whileInView={{ height: "100%" }}
-            viewport={{ once: true, margin: "-20%" }} // Delays animation until user scrolls into view
+            viewport={{ once: true, margin: "-20%" }} 
             transition={{ duration: 1.5, ease: "easeInOut" }}
           />
 
@@ -75,44 +75,41 @@ export function Timeline() {
 
               return (
                 <div key={item.id} className={`flex flex-col md:flex-row items-center justify-between w-full ${isEven ? 'md:flex-row-reverse' : ''}`}>
-                  
-                  {/* Empty space for alternating layout on desktop */}
                   <div className="hidden md:block w-5/12" />
 
-                  {/* Central Timeline Node */}
                   <motion.div 
                     initial={{ opacity: 0, scale: 0 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, margin: "-20%" }}
                     transition={{ duration: 0.4, delay: index * 0.2 }}
-                    className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-card border-2 border-primary -translate-x-1/2 flex items-center justify-center z-20 shadow-[0_0_15px_rgba(var(--primary),0.4)] hidden sm:flex"
+                    className="absolute left-4 md:left-1/2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm border-2 border-primary -translate-x-1/2 flex items-center justify-center z-20 shadow-[0_0_15px_rgba(var(--primary),0.4)] hidden sm:flex"
                   >
                     <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                   </motion.div>
 
-                  {/* The Timeline Card */}
                   <motion.div 
-                    layout // Magically animates the width/height changes
+                    layout 
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-15%" }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     className="w-full sm:w-[90%] md:w-5/12 ml-10 sm:ml-0"
                   >
+                    {/* Applied Glassmorphism */}
                     <div 
                       onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                      className={`group p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                      className={`group p-6 rounded-2xl border transition-all duration-300 cursor-pointer backdrop-blur-md shadow-xl ${
                         isExpanded 
-                          ? "bg-primary/5 border-primary shadow-2xl shadow-primary/10" 
-                          : "bg-card border-border hover:border-primary/50 hover:bg-card hover:-translate-y-1 hover:shadow-xl"
+                          ? "bg-primary/10 border-primary shadow-primary/20" 
+                          : "bg-background/40 border-border/50 hover:border-primary/50 hover:bg-background/60 hover:-translate-y-1"
                       }`}
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-2 font-mono text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full">
+                        <div className="flex items-center gap-2 font-mono text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                           <Calendar size={12} />
                           {item.year}
                         </div>
-                        <div className="p-2 rounded-full bg-muted text-muted-foreground group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+                        <div className="p-2 rounded-full bg-background/50 border border-border/50 text-muted-foreground group-hover:text-primary group-hover:bg-primary/10 transition-colors">
                           <Icon size={16} />
                         </div>
                       </div>
@@ -133,13 +130,13 @@ export function Timeline() {
                             transition={{ duration: 0.3 }}
                             className="overflow-hidden"
                           >
-                            <div className="pt-4 border-t border-border mt-4">
+                            <div className="pt-4 border-t border-border/50 mt-4">
                               <p className="text-sm text-foreground/80 leading-relaxed mb-4">
                                 {item.context}
                               </p>
                               <div className="flex flex-wrap gap-2">
                                 {item.tech.map((t, i) => (
-                                  <span key={i} className="text-[10px] font-mono uppercase tracking-wider px-2 py-1 rounded border border-border bg-muted/50 text-muted-foreground">
+                                  <span key={i} className="text-[10px] font-mono uppercase tracking-wider px-2 py-1 rounded border border-border/50 bg-background/50 text-muted-foreground">
                                     {t}
                                   </span>
                                 ))}
