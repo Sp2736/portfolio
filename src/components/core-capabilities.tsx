@@ -77,16 +77,16 @@ const containerVars = {
 
 const itemVars: Variants = {
   hidden: { opacity: 0, y: 20 },
-  show: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
       type: "spring",
-      stiffness: 260, 
-      damping: 20 
-    } 
-  },
-};
+      stiffness: 100,
+      damping: 10
+    }
+  }
+}
 
 export function CoreCapabilities() {
   return (
