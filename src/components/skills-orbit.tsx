@@ -481,8 +481,7 @@ export function SkillsOrbit() {
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.4, filter: "blur(10px)", transition: { duration: 0.2 } }}
-                  transition={{ layout: { type: "spring" as const, stiffness: 200, damping: 20 } }}
-                  className="relative z-20"
+transition={{ type: "spring", stiffness: 200, damping: 20 }}                  className="relative z-20"
                 >
                   {/* The Physics Wrapper: Moves the ENTIRE bubble perfectly together */}
                   <motion.div 
@@ -546,8 +545,7 @@ export function SkillsOrbit() {
                     key={`${skill.name}-${skill.category}`}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, delay: index * 0.03, type: "spring" as const }}
-                    className="relative z-10 hover:z-50"
+transition={{ duration: 0.4, delay: index * 0.03, type: "spring" }}                    className="relative z-10 hover:z-50"
                   >
                     <motion.div
                       animate={{ y: [0, -8, 0] }}

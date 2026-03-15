@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
-import {
+import { motion, Variants } from "framer-motion";import {
   Layers,
   BarChart,
   Shield,

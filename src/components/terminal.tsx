@@ -205,8 +205,7 @@ export function Terminal() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.2, type: "spring" as const }}
-      // Applied Glassmorphism
+transition={{ duration: 0.8, delay: 0.2, type: "spring" }}      // Applied Glassmorphism
       className="w-full max-w-lg rounded-xl border border-border/50 bg-background/40 backdrop-blur-md shadow-2xl overflow-hidden font-mono text-sm flex flex-col h-[350px]"
       onClick={() => inputRef.current?.focus({ preventScroll: true })}
     >

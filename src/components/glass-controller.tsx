@@ -32,8 +32,7 @@ export function GlassController() {
   const { theme, resolvedTheme } = useTheme();
   const [isShattered, setIsShattered] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
-
+  const animationRef = useRef<number | null>(null);
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -79,9 +78,15 @@ export function GlassController() {
     const shards: Shard[] = [];
 
     class Shard {
-      x: number; y: number; vx: number; vy: number;
-      rot: number; rotSpeed: number; size: number;
-      vertices: {x: number, y: number}[]; opacity: number;
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      rot: number;
+      rotSpeed: number;
+      size: number;
+      vertices: { x: number; y: number }[];
+      opacity: number;
 
       constructor(startX: number, startY: number, vX: number, vY: number) {
         this.x = startX;
@@ -89,16 +94,19 @@ export function GlassController() {
         this.vx = vX;
         this.vy = vY;
         this.rot = Math.random() * Math.PI * 2;
-        this.rotSpeed = (Math.random() - 0.5) * 0.4; 
-        this.size = Math.random() * 15 + 5; 
+        this.rotSpeed = (Math.random() - 0.5) * 0.4;
+        this.size = Math.random() * 15 + 5;
         this.opacity = Math.random() * 0.6 + 0.4;
 
         const numSides = Math.floor(Math.random() * 3) + 3;
         this.vertices = [];
         for (let i = 0; i < numSides; i++) {
           const angle = (i / numSides) * Math.PI * 2;
-          const radius = this.size * (0.4 + Math.random() * 0.6); 
-          this.vertices.push({ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
+          const radius = this.size * (0.4 + Math.random() * 0.6);
+          this.vertices.push({
+            x: Math.cos(angle) * radius,
+            y: Math.sin(angle) * radius,
+          });
         }
       }
 
@@ -135,7 +143,7 @@ export function GlassController() {
 
     glassElements.forEach((el) => {
       const rect = el.getBoundingClientRect();
-      
+
       if (rect.bottom < 0 || rect.top > window.innerHeight) return;
       if (rect.width === 0 || rect.height === 0) return;
 
@@ -157,7 +165,7 @@ export function GlassController() {
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       let activeShards = 0;
 
       shards.forEach((shard) => {
@@ -183,7 +191,7 @@ export function GlassController() {
       document.body.classList.remove("glass-restored");
       document.body.classList.add("glass-shattered");
       setIsShattered(true);
-      triggerShatterAnimation(); 
+      triggerShatterAnimation();
     } else {
       document.body.classList.remove("glass-shattered");
       document.body.classList.add("glass-restored");
@@ -199,25 +207,28 @@ export function GlassController() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: shatterStyles }} />
-      
-      <canvas 
-        ref={canvasRef} 
-        className="fixed inset-0 pointer-events-none z-[9999]" 
+
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none z-[9999]"
       />
 
       <button
         onClick={toggleGlass}
         title={isShattered ? "Reconstruct Glass" : "Shatter UI Glass"}
         className={`fixed bottom-[84px] right-6 z-[10000] flex items-center justify-center w-12 h-12 rounded-full border transition-all active:scale-95 group shadow-xl ${
-          isShattered 
-            ? "bg-blue-600/20 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white" 
+          isShattered
+            ? "bg-blue-600/20 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white"
             : "bg-background/40 backdrop-blur-md border-border/50 text-muted-foreground hover:bg-background/60"
         }`}
       >
         {isShattered ? (
           <Sparkles size={20} className="animate-pulse" />
         ) : (
-          <Hammer size={20} className="group-hover:-rotate-45 transition-transform" />
+          <Hammer
+            size={20}
+            className="group-hover:-rotate-45 transition-transform"
+          />
         )}
       </button>
     </>

@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ExternalLink, Github, ShoppingBag, Music, BookOpen, Linkedin } from "lucide-react";
+import { motion, Variants } from "framer-motion";import { ExternalLink, Github, ShoppingBag, Music, BookOpen, Linkedin } from "lucide-react";
 
 // --- DATA MAPPING ---
 const projectsData = [
@@ -101,9 +100,9 @@ const containerVariants = {
   }
 };
 
-const cardVariants = {
+const cardVariants : Variants {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 150, damping: 20 } }
+  show: { opacity: 1, y: 0, transition={{ type: "spring", stiffness: 150, damping: 20 }} }
 };
 
 export function Projects() {
