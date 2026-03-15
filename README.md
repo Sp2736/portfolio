@@ -1,16 +1,3 @@
-Here is your **same README content**, but:
-
-* reduced emoji spam
-* replaced emoji lists with proper bullets
-* kept the tone and humor intact
-* added **smaller visuals**
-* improved visual separators
-* kept **all original content**
-
-You can paste this directly as your `README.md`.
-
----
-
 # 🛰️ SP.SYS — Interactive Portfolio Environment
 
 <p align="center">
@@ -192,6 +179,12 @@ These interactions exist to reward curiosity.
 Shake the mouse aggressively.
 
 The interface begins to **melt like overheated hardware**.
+
+---
+
+### Antigravity... antigravity??
+
+Tap the icon of Antigravity by Google in my tech arsenal... it is antigravity for icons.
 
 ---
 
