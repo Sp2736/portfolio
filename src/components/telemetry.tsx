@@ -155,7 +155,7 @@ export function Telemetry() {
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 100, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{ type: "spring" as const, stiffness: 300, damping: 30 }}
             className="fixed bottom-6 right-24 z-50 w-80 bg-background/70 backdrop-blur-2xl border border-border/50 rounded-2xl shadow-2xl p-5 font-mono text-xs overflow-hidden"
           >
             <div className="flex items-center justify-between mb-4 border-b border-border/50 pb-3">
