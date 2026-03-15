@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { Terminal, Home, Cpu, Layers, BookOpen, History } from "lucide-react";
+import { 
+  Terminal, Cpu, Layers, BookOpen, 
+  History, Coffee, Award 
+} from "lucide-react";
 import { useLenis } from "@studio-freight/react-lenis";
 
 export function Header() {
@@ -31,16 +34,20 @@ export function Header() {
     }
   };
 
+  // Updated to your exact 7 navigation items
+  // Note: "Home" is handled separately as the Terminal icon in the sidebar
   const navLinks = [
-    { name: "init", id: "#hero", icon: Home },
+    { name: "deployments", id: "#projects", icon: Layers },
     { name: "arsenal", id: "#skills", icon: Cpu },
     { name: "chronology", id: "#chronology", icon: History }, 
-    { name: "deployments", id: "#projects", icon: Layers },
-    { name: "logs", id: "#blog", icon: BookOpen },
+    { name: "un-professional", id: "#capabilities", icon: Coffee },
+    { name: "certifications", id: "#certifications", icon: Award },
+    { name: "blogs", id: "#blog", icon: BookOpen },
   ];
 
   return (
     <>
+      {/* TOP HEADER (Visible at the very top of the page) */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: isScrolled ? -100 : 0, opacity: isScrolled ? 0 : 1 }}
@@ -58,7 +65,15 @@ export function Header() {
               SP<span className="text-primary">.</span>SYS
             </span>
           </a>
-          <nav className="hidden md:flex items-center gap-8 font-mono text-sm font-semibold text-muted-foreground">
+          
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 font-mono text-xs lg:text-sm font-semibold text-muted-foreground">
+            <a
+              href="#hero"
+              onClick={(e) => handleNav(e, "#hero")}
+              className="hover:text-primary transition-colors"
+            >
+              ./home
+            </a>
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -70,28 +85,34 @@ export function Header() {
               </a>
             ))}
           </nav>
-          <div className="w-32"></div> 
+          <div className="w-32 hidden md:block"></div> 
         </div>
       </motion.header>
 
+      {/* FLOATING SIDEBAR (Appears when scrolling down) */}
       <motion.nav
         initial={{ x: 100, opacity: 0 }}
         animate={{ x: isScrolled ? 0 : 100, opacity: isScrolled ? 1 : 0 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        // Applied Glassmorphism
-        className="fixed top-1/2 -translate-y-1/2 right-6 z-50 hidden md:flex flex-col gap-6 py-6 px-3 bg-background/40 backdrop-blur-md border border-border/50 rounded-full shadow-xl"
+        // Added scaling and compressed padding to prevent overlapping with bottom buttons
+        className="fixed top-1/2 -translate-y-1/2 right-2 md:right-6 z-50 hidden md:flex flex-col items-center gap-1.5 p-2 bg-background/50 backdrop-blur-xl border border-border/50 rounded-full shadow-2xl scale-[0.85] sm:scale-100 origin-right"
       >
+        {/* Home / Init Button */}
         <a
           href="#hero"
           onClick={(e) => handleNav(e, "#hero")}
-          className="p-2 rounded-full hover:bg-primary/20 hover:text-primary transition-colors group relative"
+          className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-primary/20 text-primary transition-colors group relative"
         >
-          <Terminal size={20} />
-          <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/80 backdrop-blur-sm border border-border/50 rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+          <Terminal size={18} strokeWidth={2} />
+          <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/90 backdrop-blur-sm border border-border/50 rounded-md text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg whitespace-nowrap text-foreground">
             Home
           </span>
         </a>
-        <div className="w-full h-[1px] bg-border/50"></div>
+
+        {/* Divider */}
+        <div className="w-5 h-[1px] bg-border/50 my-1"></div>
+
+        {/* The rest of the nav links */}
         {navLinks.map((link) => {
           const Icon = link.icon;
           return (
@@ -99,10 +120,10 @@ export function Header() {
               key={link.name}
               href={link.id}
               onClick={(e) => handleNav(e, link.id)}
-              className="p-2 rounded-full text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors group relative"
+              className="flex items-center justify-center w-10 h-10 rounded-full text-muted-foreground hover:bg-background/80 hover:text-foreground transition-all group relative"
             >
-              <Icon size={20} />
-              <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/80 backdrop-blur-sm border border-border/50 rounded text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none capitalize shadow-lg">
+              <Icon size={18} strokeWidth={1.5} />
+              <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/90 backdrop-blur-sm border border-border/50 rounded-md text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none capitalize shadow-lg whitespace-nowrap text-foreground">
                 {link.name}
               </span>
             </a>

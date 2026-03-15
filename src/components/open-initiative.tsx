@@ -35,11 +35,8 @@ export function OpenInitiative() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <a href="https://github.com/Sp2736" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity font-mono text-sm">
-                  <Users size={16} /> Become a Contributor
-                </a>
-                <a href="https://github.com/Sp2736" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-background/50 border border-border/50 text-foreground hover:bg-background/80 transition-colors font-mono text-sm">
-                  View Repository <ArrowRight size={16} />
+                <a href="https://github.com/Sp2736/seebug-visualizer" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity font-mono text-sm">
+                  <Users size={16} /> Become a Contributor or View Repository
                 </a>
               </div>
             </div>
@@ -60,6 +57,7 @@ export function OpenInitiative() {
                 <ul className="text-sm text-foreground space-y-1">
                   <li className="flex items-center gap-2"><Code2 size={12} className="text-primary"/> TS Developer</li>
                   <li className="flex items-center gap-2"><Code2 size={12} className="text-primary"/> DSA Enthusiast</li>
+                  <li className="flex items-center gap-2"><Code2 size={12} className="text-primary"/> SVG rendering</li>
                 </ul>
               </div>
             </div>

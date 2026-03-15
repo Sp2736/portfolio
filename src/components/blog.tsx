@@ -32,7 +32,7 @@ const externalLogs = [
 
 export function Blog() {
   return (
-    <section className="w-full py-12 px-6 relative z-10" id="creative">
+    <section className="w-full py-12 px-6 relative z-10" id="blog">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
         
         {/* Left Side: The Platforms & Publications */}
