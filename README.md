@@ -1,4 +1,4 @@
-# 🌌 SP.SYS | Professional Portfolio v2
+# 🌌 SP.SYS | Professional Portfolio v1
 
 A high-performance, cinematic digital portfolio built with **Next.js 14**, **Framer Motion**, and **Tailwind CSS**. This project serves as a technical showcase of fluid UI/UX, hardware-level browser integration, and interactive physics.
 
