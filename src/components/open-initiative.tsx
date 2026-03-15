@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { GitPullRequest, Code2, Users, ArrowRight } from "lucide-react";
 import { LinkedListVisual } from "./linked-list-visual";
 

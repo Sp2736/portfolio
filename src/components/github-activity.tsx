@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { Github, ExternalLink, FolderGit2, Terminal as TerminalIcon, GitBranch, Activity } from "lucide-react";
 
 // --- OPEN SOURCE REPOS DATA ---

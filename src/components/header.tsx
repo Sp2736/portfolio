@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, Variants, useScroll, useMotionValueEvent } from "framer-motion";
 import { 
   Terminal, Cpu, Layers, BookOpen, 
   History, Coffee, Award 
 } from "lucide-react";
-import { useLenis } from "@studio-freight/react-lenis";
+import { useLenis } from "lenis/react";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);

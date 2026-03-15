@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion, animate, useAnimation } from "framer-motion";
+import { motion, Variants, animate, useAnimation } from "framer-motion";
 import { Terminal } from "lucide-react";
 
 // --- 1. Text Decryptor Component ---

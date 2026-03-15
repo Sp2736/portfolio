@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Activity, Cpu, Network, Zap, HardDrive, Clock, MapPin, Maximize, Monitor, Wifi } from "lucide-react";
 
 export function Telemetry() {

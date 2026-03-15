@@ -66,18 +66,23 @@ const organicInterests = [
 
 // --- ANIMATION VARIANTS ---
 
-const containerVars = {
+const containerVars: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
 };
 
 const itemVars: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
+  hidden: { 
+    opacity: 0, 
+    y: 20 
+  },
+  show: { 
+    opacity: 1, 
     y: 0,
     transition: {
       type: "spring",
@@ -85,7 +90,7 @@ const itemVars: Variants = {
       damping: 10
     }
   }
-}
+};
 
 export function CoreCapabilities() {
   return (

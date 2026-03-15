@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useTheme } from "next-themes";
 import { 
   X, Code2, Cpu, Blocks, Database, Cloud, LineChart, 
