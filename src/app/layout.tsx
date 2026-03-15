@@ -19,6 +19,9 @@ const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" })
 export const metadata: Metadata = {
   title: "Swayam Patel | Architect & Developer",
   description: "Digital lab specimen. Exploring full-stack systems, AI, and scalable architecture.",
+  icons : {
+    icon: "app/favicon.png",
+  },
 };
 
 export default function RootLayout({
