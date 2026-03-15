@@ -1,0 +1,65 @@
+<svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="700" height="300" fill="#ffffff" />
+  
+  <style>
+    .node-box { fill: #fff; stroke: #333; stroke-width: 2; }
+    .node-text { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; font-weight: bold; fill: #333; }
+    .arrow-line { stroke: #666; stroke-width: 2; fill: none; }
+    .new-node-box { fill: #eefbff; stroke: #007bff; stroke-dasharray: 4; }
+    /* Keyframes for the 'broken' arrow fade */
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+  </style>
+
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+  </defs>
+
+  <g transform="translate(50, 150)">
+    <rect width="80" height="50" rx="5" class="node-box" />
+    <text x="40" y="30" text-anchor="middle" class="node-text">Node 1</text>
+  </g>
+
+  <g transform="translate(180, 150)">
+    <rect width="80" height="50" rx="5" class="node-box" />
+    <text x="40" y="30" text-anchor="middle" class="node-text">Node 2</text>
+  </g>
+
+  <path d="M 130 175 L 170 175" class="arrow-line" marker-end="url(#head)" />
+
+  <g transform="translate(310, 150)">
+    <rect width="80" height="50" rx="5" class="node-box" />
+    <text x="40" y="30" text-anchor="middle" class="node-text">Node 3</text>
+    <animateTransform attributeName="transform" type="translate" from="310, 150" to="440, 150" dur="0.8s" begin="4s" fill="freeze" calcMode="spline" keySplines="0.42 0 0.58 1" />
+  </g>
+
+  <path id="old-link" d="M 260 175 L 300 175" class="arrow-line" marker-end="url(#head)">
+    <animate attributeName="d" from="M 260 175 L 300 175" to="M 260 175 L 430 175" dur="0.8s" begin="4s" fill="freeze" />
+    <animate attributeName="opacity" from="1" to="0" dur="0.3s" begin="6s" fill="freeze" />
+  </path>
+
+  <g transform="translate(310, -100)">
+    <rect width="80" height="50" rx="5" class="node-box new-node-box" />
+    <text x="40" y="30" text-anchor="middle" class="node-text" fill="#007bff">NEW</text>
+    <animateTransform attributeName="transform" type="translate" from="310, -100" to="310, 150" dur="0.6s" begin="4.5s" fill="freeze" />
+  </g>
+
+  <path d="M 260 175 L 300 175" class="arrow-line" marker-end="url(#head)" opacity="0">
+    <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="5.5s" fill="freeze" />
+  </path>
+
+  <path d="M 390 175 L 430 175" class="arrow-line" marker-end="url(#head)" opacity="0">
+    <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="6s" fill="freeze" />
+  </path>
+
+  <text x="350" y="50" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#999">
+    <tspan x="350" dy="0">Original List</tspan>
+    <set attributeName="visibility" to="hidden" begin="4s" />
+  </text>
+  <text x="350" y="50" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#007bff" visibility="hidden">
+    Inserting New Node...
+    <set attributeName="visibility" to="visible" begin="4s" />
+    <set attributeName="visibility" to="hidden" begin="6.5s" />
+  </text>
+</svg>

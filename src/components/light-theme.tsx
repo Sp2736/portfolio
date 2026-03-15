@@ -7,172 +7,186 @@ import { Magnet, RefreshCcw, ShieldAlert, Zap } from "lucide-react";
 // --- 1. Foreground Interactive Cursor (Black Trail, Smoke & Ash) ---
 function AshCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    
-    const smokeParticles: Smoke[] = [];
-    const ashParticles: Ash[] = [];
-    const trail: TrailPoint[] = [];
-
-    const TRAIL_DECAY = 0.025; 
-    const TRAIL_WIDTH = 3; 
-
-    const setSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    setSize();
-    window.addEventListener("resize", setSize);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      trail.push(new TrailPoint(e.clientX, e.clientY));
-      if (Math.random() > 0.85) {
-        ashParticles.push(new Ash(e.clientX, e.clientY));
-      }
-    };
-
-    const handleClick = (e: MouseEvent) => {
-      for (let i = 0; i < 5; i++) {
-        smokeParticles.push(new Smoke(e.clientX, e.clientY));
-      }
-      for (let i = 0; i < 15; i++) {
-        ashParticles.push(new Ash(e.clientX, e.clientY));
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("click", handleClick);
-
-    class TrailPoint {
-      x: number; y: number; life: number;
-      constructor(x: number, y: number) {
-        this.x = x; this.y = y; this.life = 1.0;
-      }
-      update() { this.life -= TRAIL_DECAY; }
-    }
-
-    class Smoke {
-      x: number; y: number; vx: number; vy: number;
-      size: number; life: number; maxLife: number;
-      constructor(x: number, y: number) {
-        this.x = x + (Math.random() - 0.5) * 20; 
-        this.y = y + (Math.random() - 0.5) * 20;
-        this.vx = (Math.random() - 0.5) * 1; 
-        this.vy = Math.random() * -1.5 - 0.5; 
-        this.size = Math.random() * 15 + 10; 
-        this.life = 0;
-        this.maxLife = Math.random() * 40 + 30; 
-      }
-      update() {
-        this.x += this.vx; 
-        this.y += this.vy;
-        this.size += 0.5; 
-        this.life++; 
-      }
-      draw(context: CanvasRenderingContext2D) {
-        const progress = this.life / this.maxLife;
-        context.globalAlpha = Math.max(0, 1 - progress) * 0.15; 
-        context.fillStyle = "#171717"; 
+  
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+  
+      let animationFrameId: number;
+  
+      const stars: StarParticle[] = [];
+      const trail: TrailPoint[] = [];
+  
+      const TRAIL_DECAY = 0.02;
+      const TRAIL_WIDTH = 3;
+      const STAR_COUNT = 15;
+      const STAR_SPEED_MIN = 1;
+      const STAR_SPEED_MAX = 5;
+      // Pure whites and stark silvers for the professional Shadcn look
+      const COLORS = ["#221414", "#050D15", "#18191A", "#18191a"];
+  
+      const setSize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+      setSize();
+      window.addEventListener("resize", setSize);
+  
+      const handleMouseMove = (e: MouseEvent) => {
+        trail.push(new TrailPoint(e.clientX, e.clientY));
+        if (Math.random() > 0.8) {
+          stars.push(new StarParticle(e.clientX, e.clientY));
+        }
+      };
+  
+      const handleClick = (e: MouseEvent) => {
+        for (let i = 0; i < STAR_COUNT; i++) {
+          stars.push(new StarParticle(e.clientX, e.clientY));
+        }
+      };
+  
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("click", handleClick);
+  
+      const drawStarShape = (
+        context: CanvasRenderingContext2D,
+        x: number,
+        y: number,
+        radius: number,
+      ) => {
+        context.save();
         context.beginPath();
-        context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        context.translate(x, y);
+        context.moveTo(0, -radius);
+        context.quadraticCurveTo(0, 0, radius, 0);
+        context.quadraticCurveTo(0, 0, 0, radius);
+        context.quadraticCurveTo(0, 0, -radius, 0);
+        context.quadraticCurveTo(0, 0, 0, -radius);
         context.fill();
-        context.globalAlpha = 1;
+        context.restore();
+      };
+  
+      class TrailPoint {
+        x: number;
+        y: number;
+        life: number;
+        constructor(x: number, y: number) {
+          this.x = x;
+          this.y = y;
+          this.life = 1.0;
+        }
+        update() {
+          this.life -= TRAIL_DECAY;
+        }
       }
-    }
-
-    class Ash {
-      x: number; y: number; vx: number; vy: number;
-      size: number; life: number; maxLife: number;
-      constructor(x: number, y: number) {
-        this.x = x; this.y = y;
-        const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 4 + 2;
-        this.vx = Math.cos(angle) * speed;
-        this.vy = Math.sin(angle) * speed;
-        this.size = Math.random() * 2 + 1; 
-        this.life = 0;
-        this.maxLife = Math.random() * 20 + 15;
+  
+      class StarParticle {
+        x: number;
+        y: number;
+        vx: number;
+        vy: number;
+        size: number;
+        life: number;
+        maxLife: number;
+        color: string;
+        rotation: number;
+        rotSpeed: number;
+        constructor(x: number, y: number) {
+          this.x = x;
+          this.y = y;
+          const angle = Math.random() * Math.PI * 2;
+          const speed =
+            Math.random() * (STAR_SPEED_MAX - STAR_SPEED_MIN) + STAR_SPEED_MIN;
+          this.vx = Math.cos(angle) * speed;
+          this.vy = Math.sin(angle) * speed;
+          this.size = Math.random() * 8 + 4;
+          this.life = 0;
+          this.maxLife = Math.random() * 30 + 20;
+          this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.rotation = Math.random() * Math.PI;
+          this.rotSpeed = (Math.random() - 0.5) * 0.2;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.life++;
+          this.size *= 0.95;
+          this.rotation += this.rotSpeed;
+        }
+        draw(context: CanvasRenderingContext2D) {
+          context.globalAlpha = Math.max(0, 1 - this.life / this.maxLife);
+          context.fillStyle = this.color;
+  
+          context.save();
+          context.translate(this.x, this.y);
+          context.rotate(this.rotation);
+          drawStarShape(context, 0, 0, this.size);
+          context.restore();
+  
+          context.globalAlpha = 1;
+        }
       }
-      update() {
-        this.x += this.vx; 
-        this.vy += 0.15; 
-        this.y += this.vy;
-        this.vx *= 0.95; 
-        this.life++; 
-        this.size *= 0.9; 
-      }
-      draw(context: CanvasRenderingContext2D) {
-        context.globalAlpha = Math.max(0, 1 - (this.life / this.maxLife));
-        context.fillStyle = "#000000"; 
-        context.beginPath();
-        context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        context.fill();
-        context.globalAlpha = 1;
-      }
-    }
-
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (let i = trail.length - 1; i >= 0; i--) {
-        const point = trail[i];
-        point.update();
-        if (point.life <= 0) trail.splice(i, 1);
-      }
-
-      if (trail.length > 1) {
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        for (let i = 0; i < trail.length - 1; i++) {
+  
+      const render = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+        for (let i = trail.length - 1; i >= 0; i--) {
+          const point = trail[i];
+          point.update();
+          if (point.life <= 0) trail.splice(i, 1);
+        }
+  
+        if (trail.length > 1) {
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          for (let i = 0; i < trail.length - 1; i++) {
             const point = trail[i];
-            const nextPoint = trail[i+1];
+            const nextPoint = trail[i + 1];
             ctx.beginPath();
             ctx.moveTo(point.x, point.y);
             ctx.lineTo(nextPoint.x, nextPoint.y);
-            
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = "rgba(0,0,0,0.3)";
-            ctx.lineWidth = TRAIL_WIDTH * point.life; 
-            ctx.strokeStyle = `rgba(0, 0, 0, ${point.life * 0.8})`; 
+  
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = "#000000";
+            ctx.lineWidth = TRAIL_WIDTH * point.life;
+            ctx.strokeStyle = `rgba(0, 0, 0, ${point.life * 0.5})`;
             ctx.stroke();
+  
             ctx.shadowBlur = 0;
+            ctx.lineWidth = TRAIL_WIDTH * 0.5 * point.life;
+            ctx.strokeStyle = `rgba(0, 0, 0, ${point.life})`;
+            ctx.stroke();
+          }
         }
-      }
-
-      for (let i = smokeParticles.length - 1; i >= 0; i--) {
-        const s = smokeParticles[i];
-        s.update();
-        s.draw(ctx);
-        if (s.life >= s.maxLife) smokeParticles.splice(i, 1);
-      }
-
-      for (let i = ashParticles.length - 1; i >= 0; i--) {
-        const a = ashParticles[i];
-        a.update();
-        a.draw(ctx);
-        if (a.life >= a.maxLife) ashParticles.splice(i, 1);
-      }
-
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      window.removeEventListener("resize", setSize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("click", handleClick);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[100]" />;
+  
+        for (let i = stars.length - 1; i >= 0; i--) {
+          const s = stars[i];
+          s.update();
+          s.draw(ctx);
+          if (s.life >= s.maxLife) stars.splice(i, 1);
+        }
+  
+        animationFrameId = requestAnimationFrame(render);
+      };
+  
+      render();
+  
+      return () => {
+        window.removeEventListener("resize", setSize);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("click", handleClick);
+        cancelAnimationFrame(animationFrameId);
+      };
+    }, []);
+  
+    return (
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none z-[100]"
+      />
+    );
 }
 
 // --- 2. Magnetic Architectural Blueprint (Responsive Grid) ---
@@ -335,7 +349,6 @@ function MagneticGridBackground() {
 }
 
 // --- Global CSS Injection for the Anti-Gravity Deconstruct ---
-// --- Global CSS Injection for the Rigid-Body DOM Physics Easter Egg ---
 const zeroGStyles = `
   /* Phase 1: Magnetic Containment Failing (Alarms) */
   .gravity-failing > *:not(.easter-egg-safe) {
