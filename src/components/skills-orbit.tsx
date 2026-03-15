@@ -3,9 +3,19 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useTheme } from "next-themes";
-import { 
-  X, Code2, Cpu, Blocks, Database, Cloud, LineChart, 
-  BrainCircuit, Sparkles, Wrench, Palette, Monitor 
+import {
+  X,
+  Code2,
+  Cpu,
+  Blocks,
+  Database,
+  Cloud,
+  LineChart,
+  BrainCircuit,
+  Sparkles,
+  Wrench,
+  Palette,
+  Monitor,
 } from "lucide-react";
 // classification filters
 const categories = [
@@ -23,17 +33,17 @@ const categories = [
 ];
 
 const categoryIcons: Record<string, React.ElementType> = {
-  "Languages": Code2,
+  Languages: Code2,
   "System Level": Cpu,
-  "Frameworks": Blocks,
-  "Databases": Database,
+  Frameworks: Blocks,
+  Databases: Database,
   "Cloud & DevOps": Cloud,
   "Data & Analytics": LineChart,
   "AI & LLMs": BrainCircuit,
   "Generative AI": Sparkles,
   "Dev Tools & IDEs": Wrench,
   "Design & PM": Palette,
-  "Operating Systems": Monitor
+  "Operating Systems": Monitor,
 };
 
 const skillsData = [
@@ -439,38 +449,191 @@ export function SkillsOrbit() {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isZeroG, setIsZeroG] = useState(false);
+  const [segfaultCount, setSegfaultCount] = useState(0);
+  const [isSegfault, setIsSegfault] = useState(false);
+  useEffect(() => {
+    if (segfaultCount >= 3) {
+      setIsSegfault(true);
+      setSegfaultCount(0); // Reset
+      setTimeout(() => setIsSegfault(false), 3500); // Crash lasts 3.5 seconds
+    }
+  }, [segfaultCount]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const currentTheme = mounted ? (resolvedTheme || theme) : "dark";
+  // --- ZERO-G PHYSICS ENGINE ---
+  useEffect(() => {
+    if (!isZeroG) return;
+
+    // Grab all the icons currently rendered on screen
+    const originalNodes = document.querySelectorAll(".skill-physics-node");
+    if (originalNodes.length === 0) return;
+
+    // Create a global full-screen sandbox
+    const sandbox = document.createElement("div");
+    sandbox.id = "zero-g-sandbox";
+    sandbox.style.position = "fixed";
+    sandbox.style.inset = "0";
+    sandbox.style.pointerEvents = "none"; // Lets you click through it
+    sandbox.style.zIndex = "99999";
+    document.body.appendChild(sandbox);
+
+    // Clone the nodes, hide the originals, and set up physics bodies
+    const bodies = Array.from(originalNodes).map((node) => {
+      const el = node as HTMLElement;
+      const rect = el.getBoundingClientRect();
+      const clone = el.cloneNode(true) as HTMLElement;
+
+      // Lock clone to exact absolute coordinates
+      clone.style.position = "absolute";
+      clone.style.left = `${rect.left}px`;
+      clone.style.top = `${rect.top}px`;
+      clone.style.width = `${rect.width}px`;
+      clone.style.height = `${rect.height}px`;
+      clone.style.margin = "0";
+      clone.style.transition = "none";
+      clone.style.transform = "none"; // strip framer-motion animations
+      clone.style.pointerEvents = "auto"; // Make clones interactive
+
+      sandbox.appendChild(clone);
+      el.style.opacity = "0"; // hide original
+
+      return {
+        el: clone,
+        x: rect.left,
+        y: rect.top,
+        w: rect.width,
+        h: rect.height,
+        // Initial explosive burst velocity
+        vx: (Math.random() - 0.5) * 15,
+        vy: (Math.random() - 0.5) * 15 - 5,
+        rot: 0,
+        vRot: (Math.random() - 0.5) * 8,
+      };
+    });
+
+    // Mouse Tracking for Repulsion Force
+    let mx = -1000,
+      my = -1000;
+    const onMouseMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+    };
+    window.addEventListener("mousemove", onMouseMove);
+
+    let animationId: number;
+    const loop = () => {
+      bodies.forEach((b) => {
+        // Space Friction
+        const speed = Math.sqrt(b.vx * b.vx + b.vy * b.vy);
+        if (speed > 2) {
+          b.vx *= 0.98;
+          b.vy *= 0.98;
+        }
+
+        // Magnetic Repulsion from Mouse
+        const dx = b.x + b.w / 2 - mx;
+        const dy = b.y + b.h / 2 - my;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200) {
+          const force = (200 - dist) / 200;
+          b.vx += (dx / dist) * force * 1.5;
+          b.vy += (dy / dist) * force * 1.5;
+          b.vRot += (dx / dist) * force * 2;
+        }
+
+        b.x += b.vx;
+        b.y += b.vy;
+        b.rot += b.vRot;
+
+        // Bouncy Screen Boundaries
+        const elasticity = 0.8;
+        if (b.x <= 0) {
+          b.x = 0;
+          b.vx *= -elasticity;
+          b.vRot += b.vy * 0.1;
+        }
+        if (b.x + b.w >= window.innerWidth) {
+          b.x = window.innerWidth - b.w;
+          b.vx *= -elasticity;
+          b.vRot -= b.vy * 0.1;
+        }
+        if (b.y <= 0) {
+          b.y = 0;
+          b.vy *= -elasticity;
+          b.vRot -= b.vx * 0.1;
+        }
+        if (b.y + b.h >= window.innerHeight) {
+          b.y = window.innerHeight - b.h;
+          b.vy *= -elasticity;
+          b.vRot += b.vx * 0.1;
+        }
+
+        // Apply transformations
+        b.el.style.left = `${b.x}px`;
+        b.el.style.top = `${b.y}px`;
+        b.el.style.transform = `rotate(${b.rot}deg)`;
+      });
+      animationId = requestAnimationFrame(loop);
+    };
+    loop();
+
+    // Press Escape to restore gravity
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsZeroG(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      if (document.getElementById("zero-g-sandbox")) sandbox.remove();
+      originalNodes.forEach((node) => {
+        (node as HTMLElement).style.opacity = "1";
+      });
+    };
+  }, [isZeroG]);
+
+  const currentTheme = mounted ? resolvedTheme || theme : "dark";
   const isDarkTheme = currentTheme !== "light";
 
-  const filteredSkills = activeCategory ? skillsData.filter(s => s.category === activeCategory) : [];
+  const filteredSkills = activeCategory
+    ? skillsData.filter((s) => s.category === activeCategory)
+    : [];
 
   return (
     <section className="w-full py-12 px-6 relative z-10" id="skills">
-      
       {/* Title Block */}
       <div className="max-w-6xl mx-auto text-center mb-8">
-        <h2 className="text-primary font-mono text-[10px] tracking-widest uppercase mb-1">Technical Arsenal</h2>
-        <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">System Matrix</h3>
+        <h2 className="text-primary font-mono text-[10px] tracking-widest uppercase mb-1">
+          Technical Arsenal
+        </h2>
+        <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">
+          System Matrix
+        </h3>
       </div>
 
-      <motion.div layout className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start min-h-[300px]">
-        
+      <motion.div
+        layout
+        className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12 items-center lg:items-start min-h-[300px]"
+      >
         {/* LEFT WING: The Physical Holographic Nodes */}
-        <motion.div 
-          layout 
+        <motion.div
+          layout
           className={`flex flex-wrap justify-center gap-4 md:gap-5 transition-all duration-500 ease-in-out ${
-            activeCategory ? "w-full lg:w-1/4 flex-row lg:flex-col items-center" : "w-full"
+            activeCategory
+              ? "w-full lg:w-1/4 flex-row lg:flex-col items-center"
+              : "w-full"
           }`}
         >
           <AnimatePresence mode="popLayout">
             {categories.map((cat, i) => {
               if (activeCategory && activeCategory !== cat) return null;
-              
+
               const isActive = activeCategory === cat;
               const Icon = categoryIcons[cat] || Cpu;
 
@@ -480,41 +643,57 @@ export function SkillsOrbit() {
                   key={cat}
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.4, filter: "blur(10px)", transition: { duration: 0.2 } }}
-transition={{ type: "spring", stiffness: 200, damping: 20 }}                  className="relative z-20"
+                  exit={{
+                    opacity: 0,
+                    scale: 1.4,
+                    filter: "blur(10px)",
+                    transition: { duration: 0.2 },
+                  }}
+                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                  className="relative z-20"
                 >
                   {/* The Physics Wrapper: Moves the ENTIRE bubble perfectly together */}
-                  <motion.div 
+                  <motion.div
                     animate={isActive ? { y: 0 } : { y: [-5, 5, -5] }} // Docks firmly when active, floats when idle
-                    transition={{ duration: 4 + (i % 3), repeat: Infinity, ease: "easeInOut" }}
+                    transition={{
+                      duration: 4 + (i % 3),
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                   >
                     <motion.button
                       layoutId={`bubble-bg-${cat}`} // Handles the shape morph
                       onClick={() => setActiveCategory(isActive ? null : cat)}
-                      className={`relative flex flex-col items-center justify-center gap-2 cursor-pointer rounded-full backdrop-blur-xl border transition-colors duration-300 group overflow-hidden ${
-                        isActive 
-                          ? "w-28 h-28 md:w-32 md:h-32 bg-primary/20 border-primary shadow-[0_0_30px_rgba(var(--primary),0.5)]" 
-                          : "w-24 h-24 md:w-28 md:h-28 bg-background/50 border-border/50 hover:border-primary/50 hover:bg-background/80 shadow-lg"
+                      className={`relative flex flex-col items-center justify-center gap-2 cursor-pointer rounded-full backdrop-blur-md border transition-colors duration-300 group overflow-hidden ${
+                        isActive
+                          ? "w-28 h-28 md:w-32 md:h-32 bg-primary/20 border-primary shadow-[0_0_30px_rgba(var(--primary),0.5)]"
+                          : "w-24 h-24 md:w-28 md:h-28 bg-background/5 border-border/30 hover:border-primary/50 hover:bg-background/80 shadow-lg"
                       }`}
                     >
                       {/* Integrated Icon & Text (No more plain text boredom) */}
-                      <Icon 
-                        size={isActive ? 28 : 22} 
+                      <Icon
+                        size={isActive ? 28 : 22}
                         strokeWidth={isActive ? 2 : 1.5}
-                        className={`transition-colors duration-300 ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"}`} 
+                        className={`transition-colors duration-300 ${isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary"}`}
                       />
-                      <span className={`font-mono text-[9px] md:text-[10px] font-bold leading-tight px-3 text-center transition-colors duration-300 ${isActive ? "text-primary-foreground" : "text-foreground"}`}>
+                      <span
+                        className={`font-mono text-[9px] md:text-[10px] font-bold leading-tight px-3 text-center transition-colors duration-300 ${isActive ? "text-primary-foreground" : "text-foreground"}`}
+                      >
                         {cat}
                       </span>
-                      
+
                       {/* Close/Revert Badge */}
                       {isActive && (
-                        <motion.div 
-                          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 }}
                           className="absolute bottom-3 flex items-center gap-1 text-primary bg-background/80 px-2.5 py-1 rounded-full border border-primary/30 shadow-md"
                         >
                           <X size={10} strokeWidth={3} />
-                          <span className="text-[8px] uppercase tracking-widest font-extrabold">Close</span>
+                          <span className="text-[8px] uppercase tracking-widest font-extrabold">
+                            Close
+                          </span>
                         </motion.div>
                       )}
                     </motion.button>
@@ -528,15 +707,15 @@ transition={{ type: "spring", stiffness: 200, damping: 20 }}                  cl
         {/* RIGHT WING: The Arsenal Nodes (Remains the flawless Zero-Gravity Cascade) */}
         <AnimatePresence>
           {activeCategory && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.2 } }}
               className="w-full lg:w-3/4 flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6"
             >
               {filteredSkills.map((skill, index) => {
-                const iconUrl = skill.icon.includes('skillicons.dev') 
-                  ? `${skill.icon}&theme=${isDarkTheme ? 'dark' : 'light'}` 
+                const iconUrl = skill.icon.includes("skillicons.dev")
+                  ? `${skill.icon}&theme=${isDarkTheme ? "dark" : "light"}`
                   : skill.icon;
                 const needsInvert = skill.invertDark && isDarkTheme;
 
@@ -545,25 +724,49 @@ transition={{ type: "spring", stiffness: 200, damping: 20 }}                  cl
                     key={`${skill.name}-${skill.category}`}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
-transition={{ duration: 0.4, delay: index * 0.03, type: "spring" }}                    className="relative z-10 hover:z-50"
+                    transition={{
+                      duration: 0.4,
+                      delay: index * 0.03,
+                      type: "spring",
+                    }}
+                    // ADDED CLASS AND ONCLICK HERE:
+                    className="relative z-10 hover:z-50 skill-physics-node"
+                    onClick={() => {
+                      // Zero-G Trigger
+                      if (skill.name === "Antigravity" && !isZeroG) {
+                        setIsZeroG(true);
+                      }
+
+                      // Segmentation Fault Trigger
+                      if (skill.name === "C++" || skill.name === "Assembly") {
+                        setSegfaultCount((prev) => prev + 1);
+                      }
+                    }}
                   >
                     <motion.div
-                      animate={{ y: [0, -8, 0] }}
-                      transition={{ repeat: Infinity, duration: 3 + (index % 3), delay: index * 0.1, ease: "easeInOut" }}
+                      animate={isZeroG ? { y: 0 } : { y: [0, -8, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 3 + (index % 3),
+                        delay: index * 0.1,
+                        ease: "easeInOut",
+                      }}
                       className="group flex flex-col items-center justify-center cursor-crosshair"
                     >
                       <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-primary/30 to-transparent p-[1px] shadow-md group-hover:shadow-[0_0_25px_rgba(var(--primary),0.6)] transition-all duration-300 group-hover:scale-110">
-                        <div className="w-full h-full rounded-full bg-background/70 backdrop-blur-xl flex items-center justify-center border border-border/50 group-hover:border-primary/50 transition-colors">
-                          <img 
-                            src={iconUrl} 
-                            alt={skill.name} 
-                            className={`w-7 h-7 md:w-9 md:h-9 object-contain drop-shadow-lg transition-transform duration-300 ${needsInvert ? 'invert opacity-90' : ''}`}
+                        <div className="w-full h-full rounded-full bg-background/70 backdrop-blur-md flex items-center justify-center border border-border/30 group-hover:border-primary/50 transition-colors">
+                          <img
+                            src={iconUrl}
+                            alt={skill.name}
+                            className={`w-7 h-7 md:w-9 md:h-9 object-contain drop-shadow-lg transition-transform duration-300 ${needsInvert ? "invert opacity-90" : ""}`}
                             loading="lazy"
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                            onError={(e) => {
+                              e.currentTarget.style.display = "none";
+                            }}
                           />
                         </div>
                       </div>
-                      
+
                       <div className="absolute top-[110%] left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                         <span className="text-[9px] md:text-[10px] font-mono font-bold text-primary-foreground bg-primary px-2.5 py-1 rounded-md shadow-xl whitespace-nowrap block border border-primary/50">
                           {skill.name}
@@ -576,8 +779,73 @@ transition={{ duration: 0.4, delay: index * 0.03, type: "spring" }}             
             </motion.div>
           )}
         </AnimatePresence>
-
       </motion.div>
+      {/* ZERO-G WARNING HUD */}
+      <AnimatePresence>
+        {isZeroG && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-10 left-1/2 -translate-x-1/2 z-[100000] pointer-events-none text-center"
+          >
+            <div className="bg-red-500/10 backdrop-blur-md border border-red-500 text-red-500 px-6 py-3 rounded-full shadow-[0_0_30px_rgba(239,68,68,0.4)]">
+              <h1 className="font-mono text-sm md:text-base font-black tracking-widest uppercase animate-pulse">
+                Zero-G Protocol Engaged
+              </h1>
+              <p className="font-mono text-[10px] uppercase tracking-wider mt-1 opacity-80">
+                Press [ESC] to restore gravity
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* SEGMENTATION FAULT OVERLAY */}
+      <AnimatePresence>
+        {isSegfault && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[999999] bg-black text-[#00ff00] font-mono p-4 md:p-8 flex flex-col justify-start items-start pointer-events-none overflow-hidden text-xs md:text-sm"
+          >
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-30 mix-blend-overlay"></div>
+            <div className="relative z-10 flex flex-col gap-1">
+              <p>
+                [ 0.000000] Linux version 6.1.0-sp-sys (root@mainframe) (gcc
+                (GCC) 11.2.0, GNU ld) #1 SMP PREEMPT_DYNAMIC
+              </p>
+              <p>
+                [ 2.143211] BUG: unable to handle page fault for address:
+                ffffffffffffffff
+              </p>
+              <p>
+                [ 2.143215] #PF: supervisor instruction fetch in kernel mode
+              </p>
+              <p>[ 2.143218] #PF: error_code(0x0010) - not-present page</p>
+              <p className="text-red-500 font-bold mt-2">
+                [ 2.143220] SEGFAULT: Core Dumped. Pointer dereferenced at
+                0x00000000
+              </p>
+              <p>[ 2.143225] Oops: 0010 [#1] PREEMPT SMP NOPTI</p>
+              <p>
+                [ 2.143230] CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-sp-sys #1
+              </p>
+              <p>
+                [ 2.143235] Hardware name: Custom SP.SYS Architecture /
+                Motherboard v2.0
+              </p>
+              <p>[ 2.143240] RIP: 0010:0xffffffffffffffff</p>
+              <p className="mt-4 text-red-500 animate-pulse">
+                Kernel panic - not syncing: Fatal exception
+              </p>
+              <p className="mt-2 text-muted-foreground">
+                Rebooting system in 3 seconds...
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

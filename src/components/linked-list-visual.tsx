@@ -5,7 +5,7 @@ export function LinkedListVisual() {
   const TOTAL = "7s";
 
   return (
-    <div className="w-full bg-background/20 rounded-xl border border-border/50 overflow-hidden shadow-inner mt-8">
+    <div className="w-full bg-background/5 rounded-xl border border-border/30 overflow-hidden shadow-inner mt-8">
       <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         <defs>
           <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">

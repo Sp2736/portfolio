@@ -190,7 +190,7 @@ export function Timeline() {
                       className={`group p-4 md:p-5 rounded-2xl border transition-all duration-300 cursor-pointer backdrop-blur-md shadow-lg ${
                         isExpanded
                           ? "bg-primary/10 border-primary shadow-primary/20"
-                          : "bg-background/40 border-border/50 hover:border-primary/50 hover:bg-background/60 hover:-translate-y-0.5"
+                          : "bg-background/5 border-border/30 hover:border-primary/50 hover:bg-background/60 hover:-translate-y-0.5"
                       }`}
                     >
                       {/* Reduced bottom margin */}
@@ -199,7 +199,7 @@ export function Timeline() {
                           <Calendar size={12} />
                           {item.year}
                         </div>
-                        <div className="p-1.5 rounded-full bg-background/50 border border-border/50 text-muted-foreground group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+                        <div className="p-1.5 rounded-full bg-background/5 border border-border/30 text-muted-foreground group-hover:text-primary group-hover:bg-primary/10 transition-colors">
                           <Icon size={14} />
                         </div>
                       </div>
@@ -226,7 +226,7 @@ export function Timeline() {
                             transition={{ duration: 0.3 }}
                             className="overflow-hidden"
                           >
-                            <div className="pt-3 border-t border-border/50 mt-3">
+                            <div className="pt-3 border-t border-border/30 mt-3">
                               <p className="text-xs md:text-sm text-foreground/80 leading-relaxed mb-3">
                                 {item.context}
                               </p>
@@ -234,7 +234,7 @@ export function Timeline() {
                                 {item.tech.map((t, i) => (
                                   <span
                                     key={i}
-                                    className="text-[9px] md:text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded border border-border/50 bg-background/50 text-muted-foreground"
+                                    className="text-[9px] md:text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded border border-border/30 bg-background/5 text-muted-foreground"
                                   >
                                     {t}
                                   </span>

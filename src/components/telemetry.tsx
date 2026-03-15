@@ -143,7 +143,7 @@ export function Telemetry() {
       {/* TRIGGER BUTTON */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full border border-border/50 bg-background/40 backdrop-blur-md shadow-xl hover:bg-background/60 transition-all active:scale-95 group"
+        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full border border-border/30 bg-background/5 backdrop-blur-md shadow-xl hover:bg-background/60 transition-all active:scale-95 group"
       >
         <Activity size={20} className="text-muted-foreground group-hover:text-primary transition-colors" />
       </button>
@@ -155,14 +155,14 @@ export function Telemetry() {
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 100, opacity: 0 }}
-transition={{ type: "spring", stiffness: 300, damping: 30 }}            className="fixed bottom-6 right-24 z-50 w-80 bg-background/70 backdrop-blur-2xl border border-border/50 rounded-2xl shadow-2xl p-5 font-mono text-xs overflow-hidden"
+transition={{ type: "spring", stiffness: 300, damping: 30 }}            className="fixed bottom-6 right-24 z-50 w-80 bg-background/70 backdrop-blur-2xl border border-border/30 rounded-2xl shadow-2xl p-5 font-mono text-xs overflow-hidden"
           >
-            <div className="flex items-center justify-between mb-4 border-b border-border/50 pb-3">
+            <div className="flex items-center justify-between mb-4 border-b border-border/30 pb-3">
               <div className="flex items-center gap-2">
                 <Zap size={14} className="text-primary animate-pulse" />
                 <span className="font-bold tracking-widest uppercase">System Diagnostics</span>
               </div>
-              <div className="flex items-center gap-1 text-[10px] text-muted-foreground bg-background/50 px-2 py-0.5 rounded-full border border-border/50 shadow-inner">
+              <div className="flex items-center gap-1 text-[10px] text-muted-foreground bg-background/5 px-2 py-0.5 rounded-full border border-border/30 shadow-inner">
                 <MapPin size={10} className="text-primary" /> Local
               </div>
             </div>
@@ -214,20 +214,20 @@ transition={{ type: "spring", stiffness: 300, damping: 30 }}            classNam
             </div>
 
             {/* Render Hardware (GPU Extract) */}
-            <div className="mt-4 pt-3 border-t border-border/50 flex flex-col gap-1">
+            <div className="mt-4 pt-3 border-t border-border/30 flex flex-col gap-1">
               <span className="text-muted-foreground flex items-center gap-1.5">Render Hardware</span>
               <span className="font-bold text-foreground truncate text-primary">{gpu}</span>
             </div>
 
             {/* Uptime & DOM Nodes & FPS */}
-            <div className="mt-4 pt-3 border-t border-border/50 flex flex-col gap-2">
+            <div className="mt-4 pt-3 border-t border-border/30 flex flex-col gap-2">
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-1.5"><Clock size={12}/> Session Uptime</span>
-                <span className="font-bold text-foreground bg-background/50 border border-border/50 px-2 py-1 rounded shadow-sm">{formatUptime(uptime)}</span>
+                <span className="font-bold text-foreground bg-background/5 border border-border/30 px-2 py-1 rounded shadow-sm">{formatUptime(uptime)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-1.5">DOM Nodes</span>
-                <span className="font-bold text-foreground bg-background/50 border border-border/50 px-2 py-1 rounded shadow-sm">{nodes} nodes</span>
+                <span className="font-bold text-foreground bg-background/5 border border-border/30 px-2 py-1 rounded shadow-sm">{nodes} nodes</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground flex items-center gap-1.5"><Activity size={12}/> Render FPS</span>

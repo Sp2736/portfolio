@@ -219,7 +219,7 @@ export function GlassController() {
         className={`fixed bottom-[84px] right-6 z-[10000] flex items-center justify-center w-12 h-12 rounded-full border transition-all active:scale-95 group shadow-xl ${
           isShattered
             ? "bg-blue-600/20 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white"
-            : "bg-background/40 backdrop-blur-md border-border/50 text-muted-foreground hover:bg-background/60"
+            : "bg-background/5 backdrop-blur-md border-border/30 text-muted-foreground hover:bg-background/60"
         }`}
       >
         {isShattered ? (

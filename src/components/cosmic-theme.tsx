@@ -555,7 +555,7 @@ export function WarpDriveEasterEgg() {
         <button
           onClick={warpState === "warped" ? cancelWarp : triggerWarp}
           disabled={warpState === "spooling"}
-          className={`group flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-mono text-xs uppercase tracking-widest font-bold shadow-2xl backdrop-blur-xl ${
+          className={`group flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-mono text-xs uppercase tracking-widest font-bold shadow-2xl backdrop-blur-md ${
             warpState === "idle"
               ? "bg-slate-900/60 text-blue-400 border-blue-500/50 hover:bg-blue-900 hover:text-white hover:shadow-[0_0_30px_rgba(59,130,246,0.8)]"
               : warpState === "warped"

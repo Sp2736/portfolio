@@ -737,7 +737,7 @@ function ZeroGEasterEgg() {
               : triggerZeroG
           }
           disabled={gravityState === "failing"}
-          className={`group flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-mono text-xs uppercase tracking-widest font-bold shadow-2xl backdrop-blur-xl ${
+          className={`group flex items-center gap-3 px-6 py-3 rounded-full border transition-all duration-500 font-mono text-xs uppercase tracking-widest font-bold shadow-2xl backdrop-blur-md ${
             gravityState === "nominal"
               ? "bg-slate-50/80 text-slate-600 border-slate-300 hover:bg-slate-800 hover:text-white"
               : gravityState === "zero-g"

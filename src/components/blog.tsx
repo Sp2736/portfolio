@@ -7,6 +7,9 @@ import {
   ExternalLink,
   Server,
   Book,
+  Headphones,
+  Youtube,
+  Music
 } from "lucide-react";
 
 const externalLogs = [
@@ -51,7 +54,7 @@ export function Blog() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="p-6 rounded-2xl bg-background/40 backdrop-blur-md border border-border/50 shadow-xl"
+            className="p-6 rounded-2xl bg-background/5 backdrop-blur-md border border-border/30 shadow-xl"
           >
             <div className="flex items-center gap-3 mb-4 text-primary">
               <Server size={20} />
@@ -69,10 +72,10 @@ export function Blog() {
               transmissions.
             </p>
             <div className="flex flex-wrap gap-2 mb-6">
-              <span className="text-[10px] font-mono bg-background/50 border border-border/50 px-2 py-1 rounded text-foreground">
+              <span className="text-[10px] font-mono bg-background/5 border border-border/30 px-2 py-1 rounded text-foreground">
                 Various Categories
               </span>
-              <span className="text-[10px] font-mono bg-background/50 border border-border/50 px-2 py-1 rounded text-foreground">
+              <span className="text-[10px] font-mono bg-background/5 border border-border/30 px-2 py-1 rounded text-foreground">
                 Amazing Themes
               </span>
             </div>
@@ -96,7 +99,7 @@ export function Blog() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="p-6 rounded-2xl bg-background/40 backdrop-blur-md border border-border/50 shadow-xl"
+            className="p-6 rounded-2xl bg-background/5 backdrop-blur-md border border-border/30 shadow-xl"
           >
             <div className="flex items-center gap-3 mb-4 text-primary">
               <Book size={20} />
@@ -115,16 +118,16 @@ export function Blog() {
               — leaving only words as proof he once burned."
             </p>
             <div className="flex flex-wrap gap-2 mb-6">
-              <span className="text-[10px] font-mono bg-background/50 border border-border/50 px-2 py-1 rounded text-foreground">
+              <span className="text-[10px] font-mono bg-background/5 border border-border/30 px-2 py-1 rounded text-foreground">
                 20 Poems
               </span>
-              <span className="text-[10px] font-mono bg-background/50 border border-border/50 px-2 py-1 rounded text-foreground">
+              <span className="text-[10px] font-mono bg-background/5 border border-border/30 px-2 py-1 rounded text-foreground">
                 Mental Health
               </span>
-              <span className="text-[10px] font-mono bg-background/50 border border-border/50 px-2 py-1 rounded text-foreground">
+              <span className="text-[10px] font-mono bg-background/5 border border-border/30 px-2 py-1 rounded text-foreground">
                 Teenage Love
               </span>
-              <span className="text-[10px] font-mono bg-background/50 border border-border/50 px-2 py-1 rounded text-foreground">
+              <span className="text-[10px] font-mono bg-background/5 border border-border/30 px-2 py-1 rounded text-foreground">
                 Complicated
               </span>
             </div>
@@ -158,7 +161,7 @@ export function Blog() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group block p-6 rounded-2xl border border-border/50 bg-background/40 backdrop-blur-md shadow-xl hover:border-primary/50 hover:bg-background/60 transition-all relative overflow-hidden"
+              className="group block p-6 rounded-2xl border border-border/30 bg-background/5 backdrop-blur-md shadow-xl hover:border-primary/50 hover:bg-background/60 transition-all relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-1 h-full bg-primary origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-300 ease-out" />
 
@@ -177,7 +180,7 @@ export function Blog() {
                   </p>
                 </div>
 
-                <div className="hidden md:flex w-10 h-10 rounded-full border border-border/50 bg-background/50 items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground transition-all shrink-0">
+                <div className="hidden md:flex w-10 h-10 rounded-full border border-border/30 bg-background/5 items-center justify-center group-hover:bg-primary group-hover:border-primary group-hover:text-primary-foreground transition-all shrink-0">
                   <ArrowUpRight size={18} />
                 </div>
               </div>
@@ -185,6 +188,69 @@ export function Blog() {
           ))}
         </div>
       </div>
+      {/* --- HORIZONTAL AUDIO RIBBON --- */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="max-w-6xl mx-auto mt-8 p-6 md:p-8 rounded-2xl bg-background/10 backdrop-blur-md border border-border/30 shadow-xl flex flex-col md:flex-row items-center justify-between gap-8"
+      >
+        {/* Left Side: Context */}
+        <div className="flex flex-col items-center md:items-start text-center md:text-left md:w-1/3">
+          <div className="flex items-center gap-2 mb-2 text-primary">
+            <Headphones size={18} />
+            <h2 className="font-mono text-xs tracking-widest uppercase font-bold">
+              Sonic Architecture
+            </h2>
+          </div>
+          <h3 className="text-xl font-extrabold text-foreground tracking-tight mb-2">
+            AI Music Generation
+          </h3>
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-sm">
+            Experimenting with prompt engineering and Suno AI. Blending algorithmic generation with creative direction.
+          </p>
+        </div>
+
+        {/* Right Side: Horizontal Pill Links */}
+        <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 md:w-2/3">
+          
+          <a
+            href="https://youtu.be/HM1yuilODhc"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-border/30 bg-background/20 hover:bg-background/40 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all group"
+          >
+            <Youtube size={16} className="text-red-500 group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-bold text-foreground">Tu Rahe Na Rahe (Lyrical)</span>
+          </a>
+
+          <a
+            href="https://youtu.be/yjOfNBGiY7s"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-border/30 bg-background/20 hover:bg-background/40 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all group"
+          >
+            <Youtube size={16} className="text-red-500 group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-bold text-foreground">Love To Ashes (Lyrical)</span>
+          </a>
+
+          {/* Divider */}
+          <div className="hidden sm:block w-[1px] h-6 bg-border/50 mx-1" />
+
+          <a
+            href="https://suno.com/@sp2736"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-primary/30 bg-primary/10 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all group"
+          >
+            <Music size={16} className="text-primary group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-bold text-primary">Full Suno Profile</span>
+          </a>
+
+        </div>
+      </motion.div>
+
     </section>
   );
 }

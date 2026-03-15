@@ -99,13 +99,13 @@ export function Certifications() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group p-6 rounded-2xl bg-background/40 backdrop-blur-md border border-border/50 shadow-xl hover:bg-background/60 hover:border-primary/50 transition-all flex flex-col h-full"
+                className="group p-6 rounded-2xl bg-background/5 backdrop-blur-md border border-border/30 shadow-xl hover:bg-background/60 hover:border-primary/50 transition-all flex flex-col h-full"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                     <Icon size={18} />
                   </div>
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground bg-background/50 border border-border/50 px-2 py-1 rounded-full">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground bg-background/5 border border-border/30 px-2 py-1 rounded-full">
                     {category.issuer}
                   </span>
                 </div>
@@ -119,7 +119,7 @@ export function Certifications() {
                   ))}
                 </div>
 
-                <ul className="mt-auto space-y-2 border-t border-border/50 pt-4">
+                <ul className="mt-auto space-y-2 border-t border-border/30 pt-4">
                   {category.certs.map((cert, i) => (
                     <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
                       <span className="text-primary mt-0.5 opacity-50">▹</span>

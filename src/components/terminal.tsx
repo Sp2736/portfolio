@@ -1,12 +1,24 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 type CommandHistory = {
   command: string;
   output: React.ReactNode;
 };
+
+// The Secret Boot Sequence Messages
+const BOOT_SEQUENCE = [
+  "INITIALIZING ROOT OVERRIDE...",
+    "BYPASSING SECURITY PROTOCOLS... [OK]",
+    "ACCESSING MAINFRAME... [OK]",
+    "DECRYPTING SYS.ADMIN ARCHIVES...",
+    "WELCOME BACK, TO SP.SYS.",
+    "REBOOTING MODERN INTERFACE...",
+    "REGISTERING IP ADDRESS...",
+    "\"tryna mess with me?? gotcha!\"",
+];
 
 export function Terminal() {
   const [input, setInput] = useState("");
@@ -16,38 +28,25 @@ export function Terminal() {
       output: (
         <div className="flex flex-col gap-1 text-sm">
           <span>Available commands:</span>
-          <span className="text-primary">
-            whoami<span className="text-foreground"> - display identity</span>
-          </span>
-          <span className="text-primary">
-            skills
-            <span className="text-foreground"> - list technical arsenal</span>
-          </span>
-          <span className="text-primary">
-            projects
-            <span className="text-foreground"> - view current deployments</span>
-          </span>
-          <span className="text-primary">
-            credentials
-            <span className="text-foreground">
-              {" "}
-              - validate system clearances
-            </span>
-          </span>
-          <span className="text-primary">
-            read poetry<span className="text-foreground"> - [REDACTED]</span>
-          </span>
-          <span className="text-primary">
-            clear<span className="text-foreground"> - clear terminal</span>
-          </span>
+          <span className="text-primary">whoami<span className="text-foreground"> - display identity</span></span>
+          <span className="text-primary">skills<span className="text-foreground"> - list technical arsenal</span></span>
+          <span className="text-primary">projects<span className="text-foreground"> - view current deployments</span></span>
+          <span className="text-primary">credentials<span className="text-foreground"> - validate system clearances</span></span>
+          <span className="text-primary">read poetry<span className="text-foreground"> - [REDACTED]</span></span>
+          <span className="text-primary">clear<span className="text-foreground"> - clear terminal</span></span>
         </div>
       ),
     },
   ]);
 
+  // Easter Egg State
+  const [isHacked, setIsHacked] = useState(false);
+  const [hackTextIndex, setHackTextIndex] = useState(0);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Auto-scroll terminal
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTo({
@@ -56,6 +55,26 @@ export function Terminal() {
       });
     }
   }, [history]);
+
+  // Handle the Easter Egg Typing Animation
+  useEffect(() => {
+    if (!isHacked) return;
+
+    let timeout: NodeJS.Timeout;
+    
+    if (hackTextIndex < BOOT_SEQUENCE.length) {
+      timeout = setTimeout(() => {
+        setHackTextIndex((prev) => prev + 1);
+      }, 800); // Speed of each line appearing
+    } else {
+      timeout = setTimeout(() => {
+        setIsHacked(false);
+        setHackTextIndex(0);
+      }, 2000); // Wait 2 seconds before returning to normal
+    }
+
+    return () => clearTimeout(timeout);
+  }, [isHacked, hackTextIndex]);
 
   const handleCommand = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,59 +87,28 @@ export function Terminal() {
         output = (
           <div className="flex flex-col gap-1 text-sm">
             <span>Available commands:</span>
-            <span className="text-primary">
-              whoami<span className="text-foreground"> - display identity</span>
-            </span>
-            <span className="text-primary">
-              skills
-              <span className="text-foreground"> - list technical arsenal</span>
-            </span>
-            <span className="text-primary">
-              projects
-              <span className="text-foreground">
-                {" "}
-                - view current deployments
-              </span>
-            </span>
-            <span className="text-primary">
-              credentials
-              <span className="text-foreground">
-                {" "}
-                - validate system clearances
-              </span>
-            </span>
-            <span className="text-primary">
-              read poetry<span className="text-foreground"> - [REDACTED]</span>
-            </span>
-            <span className="text-primary">
-              clear<span className="text-foreground"> - clear terminal</span>
-            </span>
+            <span className="text-primary">whoami<span className="text-foreground"> - display identity</span></span>
+            <span className="text-primary">skills<span className="text-foreground"> - list technical arsenal</span></span>
+            <span className="text-primary">projects<span className="text-foreground"> - view current deployments</span></span>
+            <span className="text-primary">credentials<span className="text-foreground"> - validate system clearances</span></span>
+            <span className="text-primary">read poetry<span className="text-foreground"> - [REDACTED]</span></span>
+            <span className="text-primary">clear<span className="text-foreground"> - clear terminal</span></span>
           </div>
         );
         break;
       case "whoami":
-        output =
-          "Swayam Patel. B.Tech CSE at Charusat University. Architecting Full-Stack Systems That Scale. Author & AI Explorer.";
+        output = "Swayam Patel. B.Tech CSE at Charusat University. Architecting Full-Stack Systems That Scale. Author & AI Explorer.";
         break;
       case "skills":
-        output =
-          "Languages: C, C++, Java, Python, TS/JS, SQL, Assembly.\nFrameworks: Next.js, React, Node.js, Express.\nTools: Docker, Azure, AWS, Git, Wireshark, Burp Suite.";
+        output = "Languages: C, C++, Java, Python, TS/JS, SQL, Assembly.\nFrameworks: Next.js, React, Node.js, Express.\nTools: Docker, Azure, AWS, Git, Wireshark, Burp Suite.";
         break;
       case "projects":
         output = (
           <div className="flex flex-col gap-1">
-            <span>
-              &gt; ARCADE: Role-based digital ecosystem for universities.
-            </span>
-            <span>
-              &gt; Wander-n-Wonder: Premium digital garden & blogging platform.
-            </span>
-            <span>
-              &gt; BrainBin: Smart knowledge management & vector store.
-            </span>
-            <span>
-              &gt; AI Logic Commenter: Gemini-powered VS Code extension.
-            </span>
+            <span>&gt; ARCADE: Role-based digital ecosystem for universities.</span>
+            <span>&gt; Wander-n-Wonder: Premium digital garden & blogging platform.</span>
+            <span>&gt; BrainBin: Smart knowledge management & vector store.</span>
+            <span>&gt; AI Logic Commenter: Gemini-powered VS Code extension.</span>
             <span>&gt; Dark Angel & White Devil: VS Code themes.</span>
           </div>
         );
@@ -129,32 +117,18 @@ export function Terminal() {
       case "verify credentials":
         output = (
           <div className="flex flex-col gap-2 mt-1">
-            <span className="text-muted-foreground italic text-xs">
-              Decrypting certification vault...
-            </span>
+            <span className="text-muted-foreground italic text-xs">Decrypting certification vault...</span>
             <div className="border-l-2 border-primary pl-3 flex flex-col gap-1 bg-primary/5 py-2 pr-2 rounded-r-md">
-              <span className="text-primary font-bold text-xs tracking-widest uppercase">
-                [Verified] Meta
-              </span>
-              <span className="text-foreground font-bold">
-                Full-Stack Software Engineering
-              </span>
+              <span className="text-primary font-bold text-xs tracking-widest uppercase">[Verified] Meta</span>
+              <span className="text-foreground font-bold">Full-Stack Software Engineering</span>
             </div>
             <div className="border-l-2 border-primary pl-3 flex flex-col gap-1 bg-primary/5 py-2 pr-2 rounded-r-md">
-              <span className="text-primary font-bold text-xs tracking-widest uppercase">
-                [Verified] IBM
-              </span>
-              <span className="text-foreground font-bold">
-                Data Science & Analytics
-              </span>
+              <span className="text-primary font-bold text-xs tracking-widest uppercase">[Verified] IBM</span>
+              <span className="text-foreground font-bold">Data Science & Analytics</span>
             </div>
             <div className="border-l-2 border-primary pl-3 flex flex-col gap-1 bg-primary/5 py-2 pr-2 rounded-r-md">
-              <span className="text-primary font-bold text-xs tracking-widest uppercase">
-                [Verified] Google
-              </span>
-              <span className="text-foreground font-bold">
-                AI Essentials & Prompt Engineering
-              </span>
+              <span className="text-primary font-bold text-xs tracking-widest uppercase">[Verified] Google</span>
+              <span className="text-foreground font-bold">AI Essentials & Prompt Engineering</span>
             </div>
           </div>
         );
@@ -162,29 +136,22 @@ export function Terminal() {
       case "read poetry":
         output = (
           <div className="flex flex-col gap-2 mt-1 border-l-2 border-accent pl-3">
-            <span className="text-accent font-bold text-xs tracking-widest uppercase">
-              Excerpt: BEFORE I LEARNED GOODBYE
-            </span>
+            <span className="text-accent font-bold text-xs tracking-widest uppercase">Excerpt: BEFORE I LEARNED GOODBYE</span>
             <span className="italic text-foreground/80">
-              "579 Days. That was the length of 'forever.'
-              <br />
-              A boy who loved the sun so much he willingly froze underneath it —
-              <br />
+              "579 Days. That was the length of 'forever.'<br />
+              A boy who loved the sun so much he willingly froze underneath it —<br />
               leaving only words as proof he once burned."
             </span>
-            <a
-              href="https://www.bookleafpub.in/"
-              target="_blank"
-              className="text-xs text-primary hover:underline mt-1"
-            >
+            <a href="https://www.bookleafpub.in/" target="_blank" className="text-xs text-primary hover:underline mt-1">
               Initialize Purchase Link &gt;
             </a>
           </div>
         );
         break;
       case "sudo":
-        output =
-          "Nice try. This incident will be reported to the system administrator.";
+        // THIS TRIGGERS THE EASTER EGG
+        setIsHacked(true);
+        output = <span className="text-red-500 font-bold animate-pulse">WARNING: UNAUTHORIZED PRIVILEGE ESCALATION DETECTED.</span>;
         break;
       case "clear":
         setHistory([]);
@@ -202,57 +169,100 @@ export function Terminal() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-transition={{ duration: 0.8, delay: 0.2, type: "spring" }}      // Applied Glassmorphism
-      className="w-full max-w-lg rounded-xl border border-border/50 bg-background/40 backdrop-blur-md shadow-2xl overflow-hidden font-mono text-sm flex flex-col h-[350px]"
-      onClick={() => inputRef.current?.focus({ preventScroll: true })}
-    >
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border/50 bg-background/30">
-        <div className="flex gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]"></div>
-          <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]"></div>
-          <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_5px_rgba(34,197,94,0.5)]"></div>
-        </div>
-        <div className="mx-auto text-xs text-muted-foreground select-none">
-          swayam@ubuntu:~
-        </div>
-      </div>
-
-      <div
-        ref={containerRef}
-        className="flex-1 p-4 overflow-y-auto custom-scrollbar flex flex-col gap-2"
+    <>
+      {/* 1. THE NORMAL TERMINAL WINDOW */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
+        className="w-full max-w-lg rounded-xl border border-border/50 bg-background/40 backdrop-blur-md shadow-2xl overflow-hidden font-mono text-sm flex flex-col h-[350px]"
+        onClick={() => inputRef.current?.focus({ preventScroll: true })}
       >
-        {history.map((item, i) => (
-          <div key={i} className="flex flex-col gap-1">
-            {item.command && (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <span className="text-primary">➜</span>
-                <span className="text-secondary-foreground">~</span>
-                <span>{item.command}</span>
-              </div>
-            )}
-            {item.output && (
-              <div className="text-foreground/90 pl-4">{item.output}</div>
-            )}
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-border/50 bg-background/30">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]"></div>
+            <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]"></div>
+            <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_5px_rgba(34,197,94,0.5)]"></div>
           </div>
-        ))}
+          <div className="mx-auto text-xs text-muted-foreground select-none">
+            swayam@ubuntu:~
+          </div>
+        </div>
 
-        <form onSubmit={handleCommand} className="flex items-center gap-2 mt-2">
-          <span className="text-primary">➜</span>
-          <span className="text-secondary-foreground">~</span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 bg-transparent outline-none border-none text-foreground"
-            spellCheck={false}
-            autoComplete="off"
-          />
-        </form>
-      </div>
-    </motion.div>
+        <div ref={containerRef} className="flex-1 p-4 overflow-y-auto custom-scrollbar flex flex-col gap-2">
+          {history.map((item, i) => (
+            <div key={i} className="flex flex-col gap-1">
+              {item.command && (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <span className="text-primary">➜</span>
+                  <span className="text-secondary-foreground">~</span>
+                  <span>{item.command}</span>
+                </div>
+              )}
+              {item.output && (
+                <div className="text-foreground/90 pl-4 whitespace-pre-line">{item.output}</div>
+              )}
+            </div>
+          ))}
+
+          <form onSubmit={handleCommand} className="flex items-center gap-2 mt-2">
+            <span className="text-primary">➜</span>
+            <span className="text-secondary-foreground">~</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="flex-1 bg-transparent outline-none border-none text-foreground"
+              spellCheck={false}
+              autoComplete="off"
+            />
+          </form>
+        </div>
+      </motion.div>
+
+      {/* 2. THE FULL-SCREEN TERMINAL OVERRIDE EASTER EGG */}
+      <AnimatePresence>
+        {isHacked && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, filter: "blur(10px)" }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[99999] bg-black pointer-events-auto flex flex-col p-8 md:p-12 font-mono overflow-hidden"
+          >
+            {/* CRT Scanline Overlay Effect */}
+            <div 
+              className="absolute inset-0 pointer-events-none opacity-20"
+              style={{
+                background: "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))",
+                backgroundSize: "100% 4px, 6px 100%"
+              }}
+            />
+            
+            {/* Phosphor Glow Vignette */}
+            <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,255,0,0.15)]" />
+
+            {/* Terminal Text Output */}
+            <div className="relative z-10 flex flex-col gap-3">
+              {BOOT_SEQUENCE.slice(0, hackTextIndex).map((line, i) => (
+                <div key={i} className="text-[#39ff14] text-sm md:text-xl font-bold drop-shadow-[0_0_8px_rgba(57,255,20,0.8)]">
+                  <span className="opacity-70 mr-3">root@sp.sys:~#</span>
+                  {line}
+                </div>
+              ))}
+              
+              {/* Blinking Cursor */}
+              {hackTextIndex < BOOT_SEQUENCE.length && (
+                <div className="text-[#39ff14] text-sm md:text-xl font-bold drop-shadow-[0_0_8px_rgba(57,255,20,0.8)]">
+                  <span className="opacity-70 mr-3">root@sp.sys:~#</span>
+                  <span className="animate-pulse bg-[#39ff14] text-[#39ff14]">_</span>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

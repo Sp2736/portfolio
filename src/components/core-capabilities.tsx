@@ -130,7 +130,7 @@ export function CoreCapabilities() {
                   <motion.div
                     key={i}
                     variants={itemVars}
-                    className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl bg-background/40 backdrop-blur-md border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all group text-center shadow-lg"
+                    className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl bg-background/5 backdrop-blur-md border border-border/30 hover:border-primary/50 hover:bg-primary/5 transition-all group text-center shadow-lg"
                   >
                     <Icon
                       size={24}
@@ -158,7 +158,7 @@ export function CoreCapabilities() {
                   <motion.div
                     key={i}
                     variants={itemVars}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-background/30 backdrop-blur-md border border-border/40 hover:border-primary/40 transition-colors group cursor-default shadow-sm"
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-background/5 backdrop-blur-md border border-border/40 hover:border-primary/40 transition-colors group cursor-default shadow-sm"
                   >
                     <Icon
                       size={14}

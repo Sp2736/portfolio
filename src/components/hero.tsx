@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { Terminal as TerminalWindow } from "./terminal";
 import {
@@ -15,13 +16,41 @@ import {
 
 // --- HERO PROFILE (ID CARD) COMPONENT ---
 function HeroProfile() {
+  // CAFFEINE GLITCH EASTER EGG STATE
+  const [clicks, setClicks] = useState(0);
+  const [isCaffeinated, setIsCaffeinated] = useState(false);
+
+  useEffect(() => {
+    if (clicks >= 5) {
+      setIsCaffeinated(true);
+      setClicks(0); // Reset for next time
+      setTimeout(() => setIsCaffeinated(false), 5000); // Back to normal after 5 seconds
+    }
+  }, [clicks]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 p-6 md:p-8 bg-background/30 backdrop-blur-xl border border-border/50 rounded-3xl shadow-xl relative overflow-hidden group"
+      className={`w-full flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 p-6 md:p-8 bg-background/10 backdrop-blur-xl border border-border/20 rounded-3xl shadow-xl relative overflow-hidden group ${isCaffeinated ? 'caffeine-glitch' : ''}`}
     >
+      {/* INJECTED GLITCH CSS */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .caffeine-glitch {
+          animation: caffeineShake 0.15s infinite;
+          filter: contrast(120%) saturate(150%);
+        }
+        @keyframes caffeineShake {
+          0% { transform: translate(2px, 1px) rotate(0deg); }
+          20% { transform: translate(-3px, 0px) rotate(1deg); }
+          40% { transform: translate(1px, -1px) rotate(-1deg); }
+          60% { transform: translate(-3px, 1px) rotate(0deg); }
+          80% { transform: translate(-1px, -1px) rotate(1deg); }
+          100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+      `}} />
+
       {/* Background Animated Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50 pointer-events-none" />
 
@@ -40,12 +69,16 @@ function HeroProfile() {
           className="absolute w-28 h-28 md:w-32 md:h-32 rounded-full border border-primary/20 border-t-primary/60"
         />
 
-        <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-secondary/80 border-2 border-primary/50 overflow-hidden shadow-[0_0_20px_rgba(var(--primary),0.3)] z-10">
+        <div 
+          className={`relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-secondary/80 border-2 border-primary/50 overflow-hidden shadow-[0_0_20px_rgba(var(--primary),0.3)] z-10 cursor-pointer transition-transform active:scale-90 ${isCaffeinated ? 'animate-spin' : ''}`}
+          onClick={() => setClicks(prev => prev + 1)}
+          title="Click me 5 times"
+        >
           <Image
             src="/profile.jpg"
             alt="Profile"
             fill
-            className="object-cover"
+            className={`object-cover ${isCaffeinated ? 'hue-rotate-[180deg] contrast-150 saturate-200' : ''}`}
           />
         </div>
 
@@ -79,22 +112,25 @@ function HeroProfile() {
 
         {/* Dynamic Titles */}
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-4">
-          <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
-            Full-Stack Architect
-          </span>
-          <span className="text-muted-foreground text-xs font-mono">||</span>
-          <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
-            Web Security
-          </span>
-          <span className="text-muted-foreground text-xs font-mono">||</span>
-          <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
-            Data Science and Analytics
-          </span>
-          <span className="text-muted-foreground text-xs font-mono">||</span>
-
-          <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
-            Poetry Writing
-          </span>
+          {!isCaffeinated ? (
+            <>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Full-Stack Architect</span>
+              <span className="text-muted-foreground text-xs font-mono">||</span>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Web Security</span>
+              <span className="text-muted-foreground text-xs font-mono">||</span>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Data Science & Analytics</span>
+              <span className="text-muted-foreground text-xs font-mono">||</span>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Poetry Writing</span>
+            </>
+          ) : (
+            <>
+              <span className="text-[10px] md:text-xs font-black text-white bg-pink-600 px-2.5 py-1 rounded-md border border-pink-400 animate-pulse uppercase tracking-widest">Milkshake Tycoon</span>
+              <span className="text-pink-500 text-xs font-mono animate-bounce">///</span>
+              <span className="text-[10px] md:text-xs font-black text-black bg-yellow-400 px-2.5 py-1 rounded-md border border-yellow-200 animate-pulse uppercase tracking-widest">Vibe Coder</span>
+              <span className="text-yellow-500 text-xs font-mono animate-bounce">///</span>
+              <span className="text-[10px] md:text-xs font-black text-white bg-green-600 px-2.5 py-1 rounded-md border border-green-400 animate-pulse uppercase tracking-widest">Caffeinated Poet</span>
+            </>
+          )}
         </div>
 
         {/* The "About Me" Bio Lines */}
@@ -113,7 +149,7 @@ function HeroProfile() {
               href="https://github.com/Sp2736"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-background/50 border border-border/50 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
+              className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
             >
               <Github size={16} />
             </a>
@@ -121,7 +157,7 @@ function HeroProfile() {
               href="https://www.linkedin.com/in/swayam-patel-316ba5317"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-background/50 border border-border/50 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
+              className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
             >
               <Linkedin size={16} />
             </a>
@@ -129,13 +165,13 @@ function HeroProfile() {
               href="https://instagram.com/sp_27.03"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-background/50 border border-border/50 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
+              className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
             >
               <Instagram size={16} />
             </a>
             <a
               href="mailto:swayampatel2736@gmail.com"
-              className="p-2 rounded-full bg-background/50 border border-border/50 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
+              className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
             >
               <Mail size={16} />
             </a>
@@ -173,7 +209,7 @@ export function Hero() {
 
         {/* 2. The Original Grid Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="flex flex-col gap-5 md:gap-6 text-left p-6 md:p-8 rounded-3xl bg-background/40 backdrop-blur-md border border-border/50 shadow-2xl">
+          <div className="flex flex-col gap-5 md:gap-6 text-left p-6 md:p-8 rounded-3xl bg-background/5 backdrop-blur-md border border-border/30 shadow-2xl">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -213,7 +249,7 @@ export function Hero() {
               <button className="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(var(--primary),0.3)]">
                 Deployments
               </button>
-              <button className="px-5 py-2.5 rounded-lg border border-border/50 bg-background/50 hover:bg-background/80 transition-colors text-sm font-semibold">
+              <button className="px-5 py-2.5 rounded-lg border border-border/30 bg-background/5 hover:bg-background/80 transition-colors text-sm font-semibold">
                 Initialize Contact
               </button>
             </motion.div>

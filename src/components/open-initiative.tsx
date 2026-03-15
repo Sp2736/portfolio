@@ -13,7 +13,7 @@ export function OpenInitiative() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative rounded-3xl bg-background/40 backdrop-blur-xl border border-primary/30 shadow-[0_0_30px_rgba(var(--primary),0.15)] overflow-hidden p-8 md:p-12"
+          className="relative rounded-3xl bg-background/5 backdrop-blur-md border border-primary/30 shadow-[0_0_30px_rgba(var(--primary),0.15)] overflow-hidden p-8 md:p-12"
         >
           {/* Subtle animated background gradient for the CTA */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" />
@@ -56,19 +56,19 @@ export function OpenInitiative() {
             </div>
 
             {/* Sidebar Stats/Needs */}
-            <div className="w-full md:w-1/3 flex flex-col gap-4 bg-background/50 border border-border/50 rounded-xl p-5 shrink-0">
+            <div className="w-full md:w-1/3 flex flex-col gap-4 bg-background/5 border border-border/30 rounded-xl p-5 shrink-0">
               <div>
                 <span className="text-xs font-mono text-muted-foreground uppercase tracking-widest block mb-2">
                   Stack
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-2 py-1 text-[10px] font-mono bg-card border border-border/50 rounded text-foreground">
+                  <span className="px-2 py-1 text-[10px] font-mono bg-card border border-border/30 rounded text-foreground">
                     TypeScript
                   </span>
-                  <span className="px-2 py-1 text-[10px] font-mono bg-card border border-border/50 rounded text-foreground">
+                  <span className="px-2 py-1 text-[10px] font-mono bg-card border border-border/30 rounded text-foreground">
                     VS Code API
                   </span>
-                  <span className="px-2 py-1 text-[10px] font-mono bg-card border border-border/50 rounded text-foreground">
+                  <span className="px-2 py-1 text-[10px] font-mono bg-card border border-border/30 rounded text-foreground">
                     SVG / Canvas
                   </span>
                 </div>

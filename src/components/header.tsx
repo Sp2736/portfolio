@@ -95,7 +95,7 @@ export function Header() {
         animate={{ x: isScrolled ? 0 : 100, opacity: isScrolled ? 1 : 0 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
         // Added scaling and compressed padding to prevent overlapping with bottom buttons
-        className="fixed top-1/2 -translate-y-1/2 right-2 md:right-6 z-50 hidden md:flex flex-col items-center gap-1.5 p-2 bg-background/50 backdrop-blur-xl border border-border/50 rounded-full shadow-2xl scale-[0.85] sm:scale-100 origin-right"
+        className="fixed top-1/2 -translate-y-1/2 right-2 md:right-6 z-50 hidden md:flex flex-col items-center gap-1.5 p-2 bg-background/5 backdrop-blur-md border border-border/30 rounded-full shadow-2xl scale-[0.85] sm:scale-100 origin-right"
       >
         {/* Home / Init Button */}
         <a
@@ -104,7 +104,7 @@ export function Header() {
           className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-primary/20 text-primary transition-colors group relative"
         >
           <Terminal size={18} strokeWidth={2} />
-          <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/90 backdrop-blur-sm border border-border/50 rounded-md text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg whitespace-nowrap text-foreground">
+          <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/90 backdrop-blur-sm border border-border/30 rounded-md text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg whitespace-nowrap text-foreground">
             Home
           </span>
         </a>
@@ -123,7 +123,7 @@ export function Header() {
               className="flex items-center justify-center w-10 h-10 rounded-full text-muted-foreground hover:bg-background/80 hover:text-foreground transition-all group relative"
             >
               <Icon size={18} strokeWidth={1.5} />
-              <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/90 backdrop-blur-sm border border-border/50 rounded-md text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none capitalize shadow-lg whitespace-nowrap text-foreground">
+              <span className="absolute right-12 top-1/2 -translate-y-1/2 px-2 py-1 bg-background/90 backdrop-blur-sm border border-border/30 rounded-md text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none capitalize shadow-lg whitespace-nowrap text-foreground">
                 {link.name}
               </span>
             </a>

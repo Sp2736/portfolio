@@ -204,7 +204,7 @@ function GravitySwarmBackground() {
 
     // Density based on screen size
     const NODE_COUNT =
-      typeof window !== "undefined" && window.innerWidth < 768 ? 300 : 700;
+      typeof window !== "undefined" && window.innerWidth < 768 ? 800 : 2500;
 
     let mouse = { x: -1000, y: -1000 };
     let isClicking = false;

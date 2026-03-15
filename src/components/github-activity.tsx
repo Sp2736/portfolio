@@ -115,10 +115,10 @@ export function GithubActivity() {
             className="lg:w-1/2 w-full flex flex-col"
           >
             {/* Themed Terminal Container */}
-            <div className="w-full h-full rounded-2xl bg-background/60 backdrop-blur-xl border border-border/50 shadow-2xl overflow-hidden font-mono text-sm flex flex-col">
+            <div className="w-full h-full rounded-2xl bg-background/60 backdrop-blur-md border border-border/30 shadow-2xl overflow-hidden font-mono text-sm flex flex-col">
               
               {/* Terminal Header */}
-              <div className="flex items-center px-4 py-3 bg-secondary/40 border-b border-border/50">
+              <div className="flex items-center px-4 py-3 bg-secondary/40 border-b border-border/30">
                 <div className="flex gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
                   <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
@@ -196,7 +196,7 @@ export function GithubActivity() {
                   href={repo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group p-5 rounded-2xl border border-border/50 bg-background/40 backdrop-blur-md hover:bg-primary/5 hover:border-primary/50 transition-all shadow-lg hover:shadow-[0_10px_30px_rgba(var(--primary),0.15)] flex flex-col hover:-translate-y-1"
+                  className="group p-5 rounded-2xl border border-border/30 bg-background/5 backdrop-blur-md hover:bg-primary/5 hover:border-primary/50 transition-all shadow-lg hover:shadow-[0_10px_30px_rgba(var(--primary),0.15)] flex flex-col hover:-translate-y-1"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h4 className="font-bold text-foreground font-mono text-sm line-clamp-1 group-hover:text-primary transition-colors">
@@ -209,7 +209,7 @@ export function GithubActivity() {
                   </p>
                   <div className="flex flex-wrap gap-2 mt-auto">
                     {repo.tech.map((t, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-background/80 border border-border/50 rounded-md text-[9px] font-mono uppercase text-foreground group-hover:border-primary/40 transition-colors shadow-sm">
+                      <span key={i} className="px-2.5 py-1 bg-background/80 border border-border/30 rounded-md text-[9px] font-mono uppercase text-foreground group-hover:border-primary/40 transition-colors shadow-sm">
                         {t}
                       </span>
                     ))}
