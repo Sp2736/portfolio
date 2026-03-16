@@ -210,45 +210,15 @@ Reality tears open and the colors under the cursor invert.
 
 ### System Lock Simulation
 
-Typing one of these commands:
+Typing of:
 
 ```
-hack
-kali
 sudo
 ```
 
 Triggers a fake **terminal lock screen**.
 
 Relax. It's not real ransomware. Probably.
-
----
-
-### Zero-Gravity Spill
-
-Press:
-
-```
-g g g
-```
-
-The Zero-G physics system activates and UI elements begin drifting.
-
----
-
-### Kinetic Echo
-
-Spin the mouse in circles rapidly.
-
-The interface creates **ghost trails of motion**.
-
----
-
-### Hallucinations
-
-Double-click and hold the left mouse button for 2–3 seconds.
-
-The screen begins to behave… strangely.
 
 ---
 
@@ -269,14 +239,6 @@ leak
 ```
 
 DOM fragments begin trailing your cursor like ghost code.
-
----
-
-### Chronos Glitch
-
-Move the cursor erratically at high speed.
-
-The interface warps like **time is buffering**.
 
 ---
 
