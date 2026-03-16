@@ -10,6 +10,7 @@ import {
   Linkedin,
   Youtube,
 } from "lucide-react";
+
 // --- DATA MAPPING ---
 const projectsData = [
   {

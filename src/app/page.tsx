@@ -14,11 +14,11 @@ import { Blog } from "@/components/blog";
 import { CoreCapabilities } from "@/components/core-capabilities"; // Add this line
 import { PoeticOverride } from "@/components/poetic-override";
 import { WallPunchOverride } from "@/components/wall-punch-override";
-import { RansomwareOverride } from "@/components/ransomware-override";
+// import { RansomwareOverride } from "@/components/ransomware-override";
 import { ThemeTearOverride } from "@/components/theme-tear-override";
-import { HallucinationOverride } from "@/components/hallucination-override";
+// import { HallucinationOverride } from "@/components/hallucination-override";
 import { ThermalOverride } from "@/components/thermal-override";
-import { KineticOverride } from "@/components/kinetic-override";
+// import { KineticOverride } from "@/components/kinetic-override";
 import { EchoOverride } from "@/components/echo-override";
 
 export default function Home() {
@@ -43,11 +43,11 @@ export default function Home() {
       <Blog />             {/* Digital Garden & Book */}
       <PoeticOverride/>
       <WallPunchOverride/>
-      <RansomwareOverride/>
+      {/* <RansomwareOverride/> */}
       <ThemeTearOverride/>
-      <HallucinationOverride/>
+      {/* <HallucinationOverride/> */}
       <ThermalOverride/>
-      <KineticOverride/>
+      {/* <KineticOverride/> */}
       <EchoOverride/>
     </main>
     </>
