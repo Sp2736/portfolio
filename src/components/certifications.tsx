@@ -84,9 +84,16 @@ export function Certifications() {
   return (
     <section className="w-full py-12 px-6 relative z-10" id="certifications">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-12 text-center" data-code="<Validation src='authorities' />">
-          <h2 className="text-primary font-mono text-sm tracking-widest uppercase mb-2">The Evidence Locker</h2>
-          <h3 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">Verified Knowledge</h3>
+        <div
+          className="mb-12 text-center"
+          data-code="<Validation src='authorities' />"
+        >
+          <h2 className="text-primary font-mono text-sm tracking-widest uppercase mb-2">
+            The Evidence Locker
+          </h2>
+          <h3 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
+            Verified Knowledge
+          </h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -110,18 +117,26 @@ export function Certifications() {
                   </span>
                 </div>
 
-                <h4 className="text-xl font-bold text-foreground mb-1">{category.title}</h4>
+                <h4 className="text-xl font-bold text-foreground mb-1">
+                  {category.title}
+                </h4>
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {category.skills.map((skill, i) => (
-                    <span key={i} className="text-[10px] font-mono text-primary">
-                      #{skill.replace(/\s+/g, '')}
+                    <span
+                      key={i}
+                      className="text-[10px] font-mono text-primary"
+                    >
+                      #{skill.replace(/\s+/g, "")}
                     </span>
                   ))}
                 </div>
 
                 <ul className="mt-auto space-y-2 border-t border-border/30 pt-4">
                   {category.certs.map((cert, i) => (
-                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                    <li
+                      key={i}
+                      className="text-sm text-muted-foreground flex items-start gap-2"
+                    >
                       <span className="text-primary mt-0.5 opacity-50">▹</span>
                       <span className="leading-snug">{cert}</span>
                     </li>

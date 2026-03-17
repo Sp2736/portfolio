@@ -11,7 +11,7 @@ import {
   Youtube,
 } from "lucide-react";
 
-// --- DATA MAPPING ---
+// DATA MAPPING
 const projectsData = [
   {
     id: "arcade",
@@ -173,7 +173,7 @@ const projectsData = [
   },
 ];
 
-// --- ANIMATION VARIANTS ---
+// ANIMATION VARIANTS
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {

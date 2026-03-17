@@ -6,17 +6,21 @@ import { motion, AnimatePresence } from "framer-motion";
 export function PoeticOverride() {
   const [isActive, setIsActive] = useState(false);
 
-  // 1. The Keystroke Listener (The "poem" trigger)
+  // The Keystroke Listener (The "poem" trigger)
   useEffect(() => {
     let keyBuffer = "";
     const secretCode = "poem";
 
     const handleKeyDown = (e: KeyboardEvent) => {
       // Don't trigger if typing in an input field
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return;
 
       keyBuffer += e.key.toLowerCase();
-      
+
       if (keyBuffer.length > secretCode.length) {
         keyBuffer = keyBuffer.slice(1);
       }
@@ -31,13 +35,13 @@ export function PoeticOverride() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // 2. The Cinematic Timer
+  // The Cinematic Timer
   useEffect(() => {
     if (isActive) {
       // Keep the poetic screen up for 10 seconds before gracefully fading back
       const timer = setTimeout(() => {
         setIsActive(false);
-      }, 10000); 
+      }, 10000);
       return () => clearTimeout(timer);
     }
   }, [isActive]);
@@ -57,21 +61,30 @@ export function PoeticOverride() {
             {[...Array(25)].map((_, i) => (
               <motion.div
                 key={i}
-                initial={{ 
-                  y: -20, 
-                  x: typeof window !== 'undefined' ? Math.random() * window.innerWidth : 0, 
-                  opacity: 0 
+                initial={{
+                  y: -20,
+                  x:
+                    typeof window !== "undefined"
+                      ? Math.random() * window.innerWidth
+                      : 0,
+                  opacity: 0,
                 }}
                 animate={{
-                  y: typeof window !== 'undefined' ? window.innerHeight + 20 : 1000,
-                  x: typeof window !== 'undefined' ? `calc(${Math.random() * window.innerWidth}px + ${Math.random() * 100 - 50}px)` : 0,
-                  opacity: [0, 0.8, 0.8, 0]
+                  y:
+                    typeof window !== "undefined"
+                      ? window.innerHeight + 20
+                      : 1000,
+                  x:
+                    typeof window !== "undefined"
+                      ? `calc(${Math.random() * window.innerWidth}px + ${Math.random() * 100 - 50}px)`
+                      : 0,
+                  opacity: [0, 0.8, 0.8, 0],
                 }}
                 transition={{
                   duration: Math.random() * 6 + 6,
                   repeat: Infinity,
                   ease: "linear",
-                  delay: Math.random() * 5
+                  delay: Math.random() * 5,
                 }}
                 className="absolute w-1 h-1 bg-white rounded-full blur-[1.5px]"
               />
@@ -89,11 +102,12 @@ export function PoeticOverride() {
             className="relative z-10 text-center max-w-2xl px-8 flex flex-col gap-8"
           >
             <p className="text-xl md:text-3xl leading-relaxed italic font-light tracking-wide text-[#e5e5e5] drop-shadow-md">
-              "A boy who loved the sun so much<br />
+              "A boy who loved the sun so much
+              <br />
               he willingly froze underneath it —<br />
               leaving only words as proof he once burned."
             </p>
-            
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

@@ -9,7 +9,7 @@ import {
   Book,
   Headphones,
   Youtube,
-  Music
+  Music,
 } from "lucide-react";
 
 const externalLogs = [
@@ -188,7 +188,7 @@ export function Blog() {
           ))}
         </div>
       </div>
-      {/* --- HORIZONTAL AUDIO RIBBON --- */}
+      {/* HORIZONTAL AUDIO RIBBON */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -208,21 +208,26 @@ export function Blog() {
             AI Music Generation
           </h3>
           <p className="text-xs text-muted-foreground leading-relaxed max-w-sm">
-            Experimenting with prompt engineering and Suno AI. Blending algorithmic generation with creative direction.
+            Experimenting with prompt engineering and Suno AI. Blending
+            algorithmic generation with creative direction.
           </p>
         </div>
 
         {/* Right Side: Horizontal Pill Links */}
         <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 md:w-2/3">
-          
           <a
             href="https://youtu.be/HM1yuilODhc"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-border/30 bg-background/20 hover:bg-background/40 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all group"
           >
-            <Youtube size={16} className="text-red-500 group-hover:scale-110 transition-transform" />
-            <span className="text-xs font-bold text-foreground">Tu Rahe Na Rahe (Lyrical)</span>
+            <Youtube
+              size={16}
+              className="text-red-500 group-hover:scale-110 transition-transform"
+            />
+            <span className="text-xs font-bold text-foreground">
+              Tu Rahe Na Rahe (Lyrical)
+            </span>
           </a>
 
           <a
@@ -231,8 +236,13 @@ export function Blog() {
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-border/30 bg-background/20 hover:bg-background/40 hover:border-red-500/50 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all group"
           >
-            <Youtube size={16} className="text-red-500 group-hover:scale-110 transition-transform" />
-            <span className="text-xs font-bold text-foreground">Love To Ashes (Lyrical)</span>
+            <Youtube
+              size={16}
+              className="text-red-500 group-hover:scale-110 transition-transform"
+            />
+            <span className="text-xs font-bold text-foreground">
+              Love To Ashes (Lyrical)
+            </span>
           </a>
 
           {/* Divider */}
@@ -244,13 +254,16 @@ export function Blog() {
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-primary/30 bg-primary/10 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all group"
           >
-            <Music size={16} className="text-primary group-hover:scale-110 transition-transform" />
-            <span className="text-xs font-bold text-primary">Full Suno Profile</span>
+            <Music
+              size={16}
+              className="text-primary group-hover:scale-110 transition-transform"
+            />
+            <span className="text-xs font-bold text-primary">
+              Full SUNO Profile
+            </span>
           </a>
-
         </div>
       </motion.div>
-
     </section>
   );
 }

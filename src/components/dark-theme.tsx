@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { EyeOff, Eye } from "lucide-react";
 
-// --- 1. Foreground Interactive Cursor (Starlight & Trails) ---
+// Foreground Interactive Cursor (Starlight & Trails)
 function StarlightCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -24,7 +24,7 @@ function StarlightCursor() {
     const STAR_COUNT = 15;
     const STAR_SPEED_MIN = 1;
     const STAR_SPEED_MAX = 5;
-    // Pure whites and stark silvers for the professional Shadcn look
+    // Pure whites and stark silvers
     const COLORS = ["#ffffff", "#f8fafc", "#f1f5f9", "#e2e8f0"];
 
     const setSize = () => {
@@ -189,7 +189,7 @@ function StarlightCursor() {
   );
 }
 
-// --- 2. Magnetic Data Swarm Background (Gravitational Vortex) ---
+// Magnetic Data Swarm Background (Gravitational Vortex)
 function GravitySwarmBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -310,8 +310,7 @@ function GravitySwarmBackground() {
     for (let i = 0; i < NODE_COUNT; i++) dataNodes.push(new DataNode());
 
     const render = () => {
-      // MOTION BLUR EFFECT: Instead of clearRect, we fill with a semi-transparent dark color.
-      // 9, 9, 11 is the exact RGB equivalent of Shadcn's hsl(240 10% 3.9%) background.
+      // MOTION BLUR EFFECT
       ctx.fillStyle = "rgba(9, 9, 11, 0.25)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -341,8 +340,7 @@ function GravitySwarmBackground() {
   );
 }
 
-// --- Global CSS Injection for the Black Hole Collapse ---
-// --- 3. The "Go Blind" Spotlight Easter Egg ---
+// The "Go Blind" Spotlight Easter Egg
 function BlindEasterEgg() {
   const [isBlind, setIsBlind] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -387,7 +385,7 @@ function BlindEasterEgg() {
           isBlind ? "opacity-100" : "opacity-0"
         }`}
         style={{
-          // The magic: This gradient masks out the white background in a circle, revealing the dark theme below.
+          // This gradient masks out the white background in a circle, revealing the dark theme below.
           // Alpha 0 (transparent) hides the white. Alpha 1 (black) shows the white.
           WebkitMaskImage: `radial-gradient(circle 250px at var(--x, 50vw) var(--y, 50vh), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 90%)`,
           maskImage: `radial-gradient(circle 250px at var(--x, 50vw) var(--y, 50vh), rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 90%)`,
@@ -421,7 +419,7 @@ function BlindEasterEgg() {
   );
 }
 
-// --- 4. Main Export Component ---
+// Main Export Component
 export function DarkThemeEffects() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -432,9 +430,7 @@ export function DarkThemeEffects() {
 
   return (
     <>
-      <GravitySwarmBackground />{" "}
-      {/* OR your GravitySwarmBackground, whatever you named it */}
-      <StarlightCursor />
+      <GravitySwarmBackground /> <StarlightCursor />
       <BlindEasterEgg />
     </>
   );

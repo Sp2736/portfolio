@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { Flame, RefreshCcw } from "lucide-react";
 
-// --- 1. Foreground Interactive Cursor (Flares only, NO Rings, NO DOM Shake) ---
+// 1. Foreground Interactive Cursor (Flares only, NO Rings, NO DOM Shake)
 function SolarCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -141,7 +141,7 @@ function SolarCursor() {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[100]" />;
 }
 
-// --- 2. Vintage Background (Transparent Canvas, relies on your CSS variables) ---
+// 2. Vintage Background (Transparent Canvas, relies on your CSS variables)
 function VintageBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -196,7 +196,7 @@ function VintageBackground() {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[-3]" />;
 }
 
-// --- 3. Apocalyptic Background (Orbital Strike & Rising Ash) ---
+// 3. Apocalyptic Background (Orbital Strike & Rising Ash)
 function ApocalypticBackground({ isActive }: { isActive: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -335,7 +335,7 @@ function ApocalypticBackground({ isActive }: { isActive: boolean }) {
   );
 }
 
-// --- 4. Main Export Component & State Controller ---
+// 4. Main Export Component & State Controller
 export function SolarThemeEffects() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);

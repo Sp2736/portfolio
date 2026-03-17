@@ -20,7 +20,8 @@ export function ThemeToggle() {
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
-  const currentThemeName = themes.find((t) => t.id === theme)?.name || "Dark Angel";
+  const currentThemeName =
+    themes.find((t) => t.id === theme)?.name || "Dark Angel";
 
   return (
     <div className="fixed top-6 right-6 z-50">
@@ -28,7 +29,10 @@ export function ThemeToggle() {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-card/80 backdrop-blur-md transition-all duration-300 hover:bg-muted active:scale-95 group font-mono text-xs font-bold uppercase tracking-widest shadow-lg"
       >
-        <Palette size={14} className="text-primary group-hover:rotate-12 transition-transform" />
+        <Palette
+          size={14}
+          className="text-primary group-hover:rotate-12 transition-transform"
+        />
         {currentThemeName}
       </button>
 
@@ -48,7 +52,9 @@ export function ThemeToggle() {
                   setIsOpen(false);
                 }}
                 className={`text-left px-4 py-3 text-xs font-mono font-bold uppercase tracking-wider transition-colors ${
-                  theme === t.id ? "bg-primary/10 text-primary border-l-2 border-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground border-l-2 border-transparent"
+                  theme === t.id
+                    ? "bg-primary/10 text-primary border-l-2 border-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground border-l-2 border-transparent"
                 }`}
               >
                 {t.name}

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";import {
+import { motion, Variants } from "framer-motion";
+import {
   Layers,
   BarChart,
   Shield,
@@ -18,7 +19,7 @@ import { motion, Variants } from "framer-motion";import {
   Coffee,
 } from "lucide-react";
 
-// --- DATA MAPPING ---
+// DATA MAPPING
 
 const focusAreas = [
   { name: "Full-Stack Architecture", icon: Layers },
@@ -64,42 +65,39 @@ const organicInterests = [
   },
 ];
 
-// --- ANIMATION VARIANTS ---
+// ANIMATION VARIANTS
 
 const containerVars: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 };
 
 const itemVars: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: 20 
+  hidden: {
+    opacity: 0,
+    y: 20,
   },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     y: 0,
     transition: {
       type: "spring",
       stiffness: 100,
-      damping: 10
-    }
-  }
+      damping: 10,
+    },
+  },
 };
 
 export function CoreCapabilities() {
   return (
     <section className="w-full py-16 px-6 relative z-10" id="capabilities">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12">
-        {/* ==========================================
-            LEFT PANEL: COGNITIVE ARCHITECTURE 
-            (Focus Areas & Core Strengths)
-        ========================================== */}
+        {/* LEFT PANEL: COGNITIVE ARCHITECTURE */}
         <motion.div
           variants={containerVars}
           initial="hidden"
@@ -174,10 +172,7 @@ export function CoreCapabilities() {
           </div>
         </motion.div>
 
-        {/* ==========================================
-            RIGHT PANEL: ORGANIC SUBROUTINES 
-            (Interests & Human Elements)
-        ========================================== */}
+        {/* RIGHT PANEL: ORGANIC SUBROUTINES */}
 
         <motion.div
           variants={containerVars}

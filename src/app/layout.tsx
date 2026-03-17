@@ -5,21 +5,25 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Telemetry } from "@/components/telemetry";
-import { GlassController } from "@/components/glass-controller"; // NEW IMPORT
+import { GlassController } from "@/components/glass-controller";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DarkThemeEffects } from "@/components/dark-theme";
 import { CosmicThemeEffects } from "@/components/cosmic-theme";
-import { SolarThemeEffects } from "@/components/solar-theme"; 
-import { LightThemeEffects } from "@/components/light-theme"; 
+import { SolarThemeEffects } from "@/components/solar-theme";
+import { LightThemeEffects } from "@/components/light-theme";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" });
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  variable: "--font-fira-code",
+});
 
 export const metadata: Metadata = {
   title: "Swayam Patel | Architect & Developer",
-  description: "Digital lab specimen. Exploring full-stack systems, AI, and scalable architecture.",
-  icons : {
+  description:
+    "Digital lab specimen. Exploring full-stack systems, AI, and scalable architecture.",
+  icons: {
     icon: "app/favicon.png",
   },
 };
@@ -29,19 +33,21 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${firaCode.variable} font-sans antialiased overflow-x-hidden`}>
+      <body
+        className={`${inter.variable} ${firaCode.variable} font-sans antialiased overflow-x-hidden`}
+      >
         <ThemeProvider>
           <SmoothScroll>
             {/* Ambient Background & Cursor Physics Layers */}
             <DarkThemeEffects />
             <CosmicThemeEffects />
-            <SolarThemeEffects /> 
-            <LightThemeEffects /> 
-            
+            <SolarThemeEffects />
+            <LightThemeEffects />
+
             {/* UI Layer */}
             <Header />
             <ThemeToggle />
-            <GlassController /> {/* NEW COMPONENT */}
+            <GlassController />
             <Telemetry />
             <main className="min-h-screen w-full relative flex flex-col">
               {children}

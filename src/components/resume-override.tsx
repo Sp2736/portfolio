@@ -14,11 +14,13 @@ import {
 const resumeData = {
   name: "Swayam Patel",
   role: "Full-Stack Developer | SaaS Builder",
-  email: "sp2736@github.com",
-  github: "github.com/Sp2736",
-  portfolio: "sp2736.github.io/portfolio",
+  email: "swayampatel2736@gmail.com",
+  linkedin: "https://linkedin.com/in/swayam-patel-316ba5317/",
+  github: "https://github.com/Sp2736",
+  portfolio: "https://swayam-patel-v1.vercel.app",
   location: "Vadodara, Gujarat, India",
-  summary: "Software Engineer and Computer Science student focused on building scalable web applications and developer productivity tools. Creator of platforms such as ARCADE (role-based academic ecosystem) and AI Logic Commenter (VS Code extension). Experienced with React, Next.js, Node.js, and modern AI APIs. Interested in SaaS product development and freelance engineering opportunities.",
+  summary:
+    "Software Engineer and Computer Science student focused on building scalable web applications and developer productivity tools. Creator of platforms such as ARCADE (role-based academic ecosystem) and AI Logic Commenter (VS Code extension). Worked with React, Next.js, Node.js, and modern AI APIs. Interested in SaaS product development and freelance engineering opportunities. Currently working on a Data Science and Analytics project, to be revealed soon.",
   skills: {
     languages: "C, C++, Java, Python, TypeScript, JavaScript, PHP",
     frontend: "React, Next.js, Tailwind CSS, HTML, CSS",
@@ -27,54 +29,55 @@ const resumeData = {
     devTools: "Git, GitHub, VS Code API, Docker",
     cloud: "Azure, GCP",
     ai: "OpenAI, Gemini API, Claude AI, Prompt Engineering",
-    data: "Jupyter, Power BI, Google Colab"
+    data: "Google Colab, Power BI, Google Looker Studio",
   },
   projects: [
     {
       name: "ARCADE (SaaS Ecosystem)",
       tech: "Next.js, Node.js, API Security, Supabase",
-      desc: "Designed and implemented a role-based digital ecosystem for university resources. Secured unauthenticated API endpoints and prevented client-side spoofing to ensure robust data integrity."
+      desc: "Designed and implemented a role-based digital ecosystem for university resources. Secured unauthenticated API endpoints and prevented client-side spoofing to ensure robust data integrity.",
     },
     {
       name: "Logic Commenter (Developer Tool)",
       tech: "TypeScript, VS Code API, Gemini AI & API",
-      desc: "Developed a VS Code extension that automatically generates logic-focused documentation for code blocks, significantly improving developer productivity and code maintainability."
+      desc: "Developed a VS Code extension that automatically generates logic-focused documentation for code blocks, significantly improving developer productivity and code maintainability.",
     },
     {
       name: "VS Code Themes (Dark Angel & White Devil)",
       tech: "JSON, VS Code Theming API",
-      desc: "Designed and published semantic syntax themes tailored for developer ergonomics. 'Dark Angel' provides a professional zinc-based dark mode, while 'White Devil' offers a high-contrast light mode for high-glare environments."
+      desc: "Designed and published semantic syntax themes tailored for developer ergonomics. 'Dark Angel' provides a professional zinc-based dark mode, while 'White Devil' offers a high-contrast light mode for high-glare environments.",
     },
     {
-      name: "BRAINBIN",
+      name: "BrainBin",
       tech: "HTML5, CSS, JS, PHP, MySQL, LocalStorage",
-      desc: "Architected a knowledge management system with persistent client-side storage and structured retrieval mechanisms for notes and code snippets."
+      desc: "Architected a knowledge management system with persistent client-side storage and structured retrieval mechanisms for notes and code snippets.",
     },
     {
       name: "Wander-n-Wonder",
       tech: "Frontend Architecture",
-      desc: "Deployed a production-ready digital content platform showcasing modern UI/UX principles, responsive design, and optimized rendering."
-    }
+      desc: "Deployed a production-ready digital content platform showcasing modern UI/UX principles, responsive design, and optimized rendering.",
+    },
   ],
   openSource: [
     {
       name: "Open Source Contributions",
       projects: "Keploy, Zaplink, CareXpert",
-      desc: "Contributed to an open-source API testing platform (Keploy) improving workflows, and participated in frontend/backend architecture development for Zaplink and CareXpert during GDG-CHARUSAT Sprintathon 2026."
-    }
+      desc: "Contributed to an open-source API testing platform (Keploy) improving workflows, and participated in frontend/backend architecture development for Zaplink and CareXpert during GDG-CHARUSAT Sprintathon 2026.",
+    },
   ],
   certifications: [
     "Meta Full-Stack Developer Specialization",
     "IBM Data Science Professional Certificate",
-    "Google Prompt Engineering & Generative AI",
-    "Google People & Stakeholder Management"
+    "Google Prompt Engineering & Generative AI Essentials",
+    "Google People & Stakeholder Management",
   ],
   education: {
     degree: "Bachelor of Technology in Computer Science & Engineering",
     university: "DEPSTAR, CHARUSAT University",
     grad: "Expected Graduation: 2028",
-    coursework: "Data Structures, Algorithms, Object-Oriented Programming, Database Systems, Operating Systems, AI/ML"
-  }
+    coursework:
+      "Data Structures, Algorithms, Object-Oriented Programming, Database Systems, Operating Systems, AI/ML and Data Science",
+  },
 };
 
 export function ResumeOverride() {
@@ -125,12 +128,11 @@ export function ResumeOverride() {
     };
   }, [isActive]);
 
-  // --- THE FIX: HIDDEN IFRAME ISOLATION ---
   const handleDownload = () => {
     const printElement = printRef.current;
     if (!printElement) return;
 
-    // 1. Create a hidden iframe
+    // Create a iframe
     const iframe = document.createElement("iframe");
     iframe.style.position = "fixed";
     iframe.style.right = "0";
@@ -143,7 +145,7 @@ export function ResumeOverride() {
     const iframeDoc = iframe.contentWindow?.document;
     if (!iframeDoc) return;
 
-    // 2. Extract Tailwind CSS from the main window so the PDF renders beautifully
+    // Extract Tailwind CSS from the main window so the PDF renders beautifully
     const styleElements = document.querySelectorAll(
       'style, link[rel="stylesheet"]',
     );
@@ -151,7 +153,7 @@ export function ResumeOverride() {
       .map((el) => el.outerHTML)
       .join("");
 
-    // 3. Inject the isolated resume into the iframe
+    // Inject the isolated resume into the iframe
     iframeDoc.open();
     iframeDoc.write(`
       <!DOCTYPE html>
@@ -182,7 +184,7 @@ export function ResumeOverride() {
     `);
     iframeDoc.close();
 
-    // 4. Wait for styles to apply, trigger the print dialog, and clean up the iframe
+    // Wait for styles to apply, trigger the print dialog, and clean up the iframe
     setTimeout(() => {
       iframe.contentWindow?.focus();
       iframe.contentWindow?.print();
@@ -204,8 +206,6 @@ export function ResumeOverride() {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[99999] bg-background/95 backdrop-blur-xl flex items-center justify-center p-4"
         >
-          {/* I have deleted the old <style> block that caused the 11 pages! */}
-
           <div className="w-full max-w-6xl max-h-[90vh] flex flex-col md:flex-row bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
             {/* LEFT SIDEBAR: CONTROLS */}
             <div className="w-full md:w-80 border-r border-border bg-muted/20 flex flex-col shrink-0">
@@ -292,7 +292,7 @@ export function ResumeOverride() {
                 className="w-full max-w-[800px] bg-white text-black shadow-2xl overflow-hidden"
                 style={{ minHeight: "1056px", padding: "35px 40px" }}
               >
-                {/* --- TEMPLATE 1: ATS MINIMAL (HIGH DENSITY) --- */}
+                {/* TEMPLATE 1: ATS MINIMAL (HIGH DENSITY) */}
                 {template === "minimal" && (
                   <div className="font-sans leading-snug">
                     <div className="text-center mb-4">
@@ -422,7 +422,7 @@ export function ResumeOverride() {
                   </div>
                 )}
 
-                {/* --- TEMPLATE 2: MODERN TECH --- */}
+                {/* TEMPLATE 2: MODERN TECH */}
                 {template === "modern" && (
                   <div className="font-sans flex gap-6">
                     {/* Left Column */}
@@ -576,7 +576,7 @@ export function ResumeOverride() {
                   </div>
                 )}
 
-                {/* --- TEMPLATE 3: EXECUTIVE COMPOSITE --- */}
+                {/* TEMPLATE 3: EXECUTIVE COMPOSITE */}
                 {template === "composite" && (
                   <div className="font-sans">
                     {/* Header Split */}

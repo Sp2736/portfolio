@@ -26,7 +26,7 @@ export function Telemetry() {
   const lastTimeRef = useRef<number>(performance.now());
   const frameCountRef = useRef<number>(0);
 
-  // --- 1. INITIALIZE HARDWARE & STATIC DATA ---
+  // 1. INITIALIZE HARDWARE & STATIC DATA
   useEffect(() => {
     // Viewport
     const handleResize = () => setViewport(`${window.innerWidth}x${window.innerHeight}`);
@@ -74,7 +74,7 @@ export function Telemetry() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // --- 2. LIVE DATA POLLING (1s Interval) ---
+  // 2. LIVE DATA POLLING (1s Interval)
   useEffect(() => {
     const startTime = Date.now();
 
@@ -110,7 +110,7 @@ export function Telemetry() {
     return () => clearInterval(interval);
   }, []);
 
-  // --- 3. RAW RENDER FPS CALCULATION ---
+  // 3. RAW RENDER FPS CALCULATION
   const calculateFPS = (time: number) => {
     frameCountRef.current += 1;
     const delta = time - lastTimeRef.current;

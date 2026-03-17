@@ -47,7 +47,7 @@ const categoryIcons: Record<string, React.ElementType> = {
 };
 
 const skillsData = [
-  // --- Languages ---
+  // Languages
   {
     name: "C",
     category: "Languages",
@@ -99,7 +99,7 @@ const skillsData = [
     icon: "https://skillicons.dev/icons?i=css",
   },
 
-  // --- System Level ---
+  // System Level
   {
     name: "Embedded Assembly",
     category: "System Level",
@@ -122,7 +122,7 @@ const skillsData = [
     icon: "https://skillicons.dev/icons?i=py",
   },
 
-  // --- Frameworks ---
+  // Frameworks
   {
     name: "React",
     category: "Frameworks",
@@ -144,7 +144,7 @@ const skillsData = [
   //   icon: "https://skillicons.dev/icons?i=express",
   // },
 
-  // --- Databases ---
+  // Databases
   {
     name: "MongoDB",
     category: "Databases",
@@ -192,7 +192,7 @@ const skillsData = [
     invertDark: true,
   },
 
-  // --- Cloud & DevOps ---
+  // Cloud & DevOps
   {
     name: "Azure",
     category: "Cloud & DevOps",
@@ -225,7 +225,7 @@ const skillsData = [
     invertDark: true,
   },
 
-  // --- Data & Analytics ---
+  // Data & Analytics
   {
     name: "Jupyter",
     category: "Data & Analytics",
@@ -261,7 +261,7 @@ const skillsData = [
     invertDark: true,
   },
 
-  // --- AI & LLMs ---
+  // AI & LLMs
   {
     name: "ChatGPT",
     category: "AI & LLMs",
@@ -304,7 +304,7 @@ const skillsData = [
     invertDark: true,
   },
 
-  // --- Generative AI ---
+  // Generative AI
   {
     name: "Midjourney",
     category: "Generative AI",
@@ -342,7 +342,7 @@ const skillsData = [
     icon: "https://skillicons.dev/icons?i=notion",
   },
 
-  // --- Dev Tools & IDEs ---
+  // Dev Tools & IDEs
   {
     name: "VS Code",
     category: "Dev Tools & IDEs",
@@ -382,7 +382,7 @@ const skillsData = [
     invertDark: true,
   },
 
-  // --- Design & PM ---
+  // Design & PM
   {
     name: "Figma",
     category: "Design & PM",
@@ -412,7 +412,7 @@ const skillsData = [
     icon: "https://miro.medium.com/v2/resize:fit:1400/0*tviVu77uKID2H6Jn.png",
   },
 
-  // --- Operating Systems ---
+  // Operating Systems
   {
     name: "Windows",
     category: "Operating Systems",
@@ -449,7 +449,7 @@ export function SkillsOrbit() {
     setMounted(true);
   }, []);
 
-  // --- ZERO-G PHYSICS ENGINE ---
+  // ZERO-G PHYSICS ENGINE
   useEffect(() => {
     if (!isZeroG) return;
 

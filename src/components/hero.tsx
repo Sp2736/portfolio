@@ -15,7 +15,6 @@ import {
   Download,
 } from "lucide-react";
 
-// --- HERO PROFILE (ID CARD) COMPONENT ---
 function HeroProfile() {
   // CAFFEINE GLITCH EASTER EGG STATE
   const [clicks, setClicks] = useState(0);
@@ -25,7 +24,7 @@ function HeroProfile() {
     if (clicks >= 5) {
       setIsCaffeinated(true);
       setClicks(0); // Reset for next time
-      setTimeout(() => setIsCaffeinated(false), 5000); // Back to normal after 5 seconds
+      setTimeout(() => setIsCaffeinated(false), 3000); // Back to normal after 3 seconds
     }
   }, [clicks]);
 
@@ -59,7 +58,7 @@ function HeroProfile() {
       {/* Background Animated Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50 pointer-events-none" />
 
-      {/* --- LEFT: Tactical Avatar Frame --- */}
+      {/* LEFT: Tactical Avatar Frame */}
       <div className="relative shrink-0 flex items-center justify-center">
         {/* Outer Rotating Scan Ring */}
         <motion.div
@@ -96,13 +95,13 @@ function HeroProfile() {
         </div>
       </div>
 
-      {/* --- RIGHT: Profile Data & Identity --- */}
+      {/* RIGHT: Profile Data & Identity */}
       <div className="flex flex-col items-center md:items-start text-center md:text-left w-full z-10">
         {/* Verification & Location Row */}
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 md:gap-4 mb-2">
           <div className="flex items-center gap-1 text-[10px] md:text-xs font-mono text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
             <ShieldCheck size={12} />
-            <span className="uppercase tracking-widest">Sys.Admin</span>
+            <span className="uppercase tracking-widest">SP.SYS.admin</span>
           </div>
           <div className="flex items-center gap-1 text-[10px] md:text-xs font-mono text-muted-foreground">
             <MapPin size={12} className="text-primary/70" />
@@ -138,7 +137,7 @@ function HeroProfile() {
                 ||
               </span>
               <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
-                Poetry Writing
+                Poetry & Writing
               </span>
             </>
           ) : (
@@ -171,7 +170,7 @@ function HeroProfile() {
           cursor focus is on the screen (and off the below terminal).
         </p>
 
-        {/* --- ACTION BAR: Socials & Resume --- */}
+        {/* ACTION BAR: Socials & Resume */}
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 w-full mt-1">
           {/* Social Icons Container */}
           <div className="flex items-center gap-2 md:gap-3">
@@ -184,7 +183,7 @@ function HeroProfile() {
               <Github size={16} />
             </a>
             <a
-              href="https://www.linkedin.com/in/swayam-patel-316ba5317"
+              href="https://linkedin.com/in/swayam-patel-316ba5317/"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
@@ -209,11 +208,10 @@ function HeroProfile() {
               onClick={() =>
                 window.dispatchEvent(new CustomEvent("open-resume"))
               }
-              className="flex items-center gap-2 p-2 rounded-full bg-primary/10 text-primary border border-primary/20 shadow-lg hover:bg-primary/20 transition-colors"
+              className="lg:hidden flex items-center gap-2 p-2 rounded-full bg-primary/10 text-primary border border-primary/20 shadow-lg hover:bg-primary/20 transition-colors"
               title="Generate CV"
             >
               <FileText size={20} />
-              {/* Optional: Add text next to it if you want, or just keep it as an icon */}
               <span className="text-xs font-bold uppercase tracking-widest">
                 Resume
               </span>
@@ -222,24 +220,13 @@ function HeroProfile() {
 
           {/* Divider (Hidden on Mobile) */}
           <div className="hidden sm:block w-[1px] h-6 bg-border/50" />
-
-          {/* Resume Download Pill
-          <a
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-primary-foreground shadow-sm hover:shadow-[0_0_15px_rgba(var(--primary),0.4)] transition-all text-xs font-mono font-bold uppercase tracking-widest"
-          >
-            <Download size={14} />
-            Resume
-          </a> */}
         </div>
       </div>
     </motion.div>
   );
 }
 
-// --- MAIN HERO SECTION ---
+// MAIN HERO SECTION
 export function Hero() {
   return (
     <section
@@ -247,10 +234,10 @@ export function Hero() {
       className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-28 pb-16 overflow-hidden"
     >
       <div className="container mx-auto max-w-6xl flex flex-col gap-10 lg:gap-12 relative z-10">
-        {/* 1. The Identification Matrix Panel */}
+        {/* The Identification Matrix Panel */}
         <HeroProfile />
 
-        {/* 2. The Original Grid Content */}
+        {/* The Original Grid Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="flex flex-col gap-5 md:gap-6 text-left p-6 md:p-8 rounded-3xl bg-background/5 backdrop-blur-md border border-border/30 shadow-2xl">
             <motion.div

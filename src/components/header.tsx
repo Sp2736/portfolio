@@ -1,10 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { motion, Variants, useScroll, useMotionValueEvent } from "framer-motion";
-import { 
-  Terminal, Cpu, Layers, BookOpen, 
-  History, Coffee, Award 
+import {
+  motion,
+  Variants,
+  useScroll,
+  useMotionValueEvent,
+} from "framer-motion";
+import {
+  Terminal,
+  Cpu,
+  Layers,
+  BookOpen,
+  History,
+  Coffee,
+  Award,
 } from "lucide-react";
 import { useLenis } from "lenis/react";
 
@@ -34,12 +44,10 @@ export function Header() {
     }
   };
 
-  // Updated to your exact 7 navigation items
-  // Note: "Home" is handled separately as the Terminal icon in the sidebar
   const navLinks = [
     { name: "deployments", id: "#projects", icon: Layers },
     { name: "arsenal", id: "#skills", icon: Cpu },
-    { name: "chronology", id: "#chronology", icon: History }, 
+    { name: "chronology", id: "#chronology", icon: History },
     { name: "un-professional", id: "#capabilities", icon: Coffee },
     { name: "certifications", id: "#certifications", icon: Award },
     { name: "blogs", id: "#blog", icon: BookOpen },
@@ -65,7 +73,7 @@ export function Header() {
               SP<span className="text-primary">.</span>SYS
             </span>
           </a>
-          
+
           <nav className="hidden md:flex items-center gap-6 lg:gap-8 font-mono text-xs lg:text-sm font-semibold text-muted-foreground">
             <a
               href="#hero"
@@ -85,7 +93,7 @@ export function Header() {
               </a>
             ))}
           </nav>
-          <div className="w-32 hidden md:block"></div> 
+          <div className="w-32 hidden md:block"></div>
         </div>
       </motion.header>
 
@@ -97,7 +105,7 @@ export function Header() {
         // Added scaling and compressed padding to prevent overlapping with bottom buttons
         className="fixed top-1/2 -translate-y-1/2 right-2 md:right-6 z-50 hidden md:flex flex-col items-center gap-1.5 p-2 bg-background/5 backdrop-blur-md border border-border/30 rounded-full shadow-2xl scale-[0.85] sm:scale-100 origin-right"
       >
-        {/* Home / Init Button */}
+        {/* Home Button */}
         <a
           href="#hero"
           onClick={(e) => handleNav(e, "#hero")}

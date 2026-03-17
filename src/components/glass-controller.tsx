@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Hammer, Sparkles } from "lucide-react";
 import { useTheme } from "next-themes";
 
-// --- Global CSS to instantly strip the glass when shattered ---
+// Global CSS to instantly strip the glass when shattered
 const shatterStyles = `
   /* Instant snap to transparent when shattered, with a physical pop */
   .glass-shattered [class*="backdrop-blur"] {

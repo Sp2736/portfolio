@@ -7,18 +7,15 @@ import { Hero } from "@/components/hero";
 import { SkillsOrbit } from "@/components/skills-orbit";
 import { Timeline } from "@/components/timeline";
 import { Projects } from "@/components/projects";
-import { Certifications } from "@/components/certifications"; // NEW
-import { OpenInitiative } from "@/components/open-initiative"; // NEW
+import { Certifications } from "@/components/certifications";
+import { OpenInitiative } from "@/components/open-initiative";
 import { GithubActivity } from "@/components/github-activity";
 import { Blog } from "@/components/blog";
-import { CoreCapabilities } from "@/components/core-capabilities"; // Add this line
+import { CoreCapabilities } from "@/components/core-capabilities";
 import { PoeticOverride } from "@/components/poetic-override";
 import { WallPunchOverride } from "@/components/wall-punch-override";
-// import { RansomwareOverride } from "@/components/ransomware-override";
 import { ThemeTearOverride } from "@/components/theme-tear-override";
-// import { HallucinationOverride } from "@/components/hallucination-override";
 import { ThermalOverride } from "@/components/thermal-override";
-// import { KineticOverride } from "@/components/kinetic-override";
 import { EchoOverride } from "@/components/echo-override";
 import { ResumeOverride } from "@/components/resume-override";
 
@@ -31,15 +28,15 @@ export default function Home() {
         {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
       <main id="main-content" className="w-full flex flex-col items-center">
-        <Hero /> {/* Identity & Terminal */}
-        <Projects /> {/* Active Deployments */}
-        <OpenInitiative /> {/* DSA Visualizer CTA */}
-        <SkillsOrbit /> {/* Technical Arsenal */}
-        <Timeline /> {/* Learning Journey */}
-        <CoreCapabilities /> {/* Beyond Tech Life */}
-        <Certifications /> {/* The Evidence Locker */}
-        <GithubActivity /> {/* Version Control Pulse */}
-        <Blog /> {/* Digital Garden & Book */}
+        <Hero />
+        <Projects />
+        <OpenInitiative />
+        <SkillsOrbit />
+        <Timeline />
+        <CoreCapabilities />
+        <Certifications />
+        <GithubActivity />
+        <Blog />
         <ResumeOverride />
         <PoeticOverride />
         <WallPunchOverride />

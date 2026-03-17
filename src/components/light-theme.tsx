@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { Magnet, RefreshCcw, ShieldAlert, Zap } from "lucide-react";
 
-// --- 1. Foreground Interactive Cursor (Black Trail, Smoke & Ash) ---
+// Foreground Interactive Cursor (Black Trail, Smoke & Ash)
 function AshCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -24,7 +24,7 @@ function AshCursor() {
     const STAR_COUNT = 15;
     const STAR_SPEED_MIN = 1;
     const STAR_SPEED_MAX = 5;
-    // Pure whites and stark silvers for the professional Shadcn look
+    // Pure whites and stark silvers
     const COLORS = ["#221414", "#050D15", "#18191A", "#18191a"];
 
     const setSize = () => {
@@ -189,7 +189,7 @@ function AshCursor() {
   );
 }
 
-// --- 2. Magnetic Architectural Blueprint (Responsive Grid) ---
+// Magnetic Architectural Blueprint (Responsive Grid)
 function MagneticGridBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -324,7 +324,7 @@ function MagneticGridBackground() {
       }
       ctx.stroke();
 
-      // Optional: Draw structural intersection dots
+      // Draw structural intersection dots
       ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
@@ -359,7 +359,7 @@ function MagneticGridBackground() {
   );
 }
 
-// --- Global CSS Injection for the Anti-Gravity Deconstruct ---
+// Global CSS Injection for the Anti-Gravity Deconstruct
 const zeroGStyles = `
   /* Phase 1: Magnetic Containment Failing (Alarms) */
   .gravity-failing > *:not(.easter-egg-safe) {
@@ -423,19 +423,19 @@ function ZeroGEasterEgg() {
   );
 
   useEffect(() => {
-  const loop = () => {
-    // physics calculations
+    const loop = () => {
+      // physics calculations
+      physicsLoopRef.current = requestAnimationFrame(loop);
+    };
+
     physicsLoopRef.current = requestAnimationFrame(loop);
-  };
 
-  physicsLoopRef.current = requestAnimationFrame(loop);
-
-  return () => {
-    if (physicsLoopRef.current !== null) {
-      cancelAnimationFrame(physicsLoopRef.current);
-    }
-  };
-}, []);
+    return () => {
+      if (physicsLoopRef.current !== null) {
+        cancelAnimationFrame(physicsLoopRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -451,11 +451,11 @@ function ZeroGEasterEgg() {
     return () => clearInterval(interval);
   }, [gravityState]);
 
-  // --- SMART DOM PARSER & PHYSICS ENGINE ---
+  // SMART DOM PARSER & PHYSICS ENGINE
   const startPhysicsEngine = () => {
     const targets: HTMLElement[] = [];
 
-    // 1. Recursive function to mathematically identify "Solid" structural blocks
+    // Recursive function to mathematically identify "Solid" structural blocks
     const findRigidBodies = (element: HTMLElement) => {
       if (element.closest(".easter-egg-safe")) return; // Ignore the HUD/Buttons
 
@@ -520,11 +520,10 @@ function ZeroGEasterEgg() {
     const viewportH = window.innerHeight;
     physicsObjectsRef.current = [];
 
-    // 2. CRITICAL: Calculate all positions BEFORE modifying any CSS.
     // If we make them position: fixed one by one, the DOM collapses and ruins the remaining coordinates.
     const initialRects = targets.map((el) => el.getBoundingClientRect());
 
-    // 3. Detach from DOM flow and initialize physics
+    // Detach from DOM flow and initialize physics
     targets.forEach((el, index) => {
       const rect = initialRects[index];
 
@@ -553,7 +552,7 @@ function ZeroGEasterEgg() {
       el.style.transform = `translate3d(${rect.left}px, ${rect.top}px, 0px)`;
     });
 
-    // 4. Rigid Body Collision Loop
+    // Rigid Body Collision Loop
     const runPhysics = () => {
       const objs = physicsObjectsRef.current;
       const elasticity = 0.9;
@@ -770,7 +769,6 @@ function ZeroGEasterEgg() {
   );
 }
 
-// --- 3. Main Export Component ---
 export function LightThemeEffects() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);

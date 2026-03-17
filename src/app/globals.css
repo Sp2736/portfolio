@@ -19,7 +19,8 @@
 }
 
 @layer base {
-  :root, .light {
+  :root,
+  .light {
     /* WHITE DEVIL (Light Mode) */
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
@@ -70,7 +71,7 @@
     --card-foreground: 20 20% 15%;
     --popover: 40 20% 98%;
     --popover-foreground: 20 20% 15%;
-    --primary: 15 80% 55%; 
+    --primary: 15 80% 55%;
     --primary-foreground: 40 33% 96%;
     --secondary: 30 20% 85%;
     --secondary-foreground: 20 20% 15%;
@@ -107,7 +108,7 @@
   * {
     border-color: hsl(var(--border));
   }
-  
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
@@ -115,37 +116,27 @@
   }
 }
 
-/* ==========================================
-   FUNCTIONAL PROTOCOLS & OVERRIDES
-========================================== */
-
-/* ZEN MODE OVERRIDES */
-body.zen-mode-active .echo-container,
-body.zen-mode-active canvas,
-body.zen-mode-active .fixed.bottom-6, /* Hides the telemetry/audio buttons */
-body.zen-mode-active nav,
-body.zen-mode-active header {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.5s ease;
-}
-
-body.zen-mode-active section {
-  max-width: 48rem; /* Clean standard CSS alternative to Tailwind's max-w-3xl */
-  margin: 0 auto;
-}
+/* FUNCTIONAL PROTOCOLS & OVERRIDES*/
 
 /* PRINT/RESUME MODE OVERRIDES */
 @media print {
-  body, .light, .dark, .solar, .cosmic, body.print-mode {
+  body,
+  .light,
+  .dark,
+  .solar,
+  .cosmic,
+  body.print-mode {
     background: white !important;
     color: black !important;
   }
-  
-  canvas, .fixed, button, .echo-container {
+
+  canvas,
+  .fixed,
+  button,
+  .echo-container {
     display: none !important;
   }
-  
+
   /* Ensure borders and texts are crisp for paper */
   * {
     border-color: #ddd !important;
@@ -158,9 +149,7 @@ body.zen-mode-active section {
   }
 }
 
-/* ==========================================
-   SCROLLBAR STYLING
-========================================== */
+/* SCROLLBAR STYLING */
 
 ::-webkit-scrollbar {
   width: 8px;
