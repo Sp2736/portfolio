@@ -161,22 +161,17 @@ Yes. It works.
 
 # Hidden Interaction Protocols
 
-The interface contains **multiple secret triggers**.
+Most portfolios have visual easter eggs. I engineered **hidden functional utilities**. 
 
-They activate strange visual behaviors depending on:
+The interface contains secret, terminal-style triggers that bypass the GUI and interact directly with the underlying system architecture. These protocols exist to reward curiosity and provide frictionless data access for technical reviewers.
 
-* keyboard input
-* mouse movement
-* cursor velocity
-* chaotic user behavior
-
-These interactions exist to reward curiosity.
+To activate, simply type the trigger words anywhere on the site (ensure you aren't focused on an input field).
 
 ---
 
 ### Thermal Override
 
-Shake the mouse aggressively.
+Shake the mouse and move the arrow pointer aggressively.
 
 The interface begins to **melt like overheated hardware**.
 
@@ -205,20 +200,6 @@ invert
 ```
 
 Reality tears open and the colors under the cursor invert.
-
----
-
-### System Lock Simulation
-
-Typing of:
-
-```
-sudo
-```
-
-Triggers a fake **terminal lock screen**.
-
-Relax. It's not real ransomware. Probably.
 
 ---
 
@@ -254,7 +235,34 @@ You can literally punch permanent cracks into the interface.
 
 Therapy not included.
 
+
 ---
+
+### The API View (JSON Override)
+**Trigger:** Type `json`
+
+The system instantly unmounts the React GUI and replaces the entire DOM with a strictly formatted, syntax-highlighted JSON object. It exposes the raw data structure powering the portfolio, complete with a 1-click clipboard copy feature. 
+
+*Press `ESC` to return to the GUI.*
+
+---
+
+### The ATS Resume Engine
+**Trigger:** Type `resume` or `cv`
+
+This does not just download a static PDF. It opens a hidden, fully functional CV Generator modal. It features:
+* A live preview pane isolated via a hidden iframe.
+* Three dynamic formatting algorithms: **ATS Minimal**, **Modern Tech**, and **Executive Composite**.
+* A direct, flawlessly formatted print-to-PDF export that strips out web artifacts and background rendering.
+
+---
+
+### Focus / Zen Mode
+**Trigger:** Type `zen`
+
+Web interfaces can be noisy. This protocol instantly kills all background effects, stops telemetry intervals, hides navigation overlays, and centers the project text with optimized typography. Designed for pure, distraction-free reading.
+
+*Press `ESC` to restore standard environmental rendering.*
 
 ## Environment-Aware Rendering
 

@@ -20,6 +20,7 @@ import { ThemeTearOverride } from "@/components/theme-tear-override";
 import { ThermalOverride } from "@/components/thermal-override";
 // import { KineticOverride } from "@/components/kinetic-override";
 import { EchoOverride } from "@/components/echo-override";
+import { ResumeOverride } from "@/components/resume-override";
 
 export default function Home() {
     const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +42,7 @@ export default function Home() {
       <Certifications />   {/* The Evidence Locker */}
       <GithubActivity />   {/* Version Control Pulse */}
       <Blog />             {/* Digital Garden & Book */}
+      <ResumeOverride/>
       <PoeticOverride/>
       <WallPunchOverride/>
       {/* <RansomwareOverride/> */}

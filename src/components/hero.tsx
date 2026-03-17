@@ -124,7 +124,7 @@ function HeroProfile() {
             </>
           ) : (
             <>
-              <span className="text-[10px] md:text-xs font-black text-white bg-pink-600 px-2.5 py-1 rounded-md border border-pink-400 animate-pulse uppercase tracking-widest">Milkshake Tycoon</span>
+              <span className="text-[10px] md:text-xs font-black text-white bg-pink-600 px-2.5 py-1 rounded-md border border-pink-400 animate-pulse uppercase tracking-widest">Gym Freak</span>
               <span className="text-pink-500 text-xs font-mono animate-bounce">///</span>
               <span className="text-[10px] md:text-xs font-black text-black bg-yellow-400 px-2.5 py-1 rounded-md border border-yellow-200 animate-pulse uppercase tracking-widest">Vibe Coder</span>
               <span className="text-yellow-500 text-xs font-mono animate-bounce">///</span>
@@ -138,7 +138,7 @@ function HeroProfile() {
           Architecting systems that scale, breaking them to understand security,
           and writing poetry when the terminal goes dark. I build digital
           ecosystems from the lowest level of memory management to the highest
-          layers of UI/UX.
+          layers of UI/UX. To see my resume, just type 'CV' anywhere whilst cursor focus is on the screen (and off the below terminal).
         </p>
 
         {/* --- ACTION BAR: Socials & Resume --- */}
