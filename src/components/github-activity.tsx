@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, Variants } from "framer-motion";
-import { Github, ExternalLink, FolderGit2, Terminal as TerminalIcon, GitBranch, Activity } from "lucide-react";
+import { motion } from "framer-motion";
+import { 
+  Github, ExternalLink, FolderGit2, Terminal as TerminalIcon, 
+  GitBranch, Activity, PieChart, Info 
+} from "lucide-react";
 
 // --- OPEN SOURCE REPOS DATA ---
 const openSourceRepos = [
@@ -33,24 +36,38 @@ const openSourceRepos = [
 ];
 
 export function GithubActivity() {
-  const [gitData, setGitData] = useState({ repos: 0, followers: 0 });
+  const [gitData, setGitData] = useState({ 
+    repos: 0, 
+    followers: 0, 
+    following: 0, 
+    location: "",
+    name: "",
+    createdAt: "",
+    updatedAt: ""
+  });
   const [recentPushes, setRecentPushes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // --- OFFICIAL GITHUB API FETCH ---
   useEffect(() => {
     const fetchRealGithubData = async () => {
       try {
-        // Fetch User Stats
         const userRes = await fetch("https://api.github.com/users/Sp2736");
         const userData = await userRes.json();
         
-        // Fetch Recently Pushed Repositories (Limit 3)
-        const reposRes = await fetch("https://api.github.com/users/Sp2736/repos?sort=pushed&per_page=3");
+        const reposRes = await fetch("https://api.github.com/users/Sp2736/repos?sort=pushed&per_page=4");
         const reposData = await reposRes.json();
 
         if (userRes.ok && reposRes.ok) {
-          setGitData({ repos: userData.public_repos, followers: userData.followers });
+          setGitData({ 
+            repos: userData.public_repos, 
+            followers: userData.followers,
+            following: userData.following,
+            location: userData.location || "Remote",
+            // NEW: Real data points from GitHub API
+            name: userData.name || userData.login,
+            createdAt: userData.created_at,
+            updatedAt: userData.updated_at
+          });
           setRecentPushes(reposData);
         }
       } catch (error) {
@@ -63,153 +80,155 @@ export function GithubActivity() {
     fetchRealGithubData();
   }, []);
 
-  // Format the ISO date into something readable
   const formatDate = (dateString: string) => {
+    if (!dateString) return "...";
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
   return (
-    <section className="w-full py-16 px-6 relative z-10" id="github">
+    <section className="w-full py-24 px-6 relative z-10" id="github">
       <div className="max-w-7xl mx-auto flex flex-col gap-12">
         
-        {/* ==========================================
-            SECTION HEADER (Top)
-        ========================================== */}
+        {/* SECTION HEADER */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left w-full">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
             className="max-w-3xl"
           >
             <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
               <div className="p-2 rounded-lg bg-primary/10 text-primary border border-primary/20 shadow-[0_0_15px_rgba(var(--primary),0.3)]">
                 <Github size={24} />
               </div>
-              <h2 className="font-mono text-sm tracking-widest uppercase font-bold text-muted-foreground">Version Control</h2>
+              <h2 className="font-mono text-sm tracking-widest uppercase font-bold text-muted-foreground">Global Analytics</h2>
             </div>
-            
-            <h3 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight mb-4">
-              Continuous <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-foreground">Integration.</span>
+            <h3 className="text-3xl md:text-5xl font-extrabold text-foreground tracking-tight mb-4">
+              Code <span className="text-primary underline decoration-primary/30 underline-offset-8">Intelligence.</span>
             </h3>
-            
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              Code is a living organism. It requires constant iteration and refactoring. Here is a live telemetry feed of my repository updates pulled directly from the GitHub API, alongside my active open-source contributions.
+              Tracking real-time deployment metrics and open-source contributions. The following data is fetched directly from the GitHub REST API to ensure total transparency of the version control lifecycle.
             </p>
           </motion.div>
         </div>
 
-        {/* ==========================================
-            CONTENT SPLIT (Terminal Left, OSS Right)
-        ========================================== */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
+        {/* ANALYTICS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+          {[
+            { label: "Repositories", value: gitData.repos, icon: FolderGit2 },
+            { label: "Network", value: gitData.followers, icon: Activity },
+            { label: "Following", value: gitData.following, icon: GitBranch },
+            { label: "Node Location", value: gitData.location, icon: Info },
+          ].map((stat, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="p-4 rounded-xl bg-card border border-border shadow-sm flex items-center justify-between"
+            >
+              <div>
+                <p className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest">{stat.label}</p>
+                <p className="text-xl font-black text-foreground">{loading ? "..." : stat.value}</p>
+              </div>
+              <stat.icon size={20} className="text-primary/50" />
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-stretch">
           
-          {/* --- LEFT: LIVE TELEMETRY TERMINAL --- */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="lg:w-1/2 w-full flex flex-col"
-          >
-            {/* Themed Terminal Container */}
-            <div className="w-full h-full rounded-2xl bg-background/60 backdrop-blur-md border border-border/30 shadow-2xl overflow-hidden font-mono text-sm flex flex-col">
-              
-              {/* Terminal Header */}
-              <div className="flex items-center px-4 py-3 bg-secondary/40 border-b border-border/30">
-                <div className="flex gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
+          {/* LEFT: THEME-ADAPTIVE TELEMETRY TERMINAL */}
+          <div className="lg:w-1/2 w-full flex flex-col">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="w-full h-full rounded-2xl bg-card border border-border shadow-xl overflow-hidden font-mono text-xs md:text-sm flex flex-col"
+            >
+              <div className="flex items-center px-4 py-3 bg-muted/50 border-b border-border">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80 shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
                 </div>
                 <div className="mx-auto flex items-center gap-2 text-muted-foreground text-[10px] tracking-widest uppercase font-bold">
-                  <TerminalIcon size={14} /> System Telemetry
+                  <TerminalIcon size={12} /> git-telemetry.sh
                 </div>
-                <div className="w-12" /> {/* Spacer for centering */}
+                <div className="w-10" /> {/* Spacer */}
               </div>
 
-              {/* Terminal Body */}
-              <div className="p-5 md:p-6 flex flex-col gap-3 flex-grow text-xs md:text-sm">
-                <p className="text-muted-foreground mb-1">$ ssh git@github.com -u Sp2736</p>
-                
+              <div className="p-6 flex flex-col gap-3 text-foreground flex-grow">
+                <p className="text-muted-foreground">$ curl https://api.github.com/users/Sp2736</p>
                 {loading ? (
-                  <div className="flex items-center gap-2 animate-pulse text-primary mt-2">
-                    <Activity size={16} /> Establishing secure connection...
+                  <div className="animate-pulse text-primary flex items-center gap-2 italic">
+                    <Activity size={14} /> Fetching live API response...
                   </div>
                 ) : (
-                  <motion.div 
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
-                    className="flex flex-col gap-2"
-                  >
-                    <p className="text-primary font-bold">&gt; Connection established.</p>
-                    <p className="text-muted-foreground">&gt; Target: <span className="text-foreground font-semibold">Swayam Patel (Sp2736)</span></p>
-                    <p className="text-muted-foreground">&gt; Public Repositories: <span className="text-foreground font-semibold">{gitData.repos}</span></p>
-                    <p className="text-muted-foreground">&gt; Network Followers: <span className="text-foreground font-semibold">{gitData.followers}</span></p>
-                    <p className="mt-4 text-primary font-bold">&gt; Retrieving latest push events...</p>
-                    
-                    <div className="flex flex-col gap-3 mt-2 pl-3 border-l-2 border-primary/30 ml-1">
+                  <>
+                    <p className="text-primary font-bold">&gt; HTTP 200 OK</p>
+                    <div className="pl-3 border-l border-border flex flex-col gap-1 mt-1">
+                      {/* 100% REAL DATA FROM GITHUB API */}
+                      <p>&gt; <span className="text-muted-foreground">User:</span> {gitData.name}</p>
+                      <p>&gt; <span className="text-muted-foreground">Created_At:</span> {formatDate(gitData.createdAt)}</p>
+                      <p>&gt; <span className="text-muted-foreground">Updated_At:</span> {formatDate(gitData.updatedAt)}</p>
+                    </div>
+
+                    <div className="mt-5">
+                      <p className="text-primary font-bold mb-3">&gt; LATEST_COMMITS:</p>
                       {recentPushes.map((repo, i) => (
-                        <motion.a
-                          key={i}
+                        <a 
+                          key={i} 
                           href={repo.html_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.2 + (i * 0.1) }}
-                          className="flex items-center gap-2 group"
+                          className="flex justify-between items-center py-2 border-b border-border/50 hover:bg-muted/30 transition-colors group px-2 -mx-2 rounded-sm"
                         >
-                          <GitBranch size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                          <span className="font-bold text-foreground group-hover:text-primary transition-colors underline decoration-transparent group-hover:decoration-primary">
-                            {repo.name}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground hidden sm:inline-block">({formatDate(repo.pushed_at)})</span>
-                        </motion.a>
+                          <span className="text-foreground font-bold group-hover:text-primary transition-colors">{repo.name}</span>
+                          <span className="text-muted-foreground text-[10px]">{formatDate(repo.pushed_at)}</span>
+                        </a>
                       ))}
                     </div>
-                    <p className="mt-4 text-primary animate-pulse font-bold text-lg leading-none">_</p>
-                  </motion.div>
+                    <p className="text-primary animate-pulse mt-2 font-bold text-lg leading-none">_</p>
+                  </>
                 )}
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
-          {/* --- RIGHT: OPEN SOURCE CONTRIBUTIONS --- */}
+          {/* RIGHT: OPEN SOURCE CONTRIBUTIONS */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:w-1/2 w-full flex flex-col"
           >
-            <div className="flex items-center justify-center lg:justify-start gap-2 mb-6 font-mono text-sm text-primary uppercase tracking-widest font-bold px-2">
-              <FolderGit2 size={18} />
-              Open Source Repositories
+            <div className="flex items-center justify-between mb-6 px-2">
+              <div className="flex items-center gap-2 font-mono text-sm text-primary uppercase tracking-widest font-bold">
+                <PieChart size={18} /> Open-Source Contributions
+              </div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 h-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
               {openSourceRepos.map((repo, idx) => (
                 <a 
                   key={idx}
                   href={repo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group p-5 rounded-2xl border border-border/30 bg-background/5 backdrop-blur-md hover:bg-primary/5 hover:border-primary/50 transition-all shadow-lg hover:shadow-[0_10px_30px_rgba(var(--primary),0.15)] flex flex-col hover:-translate-y-1"
+                  className="group p-5 rounded-2xl border border-border bg-card hover:bg-muted/50 hover:border-primary/50 transition-all flex flex-col shadow-sm hover:shadow-md"
                 >
                   <div className="flex justify-between items-start mb-3">
-                    <h4 className="font-bold text-foreground font-mono text-sm line-clamp-1 group-hover:text-primary transition-colors">
+                    <h4 className="font-bold text-foreground font-mono text-xs group-hover:text-primary transition-colors line-clamp-1">
                       {repo.name}
                     </h4>
-                    <ExternalLink size={14} className="text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    <ExternalLink size={14} className="text-muted-foreground group-hover:text-primary shrink-0" />
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-5 flex-grow">
+                  <p className="text-[11px] text-muted-foreground leading-relaxed mb-4 flex-grow">
                     {repo.desc}
                   </p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
+                  <div className="flex flex-wrap gap-1.5 mt-auto">
                     {repo.tech.map((t, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-background/80 border border-border/30 rounded-md text-[9px] font-mono uppercase text-foreground group-hover:border-primary/40 transition-colors shadow-sm">
+                      <span key={i} className="px-2 py-0.5 bg-background border border-border rounded text-[8px] font-mono text-foreground">
                         {t}
                       </span>
                     ))}

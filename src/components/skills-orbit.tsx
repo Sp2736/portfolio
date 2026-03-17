@@ -63,11 +63,11 @@ const skillsData = [
     category: "Languages",
     icon: "https://skillicons.dev/icons?i=java",
   },
-  {
-    name: "C#",
-    category: "Languages",
-    icon: "https://skillicons.dev/icons?i=cs",
-  },
+  // {
+  //   name: "C#",
+  //   category: "Languages",
+  //   icon: "https://skillicons.dev/icons?i=cs",
+  // },
   {
     name: "Python",
     category: "Languages",
@@ -101,7 +101,7 @@ const skillsData = [
 
   // --- System Level ---
   {
-    name: "Assembly",
+    name: "Embedded Assembly",
     category: "System Level",
     icon: "https://cdn.simpleicons.org/assemblyscript",
     invertDark: true,
@@ -138,11 +138,11 @@ const skillsData = [
     category: "Frameworks",
     icon: "https://skillicons.dev/icons?i=nodejs",
   },
-  {
-    name: "Express",
-    category: "Frameworks",
-    icon: "https://skillicons.dev/icons?i=express",
-  },
+  // {
+  //   name: "Express",
+  //   category: "Frameworks",
+  //   icon: "https://skillicons.dev/icons?i=express",
+  // },
 
   // --- Databases ---
   {
@@ -180,11 +180,11 @@ const skillsData = [
     category: "Databases",
     icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Microsoft_SQL_Server_2025_icon.svg/960px-Microsoft_SQL_Server_2025_icon.svg.png",
   },
-  {
-    name: "Neon",
-    category: "Databases",
-    icon: "https://community.appsmith.com/sites/default/files/2024-03/neondatabase_logo.jpeg",
-  },
+  // {
+  //   name: "Neon",
+  //   category: "Databases",
+  //   icon: "https://community.appsmith.com/sites/default/files/2024-03/neondatabase_logo.jpeg",
+  // },
   {
     name: "XAMPP",
     category: "Databases",
@@ -217,11 +217,6 @@ const skillsData = [
     name: "GitHub",
     category: "Cloud & DevOps",
     icon: "https://skillicons.dev/icons?i=github",
-  },
-  {
-    name: "Firebase",
-    category: "Cloud & DevOps",
-    icon: "https://skillicons.dev/icons?i=firebase",
   },
   {
     name: "n8n",
@@ -358,33 +353,28 @@ const skillsData = [
     category: "Dev Tools & IDEs",
     icon: "https://skillicons.dev/icons?i=visualstudio",
   },
-  {
-    name: "Postman",
-    category: "Dev Tools & IDEs",
-    icon: "https://skillicons.dev/icons?i=postman",
-  },
-  {
-    name: "Figma",
-    category: "Dev Tools & IDEs",
-    icon: "https://skillicons.dev/icons?i=figma",
-  },
-  {
-    name: "Cursor AI",
-    category: "Dev Tools & IDEs",
-    icon: "https://cdn.simpleicons.org/cursor",
-    invertDark: true,
-  },
+  // {
+  //   name: "Postman",
+  //   category: "Dev Tools & IDEs",
+  //   icon: "https://skillicons.dev/icons?i=postman",
+  // },
+  // {
+  //   name: "Cursor AI",
+  //   category: "Dev Tools & IDEs",
+  //   icon: "https://cdn.simpleicons.org/cursor",
+  //   invertDark: true,
+  // },
   {
     name: "Antigravity",
     category: "Dev Tools & IDEs",
     icon: "https://media.licdn.com/dms/image/v2/D560BAQG5wmEaqHfmDg/company-logo_200_200/B56ZqUSJh0I4AM-/0/1763424377586/google_antigravity_logo?e=2147483647&v=beta&t=09EGMp77uIgS77oquLNRli_4mMEV8oGvXklIXLBP6YM",
   },
-  {
-    name: "Wireshark",
-    category: "Dev Tools & IDEs",
-    icon: "https://cdn.simpleicons.org/wireshark",
-    invertDark: true,
-  },
+  // {
+  //   name: "Wireshark",
+  //   category: "Dev Tools & IDEs",
+  //   icon: "https://cdn.simpleicons.org/wireshark",
+  //   invertDark: true,
+  // },
   {
     name: "Burp Suite",
     category: "Dev Tools & IDEs",
@@ -397,11 +387,6 @@ const skillsData = [
     name: "Figma",
     category: "Design & PM",
     icon: "https://skillicons.dev/icons?i=figma",
-  },
-  {
-    name: "Notion",
-    category: "Design & PM",
-    icon: "https://skillicons.dev/icons?i=notion",
   },
   {
     name: "Shadcn/UI",
@@ -613,7 +598,7 @@ export function SkillsOrbit() {
           Technical Arsenal
         </h2>
         <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">
-          System Matrix
+          Known Tools and Technologies
         </h3>
       </div>
 
