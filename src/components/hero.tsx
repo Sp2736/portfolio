@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { Terminal as TerminalWindow } from "./terminal";
@@ -33,10 +34,12 @@ function HeroProfile() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`w-full flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 p-6 md:p-8 bg-background/10 backdrop-blur-xl border border-border/20 rounded-3xl shadow-xl relative overflow-hidden group ${isCaffeinated ? 'caffeine-glitch' : ''}`}
+      className={`w-full flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 p-6 md:p-8 bg-background/10 backdrop-blur-xl border border-border/20 rounded-3xl shadow-xl relative overflow-hidden group ${isCaffeinated ? "caffeine-glitch" : ""}`}
     >
       {/* INJECTED GLITCH CSS */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .caffeine-glitch {
           animation: caffeineShake 0.15s infinite;
           filter: contrast(120%) saturate(150%);
@@ -49,7 +52,9 @@ function HeroProfile() {
           80% { transform: translate(-1px, -1px) rotate(1deg); }
           100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-      `}} />
+      `,
+        }}
+      />
 
       {/* Background Animated Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-50 pointer-events-none" />
@@ -69,16 +74,16 @@ function HeroProfile() {
           className="absolute w-28 h-28 md:w-32 md:h-32 rounded-full border border-primary/20 border-t-primary/60"
         />
 
-        <div 
-          className={`relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-secondary/80 border-2 border-primary/50 overflow-hidden shadow-[0_0_20px_rgba(var(--primary),0.3)] z-10 cursor-pointer transition-transform active:scale-90 ${isCaffeinated ? 'animate-spin' : ''}`}
-          onClick={() => setClicks(prev => prev + 1)}
+        <div
+          className={`relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-secondary/80 border-2 border-primary/50 overflow-hidden shadow-[0_0_20px_rgba(var(--primary),0.3)] z-10 cursor-pointer transition-transform active:scale-90 ${isCaffeinated ? "animate-spin" : ""}`}
+          onClick={() => setClicks((prev) => prev + 1)}
           title="Click me 5 times"
         >
           <Image
             src="/profile.jpg"
             alt="Profile"
             fill
-            className={`object-cover ${isCaffeinated ? 'hue-rotate-[180deg] contrast-150 saturate-200' : ''}`}
+            className={`object-cover ${isCaffeinated ? "hue-rotate-[180deg] contrast-150 saturate-200" : ""}`}
           />
         </div>
 
@@ -114,21 +119,45 @@ function HeroProfile() {
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-4">
           {!isCaffeinated ? (
             <>
-              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Full-Stack Architect</span>
-              <span className="text-muted-foreground text-xs font-mono">||</span>
-              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Web Security</span>
-              <span className="text-muted-foreground text-xs font-mono">||</span>
-              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Data Science & Analytics</span>
-              <span className="text-muted-foreground text-xs font-mono">||</span>
-              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">Poetry Writing</span>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
+                Full-Stack Architect
+              </span>
+              <span className="text-muted-foreground text-xs font-mono">
+                ||
+              </span>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
+                Web Security
+              </span>
+              <span className="text-muted-foreground text-xs font-mono">
+                ||
+              </span>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
+                Data Science & Analytics
+              </span>
+              <span className="text-muted-foreground text-xs font-mono">
+                ||
+              </span>
+              <span className="text-[10px] md:text-xs font-semibold text-foreground/80 bg-secondary/50 px-2.5 py-1 rounded-md border border-border/50">
+                Poetry Writing
+              </span>
             </>
           ) : (
             <>
-              <span className="text-[10px] md:text-xs font-black text-white bg-pink-600 px-2.5 py-1 rounded-md border border-pink-400 animate-pulse uppercase tracking-widest">Gym Freak</span>
-              <span className="text-pink-500 text-xs font-mono animate-bounce">///</span>
-              <span className="text-[10px] md:text-xs font-black text-black bg-yellow-400 px-2.5 py-1 rounded-md border border-yellow-200 animate-pulse uppercase tracking-widest">Vibe Coder</span>
-              <span className="text-yellow-500 text-xs font-mono animate-bounce">///</span>
-              <span className="text-[10px] md:text-xs font-black text-white bg-green-600 px-2.5 py-1 rounded-md border border-green-400 animate-pulse uppercase tracking-widest">Caffeinated Poet</span>
+              <span className="text-[10px] md:text-xs font-black text-white bg-pink-600 px-2.5 py-1 rounded-md border border-pink-400 animate-pulse uppercase tracking-widest">
+                Gym Freak
+              </span>
+              <span className="text-pink-500 text-xs font-mono animate-bounce">
+                ///
+              </span>
+              <span className="text-[10px] md:text-xs font-black text-black bg-yellow-400 px-2.5 py-1 rounded-md border border-yellow-200 animate-pulse uppercase tracking-widest">
+                Vibe Coder
+              </span>
+              <span className="text-yellow-500 text-xs font-mono animate-bounce">
+                ///
+              </span>
+              <span className="text-[10px] md:text-xs font-black text-white bg-green-600 px-2.5 py-1 rounded-md border border-green-400 animate-pulse uppercase tracking-widest">
+                Caffeinated Poet
+              </span>
             </>
           )}
         </div>
@@ -138,7 +167,8 @@ function HeroProfile() {
           Architecting systems that scale, breaking them to understand security,
           and writing poetry when the terminal goes dark. I build digital
           ecosystems from the lowest level of memory management to the highest
-          layers of UI/UX. To see my resume, just type 'CV' anywhere whilst cursor focus is on the screen (and off the below terminal).
+          layers of UI/UX. To see my resume, just type 'CV' anywhere whilst
+          cursor focus is on the screen (and off the below terminal).
         </p>
 
         {/* --- ACTION BAR: Socials & Resume --- */}
@@ -175,6 +205,19 @@ function HeroProfile() {
             >
               <Mail size={16} />
             </a>
+            <button
+              onClick={() =>
+                window.dispatchEvent(new CustomEvent("open-resume"))
+              }
+              className="flex items-center gap-2 p-2 rounded-full bg-primary/10 text-primary border border-primary/20 shadow-lg hover:bg-primary/20 transition-colors"
+              title="Generate CV"
+            >
+              <FileText size={20} />
+              {/* Optional: Add text next to it if you want, or just keep it as an icon */}
+              <span className="text-xs font-bold uppercase tracking-widest">
+                Resume
+              </span>
+            </button>
           </div>
 
           {/* Divider (Hidden on Mobile) */}

@@ -109,6 +109,15 @@ export function ResumeOverride() {
   }, [isActive]);
 
   useEffect(() => {
+    const handleOpenResume = () => {
+      setIsActive(true);
+    };
+
+    window.addEventListener("open-resume", handleOpenResume);
+    return () => window.removeEventListener("open-resume", handleOpenResume);
+  }, []);
+
+  useEffect(() => {
     if (isActive) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "unset";
     return () => {
