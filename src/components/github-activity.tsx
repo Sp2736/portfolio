@@ -17,25 +17,25 @@ import {
 const openSourceRepos = [
   {
     name: "Zaplink_frontend",
-    url: "https://github.com/Sp2736/Zaplink_frontend",
+    url: "https://github.com/gdg-charusat/Zaplink_frontend",
     desc: "Frontend architecture and UI ecosystem for the Zaplink platform.",
     tech: ["Frontend", "UI/UX"],
   },
   {
     name: "keploy",
-    url: "https://github.com/Sp2736/keploy",
+    url: "https://github.com/keploy/keploy",
     desc: "Contributions to Keploy, a powerful open-source API testing platform.",
     tech: ["Testing", "Open Source"],
   },
   {
     name: "CareXpert_frontend",
-    url: "https://github.com/Sp2736/CareXpert_frontend",
+    url: "https://github.com/gdg-charusat/CareXpert_frontend",
     desc: "The client-facing interface and dashboard ecosystem for CareXpert.",
     tech: ["Next.js", "Client"],
   },
   {
     name: "CareXpert_backend",
-    url: "https://github.com/Sp2736/CareXpert_backend",
+    url: "https://github.com/gdg-charusat/CareXpert_backend",
     desc: "Robust API, auth, and database architecture powering CareXpert.",
     tech: ["Node.js", "API"],
   },

@@ -158,8 +158,8 @@ const projectsData = [
     techStack: ["Creative Writing", "Poetry", "Publishing"],
     links: [
       {
-        label: "Publisher",
-        url: "https://www.bookleafpub.in/",
+        label: "Published E-Book",
+        url: "https://ebooks.bookleafpub.com/product-page/before-i-learned-goodbye",
         icon: BookOpen,
         primary: true,
       },

@@ -582,6 +582,7 @@ function ZeroGEasterEgg() {
         }
 
         // Component vs Component Collisions
+        // this code is for wallpaper
         for (let j = i + 1; j < objs.length; j++) {
           const other = objs[j];
 

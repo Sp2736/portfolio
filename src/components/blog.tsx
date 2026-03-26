@@ -132,7 +132,7 @@ export function Blog() {
               </span>
             </div>
             <a
-              href="https://www.bookleafpub.in/"
+              href="https://ebooks.bookleafpub.com/product-page/before-i-learned-goodbye"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-bold text-foreground hover:text-accent transition-colors group"
