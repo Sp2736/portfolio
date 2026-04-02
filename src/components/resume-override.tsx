@@ -22,7 +22,7 @@ const resumeData = {
   location: "Vadodara, Gujarat, India",
 
   summary:
-    "Built multiple AI-assisted systems and scalable web platforms, including an automated evaluation engine reducing manual analysis effort by 60% and developer tooling used globally. Focused on designing data pipelines, integrating LLM workflows, and engineering production-ready applications.",
+    "Engineered AI-driven systems and scalable web platforms, including an automated evaluation engine processing 100+ records and reducing manual analysis effort by 60%. Specialized in building data pipelines, integrating LLM workflows, and designing production-ready full-stack applications.",
 
   skills: {
     languages: "C, C++, Java, Python, JavaScript, TypeScript",
@@ -36,54 +36,36 @@ const resumeData = {
   },
 
   projects: [
-  {
-    name: "AI-Powered SWOT Analysis System",
-    tech: "Python, JSON Processing, LLM APIs",
-    desc:
-      "Built structured data pipeline to parse and normalize 100+ student records into JSON, enabling automated analysis; developed AI-driven evaluation engine generating insights, risk scores, and recommendations, reducing manual counseling effort by ~60%; engineered prompt workflows improving output consistency across varied inputs; automated report generation enabling scalable student assessment.",
-  },
+    {
+      name: "AI-Powered SWOT Analysis System",
+      tech: "Python, JSON Processing, LLM APIs",
+      desc: "Architected and deployed an AI-driven evaluation engine processing 100+ structured student records, converting raw data into insights, risk scores, and recommendations; reduced manual counseling effort by ~60% through automated scoring pipelines and LLM-based workflows; engineered prompt pipelines and normalization layers ensuring consistent outputs across diverse inputs; built scalable report generation system enabling automated assessment at scale.",
+    },
 
-  {
-    name: "ARCADE (RBAC Academic Platform)",
-    tech: "React, Node.js, Express, MongoDB",
-    desc:
-      "Designed and developed role-based academic platform with 5+ integrated modules connecting students, faculty, and alumni; implemented dashboards, resume repositories, and domain recommendation engine; secured authentication and API layers preventing unauthorized access and client-side spoofing; built multi-level content validation pipeline improving data reliability across multiple user roles.",
-  },
+    {
+      name: "ARCADE (RBAC Academic Platform)",
+      tech: "React, Node.js, Express, MongoDB",
+      desc: "Designed and developed a role-based academic platform with 5+ integrated modules connecting students, faculty, and alumni; implemented secure authentication and RBAC authorization preventing unauthorized access and client-side spoofing; built RESTful APIs and modular dashboards supporting multi-role interaction and data isolation; engineered multi-level validation pipeline improving data integrity across user roles.",
+    },
 
-  {
-    name: "AI Logic Commenter (VS Code Extension)",
-    tech: "TypeScript, VS Code API, Gemini API",
-    desc:
-      "Developed AI-powered VS Code extension generating logic-focused documentation for code blocks; integrated real-time LLM responses using BYOK architecture for secure API usage; reduced manual documentation effort by ~30–40% during development workflows; deployed as installable extension supporting real-time usage in editor environment.",
-  },
+    {
+      name: "AI Logic Commenter (VS Code Extension)",
+      tech: "TypeScript, VS Code API, Gemini API",
+      desc: "Developed and deployed an AI-powered VS Code extension generating context-aware code documentation using real-time LLM inference; integrated BYOK architecture for secure and scalable API usage; reduced manual documentation effort by ~30–40%, improving developer productivity; enabled seamless in-editor usage with real-time response handling during development workflows.",
+    },
 
-  {
-    name: "Wander-n-Wonder (Content Platform)",
-    tech: "Next.js, Prisma, Tailwind CSS",
-    desc:
-      "Built production-ready blogging platform with responsive UI and optimized rendering; designed modular frontend architecture improving content accessibility across devices; implemented structured layout system reducing UI inconsistencies across pages.",
-  },
-
-  {
-    name: "BrainBin (Knowledge Management System)",
-    tech: "HTML, CSS, JavaScript, PHP, MySQL",
-    desc:
-      "Developed structured note management system supporting storage and retrieval of 200+ entries including code snippets and documents; implemented persistent storage using local and database-backed approaches; improved retrieval efficiency for repeated access patterns.",
-  },
-
-  {
-    name: "VS Code Themes (Dark Angel & White Devil)",
-    tech: "JSON, VS Code Theming API",
-    desc:
-      "Designed and published developer-focused VS Code themes improving readability and long-session ergonomics; achieved 150+ global users with optimized syntax highlighting and contrast tuning; enhanced coding experience across varied lighting conditions.",
-  },
-],
+    {
+      name: "VS Code Themes (Dark Angel & White Devil)",
+      tech: "JSON, VS Code Theming API",
+      desc: "Designed and published developer-focused VS Code themes improving readability and long-session ergonomics; achieved 150+ global users with optimized syntax highlighting and contrast tuning; enhanced coding experience across varied lighting conditions.",
+    },
+  ],
 
   openSource: [
     {
       name: "Open Source Contributions",
       projects: "Keploy, Zaplink, CareXpert",
-      desc: "Merged 3 pull requests across Zaplink and CareXpert improving frontend and backend components in GDG Sprintathon 2026; contributed to Keploy API testing platform enhancing workflow efficiency and developer usability; implemented UI features and API integrations in collaborative, team-driven environments.",
+      desc: "Merged 3 pull requests across Zaplink and CareXpert improving frontend and backend components during GDG Sprintathon 2026; contributed to Keploy API testing platform by enhancing workflow efficiency and developer usability; implemented UI features and API integrations in collaborative, team-driven environments.",
     },
   ],
 
