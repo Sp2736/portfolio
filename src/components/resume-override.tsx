@@ -13,70 +13,87 @@ import {
 
 const resumeData = {
   name: "Swayam Patel",
-  role: "Full-Stack Developer | SaaS Builder",
+  role: "AI & Data Science Enthusiast | Full-Stack Developer",
   email: "swayampatel2736@gmail.com",
+  phone: "+91 98243 00664",
   linkedin: "https://linkedin.com/in/swayam-patel-316ba5317/",
   github: "https://github.com/Sp2736",
   portfolio: "https://swayam-patel-v1.vercel.app",
   location: "Vadodara, Gujarat, India",
+
   summary:
-    "Software Engineer and Computer Science student focused on building scalable web applications and developer productivity tools. Creator of platforms such as ARCADE (role-based academic ecosystem) and AI Logic Commenter (VS Code extension). Worked with React, Next.js, Node.js, and modern AI APIs. Interested in SaaS product development and freelance engineering opportunities. Currently working on a Data Science and Analytics project, to be revealed soon.",
+    "Computer Science student building data-driven systems and AI-assisted applications. Experienced in designing structured data pipelines, integrating LLM-based workflows, and developing scalable full-stack platforms. Delivered production-grade systems including an AI-powered evaluation engine and developer productivity tools. Focused on applied AI, analytics, and system design for converting raw data into actionable insights.",
+
   skills: {
-    languages: "C, C++, Java, Python, TypeScript, JavaScript, PHP",
+    languages: "C, C++, Java, Python, JavaScript, TypeScript",
     frontend: "React, Next.js, Tailwind CSS, HTML, CSS",
     backend: "Node.js, Express.js",
-    databases: "MongoDB, PostgreSQL, MySQL, Firebase, Supabase",
-    devTools: "Git, GitHub, VS Code API, Docker",
+    databases: "MongoDB, Oracle, MySQL, Firebase, Supabase",
+    devTools: "Git, GitHub, Docker, VS Code API",
     cloud: "Azure, GCP",
-    ai: "OpenAI, Gemini API, Claude AI, Prompt Engineering",
-    data: "Google Colab, Power BI, Google Looker Studio",
+    ai: "LLM APIs (OpenAI, Gemini, groq), Prompt Engineering",
+    data: "Power BI, Looker Studio, JSON Processing",
   },
+
   projects: [
     {
-      name: "ARCADE (SaaS Ecosystem)",
-      tech: "Next.js, Node.js, API Security, Supabase",
-      desc: "Designed and implemented a role-based digital ecosystem for university resources. Secured unauthenticated API endpoints and prevented client-side spoofing to ensure robust data integrity.",
+      name: "AI-Powered SWOT Analysis System",
+      tech: "Python, JSON Processing, LLM APIs",
+      desc: "Built structured data pipeline to parse and normalize student records into JSON, enabling automated analysis; developed AI-driven evaluation engine generating insights, risk scores, and recommendations, reducing manual counseling effort by ~60%; engineered prompt workflows to ensure consistent outputs across varied inputs; automated report generation for scalable student assessment.",
     },
+
     {
-      name: "Logic Commenter (Developer Tool)",
-      tech: "TypeScript, VS Code API, Gemini AI & API",
-      desc: "Developed a VS Code extension that automatically generates logic-focused documentation for code blocks, significantly improving developer productivity and code maintainability.",
+      name: "ARCADE (RBAC Academic Platform)",
+      tech: "React, Node.js, Express, MongoDB",
+      desc: "Designed and developed role-based academic platform connecting students, faculty, and alumni; implemented multi-module system including dashboards, resume repositories, and domain recommendation engine; secured APIs and authentication flows preventing unauthorized access and client-side spoofing; built multi-level content validation pipeline improving data reliability across user roles.",
     },
+
+    {
+      name: "AI Logic Commenter (VS Code Extension)",
+      tech: "TypeScript, VS Code API, Gemini API",
+      desc: "Developed AI-powered VS Code extension generating logic-focused documentation for code blocks; integrated real-time LLM responses using BYOK architecture for secure API usage; reduced manual documentation effort and improved code readability during development workflows; deployed as installable extension with seamless editor integration.",
+    },
+
+    {
+      name: "Wander-n-Wonder (Content Platform)",
+      tech: "Next.js, Prisma, Tailwind CSS",
+      desc: "Built production-ready blogging platform with optimized rendering and responsive UI; designed modern frontend architecture improving user experience and content accessibility; implemented structured layout system for consistent content delivery across devices.",
+    },
+
+    {
+      name: "BrainBin (Knowledge Management System)",
+      tech: "HTML, CSS, JavaScript, PHP, MySQL",
+      desc: "Developed structured note management system enabling efficient storage and retrieval of code snippets and documents; implemented persistent storage using local and database-backed approaches; improved data organization and access efficiency for repeated usage patterns.",
+    },
+
     {
       name: "VS Code Themes (Dark Angel & White Devil)",
       tech: "JSON, VS Code Theming API",
-      desc: "Designed and published semantic syntax themes tailored for developer ergonomics. 'Dark Angel' provides a professional zinc-based dark mode, while 'White Devil' offers a high-contrast light mode for high-glare environments.",
-    },
-    {
-      name: "BrainBin",
-      tech: "HTML5, CSS, JS, PHP, MySQL, LocalStorage",
-      desc: "Architected a knowledge management system with persistent client-side storage and structured retrieval mechanisms for notes and code snippets.",
-    },
-    {
-      name: "Wander-n-Wonder",
-      tech: "Frontend Architecture",
-      desc: "Deployed a production-ready digital content platform showcasing modern UI/UX principles, responsive design, and optimized rendering.",
+      desc: "Designed and published developer-focused VS Code themes improving readability and long-session ergonomics; achieved 150+ global users through optimized syntax highlighting and contrast tuning; enhanced coding experience across varied lighting conditions.",
     },
   ],
+
   openSource: [
     {
       name: "Open Source Contributions",
       projects: "Keploy, Zaplink, CareXpert",
-      desc: "Contributed to an open-source API testing platform (Keploy) improving workflows, and participated in frontend/backend architecture development for Zaplink and CareXpert during GDG-CHARUSAT Sprintathon 2026.",
+      desc: "Contributed to Keploy API testing platform improving testing workflows and developer experience; collaborated on frontend and backend architecture for Zaplink and CareXpert during GDG Sprintathon; worked across UI components, API integration, and system design in team-based environment.",
     },
   ],
+
   certifications: [
-    "Meta Full-Stack Developer Specialization",
     "IBM Data Science Professional Certificate",
+    "Meta Full-Stack Developer Specialization",
     "Google Prompt Engineering & Generative AI Essentials",
-    "Google People & Stakeholder Management",
+    "Google Stakeholder and People Management Essentials",
   ],
+
   education: {
     degree: "Bachelor of Technology in Computer Science & Engineering",
     university: "DEPSTAR, CHARUSAT University",
     grad: "Expected Graduation: 2028",
     coursework:
-      "Data Structures, Algorithms, Object-Oriented Programming, Database Systems, Operating Systems, AI/ML and Data Science",
+      "Data Structures, Algorithms, Object-Oriented Programming, Database Systems, Operating Systems, Artificial Intelligence, Data Science & Analytics",
   },
 };
 
@@ -303,8 +320,26 @@ export function ResumeOverride() {
                         {resumeData.role}
                       </p>
                       <p className="text-[11px] text-neutral-600">
-                        {resumeData.location} • {resumeData.email} •{" "}
-                        {resumeData.github} • {resumeData.portfolio}
+                        {resumeData.location} •{" "}
+                        <a
+                          href="mailto:swayampatel2736@gmail.com"
+                          target="_blank"
+                        >
+                          {resumeData.email}
+                        </a>{" "}
+                        • {resumeData.phone} •{" "}
+                        <a href="https://github.com/Sp2736" target="_blank">
+                          {resumeData.github}
+                        </a>
+                      </p>
+                      <p className="text-[11px] text-neutral-600">
+                        •{" "}
+                        <a
+                          href="https://swayam-patel-v1.vercel.app"
+                          target="_blank"
+                        >
+                          {resumeData.portfolio}
+                        </a>
                       </p>
                     </div>
 
@@ -444,9 +479,28 @@ export function ResumeOverride() {
                           Contact
                         </h2>
                         <div className="text-[10px] flex flex-col gap-1 text-neutral-700">
-                          <p>{resumeData.email}</p>
-                          <p>{resumeData.github}</p>
-                          <p>{resumeData.portfolio}</p>
+                          <p>{resumeData.phone}</p>
+                          <p>
+                            <a
+                              href="mailto:swayampatel2736@gmail.com"
+                              target="_blank"
+                            >
+                              {resumeData.email}
+                            </a>
+                          </p>
+                          <p>
+                            <a href="https://github.com/Sp2736" target="_blank">
+                              {resumeData.github}
+                            </a>
+                          </p>
+                          <p>
+                            <a
+                              href="https://swayam-patel-v1.vercel.app"
+                              target="_blank"
+                            >
+                              {resumeData.portfolio}
+                            </a>
+                          </p>
                           <p>{resumeData.location}</p>
                         </div>
                       </div>
@@ -591,12 +645,27 @@ export function ResumeOverride() {
                       </div>
                       <div className="text-right text-[10px] text-neutral-800 flex flex-col gap-0.5 font-mono">
                         <p>
-                          {resumeData.email}{" "}
+                          <a
+                            href="mailto:swayampatel2736@gmail.com"
+                            target="_blank"
+                          >
+                            {resumeData.email}
+                          </a>{" "}
+                          | {resumeData.phone}
                           <span className="text-neutral-300">|</span>{" "}
-                          {resumeData.github}
+                          <a href="https://github.com/Sp2736" target="_blank">
+                            {resumeData.github}
+                          </a>
                         </p>
                         <p>
-                          {resumeData.portfolio}{" "}
+                          <a
+                            href="https://swayam-patel-v1.vercel.app"
+                            target="_blank"
+                          >
+                            {resumeData.portfolio}
+                          </a>
+                        </p>
+                        <p>
                           <span className="text-neutral-300">|</span>{" "}
                           {resumeData.location}
                         </p>
