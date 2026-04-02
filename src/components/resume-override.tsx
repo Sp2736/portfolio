@@ -22,62 +22,68 @@ const resumeData = {
   location: "Vadodara, Gujarat, India",
 
   summary:
-    "Computer Science student building data-driven systems and AI-assisted applications. Experienced in designing structured data pipelines, integrating LLM-based workflows, and developing scalable full-stack platforms. Delivered production-grade systems including an AI-powered evaluation engine and developer productivity tools. Focused on applied AI, analytics, and system design for converting raw data into actionable insights.",
+    "Built multiple AI-assisted systems and scalable web platforms, including an automated evaluation engine reducing manual analysis effort by 60% and developer tooling used globally. Focused on designing data pipelines, integrating LLM workflows, and engineering production-ready applications.",
 
   skills: {
     languages: "C, C++, Java, Python, JavaScript, TypeScript",
     frontend: "React, Next.js, Tailwind CSS, HTML, CSS",
     backend: "Node.js, Express.js",
-    databases: "MongoDB, Oracle, MySQL, Firebase, Supabase",
+    databases: "MongoDB, PostgreSQL, MySQL, Firebase, Supabase",
     devTools: "Git, GitHub, Docker, VS Code API",
     cloud: "Azure, GCP",
-    ai: "LLM APIs (OpenAI, Gemini, groq), Prompt Engineering",
+    ai: "LLM APIs (OpenAI, Gemini), Prompt Engineering",
     data: "Power BI, Looker Studio, JSON Processing",
   },
 
   projects: [
-    {
-      name: "AI-Powered SWOT Analysis System",
-      tech: "Python, JSON Processing, LLM APIs",
-      desc: "Built structured data pipeline to parse and normalize student records into JSON, enabling automated analysis; developed AI-driven evaluation engine generating insights, risk scores, and recommendations, reducing manual counseling effort by ~60%; engineered prompt workflows to ensure consistent outputs across varied inputs; automated report generation for scalable student assessment.",
-    },
+  {
+    name: "AI-Powered SWOT Analysis System",
+    tech: "Python, JSON Processing, LLM APIs",
+    desc:
+      "Built structured data pipeline to parse and normalize 100+ student records into JSON, enabling automated analysis; developed AI-driven evaluation engine generating insights, risk scores, and recommendations, reducing manual counseling effort by ~60%; engineered prompt workflows improving output consistency across varied inputs; automated report generation enabling scalable student assessment.",
+  },
 
-    {
-      name: "ARCADE (RBAC Academic Platform)",
-      tech: "React, Node.js, Express, MongoDB",
-      desc: "Designed and developed role-based academic platform connecting students, faculty, and alumni; implemented multi-module system including dashboards, resume repositories, and domain recommendation engine; secured APIs and authentication flows preventing unauthorized access and client-side spoofing; built multi-level content validation pipeline improving data reliability across user roles.",
-    },
+  {
+    name: "ARCADE (RBAC Academic Platform)",
+    tech: "React, Node.js, Express, MongoDB",
+    desc:
+      "Designed and developed role-based academic platform with 5+ integrated modules connecting students, faculty, and alumni; implemented dashboards, resume repositories, and domain recommendation engine; secured authentication and API layers preventing unauthorized access and client-side spoofing; built multi-level content validation pipeline improving data reliability across multiple user roles.",
+  },
 
-    {
-      name: "AI Logic Commenter (VS Code Extension)",
-      tech: "TypeScript, VS Code API, Gemini API",
-      desc: "Developed AI-powered VS Code extension generating logic-focused documentation for code blocks; integrated real-time LLM responses using BYOK architecture for secure API usage; reduced manual documentation effort and improved code readability during development workflows; deployed as installable extension with seamless editor integration.",
-    },
+  {
+    name: "AI Logic Commenter (VS Code Extension)",
+    tech: "TypeScript, VS Code API, Gemini API",
+    desc:
+      "Developed AI-powered VS Code extension generating logic-focused documentation for code blocks; integrated real-time LLM responses using BYOK architecture for secure API usage; reduced manual documentation effort by ~30–40% during development workflows; deployed as installable extension supporting real-time usage in editor environment.",
+  },
 
-    {
-      name: "Wander-n-Wonder (Content Platform)",
-      tech: "Next.js, Prisma, Tailwind CSS",
-      desc: "Built production-ready blogging platform with optimized rendering and responsive UI; designed modern frontend architecture improving user experience and content accessibility; implemented structured layout system for consistent content delivery across devices.",
-    },
+  {
+    name: "Wander-n-Wonder (Content Platform)",
+    tech: "Next.js, Prisma, Tailwind CSS",
+    desc:
+      "Built production-ready blogging platform with responsive UI and optimized rendering; designed modular frontend architecture improving content accessibility across devices; implemented structured layout system reducing UI inconsistencies across pages.",
+  },
 
-    {
-      name: "BrainBin (Knowledge Management System)",
-      tech: "HTML, CSS, JavaScript, PHP, MySQL",
-      desc: "Developed structured note management system enabling efficient storage and retrieval of code snippets and documents; implemented persistent storage using local and database-backed approaches; improved data organization and access efficiency for repeated usage patterns.",
-    },
+  {
+    name: "BrainBin (Knowledge Management System)",
+    tech: "HTML, CSS, JavaScript, PHP, MySQL",
+    desc:
+      "Developed structured note management system supporting storage and retrieval of 200+ entries including code snippets and documents; implemented persistent storage using local and database-backed approaches; improved retrieval efficiency for repeated access patterns.",
+  },
 
-    {
-      name: "VS Code Themes (Dark Angel & White Devil)",
-      tech: "JSON, VS Code Theming API",
-      desc: "Designed and published developer-focused VS Code themes improving readability and long-session ergonomics; achieved 150+ global users through optimized syntax highlighting and contrast tuning; enhanced coding experience across varied lighting conditions.",
-    },
-  ],
+  {
+    name: "VS Code Themes (Dark Angel & White Devil)",
+    tech: "JSON, VS Code Theming API",
+    desc:
+      "Designed and published developer-focused VS Code themes improving readability and long-session ergonomics; achieved 150+ global users with optimized syntax highlighting and contrast tuning; enhanced coding experience across varied lighting conditions.",
+  },
+],
 
   openSource: [
     {
       name: "Open Source Contributions",
       projects: "Keploy, Zaplink, CareXpert",
-      desc: "Contributed to Keploy API testing platform improving testing workflows and developer experience; collaborated on frontend and backend architecture for Zaplink and CareXpert during GDG Sprintathon; worked across UI components, API integration, and system design in team-based environment.",
+      desc: "Merged 3 pull requests across Zaplink and CareXpert improving frontend and backend components in GDG Sprintathon 2026; contributed to Keploy API testing platform enhancing workflow efficiency and developer usability; implemented UI features and API integrations in collaborative, team-driven environments.",
     },
   ],
 
