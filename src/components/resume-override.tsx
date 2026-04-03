@@ -1,15 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FileText,
-  Download,
-  X,
-  LayoutTemplate,
-  Briefcase,
-  Columns,
-} from "lucide-react";
+import { FileText, Download, X, ExternalLink } from "lucide-react";
 
 const resumeData = {
   name: "Swayam Patel",
@@ -22,16 +15,16 @@ const resumeData = {
   location: "Vadodara, Gujarat, India",
 
   summary:
-    "Engineered AI-driven systems and scalable web platforms, including an automated evaluation engine processing 100+ records and reducing manual analysis effort by 60%. Specialized in building data pipelines, integrating LLM workflows, and designing production-ready full-stack applications.",
+    "Engineered AI-driven systems and scalable web platforms, including an automated evaluation engine processing 100+ records and reducing manual analysis effort by 60%. Experienced in building data pipelines, LLM-integrated workflows, and production-ready full-stack applications with real-world use cases.",
 
   skills: {
     languages: "C, C++, Java, Python, JavaScript, TypeScript",
-    frontend: "React, Next.js, Tailwind CSS, HTML, CSS",
+    frontend: "React, Next.js, Tailwind CSS",
     backend: "Node.js, Express.js",
     databases: "MongoDB, PostgreSQL, MySQL, Firebase, Supabase",
-    devTools: "Git, GitHub, Docker, VS Code API",
+    devTools: "Git, GitHub, Docker",
     cloud: "Azure, GCP",
-    ai: "LLM APIs (OpenAI, Gemini), Prompt Engineering",
+    ai: "Workflow Automation (n8n), LLM APIs (OpenAI, Gemini), Prompt Engineering",
     data: "Power BI, Looker Studio, JSON Processing",
   },
 
@@ -39,25 +32,35 @@ const resumeData = {
     {
       name: "AI-Powered SWOT Analysis System",
       tech: "Python, JSON Processing, LLM APIs",
-      desc: "Architected and deployed an AI-driven evaluation engine processing 100+ structured student records, converting raw data into insights, risk scores, and recommendations; reduced manual counseling effort by ~60% through automated scoring pipelines and LLM-based workflows; engineered prompt pipelines and normalization layers ensuring consistent outputs across diverse inputs; built scalable report generation system enabling automated assessment at scale.",
+      link: "https://github.com/Sp2736/counseling-reports-portal",
+      desc: "Architected and deployed an AI-driven evaluation engine processing 100+ structured student records, transforming raw data into actionable insights, risk scores, and recommendations; reduced manual counseling effort by ~60% through automated scoring pipelines and LLM-based workflows; engineered prompt pipelines and normalization layers ensuring consistent outputs across diverse inputs; built scalable report generation system enabling automated assessment at scale.",
     },
-
+    {
+      name: "AI-Powered Personal Productivity Assistant",
+      tech: "Workflow Automation, API Integration, LLM-based Systems",
+      link: "https://drive.google.com/file/d/16m9aJ6uydZ49hVnqlMSAn0PNk7VCwXIE/view?usp=sharing",
+      desc: "Designed and deployed a chatbot-driven automation system using Telegram and n8n, enabling end-to-end management of scheduling and content workflows; integrated Google Calendar APIs for conversational timetable automation and reminders; built AI-assisted Instagram content posting pipelines and work-log using excel sheets to automatically update status of content posts; engineered event-driven workflows reducing manual effort in repetitive productivity tasks.",
+    },
     {
       name: "ARCADE (RBAC Academic Platform)",
       tech: "React, Node.js, Express, MongoDB",
-      desc: "Designed and developed a role-based academic platform with 5+ integrated modules connecting students, faculty, and alumni; implemented secure authentication and RBAC authorization preventing unauthorized access and client-side spoofing; built RESTful APIs and modular dashboards supporting multi-role interaction and data isolation; engineered multi-level validation pipeline improving data integrity across user roles.",
+      link: "https://github.com/Sp2736/arcade",
+      desc: "Designed and developed a role-based academic platform with 5+ integrated modules connecting students, faculty, and alumni; implemented secure authentication and RBAC authorization preventing unauthorized access and mitigating client-side spoofing; built RESTful APIs and modular dashboards supporting multi-role interaction and data isolation; engineered multi-level validation pipeline improving data integrity across user roles.",
     },
-
     {
       name: "AI Logic Commenter (VS Code Extension)",
       tech: "TypeScript, VS Code API, Gemini API",
-      desc: "Developed and deployed an AI-powered VS Code extension generating context-aware code documentation using real-time LLM inference; integrated BYOK architecture for secure and scalable API usage; reduced manual documentation effort by ~30–40%, improving developer productivity; enabled seamless in-editor usage with real-time response handling during development workflows.",
+      link: "https://marketplace.visualstudio.com/items?itemName=sp2736.logic-commenter",
+      desc: "Developed and deployed an AI-powered VS Code extension generating context-aware code documentation using real-time LLM inference pipelines; integrated BYOK architecture for secure and scalable API usage; reduced manual documentation effort by ~30–40%, improving developer productivity; enabled seamless in-editor usage with real-time response handling during development workflows.",
     },
-
     {
       name: "VS Code Themes (Dark Angel & White Devil)",
       tech: "JSON, VS Code Theming API",
-      desc: "Designed and published developer-focused VS Code themes improving readability and long-session ergonomics; achieved 150+ global users with optimized syntax highlighting and contrast tuning; enhanced coding experience across varied lighting conditions.",
+      links: [
+        { label: "Dark Angel", url: "https://marketplace.visualstudio.com/items?itemName=sp2736.dark-angel-by-sp" },
+        { label: "White Devil", url: "https://marketplace.visualstudio.com/items?itemName=sp2736.white-devil-by-sp" }
+      ],
+      desc: "Designed and published developer-focused VS Code themes on VSCode Marketplace, improving readability and long-session ergonomics; achieved 150+ global users with optimized syntax highlighting and contrast tuning; enhanced coding experience across varied lighting conditions.",
     },
   ],
 
@@ -65,7 +68,41 @@ const resumeData = {
     {
       name: "Open Source Contributions",
       projects: "Keploy, Zaplink, CareXpert",
-      desc: "Merged 3 pull requests across Zaplink and CareXpert improving frontend and backend components during GDG Sprintathon 2026; contributed to Keploy API testing platform by enhancing workflow efficiency and developer usability; implemented UI features and API integrations in collaborative, team-driven environments.",
+      desc: "Merged 3 pull requests across Zaplink and CareXpert improving frontend and backend components during GDG Sprintathon 2026; contributed to Keploy API testing platform by enhancing workflow efficiency and developer usability; implemented UI features and API integrations in collaborative, team-driven and production-grade environments.",
+    },
+  ],
+
+  hackathons: [
+    {
+      title: "GDG Sprintathon '26",
+      desc: "Participated in a university-level hackathon focused on open-source contributions, leading to 3 merged pull requests across Zaplink and CareXpert; worked on frontend and backend improvements, API integrations, and rapid prototyping in a collaborative, production-oriented environment.",
+    },
+    {
+      title: "ThinkX Hackathon",
+      desc: "Developed innovative solutions under time-constrained conditions, focusing on ideation, system design, and practical implementation of scalable concepts.",
+    },
+    {
+      title: "Code Quest Hackathon '25",
+      desc: "Engaged in competitive problem solving and collaborative coding challenges, strengthening algorithmic thinking and development efficiency.",
+    },
+  ],
+
+  workshops: [
+    {
+      title: "Foundation of Agentic Systems – From Prompt to Production",
+      desc: "Gained hands-on exposure to designing agent-based AI systems, prompt engineering strategies, and transitioning LLM workflows into production-ready pipelines.",
+    },
+    {
+      title: "AWS Cloud Club Workshop",
+      desc: "Explored cloud fundamentals including deployment models, scalable infrastructure, and practical usage of cloud services in modern applications.",
+    },
+    {
+      title: "Hacking & Hardening – Web Vulnerabilities and WAF",
+      desc: "Learned core web security concepts including common vulnerabilities, attack vectors, and defensive mechanisms using Web Application Firewalls.",
+    },
+    {
+      title: "Edunet Green Skills AI Workshop",
+      desc: "Participated in industry-oriented training focused on applied AI concepts to implement Green Skills, real-world use cases of AI/ML/DL and practical implementation strategies.",
     },
   ],
 
@@ -87,10 +124,6 @@ const resumeData = {
 
 export function ResumeOverride() {
   const [isActive, setIsActive] = useState(false);
-  const [template, setTemplate] = useState<"minimal" | "modern" | "composite">(
-    "minimal",
-  );
-  const printRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let buffer = "";
@@ -117,10 +150,7 @@ export function ResumeOverride() {
   }, [isActive]);
 
   useEffect(() => {
-    const handleOpenResume = () => {
-      setIsActive(true);
-    };
-
+    const handleOpenResume = () => setIsActive(true);
     window.addEventListener("open-resume", handleOpenResume);
     return () => window.removeEventListener("open-resume", handleOpenResume);
   }, []);
@@ -134,72 +164,27 @@ export function ResumeOverride() {
   }, [isActive]);
 
   const handleDownload = () => {
-    const printElement = printRef.current;
-    if (!printElement) return;
-
-    // Create a iframe
-    const iframe = document.createElement("iframe");
-    iframe.style.position = "fixed";
-    iframe.style.right = "0";
-    iframe.style.bottom = "0";
-    iframe.style.width = "0";
-    iframe.style.height = "0";
-    iframe.style.border = "none";
-    document.body.appendChild(iframe);
-
-    const iframeDoc = iframe.contentWindow?.document;
-    if (!iframeDoc) return;
-
-    // Extract Tailwind CSS from the main window so the PDF renders beautifully
-    const styleElements = document.querySelectorAll(
-      'style, link[rel="stylesheet"]',
-    );
-    const styles = Array.from(styleElements)
-      .map((el) => el.outerHTML)
-      .join("");
-
-    // Inject the isolated resume into the iframe
-    iframeDoc.open();
-    iframeDoc.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>${resumeData.name} - Resume</title>
-          ${styles}
-          <style>
-            @page { margin: 0; size: auto; }
-            body { 
-              margin: 0; 
-              background: white !important; 
-              -webkit-print-color-adjust: exact !important; 
-              print-color-adjust: exact !important; 
-            }
-            #printable-resume { 
-              box-shadow: none !important; 
-              width: 100%; 
-              max-width: 800px; 
-              margin: 0 auto; 
-            }
-          </style>
-        </head>
-        <body>
-          ${printElement.outerHTML}
-        </body>
-      </html>
-    `);
-    iframeDoc.close();
-
-    // Wait for styles to apply, trigger the print dialog, and clean up the iframe
-    setTimeout(() => {
-      iframe.contentWindow?.focus();
-      iframe.contentWindow?.print();
-
-      setTimeout(() => {
-        if (document.body.contains(iframe)) {
-          document.body.removeChild(iframe);
-        }
-      }, 1000);
-    }, 500);
+    // Replace this string with your actual Google Drive PDF link
+    const driveLink = "https://drive.google.com/file/d/1TjCpBy2Qrc2x2swTwKMb1Xn32VdaDGUC/view?usp=drive_link";
+    
+    // Automatically convert a standard Google Drive viewing link into a direct download link
+    const fileIdMatch = driveLink.match(/\/d\/(.*?)\//);
+    
+    if (fileIdMatch && fileIdMatch[1]) {
+      const fileId = fileIdMatch[1];
+      const directDownloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+      
+      // Create a temporary anchor tag to trigger the silent download
+      const a = document.createElement("a");
+      a.href = directDownloadLink;
+      a.download = "Swayam_Patel_Resume.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else {
+      // Fallback just in case you use a different hosting provider
+      window.open(driveLink, "_blank");
+    }
   };
 
   return (
@@ -209,594 +194,246 @@ export function ResumeOverride() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[99999] bg-background/95 backdrop-blur-xl flex items-center justify-center p-4"
+          className="fixed inset-0 z-[99999] bg-background/95 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6"
         >
-          <div className="w-full max-w-6xl max-h-[90vh] flex flex-col md:flex-row bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
-            {/* LEFT SIDEBAR: CONTROLS */}
-            <div className="w-full md:w-80 border-r border-border bg-muted/20 flex flex-col shrink-0">
-              <div className="p-6 border-b border-border flex justify-between items-center shrink-0">
-                <div className="flex items-center gap-2 text-foreground font-mono font-bold tracking-widest text-sm uppercase">
-                  <FileText size={16} className="text-primary" />
-                  CV_Generator
+          <div className="w-full max-w-4xl max-h-[90vh] flex flex-col bg-neutral-100 rounded-2xl shadow-2xl overflow-hidden border border-border">
+            
+            {/* MODERN HEADER CONTROL BAR */}
+            <div className="flex justify-between items-center p-4 px-6 bg-white border-b border-neutral-200 shrink-0 z-10">
+              <div className="flex items-center gap-3 font-mono text-sm font-bold tracking-widest text-neutral-800 uppercase">
+                <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                  <FileText size={18} />
                 </div>
+                Resume_Preview
+              </div>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handleDownload}
+                  className="hidden sm:flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                >
+                  <Download size={16} /> Download PDF
+                </button>
                 <button
                   onClick={() => setIsActive(false)}
-                  className="text-muted-foreground hover:text-destructive transition-colors"
+                  className="p-2.5 bg-neutral-100 rounded-full hover:bg-neutral-200 hover:text-destructive text-neutral-500 transition-colors"
                 >
                   <X size={18} />
                 </button>
               </div>
-
-              <div
-                className="p-6 flex-grow flex flex-col gap-6 overflow-y-auto overscroll-contain min-h-0"
-                data-lenis-prevent="true"
-              >
-                <div>
-                  <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-widest mb-3">
-                    Signal Format
-                  </h3>
-                  <div className="flex flex-col gap-2">
-                    <button
-                      onClick={() => setTemplate("minimal")}
-                      className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${template === "minimal" ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-muted-foreground text-foreground"}`}
-                    >
-                      <LayoutTemplate size={18} />
-                      <div>
-                        <p className="font-bold text-sm">ATS Kernel</p>
-                        <p className="text-[10px] opacity-70">
-                          Strict, dense, machine-readable.
-                        </p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setTemplate("modern")}
-                      className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${template === "modern" ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-muted-foreground text-foreground"}`}
-                    >
-                      <Briefcase size={18} />
-                      <div>
-                        <p className="font-bold text-sm">Modern Tech</p>
-                        <p className="text-[10px] opacity-70">
-                          Two-column hierarchy.
-                        </p>
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => setTemplate("composite")}
-                      className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-all ${template === "composite" ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-muted-foreground text-foreground"}`}
-                    >
-                      <Columns size={18} />
-                      <div>
-                        <p className="font-bold text-sm">Executive Composite</p>
-                        <p className="text-[10px] opacity-70">
-                          Grid-based, high visual impact.
-                        </p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-6 border-t border-border bg-background shrink-0">
-                <button
-                  onClick={handleDownload}
-                  className="w-full py-3 bg-primary text-primary-foreground font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
-                >
-                  <Download size={18} /> Download PDF
-                </button>
-              </div>
             </div>
 
-            {/* RIGHT SIDEBAR: PREVIEW PANE */}
+            {/* SCROLLABLE PREVIEW PANE */}
+            {/* FIXED: Removed 'flex justify-center' which was causing the height clipping bug */}
             <div
-              className="flex-1 bg-neutral-900/50 p-4 md:p-8 overflow-y-auto overscroll-contain min-h-0 flex justify-center items-start"
+              className="flex-1 overflow-y-auto p-4 md:p-8 bg-neutral-200/50"
               data-lenis-prevent="true"
             >
+              {/* ATS MINIMAL RESUME CANVAS */}
+              {/* FIXED: Added 'mx-auto' for horizontal centering and 'h-fit' to allow natural height expansion */}
               <div
-                id="printable-resume"
-                ref={printRef}
-                className="w-full max-w-[800px] bg-white text-black shadow-2xl overflow-hidden"
+                className="w-full max-w-[800px] mx-auto h-fit bg-white text-black shadow-xl ring-1 ring-neutral-200/50"
                 style={{ minHeight: "1056px", padding: "35px 40px" }}
               >
-                {/* TEMPLATE 1: ATS MINIMAL (HIGH DENSITY) */}
-                {template === "minimal" && (
-                  <div className="font-sans leading-snug">
-                    <div className="text-center mb-4">
-                      <h1 className="text-3xl font-black uppercase tracking-tight mb-1">
-                        {resumeData.name}
-                      </h1>
-                      <p className="text-sm font-bold text-neutral-800 mb-1">
-                        {resumeData.role}
+                <div className="font-sans leading-snug">
+                  <div className="text-center mb-4">
+                    <h1 className="text-3xl font-black uppercase tracking-tight mb-1">
+                      {resumeData.name}
+                    </h1>
+                    <p className="text-sm font-bold text-neutral-800 mb-1">
+                      {resumeData.role}
+                    </p>
+                    <div className="text-[11px] text-neutral-600 flex justify-center items-center gap-1.5 flex-wrap">
+                      <span>{resumeData.location}</span>
+                      <span>•</span>
+                      <a
+                        href={`mailto:${resumeData.email}`}
+                        target="_blank"
+                        className="hover:text-black transition-colors inline-flex items-center gap-0.5"
+                      >
+                        {resumeData.email} <ExternalLink size={10} className="text-neutral-400" />
+                      </a>
+                      <span>•</span>
+                      <span>{resumeData.phone}</span>
+                    </div>
+                    <div className="text-[11px] text-neutral-600 flex justify-center items-center gap-1.5 flex-wrap mt-0.5">
+                      <a href={resumeData.linkedin} target="_blank" className="hover:text-black transition-colors inline-flex items-center gap-0.5">
+                        LinkedIn <ExternalLink size={10} className="text-neutral-400" />
+                      </a>
+                      <span>•</span>
+                      <a href={resumeData.github} target="_blank" className="hover:text-black transition-colors inline-flex items-center gap-0.5">
+                        GitHub <ExternalLink size={10} className="text-neutral-400" />
+                      </a>
+                      <span>•</span>
+                      <a
+                        href={resumeData.portfolio}
+                        target="_blank"
+                        className="hover:text-black transition-colors inline-flex items-center gap-0.5"
+                      >
+                        Portfolio <ExternalLink size={10} className="text-neutral-400" />
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <p className="text-[11px] text-neutral-800 text-justify">
+                      {resumeData.summary}
+                    </p>
+                  </div>
+
+                  <div className="mb-4">
+                    <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
+                      Technical Skills
+                    </h2>
+                    <div className="flex flex-col gap-0.5">
+                      <p className="text-[11px]">
+                        <span className="font-bold">Languages:</span>{" "}
+                        {resumeData.skills.languages}
                       </p>
-                      <p className="text-[11px] text-neutral-600">
-                        {resumeData.location} •{" "}
-                        <a
-                          href="mailto:swayampatel2736@gmail.com"
-                          target="_blank"
-                        >
-                          {resumeData.email}
-                        </a>{" "}
-                        • {resumeData.phone} •{" "}
-                        <a href="https://github.com/Sp2736" target="_blank">
-                          {resumeData.github}
-                        </a>
+                      <p className="text-[11px]">
+                        <span className="font-bold">Frontend:</span>{" "}
+                        {resumeData.skills.frontend}
                       </p>
-                      <p className="text-[11px] text-neutral-600">
-                        •{" "}
-                        <a
-                          href="https://swayam-patel-v1.vercel.app"
-                          target="_blank"
-                        >
-                          {resumeData.portfolio}
-                        </a>
+                      <p className="text-[11px]">
+                        <span className="font-bold">Backend & DB:</span>{" "}
+                        {resumeData.skills.backend} |{" "}
+                        {resumeData.skills.databases}
+                      </p>
+                      <p className="text-[11px]">
+                        <span className="font-bold">Dev & Cloud:</span>{" "}
+                        {resumeData.skills.devTools} |{" "}
+                        {resumeData.skills.cloud}
+                      </p>
+                      <p className="text-[11px]">
+                        <span className="font-bold">AI & Data:</span>{" "}
+                        {resumeData.skills.ai} | {resumeData.skills.data}
                       </p>
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <p className="text-[11px] text-neutral-800 text-justify">
-                        {resumeData.summary}
-                      </p>
-                    </div>
-
-                    <div className="mb-4">
-                      <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
-                        Technical Skills
-                      </h2>
-                      <div className="flex flex-col gap-0.5">
-                        <p className="text-[11px]">
-                          <span className="font-bold">Languages:</span>{" "}
-                          {resumeData.skills.languages}
-                        </p>
-                        <p className="text-[11px]">
-                          <span className="font-bold">Frontend:</span>{" "}
-                          {resumeData.skills.frontend}
-                        </p>
-                        <p className="text-[11px]">
-                          <span className="font-bold">Backend & DB:</span>{" "}
-                          {resumeData.skills.backend} |{" "}
-                          {resumeData.skills.databases}
-                        </p>
-                        <p className="text-[11px]">
-                          <span className="font-bold">Dev & Cloud:</span>{" "}
-                          {resumeData.skills.devTools} |{" "}
-                          {resumeData.skills.cloud}
-                        </p>
-                        <p className="text-[11px]">
-                          <span className="font-bold">AI & Data:</span>{" "}
-                          {resumeData.skills.ai} | {resumeData.skills.data}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mb-4">
-                      <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
-                        Selected Projects
-                      </h2>
-                      <div className="flex flex-col gap-2.5">
-                        {resumeData.projects.map((proj, i) => (
-                          <div key={i}>
-                            <div className="flex justify-between items-baseline mb-0.5">
-                              <h3 className="text-[12px] font-bold">
-                                {proj.name}
-                              </h3>
-                              <span className="text-[10px] font-mono text-neutral-600">
-                                {proj.tech}
-                              </span>
-                            </div>
-                            <p className="text-[11px] text-neutral-800">
-                              {proj.desc}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="mb-4">
-                      <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
-                        Open Source
-                      </h2>
-                      {resumeData.openSource.map((os, i) => (
+                  <div className="mb-4">
+                    <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
+                      Selected Projects
+                    </h2>
+                    <div className="flex flex-col gap-2.5">
+                      {resumeData.projects.map((proj, i) => (
                         <div key={i}>
                           <div className="flex justify-between items-baseline mb-0.5">
-                            <h3 className="text-[12px] font-bold">{os.name}</h3>
+                            <h3 className="text-[12px] font-bold flex flex-wrap items-center gap-1">
+                              {proj.link ? (
+                                <a href={proj.link} target="_blank" className="hover:text-neutral-600 transition-colors inline-flex items-center gap-0.5">
+                                  {proj.name} <ExternalLink size={10} className="text-neutral-400" />
+                                </a>
+                              ) : proj.links ? (
+                                <>
+                                  {proj.name}
+                                  {proj.links.map((lnk, idx) => (
+                                    <a key={idx} href={lnk.url} target="_blank" className="hover:text-neutral-800 transition-colors inline-flex items-center gap-0.5 ml-1 text-neutral-500 font-normal text-[10px]">
+                                      ({lnk.label}) <ExternalLink size={10} className="text-neutral-400" />
+                                    </a>
+                                  ))}
+                                </>
+                              ) : (
+                                proj.name
+                              )}
+                            </h3>
                             <span className="text-[10px] font-mono text-neutral-600">
-                              {os.projects}
+                              {proj.tech}
                             </span>
                           </div>
                           <p className="text-[11px] text-neutral-800">
-                            {os.desc}
+                            {proj.desc}
                           </p>
                         </div>
                       ))}
                     </div>
+                  </div>
 
-                    <div className="mb-4">
-                      <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
-                        Education
-                      </h2>
-                      <div className="flex justify-between items-baseline mb-0.5">
-                        <h3 className="text-[12px] font-bold">
-                          {resumeData.education.degree}
-                        </h3>
-                        <span className="text-[11px] font-bold">
-                          {resumeData.education.university}
-                        </span>
+                  <div className="mb-4">
+                    <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
+                      Open Source
+                    </h2>
+                    {resumeData.openSource.map((os, i) => (
+                      <div key={i}>
+                        <div className="flex justify-between items-baseline mb-0.5">
+                          <h3 className="text-[12px] font-bold">{os.name}</h3>
+                          <span className="text-[10px] font-mono text-neutral-600">
+                            {os.projects}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-neutral-800">
+                          {os.desc}
+                        </p>
                       </div>
-                      <p className="text-[11px] text-neutral-800 mb-0.5">
-                        {resumeData.education.grad}
-                      </p>
-                      <p className="text-[10px] text-neutral-600">
-                        <span className="font-bold">Coursework:</span>{" "}
-                        {resumeData.education.coursework}
-                      </p>
-                    </div>
+                    ))}
+                  </div>
 
-                    <div>
-                      <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
-                        Certifications
-                      </h2>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                        {resumeData.certifications.map((cert, i) => (
-                          <p key={i} className="text-[11px]">
-                            • {cert}
-                          </p>
-                        ))}
-                      </div>
+                  <div className="mb-4">
+                    <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
+                      Hackathons & Workshops
+                    </h2>
+                    <div className="flex flex-col gap-2.5">
+                      {resumeData.hackathons.map((hack, i) => (
+                        <div key={`hack-${i}`}>
+                          <h3 className="text-[12px] font-bold mb-0.5">{hack.title}</h3>
+                          <p className="text-[11px] text-neutral-800">{hack.desc}</p>
+                        </div>
+                      ))}
+                      {resumeData.workshops.map((ws, i) => (
+                        <div key={`ws-${i}`}>
+                          <h3 className="text-[12px] font-bold mb-0.5">{ws.title}</h3>
+                          <p className="text-[11px] text-neutral-800">{ws.desc}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                )}
 
-                {/* TEMPLATE 2: MODERN TECH */}
-                {template === "modern" && (
-                  <div className="font-sans flex gap-6">
-                    {/* Left Column */}
-                    <div className="w-[35%] flex flex-col gap-5">
-                      <div>
-                        <h1 className="text-3xl font-black leading-none tracking-tighter mb-1">
-                          {resumeData.name.split(" ")[0]}
-                        </h1>
-                        <h1 className="text-3xl font-light leading-none tracking-tighter mb-2">
-                          {resumeData.name.split(" ")[1]}
-                        </h1>
-                        <p className="text-[11px] font-bold text-neutral-600 uppercase tracking-wide">
-                          {resumeData.role}
-                        </p>
-                      </div>
-
-                      <div>
-                        <h2 className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-1.5 border-b border-neutral-200 pb-1">
-                          Contact
-                        </h2>
-                        <div className="text-[10px] flex flex-col gap-1 text-neutral-700">
-                          <p>{resumeData.phone}</p>
-                          <p>
-                            <a
-                              href="mailto:swayampatel2736@gmail.com"
-                              target="_blank"
-                            >
-                              {resumeData.email}
-                            </a>
-                          </p>
-                          <p>
-                            <a href="https://github.com/Sp2736" target="_blank">
-                              {resumeData.github}
-                            </a>
-                          </p>
-                          <p>
-                            <a
-                              href="https://swayam-patel-v1.vercel.app"
-                              target="_blank"
-                            >
-                              {resumeData.portfolio}
-                            </a>
-                          </p>
-                          <p>{resumeData.location}</p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h2 className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-1.5 border-b border-neutral-200 pb-1">
-                          Education
-                        </h2>
-                        <p className="text-[11px] font-bold text-black">
-                          {resumeData.education.degree}
-                        </p>
-                        <p className="text-[10px] text-neutral-700 mb-1">
-                          {resumeData.education.university}
-                        </p>
-                        <p className="text-[9px] text-neutral-500 mb-2">
-                          {resumeData.education.grad}
-                        </p>
-                        <p className="text-[9px] text-neutral-500 leading-tight">
-                          <span className="font-bold">Focus:</span>{" "}
-                          {resumeData.education.coursework}
-                        </p>
-                      </div>
-
-                      <div>
-                        <h2 className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-1.5 border-b border-neutral-200 pb-1">
-                          Stack
-                        </h2>
-                        <div className="flex flex-col gap-1.5 text-[10px]">
-                          <p>
-                            <span className="font-bold text-neutral-800">
-                              Core:
-                            </span>{" "}
-                            {resumeData.skills.languages}
-                          </p>
-                          <p>
-                            <span className="font-bold text-neutral-800">
-                              Web:
-                            </span>{" "}
-                            {resumeData.skills.frontend},{" "}
-                            {resumeData.skills.backend}
-                          </p>
-                          <p>
-                            <span className="font-bold text-neutral-800">
-                              DB & Cloud:
-                            </span>{" "}
-                            {resumeData.skills.databases},{" "}
-                            {resumeData.skills.cloud}
-                          </p>
-                          <p>
-                            <span className="font-bold text-neutral-800">
-                              AI:
-                            </span>{" "}
-                            {resumeData.skills.ai}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h2 className="text-[10px] font-black uppercase text-neutral-400 tracking-widest mb-1.5 border-b border-neutral-200 pb-1">
-                          Certifications
-                        </h2>
-                        <ul className="text-[10px] flex flex-col gap-1 text-neutral-700">
-                          {resumeData.certifications.map((cert, i) => (
-                            <li key={i} className="leading-tight">
-                              {cert}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                  <div className="mb-4">
+                    <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
+                      Education
+                    </h2>
+                    <div className="flex justify-between items-baseline mb-0.5">
+                      <h3 className="text-[12px] font-bold">
+                        {resumeData.education.degree}
+                      </h3>
+                      <span className="text-[11px] font-bold">
+                        {resumeData.education.university}
+                      </span>
                     </div>
-
-                    {/* Right Column */}
-                    <div className="w-[65%] flex flex-col gap-5">
-                      <div>
-                        <h2 className="text-[12px] font-black uppercase text-black tracking-widest border-b border-black pb-0.5 mb-2">
-                          Profile
-                        </h2>
-                        <p className="text-[11px] leading-relaxed text-neutral-800 text-justify">
-                          {resumeData.summary}
-                        </p>
-                      </div>
-
-                      <div>
-                        <h2 className="text-[12px] font-black uppercase text-black tracking-widest border-b border-black pb-0.5 mb-3">
-                          Architectural Projects
-                        </h2>
-                        <div className="flex flex-col gap-3.5">
-                          {resumeData.projects.map((proj, i) => (
-                            <div key={i}>
-                              <div className="flex justify-between items-end mb-0.5">
-                                <h3 className="text-[12px] font-bold text-black">
-                                  {proj.name}
-                                </h3>
-                                <p className="text-[9px] text-neutral-500 font-mono mb-1">
-                                  {proj.tech}
-                                </p>
-                              </div>
-                              <p className="text-[11px] text-neutral-800 leading-snug">
-                                {proj.desc}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h2 className="text-[12px] font-black uppercase text-black tracking-widest border-b border-black pb-0.5 mb-3">
-                          Open Source
-                        </h2>
-                        {resumeData.openSource.map((os, i) => (
-                          <div key={i}>
-                            <div className="flex justify-between items-end mb-0.5">
-                              <h3 className="text-[12px] font-bold text-black">
-                                {os.name}
-                              </h3>
-                              <p className="text-[9px] text-neutral-500 font-mono mb-1">
-                                {os.projects}
-                              </p>
-                            </div>
-                            <p className="text-[11px] text-neutral-800 leading-snug">
-                              {os.desc}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* TEMPLATE 3: EXECUTIVE COMPOSITE */}
-                {template === "composite" && (
-                  <div className="font-sans">
-                    {/* Header Split */}
-                    <div className="flex justify-between items-end border-b-2 border-black pb-3 mb-4">
-                      <div>
-                        <h1 className="text-4xl font-black tracking-tighter text-black leading-none">
-                          {resumeData.name}
-                        </h1>
-                        <p className="text-sm font-bold text-neutral-600 mt-1 tracking-widest uppercase">
-                          {resumeData.role}
-                        </p>
-                      </div>
-                      <div className="text-right text-[10px] text-neutral-800 flex flex-col gap-0.5 font-mono">
-                        <p>
-                          <a
-                            href="mailto:swayampatel2736@gmail.com"
-                            target="_blank"
-                          >
-                            {resumeData.email}
-                          </a>{" "}
-                          | {resumeData.phone}
-                          <span className="text-neutral-300">|</span>{" "}
-                          <a href="https://github.com/Sp2736" target="_blank">
-                            {resumeData.github}
-                          </a>
-                        </p>
-                        <p>
-                          <a
-                            href="https://swayam-patel-v1.vercel.app"
-                            target="_blank"
-                          >
-                            {resumeData.portfolio}
-                          </a>
-                        </p>
-                        <p>
-                          <span className="text-neutral-300">|</span>{" "}
-                          {resumeData.location}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Summary */}
-                    <p className="text-[11px] text-neutral-800 leading-relaxed mb-5 font-medium text-justify">
-                      {resumeData.summary}
+                    <p className="text-[11px] text-neutral-800 mb-0.5">
+                      {resumeData.education.grad}
                     </p>
+                    <p className="text-[10px] text-neutral-600">
+                      <span className="font-bold">Coursework:</span>{" "}
+                      {resumeData.education.coursework}
+                    </p>
+                  </div>
 
-                    {/* Grid Core */}
-                    <div className="grid grid-cols-12 gap-6">
-                      {/* Left: Projects (Takes 7 columns) */}
-                      <div className="col-span-7 flex flex-col gap-4">
-                        <div>
-                          <h2 className="text-[11px] font-black uppercase tracking-widest bg-black text-white inline-block px-2 py-1 mb-3">
-                            Engineering Projects
-                          </h2>
-                          <div className="flex flex-col gap-3.5">
-                            {resumeData.projects.map((proj, i) => (
-                              <div
-                                key={i}
-                                className="pl-3 border-l-2 border-neutral-300"
-                              >
-                                <h3 className="text-[12px] font-bold text-black leading-none mb-1">
-                                  {proj.name}
-                                </h3>
-                                <p className="text-[9px] font-mono text-neutral-500 mb-1">
-                                  {proj.tech}
-                                </p>
-                                <p className="text-[11px] text-neutral-800 leading-snug">
-                                  {proj.desc}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <h2 className="text-[11px] font-black uppercase tracking-widest bg-black text-white inline-block px-2 py-1 mb-3">
-                            Open Source
-                          </h2>
-                          {resumeData.openSource.map((os, i) => (
-                            <div
-                              key={i}
-                              className="pl-3 border-l-2 border-neutral-300"
-                            >
-                              <h3 className="text-[12px] font-bold text-black leading-none mb-1">
-                                {os.name}
-                              </h3>
-                              <p className="text-[11px] text-neutral-800 leading-snug">
-                                {os.desc}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Right: Skills, Edu, Certs (Takes 5 columns) */}
-                      <div className="col-span-5 flex flex-col gap-5">
-                        <div>
-                          <h2 className="text-[11px] font-black uppercase tracking-widest border-b border-neutral-300 pb-1 mb-2">
-                            Technical Matrix
-                          </h2>
-                          <div className="flex flex-col gap-1.5 text-[10px]">
-                            <p>
-                              <span className="font-bold block text-black">
-                                Languages
-                              </span>{" "}
-                              <span className="text-neutral-700">
-                                {resumeData.skills.languages}
-                              </span>
-                            </p>
-                            <p>
-                              <span className="font-bold block text-black">
-                                Frameworks
-                              </span>{" "}
-                              <span className="text-neutral-700">
-                                {resumeData.skills.frontend},{" "}
-                                {resumeData.skills.backend}
-                              </span>
-                            </p>
-                            <p>
-                              <span className="font-bold block text-black">
-                                Infrastructure & DB
-                              </span>{" "}
-                              <span className="text-neutral-700">
-                                {resumeData.skills.databases},{" "}
-                                {resumeData.skills.cloud}
-                              </span>
-                            </p>
-                            <p>
-                              <span className="font-bold block text-black">
-                                AI & Tooling
-                              </span>{" "}
-                              <span className="text-neutral-700">
-                                {resumeData.skills.ai},{" "}
-                                {resumeData.skills.devTools}
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h2 className="text-[11px] font-black uppercase tracking-widest border-b border-neutral-300 pb-1 mb-2">
-                            Education
-                          </h2>
-                          <div className="text-[11px]">
-                            <p className="font-bold text-black">
-                              {resumeData.education.degree}
-                            </p>
-                            <p className="text-neutral-700">
-                              {resumeData.education.university}
-                            </p>
-                            <p className="text-neutral-500 text-[10px] mb-1">
-                              {resumeData.education.grad}
-                            </p>
-                            <p className="text-[10px] text-neutral-700 leading-tight border-l border-neutral-300 pl-2 ml-1 mt-1">
-                              {resumeData.education.coursework}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h2 className="text-[11px] font-black uppercase tracking-widest border-b border-neutral-300 pb-1 mb-2">
-                            Certifications
-                          </h2>
-                          <ul className="text-[10px] text-neutral-700 flex flex-col gap-1 list-none">
-                            {resumeData.certifications.map((cert, i) => (
-                              <li key={i} className="flex items-start gap-1">
-                                <span className="text-neutral-400">▹</span>{" "}
-                                {cert}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
+                  <div>
+                    <h2 className="text-[12px] font-black uppercase border-b-[1.5px] border-black pb-0.5 mb-2 tracking-widest">
+                      Certifications
+                    </h2>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                      {resumeData.certifications.map((cert, i) => (
+                        <p key={i} className="text-[11px]">
+                          • {cert}
+                        </p>
+                      ))}
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </div>
+            
+            {/* MOBILE DOWNLOAD BUTTON (Sticky Bottom) */}
+            <div className="p-4 bg-white border-t border-neutral-200 sm:hidden">
+                <button
+                  onClick={handleDownload}
+                  className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-xl text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+                >
+                  <Download size={16} /> Download PDF
+                </button>
+            </div>
+            
           </div>
         </motion.div>
       )}
