@@ -9,6 +9,8 @@ import {
   BookOpen,
   Linkedin,
   Youtube,
+  BookOpenCheck,
+  ArrowUpRight,
 } from "lucide-react";
 
 // DATA MAPPING
@@ -26,6 +28,56 @@ const projectsData = [
         url: "https://github.com/Sp2736/arcade",
         icon: Github,
         primary: false,
+      },
+      {
+        label: "Architecture",
+        url: "/architecture/arcade.html",
+        icon: ArrowUpRight,
+        primary: true,
+      },
+    ],
+  },
+  {
+    id: "sukoon",
+    title: "SUKOON DEVELOPER",
+    description:
+      "A modern real estate platform, made for a client, featuring dynamic property listings.",
+    image: "./sukoon.png", // Architecture / Real Estate vibe
+    techStack: ["Next.js", "React", "Tailwind CSS"],
+    links: [
+      {
+        label: "Code",
+        url: "https://github.com/sp2736/sukoon-dev",
+        icon: Github,
+        primary: false,
+      },
+      {
+        label: "Visit",
+        url: "https://sukoon-developer.vercel.app",
+        icon: ExternalLink,
+        primary: true,
+      },
+    ],
+  },
+  {
+    id: "brainbin",
+    title: "BRAINBIN",
+    description:
+    "A smart knowledge management and note-taking tool. Organize thoughts, code snippets, and ideas efficiently in one centralized location.",
+    image: "./brainbin.png", // Brain / Abstract AI vibe
+    techStack: ["React", "TypeScript", "Next.js"],
+    links: [
+      {
+        label: "Code",
+        url: "https://github.com/Sp2736/BrainBin",
+        icon: Github,
+        primary: false,
+      },
+      {
+        label: "Architecture",
+        url: "/architecture/brainbin.html",
+        icon: ArrowUpRight,
+        primary: true,
       },
     ],
   },
@@ -48,22 +100,6 @@ const projectsData = [
         url: "https://wander-n-wonder.vercel.app",
         icon: ExternalLink,
         primary: true,
-      },
-    ],
-  },
-  {
-    id: "brainbin",
-    title: "BRAINBIN",
-    description:
-      "A smart knowledge management and note-taking tool. Organize thoughts, code snippets, and ideas efficiently in one centralized location.",
-    image: "./brainbin.png", // Brain / Abstract AI vibe
-    techStack: ["React", "TypeScript", "Next.js"],
-    links: [
-      {
-        label: "Code",
-        url: "https://github.com/Sp2736/BrainBin",
-        icon: Github,
-        primary: false,
       },
     ],
   },
@@ -161,13 +197,19 @@ const projectsData = [
         label: "Published E-Book",
         url: "https://ebooks.bookleafpub.com/product-page/before-i-learned-goodbye",
         icon: BookOpen,
-        primary: true,
+        primary: false,
+      },
+      {
+        label: "Published Paperback",
+        url: "https://store.bookleafpub.com/products/9789375273813",
+        icon: BookOpenCheck,
+        primary: false,
       },
       {
         label: "Author Post",
-        url: "https://www.linkedin.com/in/swayam-patel-316ba5317",
+        url: "https://www.linkedin.com/posts/swayam-patel-316ba5317_author-publishedauthor-bookpublication-ugcPost-7466396339426443264-nZr2/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFBxwYIBNXDtICjTLtPqyKcrxn03rH1yBPA",
         icon: Linkedin,
-        primary: false,
+        primary: true,
       },
     ],
   },

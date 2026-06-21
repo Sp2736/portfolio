@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartBI — AI-Powered Business Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================ TOKENS ============================================================ */
+:root{
+  --bg:#F8FAFC;
+  --surface:#FFFFFF;
+  --surface-alt:#F1F5FB;
+  --ink:#0F1729;
+  --muted:#5B6B82;
+  --muted-soft:#8A96AC;
+  --border:#E4E9F2;
+  --blue:#3D6FE0;
+  --blue-deep:#274BA8;
+  --blue-soft:#E7EEFC;
+  --mint:#16B8A6;
+  --mint-soft:#E3F8F4;
+  --amber:#F4A93B;
+  --amber-soft:#FDF1DE;
+  --rose:#EF5B6F;
+  --rose-soft:#FCE9EC;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --shadow-sm:0 1px 2px rgba(15,23,41,0.04), 0 1px 1px rgba(15,23,41,0.03);
+  --shadow-md:0 8px 24px rgba(20,40,90,0.08);
+  --shadow-lg:0 24px 64px rgba(20,40,90,0.14);
+  --container:1180px;
+  --ff-display:'Sora', sans-serif;
+  --ff-body:'Inter', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--ff-body); -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+}
+h1,h2,h3,h4{ font-family:var(--ff-display); margin:0; color:var(--ink); letter-spacing:-0.01em; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+ul,ol{ margin:0; padding:0; list-style:none; }
+button{ font-family:inherit; cursor:pointer; }
+.icon{ width:20px; height:20px; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.icon-sm{ width:15px; height:15px; }
+.container{ max-width:var(--container); margin:0 auto; padding:0 28px; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+}
+
+/* ============================================================ REVEAL ============================================================ */
+.reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.in{ opacity:1; transform:translateY(0); }
+
+/* ============================================================ BUTTONS ============================================================ */
+.btn{
+  display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  padding:13px 24px; border-radius:999px; font-weight:600; font-size:15px;
+  border:1px solid transparent; transition:transform .15s ease, box-shadow .15s ease, background .2s ease;
+  white-space:nowrap;
+}
+.btn:active{ transform:scale(0.97); }
+.btn-primary{ background:linear-gradient(135deg, var(--blue), var(--blue-deep)); color:#fff; box-shadow:0 10px 24px rgba(61,111,224,0.28); }
+.btn-primary:hover{ box-shadow:0 14px 30px rgba(61,111,224,0.36); }
+.btn-ghost{ background:transparent; color:var(--ink); border-color:var(--border); }
+.btn-ghost:hover{ background:var(--surface-alt); }
+.btn-soft{ background:var(--blue-soft); color:var(--blue-deep); }
+.btn-soft:hover{ background:#dbe6fb; }
+.btn-sm{ padding:9px 16px; font-size:13.5px; }
+
+/* ============================================================ NAV ============================================================ */
+.nav-wrap{ position:sticky; top:0; z-index:50; padding:14px 20px 0; }
+.nav{
+  max-width:var(--container); margin:0 auto; display:flex; align-items:center; gap:18px;
+  background:rgba(255,255,255,0.78); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border); border-radius:999px; padding:10px 12px 10px 20px; box-shadow:var(--shadow-sm);
+}
+.brand{ display:flex; align-items:center; gap:9px; font-family:var(--ff-display); font-weight:700; font-size:18px; color:var(--ink); }
+.brand-mark{ width:22px; height:22px; border-radius:7px; background:linear-gradient(135deg, var(--blue), var(--mint)); display:inline-block; position:relative; flex-shrink:0; }
+.brand-mark::after{ content:''; position:absolute; inset:5px; border-radius:3px; background:#fff; opacity:.85; }
+.nav-links{ display:flex; gap:26px; margin:0 auto; font-size:14.5px; font-weight:500; color:var(--muted); }
+.nav-links a:hover{ color:var(--ink); }
+.nav-cta{ flex-shrink:0; }
+.nav-toggle{ display:none; flex-direction:column; gap:4px; background:none; border:none; padding:8px; margin-left:auto; }
+.nav-toggle span{ width:20px; height:2px; background:var(--ink); border-radius:2px; transition:.2s; }
+
+/* ============================================================ HERO ============================================================ */
+.hero{ padding:64px 20px 40px; }
+.hero-inner{ max-width:var(--container); margin:0 auto; display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; }
+.eyebrow{ display:inline-block; font-size:12.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--blue-deep); background:var(--blue-soft); padding:7px 14px; border-radius:999px; margin-bottom:18px; }
+.hero h1{ font-size:clamp(32px, 4.2vw, 50px); font-weight:700; line-height:1.1; margin-bottom:18px; }
+.lede{ font-size:17px; color:var(--muted); max-width:520px; margin-bottom:28px; }
+.hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; }
+.hero-stats{ display:flex; gap:34px; flex-wrap:wrap; }
+.hero-stats strong{ display:block; font-family:var(--ff-mono); font-size:24px; color:var(--ink); }
+.hero-stats span{ font-size:13px; color:var(--muted); }
+
+.hero-art{ position:relative; min-height:420px; display:flex; align-items:center; justify-content:center; }
+.ribbon{ width:100%; max-width:420px; filter:drop-shadow(0 30px 50px rgba(61,111,224,0.18)); }
+.ribbon-band{ animation:sway 7s ease-in-out infinite; transform-origin:center; }
+.band-b{ animation-duration:9s; animation-delay:.3s; }
+.band-c{ animation-duration:11s; animation-delay:.6s; }
+@keyframes sway{ 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-6px) rotate(0.6deg); } }
+.ribbon-dot{ animation:pulse 2.4s ease-in-out infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.45; } }
+
+.hero-card{
+  position:absolute; display:flex; align-items:center; gap:10px; background:var(--surface);
+  border:1px solid var(--border); border-radius:var(--radius-md); padding:12px 16px; box-shadow:var(--shadow-lg);
+  font-size:13px; animation:float 5s ease-in-out infinite;
+}
+.hero-card strong{ display:block; font-size:14px; }
+.hero-card span{ color:var(--muted); font-size:12px; }
+.card-float-1{ top:6%; left:-4%; animation-delay:0s; }
+.card-float-2{ bottom:10%; right:-6%; animation-delay:1.2s; }
+@keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+
+/* ============================================================ SECTIONS ============================================================ */
+.section{ padding:88px 0; }
+.section.alt{ background:var(--surface-alt); }
+.section-head{ max-width:680px; margin:0 auto 48px; text-align:center; }
+.section-head h2{ font-size:clamp(26px, 3vw, 36px); margin-bottom:12px; }
+.section-head .sub{ color:var(--muted); font-size:16px; }
+
+.grid{ display:grid; gap:20px; }
+.grid-3{ grid-template-columns:repeat(3, 1fr); }
+.grid-5{ grid-template-columns:repeat(5, 1fr); }
+
+/* ---------- problem cards ---------- */
+.problem-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:26px; box-shadow:var(--shadow-sm); }
+.problem-card .icon{ color:var(--blue); margin-bottom:14px; }
+.problem-card h3{ font-size:16.5px; margin-bottom:8px; }
+.problem-card p{ font-size:14px; color:var(--muted); }
+.solution-banner{ margin-top:32px; display:flex; align-items:center; gap:16px; background:linear-gradient(135deg, var(--blue), var(--blue-deep)); color:#fff; border-radius:var(--radius-lg); padding:26px 30px; }
+.solution-banner .icon{ flex-shrink:0; width:26px; height:26px; }
+.solution-banner p{ font-size:16px; font-weight:500; }
+
+/* ---------- users ---------- */
+.users-grid{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+.user-chip{ background:var(--surface); border:1px solid var(--border); padding:11px 20px; border-radius:999px; font-size:14.5px; font-weight:500; box-shadow:var(--shadow-sm); }
+
+/* ---------- architecture ---------- */
+.arch{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:10px; }
+.arch-layer{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; transition:box-shadow .2s; }
+.arch-layer.active{ box-shadow:var(--shadow-md); border-color:#cfdcf7; }
+.arch-head{ display:flex; align-items:center; gap:14px; padding:18px 22px; cursor:pointer; }
+.arch-num{ font-family:var(--ff-mono); font-size:13px; color:var(--blue); font-weight:600; }
+.arch-head .icon{ color:var(--blue); }
+.arch-head h3{ font-size:16px; flex:1; }
+.chev{ transition:transform .25s; color:var(--muted-soft); }
+.arch-layer.active .chev{ transform:rotate(90deg); }
+.arch-body{ max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s ease; padding:0 22px; }
+.arch-layer.active .arch-body{ max-height:140px; padding:0 22px 20px 56px; }
+.arch-body p{ font-size:14.5px; color:var(--muted); }
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+.module-explorer{ display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
+.module-nav{ display:flex; flex-direction:column; gap:6px; position:sticky; top:90px; }
+.module-tab{
+  display:flex; align-items:center; gap:10px; text-align:left; background:transparent; border:none;
+  padding:11px 14px; border-radius:var(--radius-sm); font-size:14px; font-weight:500; color:var(--muted);
+  transition:background .15s, color .15s;
+}
+.module-tab span{ font-family:var(--ff-mono); font-size:11.5px; color:var(--muted-soft); width:18px; }
+.module-tab:hover{ background:var(--surface); }
+.module-tab.active{ background:var(--surface); color:var(--ink); box-shadow:var(--shadow-sm); }
+.module-tab.active span{ color:var(--blue); }
+
+.module-panels{ position:relative; }
+.module-panel{ display:none; grid-template-columns:0.85fr 1.15fr; gap:30px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:34px; box-shadow:var(--shadow-sm); }
+.module-panel.active{ display:grid; animation:fadeIn .35s ease; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+.panel-text h3{ font-size:21px; margin-bottom:10px; }
+.panel-text p{ color:var(--muted); font-size:14.5px; margin-bottom:18px; }
+.feature-list li{ position:relative; padding-left:20px; font-size:14px; color:var(--ink); margin-bottom:10px; }
+.feature-list li::before{ content:''; position:absolute; left:0; top:7px; width:7px; height:7px; border-radius:50%; background:var(--blue); }
+.panel-demo{ background:var(--surface-alt); border-radius:var(--radius-md); padding:22px; }
+.demo-label{ font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted-soft); font-weight:600; margin-bottom:12px; }
+
+/* role switcher */
+.role-switch{ display:flex; gap:8px; margin-bottom:16px; }
+.role-btn{ flex:1; padding:9px 0; border:1px solid var(--border); background:var(--surface); border-radius:var(--radius-sm); font-size:13.5px; font-weight:600; color:var(--muted); }
+.role-btn.active{ background:var(--blue); color:#fff; border-color:var(--blue); }
+.permission-list li{ display:flex; align-items:center; gap:9px; font-size:13.5px; padding:8px 0; border-bottom:1px dashed var(--border); }
+.permission-list li:last-child{ border-bottom:none; }
+.permission-list .icon{ width:16px; height:16px; }
+.allowed{ color:var(--ink); }
+.allowed .icon{ color:var(--mint); }
+.denied{ color:var(--muted-soft); }
+.denied .icon{ color:var(--rose); }
+
+/* stepper */
+.stepper{ display:flex; flex-direction:column; gap:0; margin:16px 0; }
+.stepper li{ display:flex; align-items:center; gap:12px; font-size:13.5px; color:var(--muted-soft); padding:7px 0; position:relative; }
+.stepper li .dot{ width:9px; height:9px; border-radius:50%; background:var(--border); flex-shrink:0; transition:background .2s, transform .2s; }
+.stepper li.current{ color:var(--ink); font-weight:600; }
+.stepper li.current .dot{ background:var(--blue); transform:scale(1.3); }
+.stepper li.done{ color:var(--muted); }
+.stepper li.done .dot{ background:var(--mint); }
+.source-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.badge{ background:var(--surface); border:1px solid var(--border); padding:6px 12px; border-radius:999px; font-size:12.5px; font-weight:600; color:var(--muted); }
+
+/* preprocessing */
+.toggle-row{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.seg-btn{ padding:8px 16px; border-radius:999px; border:1px solid var(--border); background:var(--surface); font-size:13px; font-weight:600; color:var(--muted); }
+.seg-btn.active{ background:var(--blue); color:#fff; border-color:var(--blue); }
+.mini-table{ width:100%; border-collapse:collapse; font-size:12.5px; background:var(--surface); border-radius:var(--radius-sm); overflow:hidden; }
+.mini-table th{ background:#EEF2FB; text-align:left; padding:8px 10px; font-weight:600; color:var(--muted); }
+.mini-table td{ padding:8px 10px; border-bottom:1px solid var(--border); color:var(--ink); }
+.quality-gauge{ display:flex; align-items:center; gap:14px; margin-top:18px; }
+.gauge-bg{ fill:none; stroke:var(--border); stroke-width:10; }
+.gauge-fg{ fill:none; stroke:var(--mint); stroke-width:10; stroke-linecap:round; transform:rotate(-90deg); transform-origin:60px 60px; transition:stroke-dashoffset .6s ease; }
+.quality-gauge strong{ display:block; font-size:18px; }
+.quality-gauge span{ font-size:12.5px; color:var(--muted); }
+
+/* profiling */
+.profile-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:6px; }
+.profile-stat{ background:var(--surface); border-radius:var(--radius-sm); padding:14px; text-align:center; }
+.profile-stat strong{ display:block; font-family:var(--ff-mono); font-size:19px; color:var(--blue-deep); }
+.profile-stat span{ font-size:11.5px; color:var(--muted); }
+.bar-row{ display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--muted); margin-bottom:8px; }
+.bar-row span{ width:120px; flex-shrink:0; }
+.bar{ flex:1; height:7px; background:var(--border); border-radius:99px; overflow:hidden; }
+.bar i{ display:block; height:100%; background:linear-gradient(90deg, var(--blue), var(--mint)); border-radius:99px; }
+
+/* SVG chart containers (used by segmentation, forecast, anomaly modules) */
+.chart-box{ width:100%; background:var(--surface); border-radius:var(--radius-sm); padding:10px 6px 4px; }
+.chart-box svg{ width:100%; height:auto; display:block; overflow:visible; }
+.chart-axis-label{ font-family:var(--ff-body); font-size:10.5px; fill:var(--muted-soft); }
+.chart-gridline{ stroke:#EEF2FA; stroke-width:1; }
+.chart-legend{ display:flex; gap:16px; margin-top:10px; flex-wrap:wrap; }
+.chart-legend span{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); }
+.chart-legend i{ width:10px; height:10px; border-radius:50%; display:inline-block; flex-shrink:0; }
+.chart-legend i[style*="--dash"]{ border-radius:2px; height:2px; width:14px; }
+.chart-dot{ cursor:pointer; transition:opacity .2s ease, r .15s ease; }
+.chart-dot:hover{ r:7; }
+.chart-tooltip{ pointer-events:none; font-family:var(--ff-body); }
+.chart-tooltip rect{ fill:var(--ink); rx:6; }
+.chart-tooltip text{ fill:#fff; font-size:11px; }
+.cluster-card{ cursor:pointer; transition:opacity .2s ease, box-shadow .2s ease; }
+.cluster-card.dim{ opacity:.35; }
+.cluster-card.is-active{ box-shadow:var(--shadow-sm); }
+
+/* segmentation */
+.cluster-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px; }
+.cluster-card{ background:var(--surface); border-radius:var(--radius-sm); padding:12px; border-left:4px solid var(--c); }
+.cluster-card strong{ display:block; font-size:13px; }
+.cluster-card span{ font-size:11.5px; color:var(--muted); }
+
+/* anomaly alert feed */
+.alert-feed{ margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+.alert-feed li{ display:flex; align-items:center; gap:10px; background:var(--surface); padding:10px 12px; border-radius:var(--radius-sm); font-size:13px; }
+.alert-feed .icon{ color:var(--rose); }
+.alert-feed div{ flex:1; display:flex; flex-direction:column; }
+.alert-feed strong{ font-size:13px; }
+.alert-feed span{ font-size:11.5px; color:var(--muted); }
+.sev{ font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:999px; }
+.sev-high{ background:var(--rose-soft); color:var(--rose); }
+.sev-mid{ background:var(--amber-soft); color:#a9711d; }
+.sev-low{ background:var(--mint-soft); color:#0f8b7d; }
+
+/* KPI grid */
+.kpi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.kpi-card{ background:var(--surface); border-radius:var(--radius-sm); padding:14px; display:flex; flex-direction:column; gap:4px; }
+.kpi-label{ font-size:11.5px; color:var(--muted); }
+.kpi-value{ font-family:var(--ff-mono); font-size:19px; }
+.kpi-delta{ font-size:11.5px; font-weight:700; width:fit-content; padding:2px 7px; border-radius:6px; }
+.kpi-delta.up{ color:#0f8b7d; background:var(--mint-soft); }
+.kpi-delta.down{ color:var(--rose); background:var(--rose-soft); }
+.kpi-spark{ width:100%; height:26px; margin-top:4px; }
+
+/* insight card */
+.insight-card{ background:var(--surface); border-radius:var(--radius-md); padding:18px; display:flex; gap:12px; align-items:flex-start; margin-bottom:14px; min-height:60px; }
+.ai-badge{ display:inline-flex; align-items:center; gap:4px; background:var(--blue-soft); color:var(--blue-deep); font-size:11px; font-weight:700; padding:5px 9px; border-radius:999px; flex-shrink:0; }
+.insight-card p{ font-size:14.5px; transition:opacity .18s ease; }
+
+/* chat / NLQ */
+.chat-window{ background:var(--surface); border-radius:var(--radius-md); padding:14px; height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+.bubble{ max-width:80%; padding:9px 13px; border-radius:14px; font-size:13.5px; line-height:1.45; }
+.bubble.bot{ background:var(--blue-soft); color:var(--ink); align-self:flex-start; border-bottom-left-radius:4px; }
+.bubble.user{ background:var(--blue); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+.bubble.typing{ display:flex; gap:4px; align-items:center; padding:12px 14px; }
+.bubble.typing span{ width:6px; height:6px; border-radius:50%; background:var(--blue-deep); opacity:.5; animation:typing 1s infinite; }
+.bubble.typing span:nth-child(2){ animation-delay:.15s; }
+.bubble.typing span:nth-child(3){ animation-delay:.3s; }
+@keyframes typing{ 0%,100%{ transform:translateY(0); opacity:.4; } 50%{ transform:translateY(-3px); opacity:1; } }
+.chat-suggestions{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.chip-btn{ background:var(--surface); border:1px solid var(--border); padding:7px 12px; border-radius:999px; font-size:12px; color:var(--muted); }
+.chip-btn:hover{ color:var(--blue-deep); border-color:var(--blue); }
+.chat-input{ display:flex; gap:8px; }
+.chat-input input{ flex:1; border:1px solid var(--border); background:var(--surface); border-radius:999px; padding:10px 16px; font-size:13.5px; font-family:inherit; outline:none; }
+.chat-input input:focus{ border-color:var(--blue); }
+
+/* dashboard bento */
+.bento{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px; }
+.bento-card{ background:var(--surface); border-radius:var(--radius-sm); padding:14px; min-height:78px; }
+.bento-card h4{ font-size:13.5px; margin-bottom:5px; }
+.bento-card p{ font-size:12px; color:var(--muted); }
+
+/* report generation */
+.select{ width:100%; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface); font-size:13.5px; font-family:inherit; margin-bottom:12px; }
+.progress-track{ height:8px; background:var(--border); border-radius:99px; overflow:hidden; margin-top:14px; }
+.progress-fill{ height:100%; width:0%; background:linear-gradient(90deg, var(--blue), var(--mint)); transition:width .2s ease; }
+.report-ready{ margin-top:16px; background:var(--surface); border-radius:var(--radius-sm); padding:14px; display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+.report-ready > span{ font-size:13.5px; font-weight:600; }
+.export-row{ display:flex; gap:8px; }
+.export-btn{ display:flex; align-items:center; gap:6px; background:var(--surface-alt); border:1px solid var(--border); padding:7px 12px; border-radius:var(--radius-sm); font-size:12.5px; font-weight:600; color:var(--ink); }
+.export-btn:hover{ border-color:var(--blue); color:var(--blue-deep); }
+
+/* notifications */
+.notif-buttons{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+
+/* admin */
+.audit-log{ display:flex; flex-direction:column; gap:8px; }
+.audit-log li{ font-size:12.5px; background:var(--surface); padding:9px 12px; border-radius:var(--radius-sm); color:var(--muted); }
+.audit-log span{ font-family:var(--ff-mono); color:var(--muted-soft); margin-right:8px; }
+.audit-log b{ color:var(--ink); }
+
+/* ============================================================ NFR ============================================================ */
+.nfr-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:26px; box-shadow:var(--shadow-sm); }
+.nfr-card .icon{ color:var(--blue); margin-bottom:10px; }
+.nfr-card strong{ display:block; font-family:var(--ff-mono); font-size:24px; margin-bottom:4px; }
+.nfr-card h3{ font-size:15px; margin-bottom:6px; }
+.nfr-card p{ font-size:13.5px; color:var(--muted); }
+
+/* ============================================================ STACK ============================================================ */
+.stack-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+.stack-col h4{ font-size:14px; margin-bottom:10px; color:var(--blue-deep); }
+.pills{ display:flex; flex-wrap:wrap; gap:7px; }
+.pills span{ background:var(--surface); border:1px solid var(--border); padding:7px 13px; border-radius:999px; font-size:12.5px; font-weight:500; }
+
+/* ============================================================ FUTURE ============================================================ */
+.future-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:22px; position:relative; box-shadow:var(--shadow-sm); }
+.future-num{ position:absolute; top:14px; right:18px; font-family:var(--ff-mono); font-size:11px; color:var(--muted-soft); }
+.future-card .icon{ color:var(--mint); margin-bottom:24px; }
+.future-card h4{ font-size:13.5px; line-height:1.35; }
+
+/* ============================================================ TOASTS ============================================================ */
+.toast-stack{ position:fixed; bottom:24px; right:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{
+  display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:13px 16px; box-shadow:var(--shadow-lg); min-width:260px; max-width:320px;
+  transform:translateX(40px); opacity:0; transition:transform .3s ease, opacity .3s ease;
+}
+.toast.show{ transform:translateX(0); opacity:1; }
+.toast strong{ display:block; font-size:13px; }
+.toast span{ font-size:12px; color:var(--muted); }
+.toast-rose .icon{ color:var(--rose); }
+.toast-blue .icon{ color:var(--blue); }
+.toast-amber .icon{ color:var(--amber); }
+.toast-mint .icon{ color:var(--mint); }
+
+/* ============================================================ FOOTER ============================================================ */
+.footer{ background:var(--ink); color:#cfd7ea; padding:54px 0 0; }
+.footer .brand{ color:#fff; margin-bottom:10px; }
+.footer-inner{ display:flex; justify-content:space-between; align-items:flex-end; gap:30px; flex-wrap:wrap; padding-bottom:36px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.footer-inner p{ max-width:420px; font-size:13.5px; color:#a7b2c9; }
+.footer-bottom{ display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; padding:18px 0; font-size:12.5px; color:#7d8aa3; }
+.footer-bottom a:hover{ color:#fff; }
+
+/* ============================================================ RESPONSIVE ============================================================ */
+@media (max-width: 980px){
+  .hero-inner{ grid-template-columns:1fr; }
+  .hero-art{ order:-1; min-height:300px; }
+  .module-explorer{ grid-template-columns:1fr; }
+  .module-nav{ position:static; flex-direction:row; overflow-x:auto; padding-bottom:6px; }
+  .module-tab{ flex-shrink:0; }
+  .module-panel{ grid-template-columns:1fr; }
+  .grid-3{ grid-template-columns:repeat(2,1fr); }
+  .grid-5{ grid-template-columns:repeat(2,1fr); }
+  .stack-grid{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width: 640px){
+  .nav-links{ position:absolute; top:64px; left:0; right:0; background:var(--surface); border-radius:var(--radius-md); flex-direction:column; padding:14px; gap:14px; box-shadow:var(--shadow-lg); display:none; }
+  .nav-links.open{ display:flex; }
+  .nav-toggle{ display:flex; }
+  .nav-cta{ display:none; }
+  .grid-3, .grid-5{ grid-template-columns:1fr; }
+  .kpi-grid{ grid-template-columns:repeat(2,1fr); }
+  .bento{ grid-template-columns:1fr; }
+  .hero-card{ display:none; }
+  .footer-inner{ align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================ ICON SPRITE ============================================================ -->
+<svg style="display:none">
+<defs>
+<symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15.5 20c.2-2.7 2-4.7 4.5-5.4"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5z"/><path d="m9 12 2.3 2.3L15.5 10"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></symbol>
+<symbol id="i-bar" viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-6"/><path d="M2 20h20"/></symbol>
+<symbol id="i-line" viewBox="0 0 24 24"><path d="M3 17 9 9l4 3 8-9"/><path d="M2 20h20"/></symbol>
+<symbol id="i-scatter" viewBox="0 0 24 24"><circle cx="6" cy="17" r="1.3"/><circle cx="10" cy="9" r="1.3"/><circle cx="15" cy="13" r="1.3"/><circle cx="18" cy="6" r="1.3"/><circle cx="8" cy="14" r="1.3"/><path d="M2 20h20" /></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 10a6 6 0 1 1 12 0c0 3.5 1.2 5 2 6H4c.8-1 2-2.5 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4"/><path d="M9 13h6M9 17h6"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M3 5h18v11H8l-5 5z"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 7 18a3 3 0 0 0 5-2v-9a3 3 0 0 0-3-3Z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 17 18a3 3 0 0 1-5-2v-9a3 3 0 0 1 3-3Z"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.6V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10c.1.7.5 1.3 1.1 1.6.4.2.9.3 1.4.3H20a2 2 0 1 1 0 4h-.1c-.5 0-1 .1-1.5.3-.5.3-.9.8-1 1.3Z" fill="none" stroke="none" opacity="0"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.5"/></symbol>
+<symbol id="i-cross" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20Z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".4" fill="currentColor"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+<symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><circle cx="7" cy="7" r=".6" fill="currentColor"/><circle cx="7" cy="17" r=".6" fill="currentColor"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17 9 11l4 4 8-9"/><path d="M16 6h5v5"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-pie" viewBox="0 0 24 24"><path d="M12 12V3a9 9 0 1 1-9 9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21V14M4 10V3M12 21v-8M12 9V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 9h6M17 12h6"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M5 20h14"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.4-4.4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/></symbol>
+</defs>
+</svg>
+
+<!-- ============================================================ NAV ============================================================ -->
+<header class="nav-wrap">
+  <nav class="nav">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      SmartBI
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="navLinks">
+      <a href="#overview">Overview</a>
+      <a href="#architecture">How it works</a>
+      <a href="#modules">Modules</a>
+      <a href="#stack">Stack</a>
+      <a href="#future">Future</a>
+    </div>
+    <a href="#modules" class="btn btn-primary btn-sm nav-cta">Explore modules</a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- ============================================================ HERO ============================================================ -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-copy reveal">
+      <span class="eyebrow">AI Business Intelligence &amp; Predictive Analytics</span>
+      <h1>Your data already knows what's next.<br>SmartBI says it out loud.</h1>
+      <p class="lede">Connect a spreadsheet, a database, or an API and SmartBI cleans it, models it, and explains it back to you in plain English — forecasts, anomalies and recommendations included, no data scientist required.</p>
+      <div class="hero-ctas">
+        <a href="#modules" class="btn btn-primary">Explore the 14 modules</a>
+        <a href="#demos" class="btn btn-ghost">See it in action <svg class="icon icon-sm"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="hero-stats">
+        <div><strong data-count="14">0</strong><span>modules</span></div>
+        <div><strong data-count="5">0</strong><span>ML &amp; forecasting models</span></div>
+        <div><strong data-count="1000000" data-suffix="+">0</strong><span>rows processed &lt;30s</span></div>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 520 560" class="ribbon">
+        <defs>
+          <linearGradient id="rg1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#CFE0FF"/><stop offset="55%" stop-color="#8FB3F7"/><stop offset="100%" stop-color="#3D6FE0"/>
+          </linearGradient>
+          <linearGradient id="rg2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#E8EFFD"/><stop offset="100%" stop-color="#6E97EE"/>
+          </linearGradient>
+        </defs>
+        <g class="ribbon-band band-a">
+          <path d="M40 480 C 40 360, 160 360, 160 240 C 160 120, 280 120, 280 40" fill="none" stroke="url(#rg1)" stroke-width="34" stroke-linecap="round"/>
+        </g>
+        <g class="ribbon-band band-b">
+          <path d="M100 520 C 100 400, 220 400, 220 280 C 220 160, 340 160, 340 70" fill="none" stroke="url(#rg2)" stroke-width="22" stroke-linecap="round" opacity="0.85"/>
+        </g>
+        <g class="ribbon-band band-c">
+          <path d="M170 540 C 170 420, 290 430, 290 310 C 290 190, 400 200, 400 100" fill="none" stroke="url(#rg1)" stroke-width="14" stroke-linecap="round" opacity="0.6"/>
+        </g>
+        <g class="ribbon-dot">
+          <circle cx="280" cy="40" r="9" fill="#3D6FE0"/>
+        </g>
+      </svg>
+      <div class="hero-card card-float-1">
+        <svg class="icon"><use href="#i-trend"/></svg>
+        <div><strong>+18.4%</strong><span>Revenue vs last month</span></div>
+      </div>
+      <div class="hero-card card-float-2">
+        <svg class="icon" style="color:var(--rose)"><use href="#i-alert"/></svg>
+        <div><strong>Anomaly flagged</strong><span>Inventory · SKU-2291</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ PROBLEM ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">The problem</span>
+      <h2>Most businesses are data-rich and insight-poor</h2>
+      <p class="sub">Spreadsheets pile up. Dashboards go stale. By the time a problem is noticed by a human, it's already a quarter old.</p>
+    </div>
+    <div class="grid grid-3 reveal">
+      <div class="problem-card"><svg class="icon"><use href="#i-grid"/></svg><h3>No central analytics platform</h3><p>Data sits scattered across spreadsheets, tools and databases with nothing tying it together.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-bar"/></svg><h3>Spreadsheets, not signal</h3><p>Rows and columns don't tell a story on their own — someone still has to interpret them.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-trend"/></svg><h3>No predictive insight</h3><p>Most reporting looks backward. Few teams can see demand or revenue before it happens.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-alert"/></svg><h3>Anomalies go unnoticed</h3><p>A sales drop or a fraud pattern can run for weeks before anyone spots it manually.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-file"/></svg><h3>No automated reporting</h3><p>Reports are rebuilt by hand every cycle instead of generating themselves.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-brain"/></svg><h3>No data science on staff</h3><p>Smaller teams rarely have access to the modelling expertise larger companies take for granted.</p></div>
+    </div>
+    <div class="solution-banner reveal">
+      <svg class="icon"><use href="#i-bolt"/></svg>
+      <p>SmartBI replaces all six gaps with one automated, AI-driven analytics layer that sits on top of the data you already have.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ TARGET USERS ============================================================ -->
+<section class="section alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Who it's for</span>
+      <h2>Built for the people who run the business</h2>
+      <p class="sub">Not just the ones whose job title contains the word "analyst."</p>
+    </div>
+    <div class="users-grid reveal">
+      <div class="user-chip">Small businesses</div>
+      <div class="user-chip">Retail stores</div>
+      <div class="user-chip">E-commerce teams</div>
+      <div class="user-chip">Startups</div>
+      <div class="user-chip">Inventory teams</div>
+      <div class="user-chip">Sales managers</div>
+      <div class="user-chip">Marketing teams</div>
+      <div class="user-chip">Financial analysts</div>
+      <div class="user-chip">Manufacturers</div>
+      <div class="user-chip">Education orgs</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ ARCHITECTURE ============================================================ -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">System architecture</span>
+      <h2>Five layers, one continuous pipeline</h2>
+      <p class="sub">Every dataset travels the same path — from raw upload to a recommendation you can act on. Click a layer to open it.</p>
+    </div>
+    <div class="arch reveal" id="archList">
+      <div class="arch-layer active" data-layer="1">
+        <div class="arch-head"><span class="arch-num">01</span><svg class="icon"><use href="#i-upload"/></svg><h3>Data Collection</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>Pulls data in from CSV and Excel uploads, PostgreSQL, MySQL and MongoDB connections, or any REST API — whatever your business already uses to store information.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="2">
+        <div class="arch-head"><span class="arch-num">02</span><svg class="icon"><use href="#i-sliders"/></svg><h3>Data Processing</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>Validates schema, fixes missing values, removes duplicates, handles outliers and engineers features so every downstream model gets clean input.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="3">
+        <div class="arch-head"><span class="arch-num">03</span><svg class="icon"><use href="#i-brain"/></svg><h3>Machine Learning Engine</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>Runs clustering, forecasting (Prophet, ARIMA, LSTM) and anomaly-detection models against the cleaned dataset.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="4">
+        <div class="arch-head"><span class="arch-num">04</span><svg class="icon"><use href="#i-bolt"/></svg><h3>Business Intelligence Engine</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>Converts raw model output into KPIs, plain-English insights and answers to natural-language questions.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="5">
+        <div class="arch-head"><span class="arch-num">05</span><svg class="icon"><use href="#i-bar"/></svg><h3>Visualization &amp; Reporting</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>Renders dashboards, sends alerts and exports executive, sales, forecast and anomaly reports on demand.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ MODULES ============================================================ -->
+<section class="section alt" id="modules">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Inside the platform</span>
+      <h2>14 modules. Every one of them interactive below.</h2>
+      <p class="sub">Pick a module on the left — each panel includes the real feature list and a live sample of how it behaves.</p>
+    </div>
+
+    <div class="module-explorer reveal">
+      <div class="module-nav" id="moduleNav">
+        <button class="module-tab active" data-mod="m1"><span>01</span>User Management</button>
+        <button class="module-tab" data-mod="m2"><span>02</span>Data Ingestion</button>
+        <button class="module-tab" data-mod="m3"><span>03</span>Preprocessing</button>
+        <button class="module-tab" data-mod="m4"><span>04</span>Data Profiling</button>
+        <button class="module-tab" data-mod="m5"><span>05</span>Segmentation</button>
+        <button class="module-tab" data-mod="m6"><span>06</span>Sales Forecasting</button>
+        <button class="module-tab" data-mod="m7"><span>07</span>Anomaly Detection</button>
+        <button class="module-tab" data-mod="m8"><span>08</span>KPI Monitoring</button>
+        <button class="module-tab" data-mod="m9"><span>09</span>AI Insight Generator</button>
+        <button class="module-tab" data-mod="m10"><span>10</span>Natural Language Query</button>
+        <button class="module-tab" data-mod="m11"><span>11</span>Dashboard System</button>
+        <button class="module-tab" data-mod="m12"><span>12</span>Report Generation</button>
+        <button class="module-tab" data-mod="m13"><span>13</span>Notifications</button>
+        <button class="module-tab" data-mod="m14"><span>14</span>Admin Panel</button>
+      </div>
+
+      <div class="module-panels" id="modulePanels">
+
+        <!-- M1 -->
+        <div class="module-panel active" data-mod="m1">
+          <div class="panel-text">
+            <h3>User Management</h3>
+            <p>Registration, login and session handling, with role-based access so people only see what their role allows.</p>
+            <ul class="feature-list">
+              <li>User registration &amp; email verification</li><li>Login, JWT auth &amp; session management</li>
+              <li>Password reset &amp; profile management</li><li>Role-based access control</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Try it — switch roles</p>
+            <div class="role-switch">
+              <button class="role-btn active" data-role="Admin">Admin</button>
+              <button class="role-btn" data-role="Analyst">Analyst</button>
+              <button class="role-btn" data-role="Viewer">Viewer</button>
+            </div>
+            <ul class="permission-list" id="permList"></ul>
+          </div>
+        </div>
+
+        <!-- M2 -->
+        <div class="module-panel" data-mod="m2">
+          <div class="panel-text">
+            <h3>Data Ingestion Engine</h3>
+            <p>Accepts data from wherever your business keeps it, then validates and stores it before any modelling begins.</p>
+            <ul class="feature-list">
+              <li>CSV, Excel, PostgreSQL, MySQL, MongoDB, REST API</li>
+              <li>Checks for missing values, duplicates, bad types &amp; dates</li>
+              <li>Produces a Dataset Quality Report</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Upload workflow</p>
+            <button class="btn btn-primary btn-sm" id="runIngest">Run demo upload</button>
+            <ol class="stepper" id="ingestStepper">
+              <li data-step="0"><span class="dot"></span>Upload dataset</li>
+              <li data-step="1"><span class="dot"></span>Validate file</li>
+              <li data-step="2"><span class="dot"></span>Check schema</li>
+              <li data-step="3"><span class="dot"></span>Detect columns</li>
+              <li data-step="4"><span class="dot"></span>Store metadata</li>
+              <li data-step="5"><span class="dot"></span>Send for processing</li>
+            </ol>
+            <div class="source-row">
+              <span class="badge">CSV</span><span class="badge">Excel</span><span class="badge">PostgreSQL</span><span class="badge">MySQL</span><span class="badge">MongoDB</span><span class="badge">REST API</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- M3 -->
+        <div class="module-panel" data-mod="m3">
+          <div class="panel-text">
+            <h3>Data Preprocessing Engine</h3>
+            <p>Cleans every dataset automatically — missing values, duplicates, outliers and encoding — before it reaches a model.</p>
+            <ul class="feature-list">
+              <li>Missing-value handling &amp; duplicate removal</li>
+              <li>Outlier detection &amp; normalization</li>
+              <li>Feature engineering &amp; categorical encoding</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Raw vs. cleaned</p>
+            <div class="toggle-row">
+              <button class="seg-btn active" data-view="raw">Raw</button>
+              <button class="seg-btn" data-view="clean">Cleaned</button>
+            </div>
+            <table class="mini-table" id="cleanTable"></table>
+            <div class="quality-gauge">
+              <svg viewBox="0 0 120 120" width="92" height="92">
+                <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                <circle cx="60" cy="60" r="50" class="gauge-fg" id="gaugeFg"/>
+              </svg>
+              <div><strong id="gaugeVal">42%</strong><span>Data quality score</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- M4 -->
+        <div class="module-panel" data-mod="m4">
+          <div class="panel-text">
+            <h3>Data Profiling System</h3>
+            <p>Reads a dataset the moment it lands and tells you what's actually in it — before you build anything on top of it.</p>
+            <ul class="feature-list">
+              <li>Row/column counts &amp; data types</li>
+              <li>Null percentage &amp; statistical summary</li>
+              <li>Correlation matrix &amp; feature importance</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Sample profile report</p>
+            <div class="profile-grid">
+              <div class="profile-stat"><strong>48,210</strong><span>Rows</span></div>
+              <div class="profile-stat"><strong>23</strong><span>Columns</span></div>
+              <div class="profile-stat"><strong>2.1%</strong><span>Null values</span></div>
+              <div class="profile-stat"><strong>6</strong><span>Data types</span></div>
+            </div>
+            <p class="demo-label" style="margin-top:14px">Feature importance</p>
+            <div class="bar-row"><span>order_frequency</span><div class="bar"><i style="width:86%"></i></div></div>
+            <div class="bar-row"><span>avg_order_value</span><div class="bar"><i style="width:71%"></i></div></div>
+            <div class="bar-row"><span>region</span><div class="bar"><i style="width:54%"></i></div></div>
+            <div class="bar-row"><span>signup_channel</span><div class="bar"><i style="width:33%"></i></div></div>
+          </div>
+        </div>
+
+        <!-- M5 -->
+        <div class="module-panel" data-mod="m5">
+          <div class="panel-text">
+            <h3>Customer Segmentation Engine</h3>
+            <p>Groups customers by behaviour using K-Means clustering, with DBSCAN and hierarchical clustering planned next.</p>
+            <ul class="feature-list">
+              <li>K-Means clustering on behavioural data</li>
+              <li>Cluster heatmaps &amp; comparison cards</li>
+              <li>Roadmap: DBSCAN, hierarchical clustering</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Cluster scatter — click a card to isolate it</p>
+            <div class="chart-box"><svg id="segChart" viewBox="0 0 560 240" preserveAspectRatio="xMidYMid meet"></svg></div>
+            <div class="cluster-cards" id="clusterCards">
+              <div class="cluster-card" data-cluster="0" style="--c:#3D6FE0"><strong>High Spending</strong><span>Cluster 1</span></div>
+              <div class="cluster-card" data-cluster="1" style="--c:#16B8A6"><strong>Frequent Buyers</strong><span>Cluster 2</span></div>
+              <div class="cluster-card" data-cluster="2" style="--c:#F4A93B"><strong>Low Engagement</strong><span>Cluster 3</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- M6 -->
+        <div class="module-panel" data-mod="m6">
+          <div class="panel-text">
+            <h3>Sales Forecasting Engine</h3>
+            <p>Predicts revenue, demand and seasonal trends using Prophet, ARIMA and LSTM models.</p>
+            <ul class="feature-list">
+              <li>7 / 30 / 90-day forecasts</li>
+              <li>Future revenue &amp; product demand</li>
+              <li>Seasonal trend detection</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Forecast horizon</p>
+            <div class="toggle-row">
+              <button class="seg-btn" data-horizon="7">7 days</button>
+              <button class="seg-btn active" data-horizon="30">30 days</button>
+              <button class="seg-btn" data-horizon="90">90 days</button>
+            </div>
+            <div class="chart-box"><svg id="forecastChart" viewBox="0 0 640 240" preserveAspectRatio="xMidYMid meet"></svg></div>
+            <div class="chart-legend">
+              <span><i style="background:#3D6FE0"></i>Actual</span>
+              <span><i style="background:#16B8A6;--dash:1"></i>Forecast</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- M7 -->
+        <div class="module-panel" data-mod="m7">
+          <div class="panel-text">
+            <h3>Anomaly Detection Engine</h3>
+            <p>Watches every metric for behaviour that doesn't fit the pattern — using Isolation Forest, Local Outlier Factor and statistical detection.</p>
+            <ul class="feature-list">
+              <li>Sales drops &amp; revenue spikes</li>
+              <li>Inventory problems &amp; fraud patterns</li>
+              <li>Abnormal user activity</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Detected anomalies highlighted in red</p>
+            <div class="chart-box"><svg id="anomalyChart" viewBox="0 0 640 220" preserveAspectRatio="xMidYMid meet"></svg></div>
+            <ul class="alert-feed">
+              <li><svg class="icon icon-sm"><use href="#i-alert"/></svg><div><strong>Revenue spike</strong><span>Day 14 — 3.1× normal range</span></div><span class="sev sev-high">High</span></li>
+              <li><svg class="icon icon-sm"><use href="#i-alert"/></svg><div><strong>Inventory drop</strong><span>SKU-2291 — below safety stock</span></div><span class="sev sev-mid">Medium</span></li>
+              <li><svg class="icon icon-sm"><use href="#i-alert"/></svg><div><strong>Unusual login pattern</strong><span>14 attempts from new region</span></div><span class="sev sev-low">Low</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- M8 -->
+        <div class="module-panel" data-mod="m8">
+          <div class="panel-text">
+            <h3>KPI Monitoring Engine</h3>
+            <p>Tracks the metrics that actually run the business in real time, with threshold alerts when something moves too far.</p>
+            <ul class="feature-list">
+              <li>Revenue, profit, orders, AOV &amp; more</li>
+              <li>Real-time + historical tracking</li>
+              <li>Threshold-based alerts</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Live KPI cards</p>
+            <div class="kpi-grid" id="kpiGrid"></div>
+          </div>
+        </div>
+
+        <!-- M9 -->
+        <div class="module-panel" data-mod="m9">
+          <div class="panel-text">
+            <h3>AI Insight Generator</h3>
+            <p>Turns analytics into plain English so anyone — not just an analyst — can understand what the numbers mean.</p>
+            <ul class="feature-list">
+              <li>LLM-generated natural-language insights</li>
+              <li>Surfaces the "why," not just the "what"</li>
+              <li>Feeds dashboards, reports and alerts</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Click to generate an insight</p>
+            <div class="insight-card">
+              <span class="ai-badge"><svg class="icon icon-sm"><use href="#i-spark"/></svg>AI</span>
+              <p id="insightText">Sales increased by 18% this month compared to last month.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="genInsight">Generate insight</button>
+          </div>
+        </div>
+
+        <!-- M10 -->
+        <div class="module-panel" data-mod="m10">
+          <div class="panel-text">
+            <h3>Natural Language Querying</h3>
+            <p>Ask a plain question about your business and get an instant answer — no dashboard digging, no SQL.</p>
+            <ul class="feature-list">
+              <li>Converts plain text into an analytics query</li>
+              <li>Answers instantly from your live data</li>
+              <li>Roadmap: full conversational chat with your data</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Ask SmartBI</p>
+            <div class="chat-window" id="chatWindow"></div>
+            <div class="chat-suggestions">
+              <button class="chip-btn">Top selling products last month?</button>
+              <button class="chip-btn">Which region is underperforming?</button>
+            </div>
+            <form class="chat-input" id="chatForm">
+              <input type="text" id="chatInput" placeholder="Ask about your business data…" autocomplete="off">
+              <button type="submit" class="btn btn-primary btn-sm">Ask</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- M11 -->
+        <div class="module-panel" data-mod="m11">
+          <div class="panel-text">
+            <h3>Dashboard System</h3>
+            <p>Five purpose-built dashboards, all sharing the same modern, responsive, dark-mode-ready widget library.</p>
+            <ul class="feature-list">
+              <li>Executive, Sales, Customer, Inventory, Forecast views</li>
+              <li>Charts, heatmaps, KPI cards, tables</li>
+              <li>Modern bento layout, dark mode, fully responsive</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Switch dashboard</p>
+            <div class="toggle-row" id="dashTabs">
+              <button class="seg-btn active" data-dash="exec">Executive</button>
+              <button class="seg-btn" data-dash="sales">Sales</button>
+              <button class="seg-btn" data-dash="customer">Customer</button>
+              <button class="seg-btn" data-dash="inventory">Inventory</button>
+              <button class="seg-btn" data-dash="forecast">Forecast</button>
+            </div>
+            <div class="bento" id="bentoView"></div>
+          </div>
+        </div>
+
+        <!-- M12 -->
+        <div class="module-panel" data-mod="m12">
+          <div class="panel-text">
+            <h3>Report Generation</h3>
+            <p>Exports executive, sales, forecast, customer and anomaly reports — complete with charts, insights and recommendations.</p>
+            <ul class="feature-list">
+              <li>Export to PDF, Excel or CSV</li>
+              <li>Five report types, generated on demand</li>
+              <li>Includes charts, insights &amp; recommendations</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Generate a report</p>
+            <select class="select" id="reportType">
+              <option>Executive Report</option><option>Sales Report</option><option>Forecast Report</option>
+              <option>Customer Analysis Report</option><option>Anomaly Report</option>
+            </select>
+            <button class="btn btn-primary btn-sm" id="genReport">Generate report</button>
+            <div class="progress-track" id="progressTrack" hidden><div class="progress-fill" id="progressFill"></div></div>
+            <div class="report-ready" id="reportReady" hidden>
+              <svg class="icon" style="color:var(--mint)"><use href="#i-check"/></svg>
+              <span id="reportReadyText">Executive Report ready</span>
+              <div class="export-row">
+                <button class="export-btn" data-fmt="PDF"><svg class="icon icon-sm"><use href="#i-file"/></svg>PDF</button>
+                <button class="export-btn" data-fmt="Excel"><svg class="icon icon-sm"><use href="#i-grid"/></svg>Excel</button>
+                <button class="export-btn" data-fmt="CSV"><svg class="icon icon-sm"><use href="#i-download"/></svg>CSV</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- M13 -->
+        <div class="module-panel" data-mod="m13">
+          <div class="panel-text">
+            <h3>Notification System</h3>
+            <p>Sends alerts the moment something needs attention, by email or directly in the app.</p>
+            <ul class="feature-list">
+              <li>Email &amp; in-app notifications</li>
+              <li>Sales drop, forecast &amp; anomaly alerts</li>
+              <li>Dataset-processing completion alerts</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Trigger a sample notification</p>
+            <div class="notif-buttons">
+              <button class="btn btn-soft btn-sm" data-toast="drop">Sales drop alert</button>
+              <button class="btn btn-soft btn-sm" data-toast="forecast">Forecast alert</button>
+              <button class="btn btn-soft btn-sm" data-toast="anomaly">Anomaly alert</button>
+              <button class="btn btn-soft btn-sm" data-toast="done">Processing complete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- M14 -->
+        <div class="module-panel" data-mod="m14">
+          <div class="panel-text">
+            <h3>Admin Panel</h3>
+            <p>One control room for the whole platform — users, datasets, system health and audit trails.</p>
+            <ul class="feature-list">
+              <li>User &amp; dataset management</li>
+              <li>Analytics &amp; system-health monitoring</li>
+              <li>Audit logs &amp; storage monitoring</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Admin overview</p>
+            <div class="profile-grid">
+              <div class="profile-stat"><strong>1,248</strong><span>Total users</span></div>
+              <div class="profile-stat"><strong>362</strong><span>Datasets stored</span></div>
+              <div class="profile-stat"><strong>99.4%</strong><span>System health</span></div>
+              <div class="profile-stat"><strong>71%</strong><span>Storage used</span></div>
+            </div>
+            <p class="demo-label" style="margin-top:14px">Audit log</p>
+            <ul class="audit-log">
+              <li><span>09:41</span> Analyst <b>R. Mehta</b> uploaded <i>q2_sales.csv</i></li>
+              <li><span>09:38</span> Admin <b>S. Patel</b> updated role permissions</li>
+              <li><span>09:12</span> System completed nightly backup</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ NFR ============================================================ -->
+<section class="section" id="demos">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Built to be trusted</span>
+      <h2>Non-functional requirements aren't an afterthought</h2>
+    </div>
+    <div class="grid grid-3 reveal">
+      <div class="nfr-card"><svg class="icon"><use href="#i-clock"/></svg><strong data-count="30" data-suffix="s">0</strong><h3>Performance</h3><p>Dataset processing completes in under 30 seconds.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-server"/></svg><strong data-count="1" data-suffix="M rows">0</strong><h3>Scalability</h3><p>Handles datasets up to one million rows.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-lock"/></svg><strong>JWT</strong><h3>Security</h3><p>Encrypted passwords, HTTPS and role-based permissions.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-shield"/></svg><strong>Auto</strong><h3>Reliability</h3><p>Automatic backups and built-in error recovery.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-users"/></svg><strong>Zero</strong><h3>Usability</h3><p>Designed so non-technical users can operate it confidently.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-bolt"/></svg><strong data-count="99" data-suffix="%">0</strong><h3>Availability</h3><p>Built toward a 99% uptime target.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ STACK ============================================================ -->
+<section class="section alt" id="stack">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Technology stack</span>
+      <h2>One stack, end to end</h2>
+    </div>
+    <div class="stack-grid reveal">
+      <div class="stack-col"><h4>Frontend</h4><div class="pills"><span>Next.js</span><span>React</span><span>TypeScript</span><span>Tailwind CSS</span><span>ShadCN UI</span><span>Recharts</span></div></div>
+      <div class="stack-col"><h4>Backend</h4><div class="pills"><span>Node.js</span><span>Express.js</span><span>TypeScript</span></div></div>
+      <div class="stack-col"><h4>Machine Learning</h4><div class="pills"><span>Python</span><span>Pandas</span><span>NumPy</span><span>Scikit-Learn</span><span>TensorFlow</span><span>Prophet</span></div></div>
+      <div class="stack-col"><h4>Database &amp; Caching</h4><div class="pills"><span>PostgreSQL</span><span>Redis</span></div></div>
+      <div class="stack-col"><h4>Deployment</h4><div class="pills"><span>Docker</span><span>AWS</span><span>Vercel</span></div></div>
+      <div class="stack-col"><h4>Version Control</h4><div class="pills"><span>Git</span><span>GitHub</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ FUTURE ============================================================ -->
+<section class="section" id="future">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">What's next</span>
+      <h2>Future scope</h2>
+      <p class="sub">SmartBI's roadmap beyond the current 14 modules.</p>
+    </div>
+    <div class="grid grid-5 reveal" id="futureGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ FOOTER ============================================================ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <a href="#top" class="brand"><span class="brand-mark" aria-hidden="true"></span>SmartBI</a>
+      <p>An AI-powered business intelligence concept — built to show what automated analytics could look like for teams without a data science desk.</p>
+    </div>
+    <a href="#modules" class="btn btn-primary">Explore the modules</a>
+  </div>
+  <div class="container footer-bottom">
+    <span>Portfolio project · Interactive demos are simulated, not connected to live data.</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+</main>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script>
+/* ============================================================ DATA HELPERS ============================================================ */
+const $  = (s, c=document) => c.querySelector(s);
+const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
+
+/* ---------- Mobile nav ---------- */
+$('#navToggle').addEventListener('click', () => {
+  $('#navLinks').classList.toggle('open');
+  $('#navToggle').classList.toggle('open');
+});
+$$('#navLinks a').forEach(a => a.addEventListener('click', () => {
+  $('#navLinks').classList.remove('open');
+  $('#navToggle').classList.remove('open');
+}));
+
+/* ---------- Scroll reveal ---------- */
+const revealItems = $$('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+revealItems.forEach(el => io.observe(el));
+
+/* ---------- Animated counters ---------- */
+function animateCount(el) {
+  const target = parseInt(el.dataset.count, 10);
+  const suffix = el.dataset.suffix || '';
+  const dur = 1100;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = Math.round(target * eased);
+    el.textContent = (val >= 1000000 ? (val/1000000).toFixed(val % 1000000 === 0 ? 0 : 1) + 'M' :
+                       val >= 1000 ? (val/1000).toFixed(val % 1000 === 0 ? 0 : 1) + 'K' : val) + suffix;
+    if (p < 1) requestAnimationFrame(tick); else {
+      el.textContent = (target >= 1000000 ? (target/1000000) + 'M' : target >= 1000 ? (target/1000)+'K' : target) + suffix;
+    }
+  }
+  requestAnimationFrame(tick);
+}
+const countIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCount(e.target); countIO.unobserve(e.target); } });
+}, { threshold: 0.4 });
+$$('[data-count]').forEach(el => countIO.observe(el));
+
+/* ---------- Toasts ---------- */
+const toastData = {
+  drop:     { icon:'i-alert',   color:'rose', title:'Sales Drop Alert',        msg:'Daily revenue is 22% below the 7-day average.' },
+  forecast: { icon:'i-trend',   color:'blue', title:'Forecast Alert',         msg:'Demand for Product B expected to rise next week.' },
+  anomaly:  { icon:'i-alert',   color:'amber',title:'Anomaly Alert',          msg:'Unusual login activity detected on Account #4471.' },
+  done:     { icon:'i-check',   color:'mint', title:'Dataset Processing Complete', msg:'sales_q2.csv is cleaned, profiled and ready.' },
+};
+function showToast(key) {
+  const d = toastData[key]; if (!d) return;
+  const el = document.createElement('div');
+  el.className = `toast toast-${d.color}`;
+  el.innerHTML = `<svg class="icon icon-sm"><use href="#${d.icon}"/></svg><div><strong>${d.title}</strong><span>${d.msg}</span></div>`;
+  $('#toastStack').appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 350); }, 4200);
+}
+$$('[data-toast]').forEach(btn => btn.addEventListener('click', () => showToast(btn.dataset.toast)));
+
+/* ============================================================ ARCHITECTURE ACCORDION ============================================================ */
+$$('.arch-layer').forEach(layer => {
+  layer.querySelector('.arch-head').addEventListener('click', () => {
+    const isActive = layer.classList.contains('active');
+    $$('.arch-layer').forEach(l => l.classList.remove('active'));
+    if (!isActive) layer.classList.add('active');
+  });
+});
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+const moduleTabs = $$('.module-tab');
+const modulePanels = $$('.module-panel');
+moduleTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    moduleTabs.forEach(t => t.classList.remove('active'));
+    modulePanels.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $(`.module-panel[data-mod="${tab.dataset.mod}"]`).classList.add('active');
+    initModuleCharts(tab.dataset.mod);
+  });
+});
+
+/* ---------- M1: role switcher ---------- */
+const permissions = {
+  Admin:   [['Manage all users & roles', true], ['Upload data & generate reports', true], ['View dashboards', true], ['Configure system settings', true]],
+  Analyst: [['Manage all users & roles', false], ['Upload data & generate reports', true], ['View dashboards', true], ['Configure system settings', false]],
+  Viewer:  [['Manage all users & roles', false], ['Upload data & generate reports', false], ['View dashboards', true], ['Configure system settings', false]],
+};
+function renderPerms(role) {
+  $('#permList').innerHTML = permissions[role].map(([label, allowed]) =>
+    `<li class="${allowed ? 'allowed' : 'denied'}"><svg class="icon icon-sm"><use href="#${allowed ? 'i-check' : 'i-cross'}"/></svg>${label}</li>`).join('');
+}
+$$('.role-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('.role-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPerms(btn.dataset.role);
+}));
+renderPerms('Admin');
+
+/* ---------- M2: ingestion stepper ---------- */
+$('#runIngest').addEventListener('click', () => {
+  const steps = $$('#ingestStepper li');
+  steps.forEach(s => s.classList.remove('done', 'current'));
+  steps.forEach((s, i) => setTimeout(() => {
+    steps.forEach(x => x.classList.remove('current'));
+    s.classList.add('current');
+    setTimeout(() => { s.classList.remove('current'); s.classList.add('done'); }, 380);
+  }, i * 420));
+});
+
+/* ---------- M3: raw vs cleaned table + gauge ---------- */
+const rawRows = [
+  ['1','Acme Co','—','120.00'], ['2','beta llc','2024/13/40','85.50'], ['2','beta llc','2024/13/40','85.50'],
+  ['3','Globex','03-11-2024','—'], ['4','N/A','03-12-2024','64.20'],
+];
+const cleanRows = [
+  ['1','Acme Co','2024-03-10','120.00'], ['2','Beta LLC','2024-03-11','85.50'],
+  ['3','Globex','2024-03-11','71.30'], ['4','Unknown','2024-03-12','64.20'],
+];
+function renderTable(view) {
+  const rows = view === 'raw' ? rawRows : cleanRows;
+  $('#cleanTable').innerHTML = `<tr><th>ID</th><th>Customer</th><th>Date</th><th>Amount</th></tr>` +
+    rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
+}
+function setGauge(pct) {
+  const circ = 2 * Math.PI * 50;
+  $('#gaugeFg').style.strokeDasharray = `${circ}`;
+  $('#gaugeFg').style.strokeDashoffset = `${circ * (1 - pct/100)}`;
+  $('#gaugeVal').textContent = pct + '%';
+}
+$$('.module-panel[data-mod="m3"] .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('.module-panel[data-mod="m3"] .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const view = btn.dataset.view;
+  renderTable(view);
+  setGauge(view === 'raw' ? 42 : 96);
+}));
+renderTable('raw'); setGauge(42);
+
+/* ============================================================ CHARTS (lazy init per module, pure SVG — no external deps) ============================================================ */
+let chartsInit = { m5:false, m6:false, m7:false };
+
+function initModuleCharts(mod) {
+  if (mod === 'm5' && !chartsInit.m5) { buildSegChart(); chartsInit.m5 = true; }
+  if (mod === 'm6' && !chartsInit.m6) { buildForecastChart(30); chartsInit.m6 = true; }
+  if (mod === 'm7' && !chartsInit.m7) { buildAnomalyChart(); chartsInit.m7 = true; }
+  if (mod === 'm8') renderKpis();
+  if (mod === 'm11') renderDash('exec');
+}
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs = {}) {
+  const el = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+function showSvgTooltip(svg, x, y, lines) {
+  let tip = svg.querySelector('.chart-tooltip');
+  if (tip) tip.remove();
+  tip = svgEl('g', { class: 'chart-tooltip' });
+  const padX = 8, padY = 6, lineH = 14;
+  const w = Math.max(...lines.map(l => l.length * 6.2)) + padX * 2;
+  const h = lines.length * lineH + padY * 2 - 4;
+  let tx = x + 10, ty = y - h - 10;
+  const vb = svg.viewBox.baseVal;
+  if (tx + w > vb.width) tx = x - w - 10;
+  if (ty < 0) ty = y + 14;
+  tip.appendChild(svgEl('rect', { x: tx, y: ty, width: w, height: h }));
+  lines.forEach((line, i) => {
+    const t = svgEl('text', { x: tx + padX, y: ty + padY + (i + 1) * lineH - 4 });
+    t.textContent = line;
+    tip.appendChild(t);
+  });
+  svg.appendChild(tip);
+}
+function hideSvgTooltip(svg) {
+  const tip = svg.querySelector('.chart-tooltip');
+  if (tip) tip.remove();
+}
+
+/* ---------- M5: cluster scatter ---------- */
+const segClusters = [
+  { label: 'High Spending', color: '#3D6FE0', cx: 75, cy: 28, spread: 24 },
+  { label: 'Frequent Buyers', color: '#16B8A6', cx: 40, cy: 60, spread: 22 },
+  { label: 'Low Engagement', color: '#F4A93B', cx: 18, cy: 86, spread: 16 },
+];
+let segPoints = null;
+function buildSegChart() {
+  const W = 560, H = 240, padL = 46, padR = 16, padT = 12, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  if (!segPoints) {
+    segPoints = segClusters.map(c => Array.from({ length: 18 }, () => ({
+      x: Math.min(100, Math.max(0, c.cx + (Math.random() - 0.5) * c.spread)),
+      y: Math.min(100, Math.max(0, c.cy + (Math.random() - 0.5) * c.spread)),
+    })));
+  }
+  const svg = $('#segChart');
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const x2px = v => padL + (v / 100) * plotW;
+  const y2px = v => padT + plotH - (v / 100) * plotH;
+
+  // gridlines
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + (plotH / 4) * i;
+    svg.appendChild(svgEl('line', { x1: padL, x2: W - padR, y1: gy, y2: gy, class: 'chart-gridline' }));
+  }
+  // axes labels
+  const xLabel = svgEl('text', { x: padL + plotW / 2, y: H - 4, 'text-anchor': 'middle', class: 'chart-axis-label' });
+  xLabel.textContent = 'Order frequency →';
+  svg.appendChild(xLabel);
+  const yLabel = svgEl('text', { x: 14, y: padT + plotH / 2, 'text-anchor': 'middle', class: 'chart-axis-label', transform: `rotate(-90 14 ${padT + plotH / 2})` });
+  yLabel.textContent = 'Avg. order value →';
+  svg.appendChild(yLabel);
+
+  const dotsGroup = svgEl('g');
+  segClusters.forEach((c, ci) => {
+    segPoints[ci].forEach(p => {
+      const dot = svgEl('circle', {
+        cx: x2px(p.x), cy: y2px(p.y), r: 5, fill: c.color, opacity: 0.78,
+        class: 'chart-dot', 'data-cluster': ci,
+      });
+      dot.addEventListener('mouseenter', () => showSvgTooltip(svg, x2px(p.x), y2px(p.y), [c.label]));
+      dot.addEventListener('mouseleave', () => hideSvgTooltip(svg));
+      dotsGroup.appendChild(dot);
+    });
+  });
+  svg.appendChild(dotsGroup);
+}
+let segActiveCluster = null;
+function applySegIsolation() {
+  $$('#segChart .chart-dot').forEach(dot => {
+    const ci = dot.getAttribute('data-cluster');
+    dot.style.opacity = (segActiveCluster === null || ci === String(segActiveCluster)) ? 0.78 : 0.08;
+  });
+  $$('#clusterCards .cluster-card').forEach(card => {
+    const ci = card.dataset.cluster;
+    card.classList.toggle('dim', segActiveCluster !== null && ci !== String(segActiveCluster));
+    card.classList.toggle('is-active', ci === String(segActiveCluster));
+  });
+}
+$$('#clusterCards .cluster-card').forEach(card => card.addEventListener('click', () => {
+  const ci = parseInt(card.dataset.cluster, 10);
+  segActiveCluster = (segActiveCluster === ci) ? null : ci;
+  applySegIsolation();
+}));
+
+/* ---------- M6: forecast line + area chart ---------- */
+let forecastCache = {};
+function buildForecastChart(horizon) {
+  const W = 640, H = 240, padL = 44, padR = 16, padT = 14, padB = 26;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const histDays = 14;
+
+  if (!forecastCache.hist) {
+    forecastCache.hist = Array.from({ length: histDays }, (_, i) => 4000 + Math.sin(i / 2) * 600 + Math.random() * 300 + i * 40);
+  }
+  const hist = forecastCache.hist;
+  const lastVal = hist[hist.length - 1];
+  if (!forecastCache.fc || forecastCache.fc.horizon !== horizon) {
+    forecastCache.fc = { horizon, data: Array.from({ length: horizon }, (_, i) => lastVal + i * 35 + Math.sin(i / 5) * 250) };
+  }
+  const fc = forecastCache.fc.data;
+
+  const allVals = [...hist, ...fc];
+  const minV = Math.min(...allVals) * 0.95, maxV = Math.max(...allVals) * 1.05;
+  const totalPts = histDays + horizon;
+  const x2px = i => padL + (i / (totalPts - 1)) * plotW;
+  const y2px = v => padT + plotH - ((v - minV) / (maxV - minV)) * plotH;
+
+  const svg = $('#forecastChart');
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + (plotH / 4) * i;
+    svg.appendChild(svgEl('line', { x1: padL, x2: W - padR, y1: gy, y2: gy, class: 'chart-gridline' }));
+  }
+
+  // actual (solid + filled area)
+  const histPts = hist.map((v, i) => [x2px(i), y2px(v)]);
+  const areaPath = `M${histPts[0][0]},${padT + plotH} ` + histPts.map(p => `L${p[0]},${p[1]}`).join(' ') + ` L${histPts[histPts.length - 1][0]},${padT + plotH} Z`;
+  svg.appendChild(svgEl('path', { d: areaPath, fill: 'rgba(61,111,224,0.08)', stroke: 'none' }));
+  const histPath = 'M' + histPts.map(p => p.join(',')).join(' L');
+  svg.appendChild(svgEl('path', { d: histPath, fill: 'none', stroke: '#3D6FE0', 'stroke-width': 2.5 }));
+
+  // forecast (dashed, continues from last actual point)
+  const fcPts = [[x2px(histDays - 1), y2px(hist[histDays - 1])], ...fc.map((v, i) => [x2px(histDays + i), y2px(v)])];
+  const fcPath = 'M' + fcPts.map(p => p.join(',')).join(' L');
+  svg.appendChild(svgEl('path', { d: fcPath, fill: 'none', stroke: '#16B8A6', 'stroke-width': 2.5, 'stroke-dasharray': '7,5' }));
+
+  // hover targets
+  const allPts = [...hist.map((v, i) => ({ x: i, v, kind: 'Actual' })), ...fc.map((v, i) => ({ x: histDays + i, v, kind: 'Forecast' }))];
+  const hitGroup = svgEl('g');
+  allPts.forEach(p => {
+    const px = x2px(p.x), py = y2px(p.v);
+    const hit = svgEl('circle', { cx: px, cy: py, r: 7, fill: 'transparent', class: 'chart-dot' });
+    hit.addEventListener('mouseenter', () => showSvgTooltip(svg, px, py, [p.kind, `Day ${p.x + 1} · $${Math.round(p.v).toLocaleString()}`]));
+    hit.addEventListener('mouseleave', () => hideSvgTooltip(svg));
+    hitGroup.appendChild(hit);
+  });
+  svg.appendChild(hitGroup);
+
+  // x-axis day labels (sparse)
+  const labelEvery = Math.ceil(totalPts / 6);
+  for (let i = 0; i < totalPts; i += labelEvery) {
+    const t = svgEl('text', { x: x2px(i), y: H - 6, 'text-anchor': 'middle', class: 'chart-axis-label' });
+    t.textContent = 'D' + (i + 1);
+    svg.appendChild(t);
+  }
+}
+$$('.module-panel[data-mod="m6"] .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('.module-panel[data-mod="m6"] .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildForecastChart(parseInt(btn.dataset.horizon, 10));
+}));
+
+/* ---------- M7: anomaly detection line chart ---------- */
+function buildAnomalyChart() {
+  const W = 640, H = 220, padL = 44, padR = 16, padT = 14, padB = 26;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const n = 24;
+  const data = Array.from({ length: n }, (_, i) => 500 + Math.sin(i / 3) * 60 + Math.random() * 40);
+  const anomalyIdx = [6, 14, 19];
+  anomalyIdx.forEach(i => data[i] += (i % 2 ? 220 : -180));
+  const minV = Math.min(...data) * 0.92, maxV = Math.max(...data) * 1.08;
+  const x2px = i => padL + (i / (n - 1)) * plotW;
+  const y2px = v => padT + plotH - ((v - minV) / (maxV - minV)) * plotH;
+
+  const svg = $('#anomalyChart');
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + (plotH / 4) * i;
+    svg.appendChild(svgEl('line', { x1: padL, x2: W - padR, y1: gy, y2: gy, class: 'chart-gridline' }));
+  }
+
+  const pts = data.map((v, i) => [x2px(i), y2px(v)]);
+  const areaPath = `M${pts[0][0]},${padT + plotH} ` + pts.map(p => `L${p[0]},${p[1]}`).join(' ') + ` L${pts[pts.length - 1][0]},${padT + plotH} Z`;
+  svg.appendChild(svgEl('path', { d: areaPath, fill: 'rgba(61,111,224,0.05)', stroke: 'none' }));
+  const linePath = 'M' + pts.map(p => p.join(',')).join(' L');
+  svg.appendChild(svgEl('path', { d: linePath, fill: 'none', stroke: '#B9C7E6', 'stroke-width': 2 }));
+
+  data.forEach((v, i) => {
+    const isAnomaly = anomalyIdx.includes(i);
+    const [px, py] = pts[i];
+    const dot = svgEl('circle', {
+      cx: px, cy: py, r: isAnomaly ? 6 : 2.5,
+      fill: isAnomaly ? '#EF5B6F' : '#3D6FE0', class: 'chart-dot',
+    });
+    dot.addEventListener('mouseenter', () => showSvgTooltip(svg, px, py, [isAnomaly ? 'Anomaly detected' : 'Daily orders', `D${i + 1} · ${Math.round(v)} orders`]));
+    dot.addEventListener('mouseleave', () => hideSvgTooltip(svg));
+    svg.appendChild(dot);
+  });
+
+  const labelEvery = Math.ceil(n / 8);
+  for (let i = 0; i < n; i += labelEvery) {
+    const t = svgEl('text', { x: x2px(i), y: H - 6, 'text-anchor': 'middle', class: 'chart-axis-label' });
+    t.textContent = 'D' + (i + 1);
+    svg.appendChild(t);
+  }
+}
+
+/* ---------- M8: KPI cards with inline SVG sparkline ---------- */
+const kpiData = [
+  { label: 'Revenue', value: '$482K', delta: '+18.4%', up: true, points:[10,14,12,18,22,19,26] },
+  { label: 'Profit', value: '$96K', delta: '+9.1%', up: true, points:[5,7,6,9,8,11,13] },
+  { label: 'Orders', value: '3,214', delta: '+4.2%', up: true, points:[20,22,21,19,23,24,26] },
+  { label: 'Retention', value: '87%', delta: '-1.3%', up: false, points:[30,29,31,28,27,26,27] },
+  { label: 'Conversion Rate', value: '4.6%', delta: '+0.6%', up: true, points:[6,7,6,8,9,8,10] },
+  { label: 'Avg. Order Value', value: '$150', delta: '+2.0%', up: true, points:[12,13,12,14,15,14,16] },
+];
+function sparkPath(points, w=80, h=28) {
+  const max = Math.max(...points), min = Math.min(...points);
+  const step = w / (points.length - 1);
+  return points.map((p,i) => {
+    const x = i*step;
+    const y = h - ((p-min)/(max-min || 1)) * h;
+    return `${i===0?'M':'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+}
+function renderKpis() {
+  if ($('#kpiGrid').dataset.done) return;
+  $('#kpiGrid').dataset.done = '1';
+  $('#kpiGrid').innerHTML = kpiData.map(k => `
+    <div class="kpi-card">
+      <span class="kpi-label">${k.label}</span>
+      <strong class="kpi-value">${k.value}</strong>
+      <span class="kpi-delta ${k.up ? 'up' : 'down'}">${k.delta}</span>
+      <svg viewBox="0 0 80 28" class="kpi-spark"><path d="${sparkPath(k.points)}" fill="none" stroke="${k.up ? '#16B8A6' : '#EF5B6F'}" stroke-width="2"/></svg>
+    </div>`).join('');
+}
+
+/* ---------- M9: insight generator ---------- */
+const insights = [
+  'Sales increased by 18% this month compared to last month.',
+  'Customer Segment A contributes 42% of total revenue.',
+  'Product X is expected to face increased demand next month.',
+  'Marketing spend efficiency improved 11% after the regional campaign shift.',
+  'Inventory turnover for the East region slowed by 6% over two weeks.',
+];
+let insightIdx = 0;
+$('#genInsight').addEventListener('click', () => {
+  insightIdx = (insightIdx + 1) % insights.length;
+  const el = $('#insightText');
+  el.style.opacity = 0;
+  setTimeout(() => { el.textContent = insights[insightIdx]; el.style.opacity = 1; }, 180);
+});
+
+/* ---------- M10: NLQ chat ---------- */
+const nlqAnswers = {
+  'top selling products last month?': 'Your top three products last month were Product A ($62K), Product C ($48K) and Product F ($31K).',
+  'which region is underperforming?': 'The East region is underperforming, with revenue 14% below forecast for the last 30 days.',
+};
+function defaultAnswer(q) {
+  return `Based on your connected data, here's what I found for "${q}" — revenue and order volume both trended upward over the selected period, with no major anomalies detected.`;
+}
+function addChatBubble(role, text) {
+  const win = $('#chatWindow');
+  const b = document.createElement('div');
+  b.className = `bubble ${role}`;
+  b.textContent = text;
+  win.appendChild(b);
+  win.scrollTop = win.scrollHeight;
+}
+function addTyping() {
+  const win = $('#chatWindow');
+  const t = document.createElement('div');
+  t.className = 'bubble bot typing';
+  t.innerHTML = '<span></span><span></span><span></span>';
+  win.appendChild(t);
+  win.scrollTop = win.scrollHeight;
+  return t;
+}
+function askQuestion(q) {
+  addChatBubble('user', q);
+  const typingEl = addTyping();
+  setTimeout(() => {
+    typingEl.remove();
+    const key = q.trim().toLowerCase();
+    addChatBubble('bot', nlqAnswers[key] || defaultAnswer(q));
+  }, 700);
+}
+$('#chatForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const input = $('#chatInput');
+  if (!input.value.trim()) return;
+  askQuestion(input.value.trim());
+  input.value = '';
+});
+$$('.chat-suggestions .chip-btn').forEach(btn => btn.addEventListener('click', () => askQuestion(btn.textContent)));
+addChatBubble('bot', "Ask me anything about your business data — try one of the suggestions below.");
+
+/* ---------- M11: dashboard bento preview ---------- */
+const dashContent = {
+  exec:      [['KPI Cards','Revenue · Profit · Orders · AOV'], ['Trend Chart','Revenue vs. target, 90 days'], ['Top Insight','AI-generated summary of the week'], ['Alerts','2 active threshold alerts']],
+  sales:     [['Sales Funnel','Lead → Opportunity → Closed'], ['Top Products','Ranked by revenue'], ['Forecast','Next 30 days'], ['Rep Leaderboard','By closed revenue']],
+  customer:  [['Segments','High spend · Frequent · Low engagement'], ['Retention Curve','Cohort by signup month'], ['Lifetime Value','By segment'], ['Churn Risk','Flagged accounts']],
+  inventory: [['Stock Levels','By SKU and warehouse'], ['Turnover Rate','30-day rolling'], ['Reorder Alerts','Below safety stock'], ['Demand Forecast','Next 30 days']],
+  forecast:  [['Revenue Forecast','Prophet model, 90 days'], ['Demand Forecast','By product line'], ['Seasonal Trends','Year-over-year'], ['Confidence Band','Upper / lower bounds']],
+};
+function renderDash(key) {
+  $('#bentoView').innerHTML = dashContent[key].map(([t,d]) => `<div class="bento-card"><h4>${t}</h4><p>${d}</p></div>`).join('');
+}
+$$('#dashTabs .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('#dashTabs .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDash(btn.dataset.dash);
+}));
+
+/* ---------- M12: report generation ---------- */
+$('#genReport').addEventListener('click', () => {
+  const track = $('#progressTrack'), fill = $('#progressFill'), ready = $('#reportReady');
+  ready.hidden = true; track.hidden = false; fill.style.width = '0%';
+  let pct = 0;
+  const iv = setInterval(() => {
+    pct += Math.random()*18 + 8;
+    if (pct >= 100) { pct = 100; clearInterval(iv);
+      setTimeout(() => { track.hidden = true; ready.hidden = false; $('#reportReadyText').textContent = `${$('#reportType').value} ready`; }, 300);
+    }
+    fill.style.width = pct + '%';
+  }, 220);
+});
+$$('.export-btn').forEach(btn => btn.addEventListener('click', () => showToastSimple(`${btn.dataset.fmt} export started — this is a demo, no file is generated.`)));
+function showToastSimple(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast toast-blue';
+  el.innerHTML = `<svg class="icon icon-sm"><use href="#i-download"/></svg><div><strong>Demo export</strong><span>${msg}</span></div>`;
+  $('#toastStack').appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 350); }, 4000);
+}
+
+/* ============================================================ FUTURE SCOPE ============================================================ */
+const future = [
+  ['Real-Time Streaming Analytics','i-bolt'], ['AI Business Consultant','i-brain'], ['Voice-Based Analytics','i-message'],
+  ['Multi-Tenant SaaS Architecture','i-layers'], ['AutoML Model Selection','i-sliders'], ['Industry-Specific Templates','i-grid'],
+  ['Mobile Application','i-bar'], ['Explainable AI','i-spark'], ['Generative BI Reports','i-file'], ['Enterprise Integrations','i-database'],
+];
+$('#futureGrid').innerHTML = future.map(([t,icon],i) => `
+  <div class="future-card"><span class="future-num">${String(i+1).padStart(2,'0')}</span><svg class="icon"><use href="#${icon}"/></svg><h4>${t}</h4></div>`).join('');
+
+/* ---------- init first module charts on load if visible ---------- */
+window.addEventListener('load', () => { /* charts init lazily on tab click */ });
+</script>
+
+</body>
+</html>

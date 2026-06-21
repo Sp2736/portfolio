@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCADE — Academic Resource &amp; Career Assist Digital Environment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================ TOKENS ============================================================ */
+:root{
+  --bg:#0A0A0F;
+  --bg-deep:#06060A;
+  --surface:#121218;
+  --surface-hi:#181820;
+  --glass:rgba(24,24,32,0.6);
+  --border:#26262F;
+  --border-soft:#1C1C24;
+  --ink:#F4F5F7;
+  --muted:#8C8FA0;
+  --muted-soft:#5C5F70;
+  --indigo:#5B6CFF;
+  --indigo-deep:#4150D6;
+  --indigo-soft:rgba(91,108,255,0.12);
+  --cyan:#3DD9D9;
+  --cyan-soft:rgba(61,217,217,0.12);
+  --amber:#F2B84B;
+  --amber-soft:rgba(242,184,75,0.12);
+  --rose:#F2596B;
+  --rose-soft:rgba(242,89,107,0.12);
+  --violet:#A175FF;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:22px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:0 12px 32px rgba(0,0,0,0.45);
+  --shadow-glow:0 0 0 1px rgba(91,108,255,0.15), 0 8px 32px rgba(91,108,255,0.12);
+  --container:1180px;
+  --ff-display:'Space Grotesk', sans-serif;
+  --ff-body:'Inter', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--ff-body);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* node-line ambient backdrop */
+body::before{
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(91,108,255,0.10), transparent 40%),
+    radial-gradient(circle at 85% 18%, rgba(61,217,217,0.07), transparent 38%),
+    radial-gradient(circle at 50% 95%, rgba(161,117,255,0.07), transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+body::after{
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 80%);
+  pointer-events:none;
+  z-index:0;
+}
+
+main, header, footer, section{ position:relative; z-index:1; }
+
+h1,h2,h3,h4{ font-family:var(--ff-display); font-weight:600; letter-spacing:-0.01em; color:var(--ink); }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+input, select, textarea{ font-family:inherit; }
+img{ max-width:100%; display:block; }
+
+.container{ max-width:var(--container); margin:0 auto; padding:0 28px; }
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ff-mono); font-size:11.5px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--indigo); background:var(--indigo-soft); border:1px solid rgba(91,108,255,0.25);
+  padding:6px 13px; border-radius:99px;
+}
+.eyebrow::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--indigo); box-shadow:0 0 8px var(--indigo); }
+
+.section{ padding:96px 0; }
+.section.alt{ background:linear-gradient(180deg, transparent, rgba(255,255,255,0.012) 8%, rgba(255,255,255,0.012) 92%, transparent); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft); }
+.section.tight{ padding:64px 0; }
+.section-head{ max-width:640px; margin-bottom:48px; }
+.section-head h2{ font-size:clamp(28px,3.6vw,40px); line-height:1.12; margin-top:16px; }
+.section-head .sub{ color:var(--muted); font-size:16px; margin-top:14px; line-height:1.6; }
+.sub code, p code, li code{ font-family:var(--ff-mono); font-size:0.86em; background:var(--surface-hi); border:1px solid var(--border); padding:1px 6px; border-radius:5px; color:var(--cyan); }
+
+/* ---------- roles ---------- */
+.role-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.role-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:26px 22px; display:flex; flex-direction:column; gap:16px; transition:border-color .2s ease, transform .2s ease;
+}
+.role-card:hover{ border-color:var(--indigo); transform:translateY(-3px); }
+.role-card .role-icon{
+  width:42px; height:42px; border-radius:11px; display:flex; align-items:center; justify-content:center;
+  background:var(--r-soft, var(--indigo-soft)); color:var(--r-color, var(--indigo));
+}
+.role-card h3{ font-size:17px; }
+.role-card .role-tag{ font-family:var(--ff-mono); font-size:10.5px; color:var(--muted-soft); text-transform:uppercase; letter-spacing:0.06em; }
+.role-card p{ font-size:13.5px; color:var(--muted); line-height:1.55; }
+.role-perms{ display:flex; flex-direction:column; gap:7px; margin-top:auto; padding-top:14px; border-top:1px solid var(--border-soft); }
+.role-perms li{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--muted); }
+.role-perms li svg{ width:13px; height:13px; flex-shrink:0; color:var(--r-color, var(--indigo)); }
+
+@media (max-width:900px){
+  .role-grid{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:560px){
+  .role-grid{ grid-template-columns:1fr; }
+}
+
+.icon-sm{ width:15px; height:15px; }
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  font-family:var(--ff-body); font-weight:600; font-size:14px;
+  padding:12px 22px; border-radius:11px; transition:all .18s ease; white-space:nowrap;
+  border:1px solid transparent;
+}
+.btn-primary{ background:var(--indigo); color:#fff; box-shadow:0 1px 0 rgba(255,255,255,0.15) inset, 0 8px 20px rgba(91,108,255,0.25); }
+.btn-primary:hover{ background:var(--indigo-deep); transform:translateY(-1px); }
+.btn-ghost{ background:var(--glass); border-color:var(--border); color:var(--ink); backdrop-filter:blur(12px); }
+.btn-ghost:hover{ border-color:var(--indigo); color:var(--indigo); }
+.btn-soft{ background:var(--surface-hi); border:1px solid var(--border); color:var(--ink); }
+.btn-soft:hover{ border-color:var(--muted-soft); }
+.btn-sm{ padding:9px 16px; font-size:13px; }
+
+/* ============================================================ HEADER ============================================================ */
+.site-header{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(10,10,15,0.72); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border-soft);
+}
+.site-header .container{ display:flex; align-items:center; justify-content:space-between; height:68px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family:var(--ff-display); font-weight:700; font-size:17px; letter-spacing:-0.01em; }
+.brand-mark{
+  width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, var(--indigo), var(--violet)); box-shadow:0 4px 14px rgba(91,108,255,0.4);
+  font-family:var(--ff-display); font-weight:700; color:#fff; font-size:16px;
+}
+nav.main-nav{ display:flex; align-items:center; gap:30px; }
+nav.main-nav a{ font-size:13.5px; font-weight:500; color:var(--muted); transition:color .15s ease; }
+nav.main-nav a:hover{ color:var(--ink); }
+.nav-actions{ display:flex; align-items:center; gap:12px; }
+.nav-toggle{ display:none; flex-direction:column; gap:4px; padding:8px; }
+.nav-toggle span{ width:20px; height:1.8px; background:var(--ink); border-radius:2px; transition:all .2s ease; }
+.nav-toggle.open span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2){ opacity:0; }
+.nav-toggle.open span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+/* ============================================================ HERO ============================================================ */
+.hero{ padding:168px 0 100px; position:relative; overflow:hidden; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
+.hero-copy h1{ font-size:clamp(36px,5vw,58px); line-height:1.05; letter-spacing:-0.02em; }
+.hero-copy h1 em{ font-style:normal; background:linear-gradient(100deg, var(--indigo), var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero-copy .lede{ font-size:17px; color:var(--muted); margin-top:22px; max-width:520px; line-height:1.65; }
+.hero-actions{ display:flex; gap:14px; margin-top:34px; flex-wrap:wrap; }
+.hero-meta{ display:flex; gap:28px; margin-top:48px; flex-wrap:wrap; }
+.hero-meta div{ display:flex; flex-direction:column; gap:3px; }
+.hero-meta strong{ font-family:var(--ff-display); font-size:24px; color:var(--ink); }
+.hero-meta span{ font-size:12px; color:var(--muted-soft); text-transform:uppercase; letter-spacing:0.05em; }
+
+/* signature node graph */
+.hero-visual{ position:relative; }
+.node-card{
+  background:var(--glass); border:1px solid var(--border); border-radius:var(--radius-lg);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  padding:22px; box-shadow:var(--shadow-md);
+}
+.node-card-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.node-card-head h4{ font-size:13px; color:var(--muted); font-weight:500; font-family:var(--ff-mono); letter-spacing:0.03em; }
+.node-card-head .live-dot{ display:flex; align-items:center; gap:6px; font-size:11px; font-family:var(--ff-mono); color:var(--cyan); }
+.node-card-head .live-dot i{ width:6px; height:6px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:pulse 2s infinite; }
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.4; } }
+.node-svg{ width:100%; height:auto; display:block; }
+.node-dot{ transition:r .2s ease; }
+.node-label{ font-family:var(--ff-mono); font-size:9.5px; fill:var(--muted); }
+.node-label.done{ fill:var(--cyan); }
+.node-label.active{ fill:var(--ink); font-weight:600; }
+
+@media (max-width:900px){
+  .hero-grid{ grid-template-columns:1fr; }
+  nav.main-nav{ position:fixed; top:68px; left:0; right:0; background:var(--bg); border-bottom:1px solid var(--border-soft); flex-direction:column; align-items:flex-start; padding:18px 28px; gap:16px; transform:translateY(-130%); transition:transform .25s ease; }
+  nav.main-nav.open{ transform:translateY(0); }
+  .nav-toggle{ display:flex; }
+  .nav-cta{ display:none; }
+}
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+.module-explorer{ display:grid; grid-template-columns:248px 1fr; gap:24px; align-items:start; }
+.module-nav{ display:flex; flex-direction:column; gap:6px; position:sticky; top:90px; }
+.module-tab{
+  display:flex; align-items:center; gap:11px; text-align:left;
+  padding:12px 14px; border-radius:11px; font-size:13.5px; font-weight:500; color:var(--muted);
+  transition:background .15s ease, color .15s ease; border:1px solid transparent;
+}
+.module-tab span{ font-family:var(--ff-mono); font-size:11px; color:var(--muted-soft); width:18px; flex-shrink:0; }
+.module-tab:hover{ background:var(--surface); color:var(--ink); }
+.module-tab.active{ background:var(--surface); color:var(--ink); border-color:var(--border); box-shadow:var(--shadow-sm); }
+.module-tab.active span{ color:var(--indigo); }
+
+.module-panels{ position:relative; }
+.module-panel{
+  display:none; grid-template-columns:0.82fr 1.18fr; gap:30px;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:32px; box-shadow:var(--shadow-md);
+}
+.module-panel.active{ display:grid; animation:fadeIn .35s ease; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+.panel-text h3{ font-size:21px; margin-bottom:10px; }
+.panel-text > p{ color:var(--muted); font-size:14px; line-height:1.6; margin-bottom:18px; }
+.panel-text .route-tag{ display:inline-flex; align-items:center; gap:6px; font-family:var(--ff-mono); font-size:11px; color:var(--cyan); background:var(--cyan-soft); border:1px solid rgba(61,217,217,0.25); padding:5px 10px; border-radius:7px; margin-bottom:16px; }
+.feature-list{ display:flex; flex-direction:column; gap:10px; }
+.feature-list li{ display:flex; align-items:flex-start; gap:9px; font-size:13px; color:var(--muted); line-height:1.5; }
+.feature-list li::before{ content:''; width:5px; height:5px; border-radius:50%; background:var(--indigo); margin-top:7px; flex-shrink:0; }
+.panel-demo{ background:var(--bg-deep); border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:20px; }
+.demo-label{ font-family:var(--ff-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted-soft); margin-bottom:14px; }
+
+/* ---------- shared demo bits ---------- */
+.seg-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.seg-btn{ padding:8px 14px; border-radius:9px; font-size:12.5px; font-weight:500; background:var(--surface-hi); border:1px solid var(--border); color:var(--muted); transition:all .15s ease; }
+.seg-btn:hover{ color:var(--ink); }
+.seg-btn.active{ background:var(--indigo); border-color:var(--indigo); color:#fff; }
+
+.badge{ display:inline-flex; align-items:center; font-family:var(--ff-mono); font-size:11px; padding:4px 10px; border-radius:7px; background:var(--surface-hi); border:1px solid var(--border); color:var(--muted); }
+.badge-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+
+.status-pill{ display:inline-flex; align-items:center; gap:5px; font-family:var(--ff-mono); font-size:10.5px; font-weight:600; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.03em; }
+.status-pending{ background:var(--amber-soft); color:var(--amber); }
+.status-approved{ background:var(--cyan-soft); color:var(--cyan); }
+.status-rejected{ background:var(--rose-soft); color:var(--rose); }
+
+/* role switch (M1) */
+.role-switch{ display:flex; gap:8px; margin-bottom:16px; }
+.permission-list{ display:flex; flex-direction:column; gap:9px; }
+.permission-list li{ display:flex; align-items:center; gap:10px; font-size:13px; padding:9px 12px; border-radius:9px; background:var(--surface-hi); }
+.permission-list li svg{ width:15px; height:15px; flex-shrink:0; }
+.permission-list li.allowed svg{ color:var(--cyan); }
+.permission-list li.denied{ color:var(--muted-soft); }
+.permission-list li.denied svg{ color:var(--rose); opacity:.7; }
+
+/* approval queue (M2) */
+.queue-list{ display:flex; flex-direction:column; gap:10px; }
+.queue-item{ display:flex; align-items:center; gap:12px; padding:12px; border-radius:11px; background:var(--surface-hi); border:1px solid var(--border-soft); }
+.queue-item .q-icon{ width:36px; height:36px; border-radius:9px; background:var(--indigo-soft); color:var(--indigo); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.queue-item .q-body{ flex:1; min-width:0; }
+.queue-item .q-title{ font-size:13px; font-weight:600; color:var(--ink); }
+.queue-item .q-meta{ font-size:11.5px; color:var(--muted-soft); margin-top:2px; }
+.queue-item .q-actions{ display:flex; gap:6px; flex-shrink:0; }
+.q-act-btn{ width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:all .15s ease; border:1px solid var(--border); }
+.q-act-btn svg{ width:14px; height:14px; }
+.q-act-btn.approve{ color:var(--cyan); } .q-act-btn.approve:hover{ background:var(--cyan-soft); border-color:var(--cyan); }
+.q-act-btn.reject{ color:var(--rose); } .q-act-btn.reject:hover{ background:var(--rose-soft); border-color:var(--rose); }
+.queue-item.resolved{ opacity:.5; }
+.queue-empty{ text-align:center; padding:30px 10px; color:var(--muted-soft); font-size:13px; }
+
+/* roadmap graph (M3) */
+.roadmap-box{ background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius-md); padding:6px; }
+.roadmap-svg{ width:100%; height:auto; display:block; }
+.roadmap-node{ cursor:pointer; }
+.roadmap-progress{ display:flex; align-items:center; gap:12px; margin-top:14px; }
+.roadmap-progress .bar-track{ flex:1; height:7px; border-radius:99px; background:var(--surface-hi); overflow:hidden; }
+.roadmap-progress .bar-fill{ height:100%; background:linear-gradient(90deg, var(--indigo), var(--cyan)); border-radius:99px; transition:width .4s ease; }
+.roadmap-progress strong{ font-family:var(--ff-mono); font-size:12.5px; color:var(--ink); flex-shrink:0; }
+.node-tip{ font-size:12px; color:var(--muted); margin-top:12px; min-height:34px; padding:9px 12px; background:var(--surface-hi); border-radius:9px; border:1px solid var(--border-soft); }
+.node-tip strong{ color:var(--ink); }
+
+/* skill navigator (M4) */
+.quiz-box{ display:flex; flex-direction:column; gap:14px; }
+.quiz-progress-dots{ display:flex; gap:5px; }
+.quiz-progress-dots i{ flex:1; height:4px; border-radius:99px; background:var(--surface-hi); }
+.quiz-progress-dots i.done{ background:var(--indigo); }
+.quiz-question{ font-size:14px; line-height:1.5; color:var(--ink); min-height:42px; }
+.quiz-options{ display:flex; flex-direction:column; gap:9px; }
+.quiz-opt{ text-align:left; padding:12px 14px; border-radius:10px; background:var(--surface-hi); border:1px solid var(--border); font-size:12.5px; color:var(--muted); line-height:1.5; transition:all .15s ease; }
+.quiz-opt:hover{ border-color:var(--indigo); color:var(--ink); }
+.quiz-result{ display:none; flex-direction:column; gap:12px; }
+.quiz-result.show{ display:flex; }
+.quiz-result-head{ display:flex; align-items:center; gap:12px; }
+.quiz-result-head .ri{ width:44px; height:44px; border-radius:11px; background:var(--indigo-soft); color:var(--indigo); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.quiz-result-head h4{ font-size:15px; }
+.quiz-result-head span{ font-size:11.5px; color:var(--muted-soft); font-family:var(--ff-mono); }
+.quiz-result p{ font-size:13px; color:var(--muted); line-height:1.6; }
+.quiz-retry{ align-self:flex-start; }
+
+/* expert network (M5) */
+.expert-grid{ display:flex; flex-direction:column; gap:10px; }
+.expert-card{ display:flex; align-items:center; gap:12px; padding:12px; border-radius:11px; background:var(--surface-hi); border:1px solid var(--border-soft); }
+.expert-avatar{ width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--ff-display); font-weight:600; font-size:13px; color:#fff; flex-shrink:0; }
+.expert-body{ flex:1; min-width:0; }
+.expert-name{ font-size:13px; font-weight:600; color:var(--ink); }
+.expert-role{ font-size:11.5px; color:var(--muted-soft); }
+.expert-tags{ display:flex; gap:5px; margin-top:6px; flex-wrap:wrap; }
+.expert-tag{ font-size:10px; font-family:var(--ff-mono); padding:2px 7px; border-radius:5px; background:var(--surface); color:var(--muted); border:1px solid var(--border-soft); }
+.expert-type{ font-size:10px; font-family:var(--ff-mono); padding:3px 8px; border-radius:99px; flex-shrink:0; }
+.expert-type.alumni{ background:var(--indigo-soft); color:var(--indigo); }
+.expert-type.industry{ background:var(--violet); background:rgba(161,117,255,0.14); color:var(--violet); }
+
+/* resume archive (M6) */
+.resume-filters{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.resume-grid{ display:flex; flex-direction:column; gap:10px; }
+.resume-card{ display:flex; align-items:center; gap:12px; padding:12px; border-radius:11px; background:var(--surface-hi); border:1px solid var(--border-soft); }
+.resume-card .r-icon{ width:36px; height:36px; border-radius:9px; background:var(--amber-soft); color:var(--amber); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.resume-card .r-body{ flex:1; min-width:0; }
+.resume-card .r-title{ font-size:13px; font-weight:600; color:var(--ink); }
+.resume-card .r-meta{ font-size:11.5px; color:var(--muted-soft); margin-top:2px; }
+.resume-card .r-dl{ font-family:var(--ff-mono); font-size:11px; color:var(--muted-soft); flex-shrink:0; }
+
+/* practice zone (M7) */
+.subject-pills{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.subject-pill{ padding:7px 13px; border-radius:99px; font-size:12px; font-weight:500; background:var(--surface-hi); border:1px solid var(--border); color:var(--muted); transition:all .15s ease; }
+.subject-pill.active{ background:var(--indigo-soft); border-color:var(--indigo); color:var(--indigo); }
+.resource-links{ display:flex; flex-direction:column; gap:8px; }
+.resource-link{ display:flex; align-items:center; gap:10px; padding:11px 13px; border-radius:10px; background:var(--surface-hi); border:1px solid var(--border-soft); font-size:12.5px; color:var(--muted); transition:all .15s ease; }
+.resource-link:hover{ border-color:var(--indigo); color:var(--ink); }
+.resource-link svg{ width:14px; height:14px; color:var(--indigo); flex-shrink:0; }
+.resource-link span{ flex:1; }
+
+/* admin panel (M-extra) */
+.admin-stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+.admin-stat{ background:var(--surface-hi); border-radius:10px; padding:13px; text-align:center; }
+.admin-stat strong{ display:block; font-family:var(--ff-display); font-size:20px; color:var(--ink); }
+.admin-stat span{ font-size:10.5px; color:var(--muted-soft); text-transform:uppercase; letter-spacing:0.04em; }
+.directory-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+.directory-table th{ text-align:left; font-family:var(--ff-mono); font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted-soft); padding:8px 10px; border-bottom:1px solid var(--border); }
+.directory-table td{ padding:10px; border-bottom:1px solid var(--border-soft); color:var(--muted); }
+.directory-table td:first-child{ color:var(--ink); font-weight:500; }
+.verify-toggle{ display:inline-flex; align-items:center; gap:6px; font-size:11px; font-family:var(--ff-mono); padding:4px 9px; border-radius:99px; cursor:pointer; transition:all .15s ease; }
+.verify-toggle.yes{ background:var(--cyan-soft); color:var(--cyan); }
+.verify-toggle.no{ background:var(--rose-soft); color:var(--rose); }
+
+@media (max-width:900px){
+  .module-explorer{ grid-template-columns:1fr; }
+  .module-nav{ position:static; flex-direction:row; overflow-x:auto; padding-bottom:6px; }
+  .module-tab{ flex-shrink:0; }
+  .module-panel{ grid-template-columns:1fr; padding:24px 20px; }
+  .admin-stat-grid{ grid-template-columns:1fr 1fr; }
+}
+
+/* ============================================================ DATA MODEL ============================================================ */
+.schema-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.schema-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:18px; transition:border-color .2s ease;
+}
+.schema-card:hover{ border-color:var(--indigo); }
+.schema-card-head{ display:flex; align-items:center; gap:8px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border-soft); }
+.schema-card-head svg{ width:15px; height:15px; color:var(--indigo); flex-shrink:0; }
+.schema-card-head h4{ font-family:var(--ff-mono); font-size:13px; font-weight:600; color:var(--ink); }
+.schema-fields{ display:flex; flex-direction:column; gap:7px; }
+.schema-field{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; font-family:var(--ff-mono); font-size:11px; }
+.schema-field .f-name{ color:var(--muted); }
+.schema-field .f-type{ color:var(--muted-soft); white-space:nowrap; }
+.schema-field.ref .f-name::before{ content:'→ '; color:var(--cyan); }
+.schema-field.ref .f-name{ color:var(--cyan); }
+
+@media (max-width:1080px){ .schema-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:560px){ .schema-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================ STACK ============================================================ */
+.stack-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.stack-card{
+  display:flex; align-items:center; gap:13px; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:18px;
+}
+.stack-card .s-icon{ width:38px; height:38px; border-radius:10px; background:var(--surface-hi); display:flex; align-items:center; justify-content:center; color:var(--indigo); flex-shrink:0; }
+.stack-card .s-icon svg{ width:19px; height:19px; }
+.stack-card h5{ font-size:13.5px; }
+.stack-card span{ font-size:11.5px; color:var(--muted-soft); }
+
+@media (max-width:1080px){ .stack-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:560px){ .stack-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================ FOOTER ============================================================ */
+.site-footer{ border-top:1px solid var(--border-soft); padding:48px 0; }
+.footer-row{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+.footer-row .brand{ font-size:15px; }
+.footer-note{ font-size:12.5px; color:var(--muted-soft); }
+.footer-links{ display:flex; gap:20px; }
+.footer-links a{ font-size:12.5px; color:var(--muted); transition:color .15s ease; }
+.footer-links a:hover{ color:var(--ink); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-student" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.9V17h2V9L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5 12.2V17c0 1.5 3.1 3 7 3s7-1.5 7-3v-4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-faculty" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 21h10M12 17v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 9h8M8 12.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-hod" viewBox="0 0 24 24"><path d="M12 2l2.6 5.6L21 8.5l-4.5 4.2L17.6 19 12 15.9 6.4 19l1.1-6.3L3 8.5l6.4-.9L12 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-admin" viewBox="0 0 24 24"><path d="M12 2 3 5.5v6c0 5 3.8 8.7 9 10.5 5.2-1.8 9-5.5 9-10.5v-6L12 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12.2l2.4 2.4 4.6-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 2v5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 2 3 5.5v6c0 5 3.8 8.7 9 10.5 5.2-1.8 9-5.5 9-10.5v-6L12 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12.2l2.4 2.4 4.6-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-shield-x" viewBox="0 0 24 24"><path d="M12 2 3 5.5v6c0 5 3.8 8.7 9 10.5 5.2-1.8 9-5.5 9-10.5v-6L12 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 18l-6 2V6l6-2 6 2 6-2v14l-6 2-6-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 11V7a5 5 0 0 1 10 0v4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="9.5" y="9.5" width="5" height="5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 8.5a3 3 0 1 1 .5 5.9M19.5 20c0-2.6-1.8-4.6-4.2-5.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M9.5 14.5l5-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M11 6.5l1-1a3.6 3.6 0 0 1 5 5l-1 1M13 17.5l-1 1a3.6 3.6 0 0 1-5-5l1-1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.4L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.6L12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4M12 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.3 3.9 1.8 18.5A1.8 1.8 0 0 0 3.4 21h17.2a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-mongodb" viewBox="0 0 24 24"><path d="M12 2c3 4 5 8 5 12a5 5 0 0 1-10 0c0-4 2-8 5-12z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 14v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="14" width="18" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 7h.01M7 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</defs>
+</svg>
+<header class="site-header">
+  <div class="container">
+    <a href="#top" class="brand"><span class="brand-mark">A</span>ARCADE</a>
+    <nav class="main-nav" id="navLinks">
+      <a href="#overview">Overview</a>
+      <a href="#roles">Roles</a>
+      <a href="#modules">Modules</a>
+      <a href="#schema">Data model</a>
+      <a href="#stack">Stack</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#modules" class="btn btn-primary btn-sm nav-cta">Explore modules</a>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<!-- ============================================================ HERO ============================================================ -->
+<section class="hero" id="overview">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">Student Group Project · Semester 4 · CHARUSAT</span>
+      <h1>Every degree needs<br><em>a dependency graph,</em><br>not a PDF syllabus.</h1>
+      <p class="lede">ARCADE centralizes verified notes, structured roadmaps and skill-gap analysis for one university — built with faculty approval chains and role-gated access at the core, not bolted on after.</p>
+      <div class="hero-actions">
+        <a href="#modules" class="btn btn-primary">Walk through the 8 modules</a>
+        <a href="#roles" class="btn btn-ghost">See the role model</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong>8</strong><span>Core modules</span></div>
+        <div><strong>4</strong><span>User roles</span></div>
+        <div><strong>8</strong><span>Mongoose models</span></div>
+        <div><strong>18</strong><span>API routes</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="node-card">
+        <div class="node-card-head">
+          <h4>roadmap_preview.svg — systems_architect</h4>
+          <span class="live-dot"><i></i>4 / 9 nodes complete</span>
+        </div>
+        <svg class="node-svg" id="heroNodeGraph" viewBox="0 0 460 360" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ ROLES ============================================================ -->
+<section class="section alt" id="roles">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Role-based access control</span>
+      <h2>One schema, four ways to use the platform.</h2>
+      <p class="sub">Every account is a <code>student</code>, <code>faculty</code> or <code>admin</code> in the database — HOD isn't a separate role, it's an <code>is_hod</code> flag on a faculty account that unlocks one extra queue. Permissions are enforced at the API layer, not just hidden in the UI.</p>
+    </div>
+    <div class="role-grid">
+      <div class="role-card" style="--r-color:#5B6CFF; --r-soft:rgba(91,108,255,0.12)">
+        <div class="role-icon"><svg class="icon"><use href="#i-student"/></svg></div>
+        <div>
+          <h3>Student</h3>
+          <span class="role-tag">role: "student"</span>
+        </div>
+        <p>The primary user. Browses the vault, follows a roadmap toward a target role, and runs the skill navigator.</p>
+        <ul class="role-perms">
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Download approved notes</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Upload notes for review</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Track roadmap progress</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Message expert network</li>
+        </ul>
+      </div>
+      <div class="role-card" style="--r-color:#3DD9D9; --r-soft:rgba(61,217,217,0.12)">
+        <div class="role-icon"><svg class="icon"><use href="#i-faculty"/></svg></div>
+        <div>
+          <h3>Faculty</h3>
+          <span class="role-tag">role: "faculty"</span>
+        </div>
+        <p>Owns the verification queue for their subjects — every note a student uploads sits pending until a faculty member rules on it.</p>
+        <ul class="role-perms">
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Approve / reject notes</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Upload verified material</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>View own teaching load</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-cross"/></svg>Manage other users</li>
+        </ul>
+      </div>
+      <div class="role-card" style="--r-color:#F2B84B; --r-soft:rgba(242,184,75,0.12)">
+        <div class="role-icon"><svg class="icon"><use href="#i-hod"/></svg></div>
+        <div>
+          <h3>HOD</h3>
+          <span class="role-tag">faculty · is_hod: true</span>
+        </div>
+        <p>A faculty account with one extra unlock: the resume repository's final approval step, escalated above regular faculty review.</p>
+        <ul class="role-perms">
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Approve resume samples</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Everything a faculty can do</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Escalated content review</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-cross"/></svg>Edit system-wide settings</li>
+        </ul>
+      </div>
+      <div class="role-card" style="--r-color:#F2596B; --r-soft:rgba(242,89,107,0.12)">
+        <div class="role-icon"><svg class="icon"><use href="#i-admin"/></svg></div>
+        <div>
+          <h3>Admin</h3>
+          <span class="role-tag">role: "admin"</span>
+        </div>
+        <p>Controls the access-control directory itself: verifying accounts, managing the resume archive, and watching system audit trails.</p>
+        <ul class="role-perms">
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Verify / suspend any user</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Manage external resources</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Read full audit log</li>
+          <li><svg viewBox="0 0 16 16"><use href="#i-check"/></svg>Override any approval</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ MODULES ============================================================ -->
+<section class="section" id="modules">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Inside the platform</span>
+      <h2>8 modules. Each one wired to a real route.</h2>
+      <p class="sub">The README lists 7 core modules — this preview adds the Expert Network panel, a real (if undocumented) feature found in the codebase. Pick a module on the left: every panel lists the actual feature set and a live sample of how it behaves, built from the project's own models and API routes.</p>
+    </div>
+
+    <div class="module-explorer">
+      <div class="module-nav" id="moduleNav">
+        <button class="module-tab active" data-mod="m1"><span>01</span>Auth &amp; Roles</button>
+        <button class="module-tab" data-mod="m2"><span>02</span>Resource Vault</button>
+        <button class="module-tab" data-mod="m3"><span>03</span>Career Roadmaps</button>
+        <button class="module-tab" data-mod="m4"><span>04</span>Skill Navigator</button>
+        <button class="module-tab" data-mod="m5"><span>05</span>Expert Network</button>
+        <button class="module-tab" data-mod="m6"><span>06</span>Resume Archives</button>
+        <button class="module-tab" data-mod="m7"><span>07</span>Practice Zone</button>
+        <button class="module-tab" data-mod="m8"><span>08</span>Admin Panel</button>
+      </div>
+
+      <div class="module-panels" id="modulePanels">
+
+        <!-- M1: Auth & Roles -->
+        <div class="module-panel active" data-mod="m1">
+          <div class="panel-text">
+            <h3>Authentication &amp; Role Management</h3>
+            <span class="route-tag">POST /api/auth/signup · /api/auth/login</span>
+            <p>College-email signup with bcrypt password hashing, NextAuth-backed sessions, and a role chosen at signup that the API enforces on every protected route.</p>
+            <ul class="feature-list">
+              <li>College email + college ID required at signup</li>
+              <li>Password hashed with bcrypt before storage</li>
+              <li>Faculty / admin signup gated behind an admin code</li>
+              <li>Session-based role checks on every API route</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Try it — switch roles to see what unlocks</p>
+            <div class="role-switch">
+              <button class="role-btn seg-btn active" data-role="Student">Student</button>
+              <button class="role-btn seg-btn" data-role="Faculty">Faculty</button>
+              <button class="role-btn seg-btn" data-role="HOD">HOD</button>
+              <button class="role-btn seg-btn" data-role="Admin">Admin</button>
+            </div>
+            <ul class="permission-list" id="permList"></ul>
+          </div>
+        </div>
+
+        <!-- M2: Resource Vault -->
+        <div class="module-panel" data-mod="m2">
+          <div class="panel-text">
+            <h3>Resource Vault</h3>
+            <span class="route-tag">GET/POST /api/notes · /api/notes/pending · /api/notes/verify</span>
+            <p>Students upload notes against a subject and semester; the file sits <code>pending</code> until the assigned faculty member approves or rejects it with a reason.</p>
+            <ul class="feature-list">
+              <li>Filter by semester, subject and free-text search</li>
+              <li>Upload tags a specific faculty member for review</li>
+              <li>Status moves pending → approved / rejected</li>
+              <li>Tracks view_count and download_count per note</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Faculty verification queue — act on a submission</p>
+            <ul class="queue-list" id="vaultQueue"></ul>
+          </div>
+        </div>
+
+        <!-- M3: Career Roadmaps -->
+        <div class="module-panel" data-mod="m3">
+          <div class="panel-text">
+            <h3>Career Roadmaps</h3>
+            <span class="route-tag">GET/POST /api/progress</span>
+            <p>A node-based dependency graph replaces the static syllabus PDF. Students pick a target role, check off mandatory, advanced and optional nodes, and progress saves straight to <code>StudentProgress</code>.</p>
+            <ul class="feature-list">
+              <li>Mandatory, advanced and optional skill tiers</li>
+              <li>Nodes lock until their prerequisites are checked</li>
+              <li>Progress persists per student, per target role</li>
+              <li>Confetti celebration on roadmap completion</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Click a node to inspect it</p>
+            <div class="roadmap-box"><svg class="roadmap-svg" id="roadmapSvg" viewBox="0 0 480 230" preserveAspectRatio="xMidYMid meet"></svg></div>
+            <div class="node-tip" id="roadmapTip">Click any node above to see what it unlocks.</div>
+            <div class="roadmap-progress">
+              <div class="bar-track"><div class="bar-fill" id="roadmapBarFill" style="width:44%"></div></div>
+              <strong id="roadmapBarLabel">4 / 9</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- M4: Skill Navigator -->
+        <div class="module-panel" data-mod="m4">
+          <div class="panel-text">
+            <h3>Skill Navigator</h3>
+            <span class="route-tag">Client-side scoring engine</span>
+            <p>A 10-question binary-choice diagnostic — not a self-rating form. Each answer adds weighted points across five domains (systems, quantitative, operations, product, R&amp;D), and the highest score picks the career-fit result.</p>
+            <ul class="feature-list">
+              <li>Forced binary choices remove rating-scale bias</li>
+              <li>Scores 5 domains: SYS, QNT, OPS, PROD, RND</li>
+              <li>Explains *why* the result fits the answers given</li>
+              <li>Surfaces automation exposure and market demand</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Take a 3-question sample</p>
+            <div class="quiz-box" id="quizBox">
+              <div class="quiz-progress-dots" id="quizDots"></div>
+              <p class="quiz-question" id="quizQuestion"></p>
+              <div class="quiz-options" id="quizOptions"></div>
+            </div>
+            <div class="quiz-result" id="quizResult">
+              <div class="quiz-result-head">
+                <div class="ri"><svg class="icon"><use href="#i-cpu"/></svg></div>
+                <div><h4 id="quizResultTitle"></h4><span id="quizResultTag"></span></div>
+              </div>
+              <p id="quizResultWhy"></p>
+              <button class="btn btn-soft btn-sm quiz-retry" id="quizRetry">Retake sample</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- M5: Expert Network -->
+        <div class="module-panel" data-mod="m5">
+          <div class="panel-text">
+            <h3>Expert Network</h3>
+            <span class="route-tag">GET /api/alumni</span>
+            <p>A directory of alumni and industry experts students can reach out to directly, tagged by the skills and domains they can speak to.</p>
+            <ul class="feature-list">
+              <li>Alumni vs. independent industry expert tagging</li>
+              <li>Filter by skill tag (system design, ML, cloud…)</li>
+              <li>Direct email and LinkedIn contact, no inbox lock-in</li>
+              <li>Surfaced contextually from roadmap and skill results</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Filter the network</p>
+            <div class="subject-pills" id="expertFilters">
+              <button class="subject-pill active" data-filter="all">All</button>
+              <button class="subject-pill" data-filter="Alumni">Alumni</button>
+              <button class="subject-pill" data-filter="Industry Expert">Industry experts</button>
+            </div>
+            <div class="expert-grid" id="expertGrid"></div>
+          </div>
+        </div>
+
+        <!-- M6: Resume Archives -->
+        <div class="module-panel" data-mod="m6">
+          <div class="panel-text">
+            <h3>Resume Archives</h3>
+            <span class="route-tag">GET/POST /api/resumes · /api/admin/resumes</span>
+            <p>A curated set of resume samples by domain and experience level. Every upload sits <code>pending_hod</code> until the department HOD approves or rejects it directly.</p>
+            <ul class="feature-list">
+              <li>Tagged by domain and experience level</li>
+              <li>Uploads sit pending_hod until reviewed</li>
+              <li>HOD approves or rejects with a reason</li>
+              <li>Download count tracked per sample</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Browse by experience level</p>
+            <div class="resume-filters" id="resumeFilters">
+              <button class="seg-btn active" data-level="all">All</button>
+              <button class="seg-btn" data-level="intern">Intern</button>
+              <button class="seg-btn" data-level="fresher">Fresher</button>
+              <button class="seg-btn" data-level="experienced">Experienced</button>
+            </div>
+            <div class="resume-grid" id="resumeGrid"></div>
+          </div>
+        </div>
+
+        <!-- M7: Practice Zone -->
+        <div class="module-panel" data-mod="m7">
+          <div class="panel-text">
+            <h3>Practice Zone</h3>
+            <span class="route-tag">GET /api/subjects</span>
+            <p>Curated external links — official docs, practice judges, course notes — organized by subject so students aren't searching blind for which resource is worth their time.</p>
+            <ul class="feature-list">
+              <li>One curated set of links per subject</li>
+              <li>Covers 8 semesters across the CS/IT curriculum</li>
+              <li>Mix of practice judges, docs and course material</li>
+              <li>Admin-managed, so links stay current</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Pick a subject</p>
+            <div class="subject-pills" id="practiceSubjects"></div>
+            <div class="resource-links" id="practiceLinks"></div>
+          </div>
+        </div>
+
+        <!-- M8: Admin Panel -->
+        <div class="module-panel" data-mod="m8">
+          <div class="panel-text">
+            <h3>Admin Control Panel</h3>
+            <span class="route-tag">GET /api/user · POST /api/admin/approvals</span>
+            <p>One directory for every account on the platform — verify new sign-ups, search by name or college ID, and read back the system's audit trail.</p>
+            <ul class="feature-list">
+              <li>Search and filter the full user directory</li>
+              <li>Toggle account verification with one click</li>
+              <li>Pending-verification count surfaced up front</li>
+              <li>Append-only audit log of role and access changes</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Access control directory</p>
+            <div class="admin-stat-grid">
+              <div class="admin-stat"><strong>1,248</strong><span>Total users</span></div>
+              <div class="admin-stat"><strong>17</strong><span>Pending</span></div>
+              <div class="admin-stat"><strong>99.6%</strong><span>Verified</span></div>
+            </div>
+            <table class="directory-table" id="directoryTable"></table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ DATA MODEL ============================================================ -->
+<section class="section alt" id="schema">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Under the hood</span>
+      <h2>8 Mongoose schemas, not a mock API.</h2>
+      <p class="sub">Every demo above maps to one of these collections. Cyan fields are <code>ObjectId</code> references — that's the actual relationship graph connecting roles, subjects, notes, resumes and progress.</p>
+    </div>
+    <div class="schema-grid">
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-users"/></svg><h4>User</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field"><span class="f-name">college_email</span><span class="f-type">String, unique</span></div>
+          <div class="schema-field"><span class="f-name">role</span><span class="f-type">enum</span></div>
+          <div class="schema-field"><span class="f-name">is_hod</span><span class="f-type">Boolean</span></div>
+          <div class="schema-field"><span class="f-name">is_verified</span><span class="f-type">Boolean</span></div>
+          <div class="schema-field"><span class="f-name">target_role</span><span class="f-type">String</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-file"/></svg><h4>Subject</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field"><span class="f-name">subject_code</span><span class="f-type">String, unique</span></div>
+          <div class="schema-field"><span class="f-name">semester</span><span class="f-type">String</span></div>
+          <div class="schema-field"><span class="f-name">department</span><span class="f-type">String</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-briefcase"/></svg><h4>FacultyTeachingLoad</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field ref"><span class="f-name">faculty_id</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field ref"><span class="f-name">subject_id</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field"><span class="f-name">is_theory</span><span class="f-type">Boolean</span></div>
+          <div class="schema-field"><span class="f-name">is_practical</span><span class="f-type">Boolean</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-file"/></svg><h4>Note</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field ref"><span class="f-name">subject_id</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field ref"><span class="f-name">uploaded_by</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field ref"><span class="f-name">verified_by</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field"><span class="f-name">status</span><span class="f-type">enum</span></div>
+          <div class="schema-field"><span class="f-name">download_count</span><span class="f-type">Number</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-bell"/></svg><h4>Notification</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field ref"><span class="f-name">user_id</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field"><span class="f-name">type</span><span class="f-type">enum</span></div>
+          <div class="schema-field"><span class="f-name">is_read</span><span class="f-type">Boolean</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-file"/></svg><h4>ResumeSample</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field"><span class="f-name">domain</span><span class="f-type">String</span></div>
+          <div class="schema-field"><span class="f-name">experience_level</span><span class="f-type">enum</span></div>
+          <div class="schema-field ref"><span class="f-name">uploaded_by</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field"><span class="f-name">status</span><span class="f-type">pending_hod…</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-map"/></svg><h4>StudentProgress</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field ref"><span class="f-name">student_id</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field"><span class="f-name">target_role</span><span class="f-type">String</span></div>
+          <div class="schema-field"><span class="f-name">completed_nodes</span><span class="f-type">Array</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-shield-check"/></svg><h4>AuditLog</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field ref"><span class="f-name">user_id</span><span class="f-type">ObjectId</span></div>
+          <div class="schema-field"><span class="f-name">action</span><span class="f-type">String</span></div>
+          <div class="schema-field"><span class="f-name">details</span><span class="f-type">Mixed</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ STACK ============================================================ -->
+<section class="section" id="stack">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Built with</span>
+      <h2>A standard, boring-on-purpose stack.</h2>
+      <p class="sub">No exotic infra. One framework, one database, one auth library — the kind of stack that's easy for the next contributor to actually pick up.</p>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-cpu"/></svg></div><div><h5>Next.js</h5><span>App Router · API routes</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-mongodb"/></svg></div><div><h5>MongoDB + Mongoose</h5><span>8 schemas, ObjectId refs</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-lock"/></svg></div><div><h5>NextAuth + bcrypt</h5><span>Session auth, hashed passwords</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-sparkle"/></svg></div><div><h5>Framer Motion</h5><span>Page and panel transitions</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-grid"/></svg></div><div><h5>Tailwind CSS</h5><span>Utility-first styling</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-cpu"/></svg></div><div><h5>Gemini (@ai-sdk/google)</h5><span>Chat-assist endpoint</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-server"/></svg></div><div><h5>Supabase</h5><span>File storage for uploads</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-shield-check"/></svg></div><div><h5>Role-gated APIs</h5><span>Enforced server-side, not just UI</span></div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-row">
+    <a href="#top" class="brand"><span class="brand-mark">A</span>ARCADE</a>
+    <p class="footer-note">Student project · CHARUSAT · Built with Next.js, MongoDB &amp; NextAuth</p>
+    <div class="footer-links">
+      <a href="https://github.com/Sp2736/arcade" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="#modules">Modules</a>
+      <a href="#schema">Data model</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const $ = (s, c=document) => c.querySelector(s);
+const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
+const SVGNS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs = {}) {
+  const el = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+
+/* ---------- nav ---------- */
+$('#navToggle').addEventListener('click', () => {
+  $('#navLinks').classList.toggle('open');
+  $('#navToggle').classList.toggle('open');
+});
+$$('#navLinks a').forEach(a => a.addEventListener('click', () => {
+  $('#navLinks').classList.remove('open');
+  $('#navToggle').classList.remove('open');
+}));
+
+/* ---------- hero node graph (signature visual) ---------- */
+function buildHeroGraph() {
+  const svg = $('#heroNodeGraph');
+  const W = 460, H = 360;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  // layout: tree of skill nodes, done / active / locked
+  const nodes = [
+    { id:'n1', x:60,  y:50,  label:'Git basics',        state:'done' },
+    { id:'n2', x:60,  y:140, label:'Linux CLI',         state:'done' },
+    { id:'n3', x:60,  y:230, label:'Data structures',   state:'done' },
+    { id:'n4', x:200, y:95,  label:'Networking',        state:'done' },
+    { id:'n5', x:200, y:185, label:'Databases',         state:'active' },
+    { id:'n6', x:340, y:60,  label:'Distributed sys',   state:'locked' },
+    { id:'n7', x:340, y:150, label:'Kubernetes',        state:'locked' },
+    { id:'n8', x:340, y:240, label:'Cloud cost design',  state:'locked' },
+    { id:'n9', x:200, y:300, label:'CI/CD pipelines',   state:'locked' },
+  ];
+  const edges = [['n1','n4'],['n2','n4'],['n2','n5'],['n3','n5'],['n4','n6'],['n4','n7'],['n5','n7'],['n5','n8'],['n5','n9']];
+  const byId = Object.fromEntries(nodes.map(n => [n.id, n]));
+  const colorFor = s => s === 'done' ? '#3DD9D9' : s === 'active' ? '#5B6CFF' : '#3A3A46';
+
+  // edges first (under nodes)
+  edges.forEach(([a,b]) => {
+    const na = byId[a], nb = byId[b];
+    const bothReady = na.state !== 'locked' && nb.state !== 'locked';
+    const path = svgEl('line', {
+      x1:na.x, y1:na.y, x2:nb.x, y2:nb.y,
+      stroke: bothReady ? 'rgba(61,217,217,0.35)' : 'rgba(255,255,255,0.08)',
+      'stroke-width': 1.5,
+      'stroke-dasharray': bothReady ? 'none' : '3,4'
+    });
+    svg.appendChild(path);
+  });
+
+  nodes.forEach(n => {
+    const g = svgEl('g');
+    const r = n.state === 'active' ? 9 : 7;
+    const dot = svgEl('circle', { cx:n.x, cy:n.y, r, fill: n.state === 'locked' ? '#1C1C26' : colorFor(n.state),
+      stroke: n.state === 'locked' ? '#34343F' : (n.state === 'active' ? '#5B6CFF' : 'none'), 'stroke-width': n.state === 'locked' ? 1.5 : 3, 'stroke-opacity': n.state === 'locked' ? 1 : 0.3, class:'node-dot' });
+    g.appendChild(dot);
+    if (n.state === 'active') {
+      const pulse = svgEl('circle', { cx:n.x, cy:n.y, r:9, fill:'none', stroke:'#5B6CFF', 'stroke-width':1.5 });
+      pulse.innerHTML = '<animate attributeName="r" from="9" to="18" dur="1.6s" repeatCount="indefinite" /><animate attributeName="opacity" from="0.6" to="0" dur="1.6s" repeatCount="indefinite" />';
+      g.appendChild(pulse);
+    }
+    const label = svgEl('text', { x:n.x, y:n.y - 14, 'text-anchor':'middle', class:`node-label ${n.state === 'done' ? 'done' : n.state === 'active' ? 'active' : ''}` });
+    label.textContent = n.label;
+    g.appendChild(label);
+    svg.appendChild(g);
+  });
+}
+buildHeroGraph();
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+const moduleTabs = $$('.module-tab');
+const modulePanels = $$('.module-panel');
+let chartsInit = {};
+moduleTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    moduleTabs.forEach(t => t.classList.remove('active'));
+    modulePanels.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $(`.module-panel[data-mod="${tab.dataset.mod}"]`).classList.add('active');
+    initModule(tab.dataset.mod);
+  });
+});
+function initModule(mod) {
+  if (chartsInit[mod]) return;
+  chartsInit[mod] = true;
+  if (mod === 'm3') buildRoadmapGraph();
+}
+
+/* ---------- M1: role switcher ---------- */
+const permissions = {
+  Student: [
+    ['Download approved notes', true], ['Upload notes for review', true],
+    ['Track roadmap progress', true], ['Approve other students\' notes', false], ['Manage user accounts', false],
+  ],
+  Faculty: [
+    ['Approve / reject notes', true], ['Upload verified material', true],
+    ['View own teaching load', true], ['Approve resume samples (final)', false], ['Manage user accounts', false],
+  ],
+  HOD: [
+    ['Approve / reject notes', true], ['Approve resume samples (final)', true],
+    ['Escalated content review', true], ['Edit system-wide settings', false], ['Manage user accounts', false],
+  ],
+  Admin: [
+    ['Verify / suspend any user', true], ['Manage external resources', true],
+    ['Read full audit log', true], ['Override any approval', true], ['Grade or review coursework', false],
+  ],
+};
+function renderPerms(role) {
+  $('#permList').innerHTML = permissions[role].map(([label, allowed]) =>
+    `<li class="${allowed ? 'allowed' : 'denied'}"><svg><use href="#${allowed ? 'i-check' : 'i-cross'}"/></svg>${label}</li>`).join('');
+}
+$$('.role-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('.role-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPerms(btn.dataset.role);
+}));
+renderPerms('Student');
+
+/* ---------- M2: resource vault verification queue ---------- */
+const vaultQueueData = [
+  { id:'q1', title:'Unit 4 — Process Synchronization.pdf', meta:'Operating Systems · Sem 4 · uploaded by R. Mehta' },
+  { id:'q2', title:'DBMS Normalization Cheatsheet.pdf', meta:'Database Management · Sem 4 · uploaded by A. Sharma' },
+  { id:'q3', title:'Graph Algorithms — Dijkstra & Bellman-Ford.pdf', meta:'DAA · Sem 5 · uploaded by K. Joshi' },
+];
+let vaultState = {};
+function renderVaultQueue() {
+  const list = $('#vaultQueue');
+  if (!list) return;
+  const pending = vaultQueueData.filter(q => !vaultState[q.id]);
+  if (pending.length === 0) {
+    list.innerHTML = '<li class="queue-empty">Queue clear — nothing pending review.</li>';
+    return;
+  }
+  list.innerHTML = vaultQueueData.map(q => {
+    const resolved = vaultState[q.id];
+    return `<li class="queue-item ${resolved ? 'resolved' : ''}" data-id="${q.id}">
+      <div class="q-icon"><svg class="icon-sm"><use href="#i-file"/></svg></div>
+      <div class="q-body"><div class="q-title">${q.title}</div><div class="q-meta">${q.meta}</div></div>
+      ${resolved
+        ? `<span class="status-pill status-${resolved}">${resolved}</span>`
+        : `<div class="q-actions">
+             <button class="q-act-btn approve" data-act="approved" data-id="${q.id}" title="Approve"><svg><use href="#i-check"/></svg></button>
+             <button class="q-act-btn reject" data-act="rejected" data-id="${q.id}" title="Reject"><svg><use href="#i-cross"/></svg></button>
+           </div>`}
+    </li>`;
+  }).join('');
+  $$('.q-act-btn', list).forEach(btn => btn.addEventListener('click', () => {
+    vaultState[btn.dataset.id] = btn.dataset.act;
+    renderVaultQueue();
+  }));
+}
+renderVaultQueue();
+
+/* ---------- M3: career roadmap node graph ---------- */
+const roadmapNodes = [
+  { id:'r1', x:55,  y:40,  label:'HTML/CSS',        tier:'mandatory', done:true,  desc:'Foundation markup and styling — prerequisite for every web-track node.' },
+  { id:'r2', x:55,  y:115, label:'JavaScript',       tier:'mandatory', done:true,  desc:'Core language for both frontend logic and Node.js backends.' },
+  { id:'r3', x:55,  y:190, label:'Git & GitHub',     tier:'mandatory', done:true,  desc:'Version control fundamentals — branching, PRs, merge conflicts.' },
+  { id:'r4', x:200, y:75,  label:'React',            tier:'mandatory', done:true,  desc:'Component-based UI library used across ARCADE\'s own frontend.' },
+  { id:'r5', x:200, y:155, label:'Node.js + Express', tier:'advanced', done:false, active:true, desc:'Server-side runtime and routing — what the /api routes here are built on.' },
+  { id:'r6', x:345, y:40,  label:'REST API design',  tier:'advanced', done:false, desc:'Resource modelling, status codes, auth headers — locked until Node/Express is checked.' },
+  { id:'r7', x:345, y:115, label:'MongoDB',          tier:'advanced', done:false, desc:'Document database — same engine backing ARCADE\'s own Mongoose models.' },
+  { id:'r8', x:345, y:190, label:'Auth (JWT/OAuth)',  tier:'optional', done:false, desc:'Token-based session handling, the optional-tier topic for this role.' },
+  { id:'r9', x:200, y:230, label:'Deployment (CI/CD)', tier:'advanced', done:false, desc:'Shipping pipelines — Docker, GitHub Actions, hosting targets.' },
+];
+const roadmapEdges = [['r1','r4'],['r2','r4'],['r2','r5'],['r3','r5'],['r4','r6'],['r4','r7'],['r5','r7'],['r5','r8'],['r5','r9']];
+function tierColor(tier){ return tier === 'mandatory' ? '#5B6CFF' : tier === 'advanced' ? '#3DD9D9' : '#A175FF'; }
+function buildRoadmapGraph() {
+  const svg = $('#roadmapSvg');
+  const W = 480, H = 230;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const byId = Object.fromEntries(roadmapNodes.map(n => [n.id, n]));
+
+  roadmapEdges.forEach(([a,b]) => {
+    const na = byId[a], nb = byId[b];
+    const bothDone = na.done && nb.done;
+    svg.appendChild(svgEl('line', {
+      x1:na.x, y1:na.y, x2:nb.x, y2:nb.y,
+      stroke: bothDone ? 'rgba(61,217,217,0.4)' : 'rgba(255,255,255,0.10)',
+      'stroke-width':1.5, 'stroke-dasharray': bothDone ? 'none' : '3,4'
+    }));
+  });
+
+  roadmapNodes.forEach(n => {
+    const g = svgEl('g', { class:'roadmap-node', 'data-id':n.id });
+    const r = n.active ? 9 : 7;
+    const fill = n.done ? tierColor(n.tier) : (n.active ? tierColor(n.tier) : '#1C1C26');
+    g.appendChild(svgEl('circle', {
+      cx:n.x, cy:n.y, r, fill,
+      stroke: n.done ? 'none' : '#34343F', 'stroke-width': n.done ? 0 : 1.5,
+    }));
+    if (n.active) {
+      const pulse = svgEl('circle', { cx:n.x, cy:n.y, r:9, fill:'none', stroke:tierColor(n.tier), 'stroke-width':1.5 });
+      pulse.innerHTML = '<animate attributeName="r" from="9" to="17" dur="1.5s" repeatCount="indefinite" /><animate attributeName="opacity" from="0.6" to="0" dur="1.5s" repeatCount="indefinite" />';
+      g.appendChild(pulse);
+    }
+    const label = svgEl('text', { x:n.x, y:n.y - 13, 'text-anchor':'middle', class:`node-label ${n.done ? 'done' : n.active ? 'active' : ''}` });
+    label.textContent = n.label;
+    g.appendChild(label);
+    g.addEventListener('click', () => showRoadmapTip(n));
+    g.addEventListener('mouseenter', () => g.style.cursor = 'pointer');
+    svg.appendChild(g);
+  });
+}
+function showRoadmapTip(n) {
+  const tierLabel = n.tier === 'mandatory' ? 'Mandatory' : n.tier === 'advanced' ? 'Advanced' : 'Optional';
+  const stateLabel = n.done ? 'Completed' : n.active ? 'In progress' : 'Locked';
+  $('#roadmapTip').innerHTML = `<strong>${n.label}</strong> · ${tierLabel} · ${stateLabel}<br>${n.desc}`;
+}
+$('#roadmapBarLabel') && ($('#roadmapBarLabel').textContent = `${roadmapNodes.filter(n=>n.done).length} / ${roadmapNodes.length}`);
+
+/* ---------- M4: skill navigator sample quiz ---------- */
+const quizQuestions = [
+  {
+    text: 'A critical machine in your facility stops working. Where does your mind go first?',
+    options: [
+      { text: 'The blueprint — was this system designed with a flaw?', scores: { SYS: 2, PROD: 0 } },
+      { text: 'The output logs — what do the metrics tell me?', scores: { QNT: 2, OPS: 1 } },
+    ],
+  },
+  {
+    text: 'You manage a supply chain with 100 units of energy. Do you:',
+    options: [
+      { text: 'Invest 90 units into a hyper-efficient system with a guaranteed return.', scores: { SYS: 1, QNT: 2 } },
+      { text: 'Spread 10 units across 10 high-risk bets that could pay off big.', scores: { PROD: 1, RND: 2 } },
+    ],
+  },
+  {
+    text: 'Two departments are deadlocked over a project requirement. How do you break the tie?',
+    options: [
+      { text: 'Redefine the parameters and force a compromise so both teams can move.', scores: { OPS: 2, PROD: 1 } },
+      { text: 'Dig into the technical limits of both sides for a third option.', scores: { SYS: 1, RND: 2 } },
+    ],
+  },
+];
+const quizDomains = {
+  SYS:  { title: 'Systems Architecture / Cloud Infrastructure', why: 'Your answers leaned toward structural diagnosis and delayed feedback loops — mapping the blueprint before reacting. That instinct is the core trait of infrastructure and backend architecture roles.' },
+  QNT:  { title: 'Data & Quantitative Analysis', why: 'You gravitated toward metrics and efficient, measured bets over broad risk-taking. That points toward roles built on data analysis, modelling and quantitative decision-making.' },
+  OPS:  { title: 'Product Operations & Logistics', why: 'You resolved friction through process and compromise rather than deep technical excavation — a strong signal for ProductOps and program-management-style roles.' },
+  PROD: { title: 'Product Management', why: 'You balanced measured risk with a bias toward forcing forward motion — a common trait among product managers who trade some technical depth for velocity.' },
+  RND:  { title: 'R&D / Applied Research', why: 'You consistently chose the higher-variance, exploratory option over the safe one — comfortable working in the dark before a result appears. That\'s an R&D instinct.' },
+};
+let quizIdx = 0;
+let quizScores = { SYS:0, QNT:0, OPS:0, PROD:0, RND:0 };
+function renderQuizDots() {
+  $('#quizDots').innerHTML = quizQuestions.map((_,i) => `<i class="${i < quizIdx ? 'done' : ''}"></i>`).join('');
+}
+function renderQuizQuestion() {
+  if (quizIdx >= quizQuestions.length) { showQuizResult(); return; }
+  $('#quizBox').style.display = 'flex';
+  $('#quizResult').classList.remove('show');
+  renderQuizDots();
+  const q = quizQuestions[quizIdx];
+  $('#quizQuestion').textContent = q.text;
+  $('#quizOptions').innerHTML = q.options.map((o,i) => `<button class="quiz-opt" data-i="${i}">${o.text}</button>`).join('');
+  $$('.quiz-opt').forEach(btn => btn.addEventListener('click', () => {
+    const opt = q.options[parseInt(btn.dataset.i,10)];
+    Object.entries(opt.scores).forEach(([k,v]) => quizScores[k] += v);
+    quizIdx++;
+    renderQuizQuestion();
+  }));
+}
+function showQuizResult() {
+  $('#quizBox').style.display = 'none';
+  const top = Object.entries(quizScores).sort((a,b) => b[1]-a[1])[0][0];
+  const d = quizDomains[top];
+  $('#quizResultTitle').textContent = d.title;
+  $('#quizResultTag').textContent = `Best fit: ${top} domain`;
+  $('#quizResultWhy').textContent = d.why;
+  $('#quizResult').classList.add('show');
+}
+$('#quizRetry').addEventListener('click', () => {
+  quizIdx = 0;
+  quizScores = { SYS:0, QNT:0, OPS:0, PROD:0, RND:0 };
+  renderQuizQuestion();
+});
+renderQuizQuestion();
+
+/* ---------- M5: expert network ---------- */
+const expertData = [
+  { name:'Arjun Mehta', role:'Senior SDE @ Microsoft', type:'Alumni', tags:['System Design','Cloud Architecture'], color:'#5B6CFF' },
+  { name:'Dr. Sarah Chen', role:'AI Research Lead @ Google', type:'Industry Expert', tags:['Machine Learning','Python'], color:'#A175FF' },
+  { name:'Priya Nair', role:'Product Manager @ Atlassian', type:'Alumni', tags:['ProductOps','Roadmapping'], color:'#3DD9D9' },
+  { name:'Marcus Webb', role:'Staff Engineer @ Stripe', type:'Industry Expert', tags:['Distributed Systems','Go'], color:'#F2B84B' },
+];
+function initials(name){ return name.split(' ').map(p=>p[0]).slice(0,2).join(''); }
+function renderExperts(filter) {
+  const list = filter === 'all' ? expertData : expertData.filter(e => e.type === filter);
+  $('#expertGrid').innerHTML = list.map(e => `
+    <div class="expert-card">
+      <div class="expert-avatar" style="background:${e.color}">${initials(e.name)}</div>
+      <div class="expert-body">
+        <div class="expert-name">${e.name}</div>
+        <div class="expert-role">${e.role}</div>
+        <div class="expert-tags">${e.tags.map(t => `<span class="expert-tag">${t}</span>`).join('')}</div>
+      </div>
+      <span class="expert-type ${e.type === 'Alumni' ? 'alumni' : 'industry'}">${e.type === 'Alumni' ? 'Alumni' : 'Expert'}</span>
+    </div>`).join('');
+}
+$$('#expertFilters .subject-pill').forEach(btn => btn.addEventListener('click', () => {
+  $$('#expertFilters .subject-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderExperts(btn.dataset.filter);
+}));
+renderExperts('all');
+
+/* ---------- M6: resume archives ---------- */
+const resumeData = [
+  { title:'SDE Intern — Frontend focus', domain:'Software Engineering', level:'intern', downloads:341 },
+  { title:'Data Analyst — fresher template', domain:'Data & Analytics', level:'fresher', downloads:512 },
+  { title:'Full-Stack Engineer — 2 YOE', domain:'Software Engineering', level:'experienced', downloads:288 },
+  { title:'ML Engineer Intern — research-heavy', domain:'Machine Learning', level:'intern', downloads:197 },
+  { title:'Product Manager — 3 YOE', domain:'Product', level:'experienced', downloads:163 },
+];
+function renderResumes(level) {
+  const list = level === 'all' ? resumeData : resumeData.filter(r => r.level === level);
+  $('#resumeGrid').innerHTML = list.map(r => `
+    <div class="resume-card">
+      <div class="r-icon"><svg class="icon-sm"><use href="#i-file"/></svg></div>
+      <div class="r-body"><div class="r-title">${r.title}</div><div class="r-meta">${r.domain} · ${r.level}</div></div>
+      <div class="r-dl"><svg class="icon-sm" style="display:inline;vertical-align:-2px;margin-right:3px"><use href="#i-download"/></svg>${r.downloads}</div>
+    </div>`).join('') || '<div class="queue-empty">No samples at this level yet.</div>';
+}
+$$('#resumeFilters .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('#resumeFilters .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderResumes(btn.dataset.level);
+}));
+renderResumes('all');
+
+/* ---------- M7: practice zone ---------- */
+const practiceData = [
+  { id:'dsa', title:'Data Structures', links:[
+    { name:'LeetCode Practice', url:'https://leetcode.com/problemset/all/' },
+    { name:'NeetCode Roadmap', url:'https://neetcode.io/roadmap' },
+    { name:'GeeksforGeeks DSA', url:'https://www.geeksforgeeks.org/data-structures/' },
+  ]},
+  { id:'os', title:'Operating Systems', links:[
+    { name:'OSTEP (Three Easy Pieces)', url:'https://pages.cs.wisc.edu/~remzi/OSTEP/' },
+    { name:'NPTEL Operating Systems', url:'https://nptel.ac.in/courses/106108101' },
+    { name:'Baeldung Linux/OS', url:'https://www.baeldung.com/linux/' },
+  ]},
+  { id:'dbms', title:'Database Management', links:[
+    { name:'SQLZoo Interactive SQL', url:'https://sqlzoo.net/' },
+    { name:'LeetCode Database Questions', url:'https://leetcode.com/problemset/database/' },
+    { name:'Mode SQL Tutorial', url:'https://mode.com/sql-tutorial/' },
+  ]},
+  { id:'cn', title:'Computer Networks', links:[
+    { name:'GeeksforGeeks Networks', url:'https://www.geeksforgeeks.org/computer-network-tutorials/' },
+    { name:'Cisco Networking Academy', url:'https://www.netacad.com/' },
+    { name:'Cloudflare Learning Center', url:'https://www.cloudflare.com/learning/' },
+  ]},
+  { id:'ai', title:'Artificial Intelligence', links:[
+    { name:'Google ML Crash Course', url:'https://developers.google.com/machine-learning/crash-course' },
+    { name:'Kaggle Learn Microcourses', url:'https://www.kaggle.com/learn' },
+    { name:'OpenAI Spinning Up (RL)', url:'https://spinningup.openai.com/' },
+  ]},
+];
+function renderPracticeSubjects() {
+  $('#practiceSubjects').innerHTML = practiceData.map((s,i) =>
+    `<button class="subject-pill ${i===0?'active':''}" data-id="${s.id}">${s.title}</button>`).join('');
+  $$('#practiceSubjects .subject-pill').forEach(btn => btn.addEventListener('click', () => {
+    $$('#practiceSubjects .subject-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderPracticeLinks(btn.dataset.id);
+  }));
+}
+function renderPracticeLinks(id) {
+  const subj = practiceData.find(s => s.id === id);
+  $('#practiceLinks').innerHTML = subj.links.map(l =>
+    `<a class="resource-link" href="${l.url}" target="_blank" rel="noopener"><svg><use href="#i-link"/></svg><span>${l.name}</span><svg class="icon-sm"><use href="#i-arrow"/></svg></a>`).join('');
+}
+renderPracticeSubjects();
+renderPracticeLinks(practiceData[0].id);
+
+/* ---------- M8: admin directory ---------- */
+const directoryData = [
+  { name:'Rohan Mehta', id:'24DCS021', role:'Student', dept:'CSE', verified:true },
+  { name:'Anjali Sharma', id:'24DCS049', role:'Student', dept:'CSE', verified:true },
+  { name:'Dr. Kavita Rao', id:'FAC-0142', role:'Faculty', dept:'CSE', verified:true },
+  { name:'Dr. Sanjay Iyer', id:'FAC-0098', role:'HOD', dept:'IT', verified:true },
+  { name:'Karan Joshi', id:'24DCE045', role:'Student', dept:'CE', verified:false },
+];
+function renderDirectory() {
+  $('#directoryTable').innerHTML = `<tr><th>Name</th><th>College ID</th><th>Role</th><th>Dept</th><th>Status</th></tr>` +
+    directoryData.map((u,i) => `<tr>
+      <td>${u.name}</td><td style="font-family:var(--ff-mono)">${u.id}</td><td>${u.role}</td><td>${u.dept}</td>
+      <td><span class="verify-toggle ${u.verified ? 'yes' : 'no'}" data-i="${i}">${u.verified ? '✓ Verified' : '✕ Pending'}</span></td>
+    </tr>`).join('');
+  $$('.verify-toggle').forEach(el => el.addEventListener('click', () => {
+    const i = parseInt(el.dataset.i, 10);
+    directoryData[i].verified = !directoryData[i].verified;
+    renderDirectory();
+  }));
+}
+renderDirectory();
+</script>
+
+</body>
+</html>

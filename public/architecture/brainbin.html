@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainBin — CHARUSAT Student Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================ TOKENS ============================================================ */
+:root{
+  --bg:#F4F8FF;
+  --surface:#FFFFFF;
+  --surface-alt:#EAF4FF;
+  --sky:#DBE9FF;
+  --sky-deep:#C2DBFF;
+  --ink:#16213B;
+  --muted:#5C6B85;
+  --muted-soft:#8C99B5;
+  --border:#DDE7FB;
+  --navy:#0B3D91;
+  --navy-deep:#082B69;
+  --blue:#164DBA;
+  --blue-soft:rgba(11,61,145,0.08);
+  --green:#2E9E5B;
+  --green-soft:#E4F6EB;
+  --amber:#E08A1E;
+  --amber-soft:#FCEEDB;
+  --rose:#D32F2F;
+  --rose-soft:#FBE6E6;
+  --purple:#8E3FC9;
+  --purple-soft:#F2E6FB;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:22px;
+  --shadow-sm:0 1px 2px rgba(11,61,145,0.06);
+  --shadow-md:0 10px 28px rgba(11,61,145,0.10);
+  --shadow-lg:0 20px 50px rgba(11,61,145,0.16);
+  --container:1180px;
+  --ff-display:'Poppins', sans-serif;
+  --ff-body:'Inter', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--ff-body);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  position:relative;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    radial-gradient(circle at 12% 10%, rgba(11,61,145,0.07), transparent 40%),
+    radial-gradient(circle at 88% 22%, rgba(46,158,91,0.06), transparent 38%),
+    radial-gradient(circle at 50% 100%, rgba(142,63,201,0.05), transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+main, header, footer, section{ position:relative; z-index:1; }
+
+h1,h2,h3,h4{ font-family:var(--ff-display); font-weight:700; letter-spacing:-0.01em; color:var(--ink); }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+input, select, textarea{ font-family:inherit; }
+img{ max-width:100%; display:block; }
+
+.container{ max-width:var(--container); margin:0 auto; padding:0 28px; }
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ff-mono); font-size:11.5px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--navy); background:var(--blue-soft); border:1px solid rgba(11,61,145,0.18);
+  padding:6px 13px; border-radius:99px;
+}
+.eyebrow::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--navy); }
+
+.section{ padding:92px 0; }
+.section.alt{ background:linear-gradient(180deg, transparent, var(--surface-alt) 8%, var(--surface-alt) 92%, transparent); }
+.section.tight{ padding:60px 0; }
+.section-head{ max-width:640px; margin-bottom:46px; }
+.section-head h2{ font-size:clamp(27px,3.4vw,38px); line-height:1.16; margin-top:16px; }
+.section-head .sub{ color:var(--muted); font-size:15.5px; margin-top:13px; line-height:1.6; }
+.sub code, p code, li code{ font-family:var(--ff-mono); font-size:0.86em; background:var(--surface-alt); border:1px solid var(--border); padding:1px 6px; border-radius:5px; color:var(--blue); }
+
+.icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.icon-sm{ width:15px; height:15px; }
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  font-family:var(--ff-body); font-weight:600; font-size:14px;
+  padding:12px 22px; border-radius:11px; transition:all .18s ease; white-space:nowrap;
+  border:1px solid transparent;
+}
+.btn-primary{ background:linear-gradient(135deg, var(--navy), var(--blue)); color:#fff; box-shadow:0 8px 20px rgba(11,61,145,0.25); }
+.btn-primary:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(11,61,145,0.32); }
+.btn-ghost{ background:var(--surface); border-color:var(--border); color:var(--ink); }
+.btn-ghost:hover{ border-color:var(--navy); color:var(--navy); }
+.btn-soft{ background:var(--surface-alt); border:1px solid var(--border); color:var(--navy); }
+.btn-soft:hover{ border-color:var(--navy); }
+.btn-sm{ padding:9px 16px; font-size:13px; }
+
+/* ============================================================ HEADER ============================================================ */
+.site-header{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(244,248,255,0.82); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.site-header .container{ display:flex; align-items:center; justify-content:space-between; height:68px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family:var(--ff-display); font-weight:700; font-size:17px; letter-spacing:-0.01em; color:var(--navy); }
+.brand-mark{
+  width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, var(--navy), var(--blue)); box-shadow:0 4px 14px rgba(11,61,145,0.3);
+}
+.brand-mark svg{ width:19px; height:19px; stroke:#fff; fill:none; stroke-width:2; }
+nav.main-nav{ display:flex; align-items:center; gap:30px; }
+nav.main-nav a{ font-size:13.5px; font-weight:500; color:var(--muted); transition:color .15s ease; }
+nav.main-nav a:hover{ color:var(--navy); }
+.nav-actions{ display:flex; align-items:center; gap:12px; }
+.nav-toggle{ display:none; flex-direction:column; gap:4px; padding:8px; }
+.nav-toggle span{ width:20px; height:1.8px; background:var(--navy); border-radius:2px; transition:all .2s ease; }
+.nav-toggle.open span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2){ opacity:0; }
+.nav-toggle.open span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+@media (max-width:900px){
+  nav.main-nav{ position:fixed; top:68px; left:0; right:0; background:var(--bg); border-bottom:1px solid var(--border); flex-direction:column; align-items:flex-start; padding:18px 28px; gap:16px; transform:translateY(-130%); transition:transform .25s ease; }
+  nav.main-nav.open{ transform:translateY(0); }
+  .nav-toggle{ display:flex; }
+  .nav-cta{ display:none; }
+}
+
+/* ============================================================ HERO ============================================================ */
+.hero{ padding:164px 0 96px; position:relative; overflow:hidden; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:54px; align-items:center; }
+.hero-copy h1{ font-size:clamp(34px,4.7vw,54px); line-height:1.08; letter-spacing:-0.02em; }
+.hero-copy h1 em{ font-style:normal; background:linear-gradient(100deg, var(--navy), var(--blue)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero-copy .lede{ font-size:16.5px; color:var(--muted); margin-top:20px; max-width:520px; line-height:1.65; }
+.hero-actions{ display:flex; gap:14px; margin-top:32px; flex-wrap:wrap; }
+.hero-meta{ display:flex; gap:26px; margin-top:44px; flex-wrap:wrap; }
+.hero-meta div{ display:flex; flex-direction:column; gap:3px; }
+.hero-meta strong{ font-family:var(--ff-display); font-size:23px; color:var(--navy); }
+.hero-meta span{ font-size:11.5px; color:var(--muted-soft); text-transform:uppercase; letter-spacing:0.05em; }
+
+/* signature visual: materials browser */
+.hero-visual{ position:relative; }
+.browser-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:6px; box-shadow:var(--shadow-lg);
+}
+.browser-titlebar{ display:flex; align-items:center; gap:8px; padding:12px 16px; }
+.browser-titlebar i{ width:9px; height:9px; border-radius:50%; background:var(--border); }
+.browser-titlebar span{ font-family:var(--ff-mono); font-size:11px; color:var(--muted-soft); margin-left:6px; }
+.browser-body{ background:var(--surface-alt); border-radius:16px; padding:18px; }
+.browser-tabs{ display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; }
+.browser-tab{ font-family:var(--ff-mono); font-size:11px; padding:6px 11px; border-radius:8px; background:var(--surface); color:var(--muted); border:1px solid var(--border); }
+.browser-tab.active{ background:var(--navy); color:#fff; border-color:var(--navy); }
+.browser-list{ display:flex; flex-direction:column; gap:8px; }
+.browser-row{ display:flex; align-items:center; gap:11px; background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:11px 13px; }
+.browser-row .b-icon{ width:32px; height:32px; border-radius:8px; background:var(--blue-soft); color:var(--navy); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.browser-row .b-body{ flex:1; min-width:0; }
+.browser-row .b-title{ font-size:12.5px; font-weight:600; color:var(--ink); }
+.browser-row .b-meta{ font-size:10.5px; color:var(--muted-soft); margin-top:1px; }
+.browser-row .b-badge{ font-family:var(--ff-mono); font-size:9.5px; padding:3px 8px; border-radius:99px; background:var(--green-soft); color:var(--green); flex-shrink:0; }
+
+@media (max-width:900px){
+  .hero-grid{ grid-template-columns:1fr; }
+}
+
+/* ============================================================ HOW IT WORKS (roles) ============================================================ */
+.role-split{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.role-pane{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:28px 26px; position:relative; overflow:hidden;
+}
+.role-pane::before{ content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--rp-color, var(--navy)); }
+.role-pane-head{ display:flex; align-items:center; gap:13px; margin-bottom:16px; }
+.role-pane-head .rp-icon{ width:44px; height:44px; border-radius:12px; background:var(--rp-soft, var(--blue-soft)); color:var(--rp-color, var(--navy)); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.role-pane-head h3{ font-size:18px; }
+.role-pane-head span{ font-family:var(--ff-mono); font-size:11px; color:var(--muted-soft); }
+.role-pane p.rp-desc{ font-size:13.5px; color:var(--muted); line-height:1.6; margin-bottom:16px; }
+.rp-list{ display:flex; flex-direction:column; gap:9px; }
+.rp-list li{ display:flex; align-items:flex-start; gap:9px; font-size:13px; color:var(--muted); line-height:1.5; }
+.rp-list li svg{ width:15px; height:15px; color:var(--rp-color, var(--navy)); flex-shrink:0; margin-top:1px; }
+
+@media (max-width:860px){ .role-split{ grid-template-columns:1fr; } }
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+.module-explorer{ display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
+.module-nav{ display:flex; flex-direction:column; gap:6px; position:sticky; top:90px; }
+.module-tab{
+  display:flex; align-items:center; gap:11px; text-align:left;
+  padding:12px 14px; border-radius:11px; font-size:13.5px; font-weight:500; color:var(--muted);
+  transition:background .15s ease, color .15s ease; border:1px solid transparent;
+}
+.module-tab span{ font-family:var(--ff-mono); font-size:11px; color:var(--muted-soft); width:18px; flex-shrink:0; }
+.module-tab:hover{ background:var(--surface); color:var(--ink); }
+.module-tab.active{ background:var(--surface); color:var(--navy); border-color:var(--border); box-shadow:var(--shadow-sm); }
+.module-tab.active span{ color:var(--navy); }
+
+.module-panels{ position:relative; }
+.module-panel{
+  display:none; grid-template-columns:0.82fr 1.18fr; gap:30px;
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:32px; box-shadow:var(--shadow-md);
+}
+.module-panel.active{ display:grid; animation:fadeIn .35s ease; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+.panel-text h3{ font-size:20px; margin-bottom:10px; }
+.panel-text > p{ color:var(--muted); font-size:14px; line-height:1.6; margin-bottom:18px; }
+.panel-text .route-tag{ display:inline-flex; align-items:center; gap:6px; font-family:var(--ff-mono); font-size:11px; color:var(--blue); background:var(--blue-soft); border:1px solid rgba(11,61,145,0.18); padding:5px 10px; border-radius:7px; margin-bottom:16px; }
+.feature-list{ display:flex; flex-direction:column; gap:10px; }
+.feature-list li{ display:flex; align-items:flex-start; gap:9px; font-size:13px; color:var(--muted); line-height:1.5; }
+.feature-list li::before{ content:''; width:5px; height:5px; border-radius:50%; background:var(--navy); margin-top:7px; flex-shrink:0; }
+.panel-demo{ background:var(--surface-alt); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; }
+.demo-label{ font-family:var(--ff-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted-soft); margin-bottom:14px; }
+
+/* ---------- shared demo bits ---------- */
+.seg-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.seg-btn{ padding:8px 14px; border-radius:9px; font-size:12.5px; font-weight:500; background:var(--surface); border:1px solid var(--border); color:var(--muted); transition:all .15s ease; }
+.seg-btn:hover{ color:var(--ink); }
+.seg-btn.active{ background:var(--navy); border-color:var(--navy); color:#fff; }
+
+.status-pill{ display:inline-flex; align-items:center; gap:5px; font-family:var(--ff-mono); font-size:10.5px; font-weight:600; padding:3px 9px; border-radius:99px; text-transform:uppercase; letter-spacing:0.03em; }
+.status-active{ background:var(--green-soft); color:var(--green); }
+.status-inactive{ background:var(--rose-soft); color:var(--rose); }
+.status-open{ background:var(--green-soft); color:var(--green); }
+.status-closed{ background:var(--muted-soft); color:#fff; }
+.status-admin{ background:var(--purple-soft); color:var(--purple); }
+.status-user{ background:var(--blue-soft); color:var(--navy); }
+
+/* M1: auth form preview */
+.auth-mock{ background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; }
+.auth-field{ margin-bottom:12px; }
+.auth-field label{ display:block; font-size:11.5px; font-weight:600; color:var(--muted); margin-bottom:5px; }
+.auth-field input{ width:100%; padding:9px 11px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; background:var(--bg); color:var(--ink); }
+.auth-validation{ margin-top:14px; display:flex; flex-direction:column; gap:7px; }
+.auth-validation li{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+.auth-validation li svg{ width:13px; height:13px; flex-shrink:0; }
+.auth-validation li.pass svg{ color:var(--green); }
+.auth-validation li.fail svg{ color:var(--rose); }
+
+/* M2: semester dashboard */
+.sem-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+.sem-card{ background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:13px 10px; text-align:center; cursor:pointer; transition:all .15s ease; }
+.sem-card:hover{ border-color:var(--navy); transform:translateY(-2px); }
+.sem-card .sc-num{ font-family:var(--ff-display); font-size:19px; color:var(--navy); font-weight:700; }
+.sem-card .sc-label{ font-size:10px; color:var(--muted-soft); margin-top:2px; }
+.faq-mini{ margin-top:14px; display:flex; flex-direction:column; gap:7px; }
+.faq-mini-item{ background:var(--surface); border:1px solid var(--border); border-radius:9px; overflow:hidden; }
+.faq-mini-q{ padding:10px 13px; font-size:12.5px; font-weight:600; display:flex; justify-content:space-between; align-items:center; }
+.faq-mini-q svg{ width:13px; height:13px; transition:transform .2s ease; flex-shrink:0; color:var(--muted-soft); }
+.faq-mini-item.open .faq-mini-q svg{ transform:rotate(180deg); }
+.faq-mini-a{ max-height:0; overflow:hidden; transition:max-height .25s ease; }
+.faq-mini-item.open .faq-mini-a{ max-height:120px; }
+.faq-mini-a p{ padding:0 13px 12px; font-size:12px; color:var(--muted); line-height:1.55; }
+
+/* M3: materials table */
+.materials-table{ width:100%; border-collapse:collapse; font-size:12px; }
+.materials-table th{ text-align:left; font-family:var(--ff-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted-soft); padding:8px 9px; border-bottom:1.5px solid var(--border); }
+.materials-table td{ padding:9px; border-bottom:1px solid var(--border); color:var(--muted); }
+.materials-table td:first-child{ color:var(--ink); font-weight:500; }
+.materials-table .dl-count{ font-family:var(--ff-mono); color:var(--navy); }
+
+/* M4: drive resource linker */
+.drive-form{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:14px; }
+.drive-form select{ padding:9px 10px; border:1.5px solid var(--border); border-radius:8px; font-size:12px; background:var(--surface); color:var(--ink); }
+.drive-resource-list{ display:flex; flex-direction:column; gap:8px; }
+.drive-resource-item{ display:flex; align-items:center; gap:11px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:11px; }
+.drive-resource-item .dr-icon{ width:32px; height:32px; border-radius:8px; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.drive-resource-item .dr-body{ flex:1; min-width:0; font-size:12.5px; }
+.drive-resource-item .dr-title{ font-weight:600; color:var(--ink); }
+.drive-resource-item .dr-meta{ font-size:11px; color:var(--muted-soft); }
+
+/* M5: events */
+.event-list{ display:flex; flex-direction:column; gap:9px; }
+.event-card{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:11px; padding:12px; }
+.event-card .ev-date{ width:46px; height:46px; border-radius:9px; background:var(--blue-soft); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+.event-card .ev-date strong{ font-family:var(--ff-display); font-size:15px; color:var(--navy); line-height:1; }
+.event-card .ev-date span{ font-size:8.5px; color:var(--navy); text-transform:uppercase; }
+.event-card .ev-body{ flex:1; min-width:0; }
+.event-card .ev-title{ font-size:13px; font-weight:600; color:var(--ink); }
+.event-card .ev-desc{ font-size:11.5px; color:var(--muted-soft); margin-top:2px; }
+.event-form{ display:flex; flex-direction:column; gap:9px; margin-bottom:14px; }
+.event-form input, .event-form textarea{ padding:9px 11px; border:1.5px solid var(--border); border-radius:8px; font-size:12.5px; background:var(--surface); color:var(--ink); }
+
+/* M6: user management */
+.user-table{ width:100%; border-collapse:collapse; font-size:12px; }
+.user-table th{ text-align:left; font-family:var(--ff-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted-soft); padding:8px 9px; border-bottom:1.5px solid var(--border); }
+.user-table td{ padding:9px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:middle; }
+.user-table td:first-child{ color:var(--ink); font-weight:500; }
+.row-actions{ display:flex; gap:5px; }
+.row-act-btn{ width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); transition:all .15s ease; }
+.row-act-btn svg{ width:12px; height:12px; }
+.row-act-btn.promote{ color:var(--purple); } .row-act-btn.promote:hover{ background:var(--purple-soft); border-color:var(--purple); }
+.row-act-btn.toggle{ color:var(--amber); } .row-act-btn.toggle:hover{ background:var(--amber-soft); border-color:var(--amber); }
+.row-act-btn.delete{ color:var(--rose); } .row-act-btn.delete:hover{ background:var(--rose-soft); border-color:var(--rose); }
+
+/* M7: audit log + stats */
+.audit-stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:9px; margin-bottom:16px; }
+.audit-stat{ background:var(--surface); border-radius:10px; padding:12px 8px; text-align:center; border-left:4px solid var(--as-color, var(--navy)); }
+.audit-stat strong{ display:block; font-family:var(--ff-display); font-size:18px; color:var(--ink); }
+.audit-stat span{ font-size:9.5px; color:var(--muted-soft); text-transform:uppercase; letter-spacing:0.03em; }
+.audit-log-list{ display:flex; flex-direction:column; gap:7px; }
+.audit-log-item{ display:flex; align-items:center; gap:10px; font-size:12px; padding:9px 11px; background:var(--surface); border:1px solid var(--border); border-radius:9px; }
+.audit-log-item .al-icon{ width:26px; height:26px; border-radius:7px; background:var(--blue-soft); color:var(--navy); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.audit-log-item .al-icon svg{ width:13px; height:13px; }
+.audit-log-item .al-body{ flex:1; }
+.audit-log-item .al-time{ font-family:var(--ff-mono); font-size:10.5px; color:var(--muted-soft); flex-shrink:0; }
+
+@media (max-width:900px){
+  .module-explorer{ grid-template-columns:1fr; }
+  .module-nav{ position:static; flex-direction:row; overflow-x:auto; padding-bottom:6px; }
+  .module-tab{ flex-shrink:0; }
+  .module-panel{ grid-template-columns:1fr; padding:24px 20px; }
+  .audit-stat-grid{ grid-template-columns:1fr 1fr; }
+  .drive-form{ grid-template-columns:1fr; }
+}
+
+/* ============================================================ DATA MODEL ============================================================ */
+.schema-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.schema-card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:18px; transition:border-color .2s ease;
+}
+.schema-card:hover{ border-color:var(--navy); }
+.schema-card-head{ display:flex; align-items:center; gap:8px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border); }
+.schema-card-head svg{ width:15px; height:15px; color:var(--navy); flex-shrink:0; }
+.schema-card-head h4{ font-family:var(--ff-mono); font-size:13px; font-weight:600; color:var(--ink); }
+.schema-fields{ display:flex; flex-direction:column; gap:7px; }
+.schema-field{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; font-family:var(--ff-mono); font-size:11px; }
+.schema-field .f-name{ color:var(--muted); }
+.schema-field .f-type{ color:var(--muted-soft); white-space:nowrap; }
+.schema-field.ref .f-name::before{ content:'→ '; color:var(--blue); }
+.schema-field.ref .f-name{ color:var(--blue); }
+
+@media (max-width:1080px){ .schema-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:560px){ .schema-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================ STACK ============================================================ */
+.stack-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.stack-card{
+  display:flex; align-items:center; gap:13px; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:18px;
+}
+.stack-card .s-icon{ width:38px; height:38px; border-radius:10px; background:var(--surface-alt); display:flex; align-items:center; justify-content:center; color:var(--navy); flex-shrink:0; }
+.stack-card .s-icon svg{ width:19px; height:19px; }
+.stack-card h5{ font-size:13.5px; }
+.stack-card span{ font-size:11.5px; color:var(--muted-soft); }
+
+@media (max-width:1080px){ .stack-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:560px){ .stack-grid{ grid-template-columns:1fr; } }
+
+/* ============================================================ FOOTER ============================================================ */
+.site-footer{ border-top:1px solid var(--border); padding:44px 0; }
+.footer-row{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+.footer-row .brand{ font-size:15px; }
+.footer-note{ font-size:12.5px; color:var(--muted-soft); }
+.footer-links{ display:flex; gap:20px; }
+.footer-links a{ font-size:12.5px; color:var(--muted); transition:color .15s ease; }
+.footer-links a:hover{ color:var(--navy); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-student" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.9V17h2V9L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M5 12.2V17c0 1.5 3.1 3 7 3s7-1.5 7-3v-4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-admin" viewBox="0 0 24 24"><path d="M12 2 3 5.5v6c0 5 3.8 8.7 9 10.5 5.2-1.8 9-5.5 9-10.5v-6L12 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12.2l2.4 2.4 4.6-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5a1.5 1.5 0 0 1 1.5-1.5h4.5l2 2.5h8.5A1.5 1.5 0 0 1 21 9v8.5A1.5 1.5 0 0 1 19.5 19h-15A1.5 1.5 0 0 1 3 17.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 2v5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-drive" viewBox="0 0 24 24"><path d="M8 3h8l5 9-4 8H7l-4-8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 12h18M9 3l-6 9M15 3l6 9" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 11V7a5 5 0 0 1 10 0v4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M16 8.5a3 3 0 1 1 .5 5.9M19.5 20c0-2.6-1.8-4.6-4.2-5.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 2 3 5.5v6c0 5 3.8 8.7 9 10.5 5.2-1.8 9-5.5 9-10.5v-6L12 2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12.2l2.4 2.4 4.6-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M20 20l-4.3-4.3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4M12 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.3 3.9 1.8 18.5A1.8 1.8 0 0 0 3.4 21h17.2a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-mysql" viewBox="0 0 24 24"><path d="M4 6c0 7 16 7 16 0M4 6v12c0 1.5 3.5 3 8 3s8-1.5 8-3V6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 12c0 1.5 3.5 3 8 3s8-1.5 8-3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="14" width="18" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 7h.01M7 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 6 2 12l6 6M16 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-toggle" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="12" r="3" fill="currentColor"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="3.5" cy="6" r="1.4" fill="currentColor"/><circle cx="3.5" cy="12" r="1.4" fill="currentColor"/><circle cx="3.5" cy="18" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs>
+</svg>
+<header class="site-header">
+  <div class="container">
+    <a href="#top" class="brand"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 0-4 4c0 1 .3 1.7.8 2.4C8.3 11.2 8 12.3 8 13.5 8 16 10 18 12.5 18S17 16 17 13.5c0-1.2-.3-2.3-.8-3.1.5-.7.8-1.4.8-2.4a4 4 0 0 0-4-4z"/><path d="M9 18v1a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-1"/></svg></span>BrainBin</a>
+    <nav class="main-nav" id="navLinks">
+      <a href="#overview">Overview</a>
+      <a href="#how">How it works</a>
+      <a href="#modules">Modules</a>
+      <a href="#schema">Data model</a>
+      <a href="#stack">Stack</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#modules" class="btn btn-primary btn-sm nav-cta">Explore modules</a>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<!-- ============================================================ HERO ============================================================ -->
+<section class="hero" id="overview">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">Student Project · ITUE203 · CHARUSAT</span>
+      <h1>Six semesters of notes,<br>finally in <em>one place</em><br>instead of ten group chats.</h1>
+      <p class="lede">BrainBin centralizes semester-wise study materials, college events and Google Drive resources behind a plain login — built on PHP, MySQL and prepared statements, with an admin panel for the person who actually has to keep it organized.</p>
+      <div class="hero-actions">
+        <a href="#modules" class="btn btn-primary">Walk through the modules</a>
+        <a href="#how" class="btn btn-ghost">See how it's built</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong>6</strong><span>Semesters covered</span></div>
+        <div><strong>2</strong><span>User roles</span></div>
+        <div><strong>6</strong><span>MySQL tables</span></div>
+        <div><strong>17</strong><span>PHP endpoints</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="browser-card">
+        <div class="browser-titlebar"><i></i><i></i><i></i><span>get_drive_materials.php?semester=3</span></div>
+        <div class="browser-body">
+          <div class="browser-tabs" id="heroTabs"></div>
+          <div class="browser-list" id="heroList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ HOW IT WORKS ============================================================ -->
+<section class="section alt" id="how">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Two roles, one users table</span>
+      <h2>Just <code>user</code> and <code>admin</code> — no in-between.</h2>
+      <p class="sub">There's no faculty tier here. Every account is a row in <code>users</code> with a <code>role</code> column; admins get a second dashboard, students get the portal. Status checks (<code>active</code> / <code>inactive</code>) gate login before role even matters.</p>
+    </div>
+    <div class="role-split">
+      <div class="role-pane" style="--rp-color:#0B3D91; --rp-soft:rgba(11,61,145,0.1)">
+        <div class="role-pane-head">
+          <div class="rp-icon"><svg class="icon"><use href="#i-student"/></svg></div>
+          <div><h3>Student</h3><span>role: "user"</span></div>
+        </div>
+        <p class="rp-desc">Signs up with a college email, lands on a dashboard built around six semester cards plus a collective materials browser.</p>
+        <ul class="rp-list">
+          <li><svg><use href="#i-check"/></svg>Browse materials by semester &amp; subject</li>
+          <li><svg><use href="#i-check"/></svg>Open linked Google Drive folders</li>
+          <li><svg><use href="#i-check"/></svg>See upcoming college events</li>
+          <li><svg><use href="#i-check"/></svg>Download server-hosted material files</li>
+        </ul>
+      </div>
+      <div class="role-pane" style="--rp-color:#8E3FC9; --rp-soft:rgba(142,63,201,0.1)">
+        <div class="role-pane-head">
+          <div class="rp-icon"><svg class="icon"><use href="#i-admin"/></svg></div>
+          <div><h3>Admin</h3><span>role: "admin"</span></div>
+        </div>
+        <p class="rp-desc">The same login screen, a different landing page — full control over users, events, and which Drive folders map to which subject.</p>
+        <ul class="rp-list">
+          <li><svg><use href="#i-check"/></svg>Promote, demote, activate, deactivate, delete users</li>
+          <li><svg><use href="#i-check"/></svg>Create and manage college events</li>
+          <li><svg><use href="#i-check"/></svg>Link Drive folders to semester + subject</li>
+          <li><svg><use href="#i-check"/></svg>Read the full audit log</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ MODULES ============================================================ -->
+<section class="section" id="modules">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Inside the portal</span>
+      <h2>7 modules. Each one a real PHP endpoint.</h2>
+      <p class="sub">Pick a module on the left — every panel lists the actual feature set and a live sample of how it behaves, checked against the project's own PHP files and SQL queries.</p>
+    </div>
+
+    <div class="module-explorer">
+      <div class="module-nav" id="moduleNav">
+        <button class="module-tab active" data-mod="m1"><span>01</span>Authentication</button>
+        <button class="module-tab" data-mod="m2"><span>02</span>Student Dashboard</button>
+        <button class="module-tab" data-mod="m3"><span>03</span>Study Materials</button>
+        <button class="module-tab" data-mod="m4"><span>04</span>Drive Resources</button>
+        <button class="module-tab" data-mod="m5"><span>05</span>Events</button>
+        <button class="module-tab" data-mod="m6"><span>06</span>User Management</button>
+        <button class="module-tab" data-mod="m7"><span>07</span>Audit &amp; Analytics</button>
+      </div>
+
+      <div class="module-panels" id="modulePanels">
+
+        <!-- M1: Authentication -->
+        <div class="module-panel active" data-mod="m1">
+          <div class="panel-text">
+            <h3>Authentication</h3>
+            <span class="route-tag">POST signup.php · login.php</span>
+            <p>Plain username/password auth with PHP's <code>password_hash()</code>, prepared statements against MySQL, and a status check that runs before the password is even verified.</p>
+            <ul class="feature-list">
+              <li>Username: 3-50 alphanumeric characters, server-validated</li>
+              <li>Password hashed with bcrypt via password_hash()</li>
+              <li>Inactive accounts are blocked at login, not just hidden</li>
+              <li>Every login and signup writes a row to audit_log</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Live signup validation</p>
+            <div class="auth-mock">
+              <div class="auth-field">
+                <label>Username</label>
+                <input type="text" id="authUsername" placeholder="e.g. swayam_p" value="sw">
+              </div>
+              <div class="auth-field">
+                <label>Password</label>
+                <input type="password" id="authPassword" placeholder="At least 6 characters" value="12345">
+              </div>
+              <ul class="auth-validation" id="authValidation"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- M2: Student Dashboard -->
+        <div class="module-panel" data-mod="m2">
+          <div class="panel-text">
+            <h3>Student Dashboard</h3>
+            <span class="route-tag">GET dashboard.php</span>
+            <p>The landing page after login — six semester cards, an "All Study Materials" shortcut, upcoming events pulled live from MySQL, and an FAQ accordion.</p>
+            <ul class="feature-list">
+              <li>One card per semester (1st through 6th)</li>
+              <li>Upcoming events queried straight from the events table</li>
+              <li>Session timestamp refreshed on every dashboard load</li>
+              <li>Plain-JS FAQ accordion, no framework needed</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Click a semester</p>
+            <div class="sem-grid" id="semGrid"></div>
+            <div class="faq-mini" id="faqMini"></div>
+          </div>
+        </div>
+
+        <!-- M3: Study Materials -->
+        <div class="module-panel" data-mod="m3">
+          <div class="panel-text">
+            <h3>Study Materials</h3>
+            <span class="route-tag">GET get_materials.php · download_material.php</span>
+            <p>The server-hosted half of the materials system — files uploaded directly through the admin panel, tracked in a <code>study_materials</code> table with a running download count.</p>
+            <ul class="feature-list">
+              <li>Filtered by semester (1-6) on every request</li>
+              <li>Joined against users to show who uploaded each file</li>
+              <li>download_count increments on every fetch</li>
+              <li>File size converted to KB for display</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Semester 3 materials</p>
+            <table class="materials-table" id="materialsTable"></table>
+          </div>
+        </div>
+
+        <!-- M4: Drive Resources -->
+        <div class="module-panel" data-mod="m4">
+          <div class="panel-text">
+            <h3>Google Drive Resources</h3>
+            <span class="route-tag">GET get_drive_materials.php · POST admin_drive_actions.php</span>
+            <p>The newer, recommended path: instead of uploading files to the server, an admin links a Drive folder to a semester + subject + material type, and it shows up for every student instantly.</p>
+            <ul class="feature-list">
+              <li>No storage limits — Drive holds the actual files</li>
+              <li>One dropdown form: semester, subject, material type</li>
+              <li>Grouped by semester then subject on the student side</li>
+              <li>Automatic per-user access grant is wired but currently disabled in signup.php</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Admin: link a new folder</p>
+            <div class="drive-form">
+              <select id="driveSemSelect"><option>Semester 3</option><option>Semester 4</option><option>Semester 5</option></select>
+              <select id="driveSubjSelect"><option>DBMS</option><option>Operating Systems</option><option>Web Frameworks</option></select>
+            </div>
+            <button class="btn btn-primary btn-sm" id="driveLinkBtn" style="width:100%; margin-bottom:14px;">Link Drive folder</button>
+            <div class="drive-resource-list" id="driveResourceList"></div>
+          </div>
+        </div>
+
+        <!-- M5: Events -->
+        <div class="module-panel" data-mod="m5">
+          <div class="panel-text">
+            <h3>Event Management</h3>
+            <span class="route-tag">GET manage_events.php · POST event_actions.php</span>
+            <p>Full CRUD for college events — admins create and remove them, students see the read-only upcoming list on their dashboard.</p>
+            <ul class="feature-list">
+              <li>event_name, event_date, description, status fields</li>
+              <li>Status is open or closed, shown as a colored pill</li>
+              <li>Newest events sort first, ordered by event_date</li>
+              <li>Deletes are immediate — no soft-delete flag</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Add an event</p>
+            <div class="event-form">
+              <input type="text" id="eventNameInput" placeholder="Event name" value="Tech Fest 2026">
+              <input type="text" id="eventDateInput" placeholder="Date" value="Mar 14">
+            </div>
+            <button class="btn btn-primary btn-sm" id="addEventBtn" style="width:100%; margin-bottom:14px;">Add event</button>
+            <div class="event-list" id="eventList"></div>
+          </div>
+        </div>
+
+        <!-- M6: User Management -->
+        <div class="module-panel" data-mod="m6">
+          <div class="panel-text">
+            <h3>User Management</h3>
+            <span class="route-tag">POST admin_actions.php</span>
+            <p>One action endpoint, four operations — change_role, toggle_status, delete_user, all gated by a server-side admin check, and all blocked from targeting your own account.</p>
+            <ul class="feature-list">
+              <li>Promote / demote between user and admin</li>
+              <li>Activate / deactivate without deleting the account</li>
+              <li>Hard delete, with no self-delete allowed</li>
+              <li>Every action writes to audit_log with an IP address</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Directory — try the row actions</p>
+            <table class="user-table" id="userTable"></table>
+          </div>
+        </div>
+
+        <!-- M7: Audit & Analytics -->
+        <div class="module-panel" data-mod="m7">
+          <div class="panel-text">
+            <h3>Audit &amp; Analytics</h3>
+            <span class="route-tag">GET admin_dashboard.php</span>
+            <p>The numbers on the admin landing page are live COUNT() queries, not cached stats — total users, total admins, total and open events, plus the 10 most recent audit_log rows.</p>
+            <ul class="feature-list">
+              <li>4 stat cards computed on every dashboard load</li>
+              <li>Audit log joined against users for the actor's name</li>
+              <li>Logs every signup, login, role change and deletion</li>
+              <li>No log rotation yet — table grows indefinitely</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Admin overview</p>
+            <div class="audit-stat-grid">
+              <div class="audit-stat" style="--as-color:#0B3D91"><strong>312</strong><span>Total users</span></div>
+              <div class="audit-stat" style="--as-color:#8E3FC9"><strong>4</strong><span>Admins</span></div>
+              <div class="audit-stat" style="--as-color:#2E9E5B"><strong>9</strong><span>Open events</span></div>
+              <div class="audit-stat" style="--as-color:#E08A1E"><strong>14</strong><span>Total events</span></div>
+            </div>
+            <div class="audit-log-list" id="auditLogList"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ DATA MODEL ============================================================ -->
+<section class="section alt" id="schema">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Under the hood</span>
+      <h2>6 MySQL tables, inferred from the live queries.</h2>
+      <p class="sub">There's no ORM here — just prepared statements. This schema is reconstructed directly from the SELECT/INSERT calls in the PHP files, since the SQL setup scripts described in the README aren't included in this checkout. Blue fields are foreign-key-style references.</p>
+    </div>
+    <div class="schema-grid">
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-users"/></svg><h4>users</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field"><span class="f-name">username</span><span class="f-type">VARCHAR, unique</span></div>
+          <div class="schema-field"><span class="f-name">email</span><span class="f-type">VARCHAR, unique</span></div>
+          <div class="schema-field"><span class="f-name">password</span><span class="f-type">VARCHAR, hashed</span></div>
+          <div class="schema-field"><span class="f-name">role</span><span class="f-type">user / admin</span></div>
+          <div class="schema-field"><span class="f-name">status</span><span class="f-type">active / inactive</span></div>
+          <div class="schema-field"><span class="f-name">last_login</span><span class="f-type">DATETIME</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-calendar"/></svg><h4>events</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field"><span class="f-name">event_name</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">event_date</span><span class="f-type">DATE</span></div>
+          <div class="schema-field"><span class="f-name">event_description</span><span class="f-type">TEXT</span></div>
+          <div class="schema-field"><span class="f-name">event_status</span><span class="f-type">open / closed</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-file"/></svg><h4>study_materials</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field"><span class="f-name">subject</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">material_type</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">semester</span><span class="f-type">INT, 1-6</span></div>
+          <div class="schema-field ref"><span class="f-name">uploaded_by</span><span class="f-type">→ users.id</span></div>
+          <div class="schema-field"><span class="f-name">download_count</span><span class="f-type">INT</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-drive"/></svg><h4>drive_resources</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field"><span class="f-name">semester</span><span class="f-type">INT, 1-6</span></div>
+          <div class="schema-field"><span class="f-name">subject</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">drive_folder_id</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">folder_name</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field ref"><span class="f-name">created_by</span><span class="f-type">→ users.id</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-lock"/></svg><h4>drive_permissions</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field ref"><span class="f-name">user_id</span><span class="f-type">→ users.id</span></div>
+          <div class="schema-field ref"><span class="f-name">resource_id</span><span class="f-type">→ drive_resources.id</span></div>
+          <div class="schema-field"><span class="f-name">status</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">error_message</span><span class="f-type">TEXT, nullable</span></div>
+        </div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-card-head"><svg><use href="#i-shield-check"/></svg><h4>audit_log</h4></div>
+        <div class="schema-fields">
+          <div class="schema-field ref"><span class="f-name">user_id</span><span class="f-type">→ users.id</span></div>
+          <div class="schema-field"><span class="f-name">action</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">table_name</span><span class="f-type">VARCHAR, nullable</span></div>
+          <div class="schema-field"><span class="f-name">ip_address</span><span class="f-type">VARCHAR</span></div>
+          <div class="schema-field"><span class="f-name">created_at</span><span class="f-type">DATETIME</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ STACK ============================================================ -->
+<section class="section" id="stack">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Built with</span>
+      <h2>The LAMP stack, on purpose.</h2>
+      <p class="sub">No build step, no framework, no node_modules. The kind of stack you can read top to bottom in an afternoon — which is sort of the point for a Web Frameworks coursework project.</p>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-code"/></svg></div><div><h5>PHP 7.4+</h5><span>mysqli, prepared statements</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-mysql"/></svg></div><div><h5>MySQL 5.7+</h5><span>6 tables, no ORM</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-server"/></svg></div><div><h5>XAMPP</h5><span>Apache + MySQL, local dev</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-lock"/></svg></div><div><h5>password_hash()</h5><span>bcrypt, PHP-native</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-grid"/></svg></div><div><h5>Vanilla HTML/CSS/JS</h5><span>No framework, no bundler</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-drive"/></svg></div><div><h5>Google Drive API</h5><span>Service account, PHP client</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-shield-check"/></svg></div><div><h5>Session-based auth</h5><span>30-min timeout, remember-me cookie</span></div></div>
+      <div class="stack-card"><div class="s-icon"><svg><use href="#i-list"/></svg></div><div><h5>Audit logging</h5><span>Every write traced to a user + IP</span></div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-row">
+    <a href="#top" class="brand"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 0-4 4c0 1 .3 1.7.8 2.4C8.3 11.2 8 12.3 8 13.5 8 16 10 18 12.5 18S17 16 17 13.5c0-1.2-.3-2.3-.8-3.1.5-.7.8-1.4.8-2.4a4 4 0 0 0-4-4z"/><path d="M9 18v1a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-1"/></svg></span>BrainBin</a>
+    <p class="footer-note">Student project · CHARUSAT · Built with PHP, MySQL &amp; plain JavaScript</p>
+    <div class="footer-links">
+      <a href="https://github.com/sp2736/brainbin" target="_blank" rel="noopener">GitHub repo</a>
+      <a href="#modules">Modules</a>
+      <a href="#schema">Data model</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const $ = (s, c=document) => c.querySelector(s);
+const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
+
+/* ---------- nav ---------- */
+$('#navToggle').addEventListener('click', () => {
+  $('#navLinks').classList.toggle('open');
+  $('#navToggle').classList.toggle('open');
+});
+$$('#navLinks a').forEach(a => a.addEventListener('click', () => {
+  $('#navLinks').classList.remove('open');
+  $('#navToggle').classList.remove('open');
+}));
+
+/* ---------- hero materials browser (signature visual) ---------- */
+const heroSubjects = ['DBMS', 'Operating Systems', 'Web Frameworks'];
+const heroFiles = {
+  'DBMS': [
+    { name:'Unit 3 — Normalization', type:'PDF Notes', verified:true },
+    { name:'ER Diagram Practice Set', type:'Drive Folder', verified:true },
+  ],
+  'Operating Systems': [
+    { name:'Process Scheduling Slides', type:'PDF Notes', verified:true },
+    { name:'Past Year Papers 2023-24', type:'Drive Folder', verified:true },
+  ],
+  'Web Frameworks': [
+    { name:'PHP + MySQL Lab Manual', type:'PDF Notes', verified:true },
+    { name:'Practical List (1-15)', type:'Drive Folder', verified:true },
+  ],
+};
+function renderHeroTabs() {
+  $('#heroTabs').innerHTML = heroSubjects.map((s,i) =>
+    `<button class="browser-tab ${i===0?'active':''}" data-s="${s}">${s}</button>`).join('');
+  $$('#heroTabs .browser-tab').forEach(btn => btn.addEventListener('click', () => {
+    $$('#heroTabs .browser-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderHeroList(btn.dataset.s);
+  }));
+}
+function renderHeroList(subject) {
+  $('#heroList').innerHTML = heroFiles[subject].map(f => `
+    <div class="browser-row">
+      <div class="b-icon"><svg class="icon-sm"><use href="#${f.type==='Drive Folder'?'i-drive':'i-file'}"/></svg></div>
+      <div class="b-body"><div class="b-title">${f.name}</div><div class="b-meta">${f.type} · Semester 3</div></div>
+      <span class="b-badge">Active</span>
+    </div>`).join('');
+}
+renderHeroTabs();
+renderHeroList(heroSubjects[0]);
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+const moduleTabs = $$('.module-tab');
+const modulePanels = $$('.module-panel');
+moduleTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    moduleTabs.forEach(t => t.classList.remove('active'));
+    modulePanels.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $(`.module-panel[data-mod="${tab.dataset.mod}"]`).classList.add('active');
+  });
+});
+
+/* ---------- M1: live signup validation ---------- */
+function runAuthValidation() {
+  const username = $('#authUsername').value;
+  const password = $('#authPassword').value;
+  const checks = [
+    { label: 'Username: 3-50 alphanumeric characters', pass: /^[A-Za-z0-9]{3,50}$/.test(username) },
+    { label: 'Password: at least 6 characters', pass: password.length >= 6 },
+  ];
+  $('#authValidation').innerHTML = checks.map(c =>
+    `<li class="${c.pass ? 'pass' : 'fail'}"><svg><use href="#${c.pass ? 'i-check' : 'i-cross'}"/></svg>${c.label}</li>`).join('');
+}
+$('#authUsername').addEventListener('input', runAuthValidation);
+$('#authPassword').addEventListener('input', runAuthValidation);
+runAuthValidation();
+
+/* ---------- M2: student dashboard semester grid + FAQ ---------- */
+const semOrdinals = ['1st','2nd','3rd','4th','5th','6th'];
+function renderSemGrid() {
+  $('#semGrid').innerHTML = semOrdinals.map((o,i) =>
+    `<div class="sem-card" data-sem="${i+1}"><div class="sc-num">${o}</div><div class="sc-label">Semester</div></div>`).join('');
+  $$('#semGrid .sem-card').forEach(card => card.addEventListener('click', () => {
+    $$('#semGrid .sem-card').forEach(c => c.style.borderColor = '');
+    card.style.borderColor = 'var(--navy)';
+  }));
+}
+const faqData = [
+  { q:'What is BrainBin?', a:'A centralized portal for B.Tech students to access semester-wise study materials, college events, and academic resources in one place.' },
+  { q:'How do I access study materials?', a:'Log in, pick a semester card on your dashboard, and browse by subject — or use the collective materials page to see everything at once.' },
+  { q:'Who manages this portal?', a:'A small admin team uploads materials, links Drive folders, and manages events through a separate admin dashboard.' },
+];
+function renderFaqMini() {
+  $('#faqMini').innerHTML = faqData.map((f,i) => `
+    <div class="faq-mini-item" data-i="${i}">
+      <div class="faq-mini-q">${f.q}<svg class="icon-sm"><use href="#i-chevron"/></svg></div>
+      <div class="faq-mini-a"><p>${f.a}</p></div>
+    </div>`).join('');
+  $$('#faqMini .faq-mini-q').forEach(q => q.addEventListener('click', () => {
+    q.closest('.faq-mini-item').classList.toggle('open');
+  }));
+}
+renderSemGrid();
+renderFaqMini();
+
+/* ---------- M3: study materials table ---------- */
+const materialsData = [
+  { subject:'DBMS', type:'Notes', file:'unit3_normalization.pdf', size:'842 KB', downloads:213, uploadedBy:'admin' },
+  { subject:'Operating Systems', type:'Assignment', file:'scheduling_assignment.pdf', size:'310 KB', downloads:98, uploadedBy:'24DCS088' },
+  { subject:'Web Frameworks', type:'Practical', file:'practical_list_1-15.pdf', size:'1.2 MB', downloads:341, uploadedBy:'admin' },
+  { subject:'DBMS', type:'Notes', file:'er_diagrams_unit2.pdf', size:'654 KB', downloads:156, uploadedBy:'24DCS021' },
+];
+function renderMaterialsTable() {
+  $('#materialsTable').innerHTML = `<tr><th>File</th><th>Subject</th><th>Type</th><th>Size</th><th>Downloads</th></tr>` +
+    materialsData.map(m => `<tr>
+      <td>${m.file}</td><td>${m.subject}</td><td>${m.type}</td><td>${m.size}</td>
+      <td class="dl-count"><svg class="icon-sm" style="display:inline;vertical-align:-2px;margin-right:3px"><use href="#i-download"/></svg>${m.downloads}</td>
+    </tr>`).join('');
+}
+renderMaterialsTable();
+
+/* ---------- M4: drive resource linker ---------- */
+let driveResources = [
+  { sem:3, subject:'DBMS', type:'Reading Notes', folder:'DBMS_Unit_1-5_Notes' },
+  { sem:3, subject:'Operating Systems', type:'Practice Papers', folder:'OS_PYQ_2023-24' },
+];
+function renderDriveResources() {
+  $('#driveResourceList').innerHTML = driveResources.slice().reverse().map(r => `
+    <div class="drive-resource-item">
+      <div class="dr-icon"><svg class="icon-sm"><use href="#i-drive"/></svg></div>
+      <div class="dr-body"><div class="dr-title">${r.folder}</div><div class="dr-meta">Sem ${r.sem} · ${r.subject} · ${r.type}</div></div>
+    </div>`).join('');
+}
+$('#driveLinkBtn').addEventListener('click', () => {
+  const sem = parseInt($('#driveSemSelect').value.replace('Semester ', ''), 10);
+  const subject = $('#driveSubjSelect').value;
+  driveResources.push({ sem, subject, type:'Reading Notes', folder:`${subject.replace(/\s+/g,'_')}_Notes_New` });
+  renderDriveResources();
+});
+renderDriveResources();
+
+/* ---------- M5: events ---------- */
+let eventsData = [
+  { name:'Annual Tech Symposium', date:'Feb 18', desc:'Department-wide project showcase and guest talks.', status:'open' },
+  { name:'Sports Week Finals', date:'Mar 02', desc:'Inter-branch finals across 6 sports.', status:'open' },
+  { name:'Alumni Meet 2025', date:'Jan 20', desc:'Closed registration — wrapped last month.', status:'closed' },
+];
+function renderEvents() {
+  $('#eventList').innerHTML = eventsData.slice().reverse().map(e => {
+    const [mon, day] = e.date.split(' ');
+    return `<div class="event-card">
+      <div class="ev-date"><strong>${day}</strong><span>${mon}</span></div>
+      <div class="ev-body"><div class="ev-title">${e.name}</div><div class="ev-desc">${e.desc}</div></div>
+      <span class="status-pill status-${e.status}">${e.status}</span>
+    </div>`;
+  }).join('');
+}
+$('#addEventBtn').addEventListener('click', () => {
+  const name = $('#eventNameInput').value.trim() || 'Untitled Event';
+  const date = $('#eventDateInput').value.trim() || 'TBD';
+  eventsData.push({ name, date, desc:'Newly added — pending description.', status:'open' });
+  renderEvents();
+});
+renderEvents();
+
+/* ---------- M6: user management ---------- */
+let usersData = [
+  { name:'swayam_p', email:'24dcs088@charusat.edu.in', role:'admin', status:'active' },
+  { name:'anjali_sharma', email:'24dcs049@charusat.edu.in', role:'user', status:'active' },
+  { name:'karan_joshi', email:'24dce045@charusat.edu.in', role:'user', status:'inactive' },
+  { name:'priya_patel', email:'24dit012@charusat.edu.in', role:'user', status:'active' },
+];
+function renderUserTable() {
+  $('#userTable').innerHTML = `<tr><th>Username</th><th>Role</th><th>Status</th><th>Actions</th></tr>` +
+    usersData.map((u,i) => `<tr>
+      <td>${u.name}</td>
+      <td><span class="status-pill status-${u.role}">${u.role}</span></td>
+      <td><span class="status-pill status-${u.status}">${u.status}</span></td>
+      <td><div class="row-actions">
+        <button class="row-act-btn promote" data-i="${i}" data-act="role" title="Promote/demote"><svg><use href="#i-admin"/></svg></button>
+        <button class="row-act-btn toggle" data-i="${i}" data-act="status" title="Activate/deactivate"><svg><use href="#i-toggle"/></svg></button>
+        <button class="row-act-btn delete" data-i="${i}" data-act="delete" title="Delete"><svg><use href="#i-cross"/></svg></button>
+      </div></td>
+    </tr>`).join('');
+  $$('.row-act-btn').forEach(btn => btn.addEventListener('click', () => {
+    const i = parseInt(btn.dataset.i, 10);
+    const act = btn.dataset.act;
+    if (act === 'role') usersData[i].role = usersData[i].role === 'admin' ? 'user' : 'admin';
+    if (act === 'status') usersData[i].status = usersData[i].status === 'active' ? 'inactive' : 'active';
+    if (act === 'delete') usersData.splice(i, 1);
+    renderUserTable();
+  }));
+}
+renderUserTable();
+
+/* ---------- M7: audit log ---------- */
+const auditLogData = [
+  { user:'swayam_p', action:'change_role', detail:'promoted anjali_sharma to admin', time:'2m ago', icon:'i-admin' },
+  { user:'karan_joshi', action:'login', detail:'signed in from 103.27.x.x', time:'14m ago', icon:'i-lock' },
+  { user:'swayam_p', action:'toggle_status', detail:'deactivated priya_patel', time:'41m ago', icon:'i-toggle' },
+  { user:'new_user_212', action:'signup', detail:'new account created', time:'1h ago', icon:'i-student' },
+  { user:'swayam_p', action:'delete_user', detail:'removed a stale test account', time:'2h ago', icon:'i-cross' },
+];
+function renderAuditLog() {
+  $('#auditLogList').innerHTML = auditLogData.map(a => `
+    <div class="audit-log-item">
+      <div class="al-icon"><svg><use href="#${a.icon}"/></svg></div>
+      <div class="al-body"><strong>${a.user}</strong> ${a.detail}</div>
+      <span class="al-time">${a.time}</span>
+    </div>`).join('');
+}
+renderAuditLog();
+</script>
+
+</body>
+</html>
