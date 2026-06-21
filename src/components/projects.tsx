@@ -16,6 +16,22 @@ import {
 // DATA MAPPING
 const projectsData = [
   {
+    id: "finiq",
+    title: "FINIQ",
+    description:
+      "A robust financial management SaaS platform featuring dedicated investor and distributor modules. Includes secure API integrations, advanced capital gains reporting, and an ethical finance-oriented UI.",
+    image: "./finiq.png", // Professional / Finance vibe
+    techStack: ["Next.js", "Node.js", "Express", "SQL", "AWS"],
+    links: [
+      {
+        label: "Architecture",
+        url: "/architecture/finiq.html",
+        icon: ArrowUpRight,
+        primary: true,
+      },
+    ],
+  },
+  {
     id: "arcade",
     title: "ARCADE",
     description:
@@ -46,15 +62,31 @@ const projectsData = [
     techStack: ["Next.js", "React", "Tailwind CSS"],
     links: [
       {
+        label: "Visit",
+        url: "https://sukoon-developer.vercel.app",
+        icon: ExternalLink,
+        primary: true,
+      },
+    ],
+  },
+  {
+    id: "counseling-reports-portal",
+    title: "COUNSELING SWOT PORTAL",
+    description:
+      "A comprehensive role-based web portal using automated AI-driven SWOT analysis for counseling reports.",
+    image: "./swot-portal.png", // Dashboard / Education vibe
+    techStack: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS", "NextAuth"],
+    links: [
+      {
         label: "Code",
-        url: "https://github.com/sp2736/sukoon-dev",
+        url: "https://github.com/Sp2736/counseling-reports-portal",
         icon: Github,
         primary: false,
       },
       {
-        label: "Visit",
-        url: "https://sukoon-developer.vercel.app",
-        icon: ExternalLink,
+        label: "Architecture", 
+        url: "/architecture/swot.html", // Adjust this path if needed
+        icon: ArrowUpRight,
         primary: true,
       },
     ],
@@ -194,13 +226,13 @@ const projectsData = [
     techStack: ["Creative Writing", "Poetry", "Publishing"],
     links: [
       {
-        label: "Published E-Book",
+        label: "E-Book",
         url: "https://ebooks.bookleafpub.com/product-page/before-i-learned-goodbye",
         icon: BookOpen,
         primary: false,
       },
       {
-        label: "Published Paperback",
+        label: "Paperback",
         url: "https://store.bookleafpub.com/products/9789375273813",
         icon: BookOpenCheck,
         primary: false,

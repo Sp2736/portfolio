@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinIQ — Unified Wealth Platform for MFDs &amp; Investors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================ TOKENS ============================================================ */
+:root{
+  --bg:#FBF8FB;
+  --surface:#FFFFFF;
+  --surface-alt:#F7F0F7;
+  --ink:#180F22;
+  --muted:#675F76;
+  --muted-soft:#A299AE;
+  --border:#ECE1EE;
+  --pink:#E31C79;
+  --pink-deep:#A8155C;
+  --pink-soft:#FCE6F1;
+  --violet:#6E2BEA;
+  --violet-deep:#4E1BB0;
+  --violet-soft:#EFE7FE;
+  --green:#119A66;
+  --green-soft:#E2F7EE;
+  --amber:#E69A1E;
+  --amber-soft:#FDF1DE;
+  --red:#E5484D;
+  --red-soft:#FCE7E8;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --shadow-sm:0 1px 2px rgba(24,15,34,0.05), 0 1px 1px rgba(24,15,34,0.03);
+  --shadow-md:0 8px 24px rgba(80,20,70,0.08);
+  --shadow-lg:0 24px 64px rgba(80,20,70,0.15);
+  --container:1180px;
+  --ff-display:'Outfit', sans-serif;
+  --ff-body:'Inter', sans-serif;
+  --ff-mono:'IBM Plex Mono', monospace;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--ff-body); -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+}
+h1,h2,h3,h4{ font-family:var(--ff-display); margin:0; color:var(--ink); letter-spacing:-0.01em; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+ul,ol{ margin:0; padding:0; list-style:none; }
+button{ font-family:inherit; cursor:pointer; }
+.icon{ width:20px; height:20px; flex-shrink:0; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.icon-sm{ width:15px; height:15px; }
+.container{ max-width:var(--container); margin:0 auto; padding:0 28px; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+}
+
+/* ============================================================ REVEAL ============================================================ */
+.reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.in{ opacity:1; transform:translateY(0); }
+
+/* ============================================================ BUTTONS ============================================================ */
+.btn{
+  display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  padding:13px 24px; border-radius:999px; font-weight:600; font-size:15px;
+  border:1px solid transparent; transition:transform .15s ease, box-shadow .15s ease, background .2s ease;
+  white-space:nowrap;
+}
+.btn:active{ transform:scale(0.97); }
+.btn-primary{ background:linear-gradient(135deg, var(--pink), var(--violet)); color:#fff; box-shadow:0 10px 24px rgba(227,28,121,0.28); }
+.btn-primary:hover{ box-shadow:0 14px 30px rgba(227,28,121,0.36); }
+.btn-ghost{ background:transparent; color:var(--ink); border-color:var(--border); }
+.btn-ghost:hover{ background:var(--surface-alt); }
+.btn-soft{ background:var(--pink-soft); color:var(--pink-deep); }
+.btn-soft:hover{ background:#fad3e8; }
+.btn-sm{ padding:9px 16px; font-size:13.5px; }
+
+/* ============================================================ NAV ============================================================ */
+.nav-wrap{ position:sticky; top:0; z-index:50; padding:14px 20px 0; }
+.nav{
+  max-width:var(--container); margin:0 auto; display:flex; align-items:center; gap:18px;
+  background:rgba(255,255,255,0.8); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--border); border-radius:999px; padding:10px 12px 10px 20px; box-shadow:var(--shadow-sm);
+}
+.brand{ display:flex; align-items:center; gap:9px; font-family:var(--ff-display); font-weight:700; font-size:18px; color:var(--ink); }
+.brand-mark{ width:22px; height:22px; border-radius:7px; background:linear-gradient(135deg, var(--pink), var(--violet)); display:inline-block; position:relative; flex-shrink:0; }
+.brand-mark::after{ content:''; position:absolute; inset:5px; border-radius:3px; background:#fff; opacity:.85; }
+.nav-links{ display:flex; gap:26px; margin:0 auto; font-size:14.5px; font-weight:500; color:var(--muted); }
+.nav-links a:hover{ color:var(--ink); }
+.nav-cta{ flex-shrink:0; }
+.nav-toggle{ display:none; flex-direction:column; gap:4px; background:none; border:none; padding:8px; margin-left:auto; }
+.nav-toggle span{ width:20px; height:2px; background:var(--ink); border-radius:2px; transition:.2s; }
+
+/* ============================================================ HERO ============================================================ */
+.hero{ padding:64px 20px 40px; }
+.hero-inner{ max-width:var(--container); margin:0 auto; display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; }
+.eyebrow{ display:inline-block; font-size:12.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--pink-deep); background:var(--pink-soft); padding:7px 14px; border-radius:999px; margin-bottom:18px; }
+.hero h1{ font-size:clamp(32px, 4.2vw, 50px); font-weight:700; line-height:1.1; margin-bottom:18px; }
+.lede{ font-size:17px; color:var(--muted); max-width:520px; margin-bottom:28px; }
+.hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; }
+.hero-stats{ display:flex; gap:34px; flex-wrap:wrap; }
+.hero-stats strong{ display:block; font-family:var(--ff-mono); font-size:24px; color:var(--ink); }
+.hero-stats span{ font-size:13px; color:var(--muted); }
+
+.hero-art{ position:relative; min-height:420px; display:flex; align-items:center; justify-content:center; }
+.ring-wrap{ width:100%; max-width:380px; filter:drop-shadow(0 30px 50px rgba(110,43,234,0.16)); }
+.ring-group{ animation:sway 8s ease-in-out infinite; transform-origin:120px 120px; }
+@keyframes sway{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(2.2deg); } }
+.hero-card{
+  position:absolute; display:flex; align-items:center; gap:10px; background:var(--surface);
+  border:1px solid var(--border); border-radius:var(--radius-md); padding:12px 16px; box-shadow:var(--shadow-lg);
+  font-size:13px; animation:float 5s ease-in-out infinite;
+}
+.hero-card strong{ display:block; font-size:14px; }
+.hero-card span{ color:var(--muted); font-size:12px; }
+.card-float-1{ top:6%; left:-4%; animation-delay:0s; }
+.card-float-2{ bottom:8%; right:-6%; animation-delay:1.2s; }
+@keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+
+/* ============================================================ SECTIONS ============================================================ */
+.section{ padding:88px 0; }
+.section.alt{ background:var(--surface-alt); }
+.section-head{ max-width:680px; margin:0 auto 48px; text-align:center; }
+.section-head h2{ font-size:clamp(26px, 3vw, 36px); margin-bottom:12px; }
+.section-head .sub{ color:var(--muted); font-size:16px; }
+
+.grid{ display:grid; gap:20px; }
+.grid-3{ grid-template-columns:repeat(3, 1fr); }
+.grid-5{ grid-template-columns:repeat(5, 1fr); }
+
+/* ---------- problem cards ---------- */
+.problem-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:26px; box-shadow:var(--shadow-sm); }
+.problem-card .icon{ color:var(--pink); margin-bottom:14px; }
+.problem-card h3{ font-size:16.5px; margin-bottom:8px; }
+.problem-card p{ font-size:14px; color:var(--muted); }
+.solution-banner{ margin-top:32px; display:flex; align-items:center; gap:16px; background:linear-gradient(135deg, var(--pink), var(--violet)); color:#fff; border-radius:var(--radius-lg); padding:26px 30px; }
+.solution-banner .icon{ flex-shrink:0; width:26px; height:26px; }
+.solution-banner p{ font-size:16px; font-weight:500; }
+
+/* ---------- portals ---------- */
+.portal-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.portal-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; box-shadow:var(--shadow-sm); }
+.portal-icon{ width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:18px; background:linear-gradient(135deg, var(--pink-soft), var(--violet-soft)); }
+.portal-icon .icon{ width:22px; height:22px; color:var(--violet-deep); }
+.role-tag{ display:inline-block; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--pink-deep); background:var(--pink-soft); padding:4px 10px; border-radius:999px; margin-bottom:12px; }
+.portal-card h3{ font-size:19px; margin-bottom:8px; }
+.portal-card p.desc{ font-size:14px; color:var(--muted); margin-bottom:16px; }
+.portal-list li{ position:relative; padding-left:18px; font-size:13.5px; color:var(--ink); margin-bottom:9px; }
+.portal-list li::before{ content:''; position:absolute; left:0; top:7px; width:6px; height:6px; border-radius:50%; background:var(--violet); }
+
+/* ---------- architecture ---------- */
+.arch{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:10px; }
+.arch-layer{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; transition:box-shadow .2s; }
+.arch-layer.active{ box-shadow:var(--shadow-md); border-color:#ecd2e3; }
+.arch-head{ display:flex; align-items:center; gap:14px; padding:18px 22px; cursor:pointer; }
+.arch-num{ font-family:var(--ff-mono); font-size:13px; color:var(--pink); font-weight:600; }
+.arch-head .icon{ color:var(--pink); }
+.arch-head h3{ font-size:16px; flex:1; }
+.chev{ transition:transform .25s; color:var(--muted-soft); }
+.arch-layer.active .chev{ transform:rotate(90deg); }
+.arch-body{ max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s ease; padding:0 22px; }
+.arch-layer.active .arch-body{ max-height:140px; padding:0 22px 20px 56px; }
+.arch-body p{ font-size:14.5px; color:var(--muted); }
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+.module-explorer{ display:grid; grid-template-columns:240px 1fr; gap:24px; align-items:start; }
+.module-nav{ display:flex; flex-direction:column; gap:6px; position:sticky; top:90px; }
+.module-tab{
+  display:flex; align-items:center; gap:10px; text-align:left; background:transparent; border:none;
+  padding:11px 14px; border-radius:var(--radius-sm); font-size:14px; font-weight:500; color:var(--muted);
+  transition:background .15s, color .15s;
+}
+.module-tab span{ font-family:var(--ff-mono); font-size:11.5px; color:var(--muted-soft); width:18px; }
+.module-tab:hover{ background:var(--surface); }
+.module-tab.active{ background:var(--surface); color:var(--ink); box-shadow:var(--shadow-sm); }
+.module-tab.active span{ color:var(--pink); }
+
+.module-panels{ position:relative; }
+.module-panel{ display:none; grid-template-columns:0.85fr 1.15fr; gap:30px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:34px; box-shadow:var(--shadow-sm); }
+.module-panel.active{ display:grid; animation:fadeIn .35s ease; }
+@keyframes fadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+.panel-text h3{ font-size:21px; margin-bottom:10px; }
+.panel-text p{ color:var(--muted); font-size:14.5px; margin-bottom:18px; }
+.feature-list li{ position:relative; padding-left:20px; font-size:14px; color:var(--ink); margin-bottom:10px; }
+.feature-list li::before{ content:''; position:absolute; left:0; top:7px; width:7px; height:7px; border-radius:50%; background:var(--pink); }
+.panel-demo{ background:var(--surface-alt); border-radius:var(--radius-md); padding:22px; }
+.demo-label{ font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted-soft); font-weight:600; margin-bottom:12px; }
+
+/* role switcher */
+.role-switch{ display:flex; gap:8px; margin-bottom:16px; }
+.role-btn{ flex:1; padding:9px 0; border:1px solid var(--border); background:var(--surface); border-radius:var(--radius-sm); font-size:13.5px; font-weight:600; color:var(--muted); }
+.role-btn.active{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.permission-list li{ display:flex; align-items:center; gap:9px; font-size:13.5px; padding:8px 0; border-bottom:1px dashed var(--border); }
+.permission-list li:last-child{ border-bottom:none; }
+.permission-list .icon{ width:16px; height:16px; }
+.allowed{ color:var(--ink); }
+.allowed .icon{ color:var(--green); }
+.denied{ color:var(--muted-soft); }
+.denied .icon{ color:var(--red); }
+
+/* stepper */
+.stepper{ display:flex; flex-direction:column; gap:0; margin:16px 0; }
+.stepper li{ display:flex; align-items:center; gap:12px; font-size:13.5px; color:var(--muted-soft); padding:7px 0; position:relative; }
+.stepper li .dot{ width:9px; height:9px; border-radius:50%; background:var(--border); flex-shrink:0; transition:background .2s, transform .2s; }
+.stepper li.current{ color:var(--ink); font-weight:600; }
+.stepper li.current .dot{ background:var(--pink); transform:scale(1.3); }
+.stepper li.done{ color:var(--muted); }
+.stepper li.done .dot{ background:var(--green); }
+.source-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.badge{ background:var(--surface); border:1px solid var(--border); padding:6px 12px; border-radius:999px; font-size:12.5px; font-weight:600; color:var(--muted); }
+
+/* toggles / tables */
+.toggle-row{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.seg-btn{ padding:8px 16px; border-radius:999px; border:1px solid var(--border); background:var(--surface); font-size:13px; font-weight:600; color:var(--muted); }
+.seg-btn.active{ background:var(--pink); color:#fff; border-color:var(--pink); }
+.mini-table{ width:100%; border-collapse:collapse; font-size:12.5px; background:var(--surface); border-radius:var(--radius-sm); overflow:hidden; }
+.mini-table th{ background:#F6ECF4; text-align:left; padding:8px 10px; font-weight:600; color:var(--muted); }
+.mini-table td{ padding:8px 10px; border-bottom:1px solid var(--border); color:var(--ink); }
+.mini-cap{ font-size:12px; color:var(--muted-soft); margin-top:10px; }
+
+/* profiling / stats */
+.profile-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:6px; }
+.profile-stat{ background:var(--surface); border-radius:var(--radius-sm); padding:14px; text-align:center; }
+.profile-stat strong{ display:block; font-family:var(--ff-mono); font-size:19px; color:var(--violet-deep); }
+.profile-stat span{ font-size:11.5px; color:var(--muted); }
+.bar-row{ display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--muted); margin-bottom:8px; }
+.bar-row span{ width:150px; flex-shrink:0; }
+.bar{ flex:1; height:7px; background:var(--border); border-radius:99px; overflow:hidden; }
+.bar i{ display:block; height:100%; background:linear-gradient(90deg, var(--pink), var(--violet)); border-radius:99px; }
+.bar-row .amt{ width:62px; flex-shrink:0; text-align:right; font-family:var(--ff-mono); color:var(--ink); }
+
+/* SVG chart containers */
+.chart-box{ width:100%; background:var(--surface); border-radius:var(--radius-sm); padding:10px 6px 4px; }
+.chart-box svg{ width:100%; height:auto; display:block; overflow:visible; }
+.chart-axis-label{ font-family:var(--ff-body); font-size:10.5px; fill:var(--muted-soft); }
+.chart-gridline{ stroke:#F3E9F1; stroke-width:1; }
+.chart-dot{ cursor:pointer; transition:opacity .2s ease, r .15s ease; }
+.chart-dot:hover{ r:7; }
+.chart-tooltip{ pointer-events:none; font-family:var(--ff-body); }
+.chart-tooltip rect{ fill:var(--ink); rx:6; }
+.chart-tooltip text{ fill:#fff; font-size:11px; }
+
+/* KPI grid */
+.kpi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.kpi-card{ background:var(--surface); border-radius:var(--radius-sm); padding:14px; display:flex; flex-direction:column; gap:4px; }
+.kpi-label{ font-size:11.5px; color:var(--muted); }
+.kpi-value{ font-family:var(--ff-mono); font-size:18px; }
+.kpi-delta{ font-size:11.5px; font-weight:700; width:fit-content; padding:2px 7px; border-radius:6px; }
+.kpi-delta.up{ color:#0f7d52; background:var(--green-soft); }
+.kpi-delta.down{ color:var(--red); background:var(--red-soft); }
+.kpi-spark{ width:100%; height:26px; margin-top:4px; }
+
+/* status pills (SIP/STP) */
+.status-pill{ font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:999px; white-space:nowrap; }
+.status-active{ background:var(--green-soft); color:#0f7d52; }
+.status-paused{ background:var(--amber-soft); color:#9a6b14; }
+.status-closed{ background:var(--surface); color:var(--muted); border:1px solid var(--border); }
+.sip-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+.sip-table th{ text-align:left; padding:8px 10px; color:var(--muted); font-weight:600; border-bottom:1px solid var(--border); }
+.sip-table td{ padding:9px 10px; border-bottom:1px solid var(--border); color:var(--ink); background:var(--surface); }
+.sip-table tr.hide{ display:none; }
+
+/* calculators (M9) */
+.calc-tabs{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:18px; }
+.calc-pane{ display:none; }
+.calc-pane.active{ display:block; animation:fadeIn .3s ease; }
+.field-row{ margin-bottom:14px; }
+.field-row label{ display:flex; justify-content:space-between; gap:10px; font-size:12.5px; color:var(--muted); margin-bottom:6px; font-weight:600; }
+.field-row label b{ color:var(--ink); font-family:var(--ff-mono); font-weight:600; white-space:nowrap; }
+.field-row input[type=range]{ width:100%; accent-color:var(--pink); }
+.calc-result{ background:linear-gradient(135deg, var(--pink-soft), var(--violet-soft)); border-radius:var(--radius-md); padding:18px; margin-top:8px; }
+.calc-result .r-label{ font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--violet-deep); font-weight:700; }
+.calc-result .r-value{ font-family:var(--ff-mono); font-size:25px; color:var(--ink); margin:4px 0 12px; display:block; }
+.calc-result .r-sub{ display:flex; gap:20px; flex-wrap:wrap; }
+.calc-result .r-sub div span{ display:block; font-size:11.5px; color:var(--muted); }
+.calc-result .r-sub div b{ display:block; font-size:13.5px; color:var(--ink); font-family:var(--ff-mono); margin-top:2px; }
+
+/* hierarchy + client AUM (M10) */
+.tree{ display:flex; flex-direction:column; gap:6px; margin-bottom:18px; }
+.tree-row{ display:flex; align-items:center; gap:8px; font-size:13px; padding:8px 10px; border-radius:var(--radius-sm); background:var(--surface); }
+.tree-row.lvl1{ font-weight:700; }
+.tree-row.lvl2{ margin-left:20px; color:var(--ink); }
+.tree-row.lvl3{ margin-left:40px; color:var(--muted); font-size:12.5px; }
+.tree-row .aum{ margin-left:auto; font-family:var(--ff-mono); color:var(--violet-deep); font-weight:600; flex-shrink:0; }
+.client-row{ display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--muted); margin-bottom:9px; }
+.client-row span.name{ width:120px; flex-shrink:0; color:var(--ink); font-weight:500; }
+.client-row .bar{ flex:1; }
+.client-row .amt{ width:54px; flex-shrink:0; text-align:right; font-family:var(--ff-mono); color:var(--ink); }
+
+/* notifications */
+.notif-buttons{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+
+/* admin */
+.audit-log{ display:flex; flex-direction:column; gap:8px; }
+.audit-log li{ font-size:12.5px; background:var(--surface); padding:9px 12px; border-radius:var(--radius-sm); color:var(--muted); }
+.audit-log span{ font-family:var(--ff-mono); color:var(--muted-soft); margin-right:8px; }
+.audit-log b{ color:var(--ink); }
+
+/* ============================================================ NFR ============================================================ */
+.nfr-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:26px; box-shadow:var(--shadow-sm); }
+.nfr-card .icon{ color:var(--pink); margin-bottom:10px; }
+.nfr-card strong{ display:block; font-family:var(--ff-mono); font-size:22px; margin-bottom:4px; }
+.nfr-card h3{ font-size:15px; margin-bottom:6px; }
+.nfr-card p{ font-size:13.5px; color:var(--muted); }
+
+/* ============================================================ STACK ============================================================ */
+.stack-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+.stack-col h4{ font-size:14px; margin-bottom:10px; color:var(--violet-deep); }
+.pills{ display:flex; flex-wrap:wrap; gap:7px; }
+.pills span{ background:var(--surface); border:1px solid var(--border); padding:7px 13px; border-radius:999px; font-size:12.5px; font-weight:500; }
+
+/* ============================================================ FUTURE ============================================================ */
+.future-card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:22px; position:relative; box-shadow:var(--shadow-sm); }
+.future-num{ position:absolute; top:14px; right:18px; font-family:var(--ff-mono); font-size:11px; color:var(--muted-soft); }
+.future-card .icon{ color:var(--violet); margin-bottom:24px; }
+.future-card h4{ font-size:13.5px; line-height:1.35; }
+
+/* ============================================================ TOASTS ============================================================ */
+.toast-stack{ position:fixed; bottom:24px; right:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{
+  display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:13px 16px; box-shadow:var(--shadow-lg); min-width:260px; max-width:320px;
+  transform:translateX(40px); opacity:0; transition:transform .3s ease, opacity .3s ease;
+}
+.toast.show{ transform:translateX(0); opacity:1; }
+.toast strong{ display:block; font-size:13px; }
+.toast span{ font-size:12px; color:var(--muted); }
+.toast-red .icon{ color:var(--red); }
+.toast-pink .icon{ color:var(--pink); }
+.toast-amber .icon{ color:var(--amber); }
+.toast-green .icon{ color:var(--green); }
+
+/* ============================================================ FOOTER ============================================================ */
+.footer{ background:var(--ink); color:#d6cee2; padding:54px 0 0; }
+.footer .brand{ color:#fff; margin-bottom:10px; }
+.footer-inner{ display:flex; justify-content:space-between; align-items:flex-end; gap:30px; flex-wrap:wrap; padding-bottom:36px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.footer-inner p{ max-width:420px; font-size:13.5px; color:#b3a8c2; }
+.footer-bottom{ display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; padding:18px 0; font-size:12.5px; color:#8a7f9a; }
+.footer-bottom a:hover{ color:#fff; }
+
+/* ============================================================ RESPONSIVE ============================================================ */
+@media (max-width: 980px){
+  .hero-inner{ grid-template-columns:1fr; }
+  .hero-art{ order:-1; min-height:300px; }
+  .module-explorer{ grid-template-columns:1fr; }
+  .module-nav{ position:static; flex-direction:row; overflow-x:auto; padding-bottom:6px; }
+  .module-tab{ flex-shrink:0; }
+  .module-panel{ grid-template-columns:1fr; }
+  .grid-3{ grid-template-columns:repeat(2,1fr); }
+  .grid-5{ grid-template-columns:repeat(2,1fr); }
+  .stack-grid{ grid-template-columns:repeat(2,1fr); }
+  .portal-grid{ grid-template-columns:1fr; }
+}
+@media (max-width: 640px){
+  .nav-links{ position:absolute; top:64px; left:0; right:0; background:var(--surface); border-radius:var(--radius-md); flex-direction:column; padding:14px; gap:14px; box-shadow:var(--shadow-lg); display:none; }
+  .nav-links.open{ display:flex; }
+  .nav-toggle{ display:flex; }
+  .nav-cta{ display:none; }
+  .grid-3, .grid-5{ grid-template-columns:1fr; }
+  .kpi-grid{ grid-template-columns:repeat(2,1fr); }
+  .hero-card{ display:none; }
+  .footer-inner{ align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================ ICON SPRITE ============================================================ -->
+<svg style="display:none">
+<defs>
+<symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.6"/><path d="M15.5 20c.2-2.7 2-4.7 4.5-5.4"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 11 4.6-2.4 8-6 8-11V5z"/><path d="m9 12 2.3 2.3L15.5 10"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></symbol>
+<symbol id="i-bar" viewBox="0 0 24 24"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-6"/><path d="M2 20h20"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 10a6 6 0 1 1 12 0c0 3.5 1.2 5 2 6H4c.8-1 2-2.5 2-6Z"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4"/><path d="M9 13h6M9 17h6"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M3 5h18v11H8l-5 5z"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 7 18a3 3 0 0 0 5-2v-9a3 3 0 0 0-3-3Z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 17 18a3 3 0 0 1-5-2v-9a3 3 0 0 1 3-3Z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.6 2.6L16 9.5"/></symbol>
+<symbol id="i-cross" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20Z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".4" fill="currentColor"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+<symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><circle cx="7" cy="7" r=".6" fill="currentColor"/><circle cx="7" cy="17" r=".6" fill="currentColor"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17 9 11l4 4 8-9"/><path d="M16 6h5v5"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-pie" viewBox="0 0 24 24"><path d="M12 12V3a9 9 0 1 1-9 9z"/><path d="M12 3a9 9 0 0 1 9 9h-9z"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 21V14M4 10V3M12 21v-8M12 9V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 9h6M17 12h6"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5 19 19M19 5l-2.5 2.5M7.5 16.5 5 19"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+<symbol id="i-id" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="12" r="2.2"/><path d="M13 10h6M13 14h4"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3M9 21h6"/></symbol>
+</defs>
+</svg>
+
+<!-- ============================================================ NAV ============================================================ -->
+<header class="nav-wrap">
+  <nav class="nav">
+    <a href="#top" class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      FinIQ
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="navLinks">
+      <a href="#overview">Overview</a>
+      <a href="#portals">Portals</a>
+      <a href="#architecture">How it works</a>
+      <a href="#modules">Modules</a>
+      <a href="#stack">Stack</a>
+      <a href="#future">Future</a>
+    </div>
+    <a href="#modules" class="btn btn-primary btn-sm nav-cta">Explore modules</a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- ============================================================ HERO ============================================================ -->
+<section class="hero" id="overview">
+  <div class="hero-inner">
+    <div class="hero-copy reveal">
+      <span class="eyebrow">B2B2C WealthTech SaaS for MFDs &amp; Investors</span>
+      <h1>Every folio. Every NAV.<br>One unified portfolio.</h1>
+      <p class="lede">FinIQ pulls brokerage, transaction and SIP/STP data straight from CAMS and Karvy, then serves it back through role-based Admin, Distributor and Investor portals — with automated FIFO capital gains and brokerage, so nothing gets reconciled by hand.</p>
+      <div class="hero-ctas">
+        <a href="#portals" class="btn btn-primary">Explore the 3 portals</a>
+        <a href="#modules" class="btn btn-ghost">See it in action <svg class="icon icon-sm"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="hero-stats">
+        <div><strong data-count="3">0</strong><span>role-based portals</span></div>
+        <div><strong data-count="12">0</strong><span>platform modules</span></div>
+        <div><strong data-count="6">0</strong><span>planning calculators</span></div>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 240 240" class="ring-wrap">
+        <g class="ring-group">
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#F1E6EE" stroke-width="22"/>
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#E31C79" stroke-width="22" stroke-linecap="round" transform="rotate(-90 120 120)" stroke-dasharray="311.02 254.47" stroke-dashoffset="0"/>
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#6E2BEA" stroke-width="22" stroke-linecap="round" transform="rotate(-90 120 120)" stroke-dasharray="141.37 424.12" stroke-dashoffset="-311.02"/>
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#119A66" stroke-width="22" stroke-linecap="round" transform="rotate(-90 120 120)" stroke-dasharray="67.86 497.63" stroke-dashoffset="-452.39"/>
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#E69A1E" stroke-width="22" stroke-linecap="round" transform="rotate(-90 120 120)" stroke-dasharray="45.24 520.25" stroke-dashoffset="-520.25"/>
+        </g>
+        <text x="120" y="114" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="20" fill="#180F22" font-weight="600">₹18.4L</text>
+        <text x="120" y="134" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#675F76">Sample asset mix</text>
+      </svg>
+      <div class="hero-card card-float-1">
+        <svg class="icon"><use href="#i-trend"/></svg>
+        <div><strong>₹3.2 Cr · AUM tracked</strong><span>Across one distributor's book</span></div>
+      </div>
+      <div class="hero-card card-float-2">
+        <svg class="icon" style="color:var(--amber)"><use href="#i-bell"/></svg>
+        <div><strong>SIP due in 2 days</strong><span>Rohan Mehta · HDFC Flexi Cap</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ PROBLEM ============================================================ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">The problem</span>
+      <h2>Most MFDs are still reconciling two RTAs by hand</h2>
+      <p class="sub">CAMS and Karvy each speak their own format. By the time brokerage, holdings and tax numbers are stitched together in a spreadsheet, the data is already a cycle old.</p>
+    </div>
+    <div class="grid grid-3 reveal">
+      <div class="problem-card"><svg class="icon"><use href="#i-database"/></svg><h3>Two RTAs, zero single view</h3><p>CAMS and Karvy each send brokerage, transaction and SIP files in their own format, with nothing tying the two together.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-sliders"/></svg><h3>Brokerage is a spreadsheet exercise</h3><p>Commission slabs differ by AMC, scheme and sub-broker, so most distributors still recalculate earnings by hand every month.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-file"/></svg><h3>Capital gains is a year-end scramble</h3><p>Without FIFO-matched lot tracking, STCG and LTCG numbers get assembled manually right before tax season.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-bell"/></svg><h3>SIPs and STPs go untracked</h3><p>Once registered, systematic transactions disappear into RTA back-end systems until an installment quietly fails.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-shield"/></svg><h3>No tenant-safe hierarchy</h3><p>Sub-broker structures and client mappings live in someone's memory, not in a system with real access controls.</p></div>
+      <div class="problem-card"><svg class="icon"><use href="#i-grid"/></svg><h3>Investors get a PDF, not a portal</h3><p>End clients receive a CAMS or Karvy statement PDF instead of a live, explorable view of their own money.</p></div>
+    </div>
+    <div class="solution-banner reveal">
+      <svg class="icon"><use href="#i-bolt"/></svg>
+      <p>FinIQ replaces all six gaps with one ingestion-to-insight platform — three connected portals, running on a single automated CAMS/Karvy pipeline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ PORTALS ============================================================ -->
+<section class="section alt" id="portals">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Core architecture</span>
+      <h2>Three portals, one connected platform</h2>
+      <p class="sub">Every login sees exactly the slice of FinIQ that's built for them.</p>
+    </div>
+    <div class="portal-grid reveal">
+      <div class="portal-card">
+        <div class="portal-icon"><svg class="icon"><use href="#i-shield"/></svg></div>
+        <span class="role-tag">Admin Portal</span>
+        <h3>Run the whole tenant base</h3>
+        <p class="desc">For super-admins managing global configuration and the data pipeline itself.</p>
+        <ul class="portal-list">
+          <li>Tenant &amp; global configuration management</li>
+          <li>CAMS/Karvy ingestion &amp; scraping engine oversight</li>
+          <li>Sub-broker &amp; ARN management</li>
+        </ul>
+      </div>
+      <div class="portal-card">
+        <div class="portal-icon"><svg class="icon"><use href="#i-users"/></svg></div>
+        <span class="role-tag">Distributor Portal</span>
+        <h3>Run a book of clients</h3>
+        <p class="desc">For mutual fund distributors managing clients, earnings and hierarchy.</p>
+        <ul class="portal-list">
+          <li>Client list mapped to RTA folios, holdings &amp; allocation</li>
+          <li>Brokerage, earnings ledger &amp; commission tracking</li>
+          <li>SIP/STP tracking plus Ledger &amp; Hierarchy reports</li>
+        </ul>
+      </div>
+      <div class="portal-card">
+        <div class="portal-icon"><svg class="icon"><use href="#i-pie"/></svg></div>
+        <span class="role-tag">Investor Portal</span>
+        <h3>See your own money</h3>
+        <p class="desc">For the end investor checking on their own portfolio, any time.</p>
+        <ul class="portal-list">
+          <li>Unified portfolio across every CAMS/Karvy folio</li>
+          <li>Capital gains &amp; transaction report downloads</li>
+          <li>Full access to the shared financial calculators suite</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ ARCHITECTURE ============================================================ -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">System architecture</span>
+      <h2>Five layers, one continuous pipeline</h2>
+      <p class="sub">Every transaction travels the same path — from an RTA file to a number an investor can trust. Click a layer to open it.</p>
+    </div>
+    <div class="arch reveal" id="archList">
+      <div class="arch-layer active" data-layer="1">
+        <div class="arch-head"><span class="arch-num">01</span><svg class="icon"><use href="#i-upload"/></svg><h3>RTA Data Ingestion</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>CAMS and Karvy deliver brokerage, investor-static, transaction, scheme and SIP/STP files, parsed by dedicated upload services for each RTA.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="2">
+        <div class="arch-head"><span class="arch-num">02</span><svg class="icon"><use href="#i-users"/></svg><h3>Investor &amp; Folio Mapping</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>investor-mapping.service links every incoming Folio/PAN to a user profile, while CAMS and Karvy records are normalized into one broker-transaction standard.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="3">
+        <div class="arch-head"><span class="arch-num">03</span><svg class="icon"><use href="#i-database"/></svg><h3>NAV &amp; Holdings Engine</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>The scraping engine keeps daily NAV current, and holdings-cache.service walks each investor's transactions against today's price to produce a live portfolio value.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="4">
+        <div class="arch-head"><span class="arch-num">04</span><svg class="icon"><use href="#i-bolt"/></svg><h3>Tax &amp; Brokerage Engine</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>tax-calculation.service runs FIFO capital-gains matching on every redemption, while commission-mapping.entity works out exactly what each distributor earned.</p></div>
+      </div>
+      <div class="arch-layer" data-layer="5">
+        <div class="arch-head"><span class="arch-num">05</span><svg class="icon"><use href="#i-bar"/></svg><h3>Portal Delivery &amp; Reporting</h3><svg class="chev icon-sm"><use href="#i-arrow"/></svg></div>
+        <div class="arch-body"><p>Role-guarded NestJS APIs and Next.js middleware serve dashboards, ledgers, capital-gains statements and calculator results — paginated and tenant-isolated by default.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ MODULES ============================================================ -->
+<section class="section alt" id="modules">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Inside the platform</span>
+      <h2>12 modules. Every one of them interactive below.</h2>
+      <p class="sub">Pick a module on the left — each panel includes the real feature list and a live sample of how it behaves.</p>
+    </div>
+
+    <div class="module-explorer reveal">
+      <div class="module-nav" id="moduleNav">
+        <button class="module-tab active" data-mod="m1"><span>01</span>Auth &amp; Access Control</button>
+        <button class="module-tab" data-mod="m2"><span>02</span>CAMS Data Ingestion</button>
+        <button class="module-tab" data-mod="m3"><span>03</span>Karvy &amp; Normalization</button>
+        <button class="module-tab" data-mod="m4"><span>04</span>NAV Scraping Engine</button>
+        <button class="module-tab" data-mod="m5"><span>05</span>Holdings Engine</button>
+        <button class="module-tab" data-mod="m6"><span>06</span>Capital Gains &amp; Tax</button>
+        <button class="module-tab" data-mod="m7"><span>07</span>Brokerage &amp; Ledger</button>
+        <button class="module-tab" data-mod="m8"><span>08</span>SIP / STP Tracking</button>
+        <button class="module-tab" data-mod="m9"><span>09</span>Financial Calculators</button>
+        <button class="module-tab" data-mod="m10"><span>10</span>Clients &amp; Hierarchy</button>
+        <button class="module-tab" data-mod="m11"><span>11</span>Notifications</button>
+        <button class="module-tab" data-mod="m12"><span>12</span>Admin Control Center</button>
+      </div>
+
+      <div class="module-panels" id="modulePanels">
+
+        <!-- M1 -->
+        <div class="module-panel active" data-mod="m1">
+          <div class="panel-text">
+            <h3>Authentication &amp; Access Control</h3>
+            <p>Multi-role JWT auth with OTP verification and strict tenant/role route guards, so each portal only ever sees what its role allows.</p>
+            <ul class="feature-list">
+              <li>Email/password login + OTP verification flow</li>
+              <li>JWT-based session management per role</li>
+              <li>Tenant- &amp; role-based route guards (middleware + NestJS RoleGuard)</li>
+              <li>Password reset &amp; profile management</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Try it — switch roles</p>
+            <div class="role-switch">
+              <button class="role-btn active" data-role="Admin">Admin</button>
+              <button class="role-btn" data-role="Distributor">Distributor</button>
+              <button class="role-btn" data-role="Investor">Investor</button>
+            </div>
+            <ul class="permission-list" id="permList"></ul>
+          </div>
+        </div>
+
+        <!-- M2 -->
+        <div class="module-panel" data-mod="m2">
+          <div class="panel-text">
+            <h3>CAMS Data Ingestion</h3>
+            <p>Automated processing of CAMS brokerage data, investor static details, transactions, scheme details and SIP/STP details — validated before any of it touches the database.</p>
+            <ul class="feature-list">
+              <li>Parses CAMS brokerage, investor &amp; transaction files (DBF/CSV/Excel)</li>
+              <li>Validates folio numbers &amp; ARNs against company records</li>
+              <li>Logs unparseable files for review instead of failing silently</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">CAMS upload workflow</p>
+            <button class="btn btn-primary btn-sm" id="runCamsIngest">Run demo upload</button>
+            <ol class="stepper" id="camsStepper">
+              <li data-step="0"><span class="dot"></span>Receive CAMS file</li>
+              <li data-step="1"><span class="dot"></span>Parse brokerage / investor / transaction records</li>
+              <li data-step="2"><span class="dot"></span>Validate folio &amp; ARN</li>
+              <li data-step="3"><span class="dot"></span>Normalize to broker-transaction model</li>
+              <li data-step="4"><span class="dot"></span>Store &amp; queue investor mapping</li>
+              <li data-step="5"><span class="dot"></span>Notify on completion</li>
+            </ol>
+            <div class="source-row">
+              <span class="badge">Brokerage Data</span><span class="badge">Investor Static Details</span><span class="badge">Transactions</span><span class="badge">Scheme Details</span><span class="badge">SIP/STP Details</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- M3 -->
+        <div class="module-panel" data-mod="m3">
+          <div class="panel-text">
+            <h3>Karvy Ingestion &amp; Transaction Normalization</h3>
+            <p>Runs the same pipeline in parallel for Karvy, then unifies both RTAs into one broker-transaction standard so the frontend never has to know which RTA a record came from.</p>
+            <ul class="feature-list">
+              <li>Parallel parsing of Karvy brokerage, scheme &amp; transaction files</li>
+              <li>Karvy transaction-type codes mapped to CAMS-equivalent codes</li>
+              <li>Single unified transaction shape served to every portal</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Same purchase, three representations — click a format</p>
+            <div class="toggle-row" id="txnToggle">
+              <button class="seg-btn active" data-view="cams">CAMS raw</button>
+              <button class="seg-btn" data-view="karvy">Karvy raw</button>
+              <button class="seg-btn" data-view="unified">Unified</button>
+            </div>
+            <table class="mini-table" id="txnTable"></table>
+            <p class="mini-cap" id="txnCap">CAMS field names, as received from the RTA file.</p>
+          </div>
+        </div>
+
+        <!-- M4 -->
+        <div class="module-panel" data-mod="m4">
+          <div class="panel-text">
+            <h3>NAV Scraping Engine</h3>
+            <p>A dedicated module fetches live and historical NAV for every scheme, so holdings, returns and capital gains always have a reliable daily price to work from.</p>
+            <ul class="feature-list">
+              <li>Daily NAV scrape across AMCs &amp; schemes</li>
+              <li>Cached latest-NAV lookups for instant holdings &amp; calculator screens</li>
+              <li>Manual refresh trigger with per-scheme failure logging</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">HDFC Flexi Cap Fund — Growth, sample NAV</p>
+            <div class="toggle-row" id="navToggle">
+              <button class="seg-btn" data-horizon="30">1M</button>
+              <button class="seg-btn active" data-horizon="180">6M</button>
+              <button class="seg-btn" data-horizon="365">1Y</button>
+            </div>
+            <div class="chart-box"><svg id="navChart" viewBox="0 0 640 220" preserveAspectRatio="xMidYMid meet"></svg></div>
+            <button class="btn btn-soft btn-sm" id="refreshNav" style="margin-top:14px">Refresh NAV now</button>
+          </div>
+        </div>
+
+        <!-- M5 -->
+        <div class="module-panel" data-mod="m5">
+          <div class="panel-text">
+            <h3>Holdings Engine</h3>
+            <p>Calculates what every investor actually owns right now, by walking each transaction against the latest NAV and caching the result so dashboards never recompute it from scratch.</p>
+            <ul class="feature-list">
+              <li>Real-time holdings value per folio &amp; scheme</li>
+              <li>holdings-cache.service refresh on new transactions or NAV updates</li>
+              <li>Powers GlobalStatsRibbon, MobileHoldings &amp; DesktopFundTable</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Sample investor holdings snapshot</p>
+            <div class="kpi-grid" id="kpiGrid"></div>
+          </div>
+        </div>
+
+        <!-- M6 -->
+        <div class="module-panel" data-mod="m6">
+          <div class="panel-text">
+            <h3>Capital Gains &amp; Tax Engine</h3>
+            <p>Matches every sold unit back to its original purchase lot on a FIFO basis, then applies the right short- or long-term rule before a single tax report goes out.</p>
+            <ul class="feature-list">
+              <li>FIFO lot-matching on every redemption (capital-gains-tax-rule.entity)</li>
+              <li>Automatic STCG / LTCG classification by holding period</li>
+              <li>Exportable capital gains statements per investor, per financial year</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">FY 2025–26 sample summary</p>
+            <div class="profile-grid">
+              <div class="profile-stat"><strong>₹1,84,200</strong><span>Total capital gains</span></div>
+              <div class="profile-stat"><strong>₹46,500</strong><span>Short-term gains</span></div>
+              <div class="profile-stat"><strong>₹1,37,700</strong><span>Long-term gains</span></div>
+              <div class="profile-stat"><strong>₹19,870</strong><span>Estimated tax payable</span></div>
+            </div>
+            <p class="demo-label" style="margin-top:14px">Gains by fund (FIFO-matched)</p>
+            <div class="bar-row"><span>HDFC Flexi Cap Fund</span><div class="bar"><i style="width:86%"></i></div><span class="amt">₹62,100</span></div>
+            <div class="bar-row"><span>SBI Small Cap Fund</span><div class="bar"><i style="width:64%"></i></div><span class="amt">₹46,300</span></div>
+            <div class="bar-row"><span>ICICI Pru Bluechip Fund</span><div class="bar"><i style="width:41%"></i></div><span class="amt">₹29,600</span></div>
+            <div class="bar-row"><span>Axis Long Term Equity</span><div class="bar"><i style="width:22%"></i></div><span class="amt">₹16,200</span></div>
+          </div>
+        </div>
+
+        <!-- M7 -->
+        <div class="module-panel" data-mod="m7">
+          <div class="panel-text">
+            <h3>Brokerage &amp; Earnings Ledger</h3>
+            <p>Calculates exactly what a distributor earned on every transaction, using AMC- and scheme-specific commission slabs, rolled into a ledger they can audit line by line.</p>
+            <ul class="feature-list">
+              <li>commission-mapping.entity slabs by AMC, scheme &amp; sub-broker</li>
+              <li>Brokerage ledger table per transaction, per client</li>
+              <li>Monthly &amp; AUM-based earnings summaries</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">This month, at a glance</p>
+            <div class="profile-grid">
+              <div class="profile-stat"><strong>₹1,12,480</strong><span>Brokerage earned (MTD)</span></div>
+              <div class="profile-stat"><strong>₹18,200</strong><span>Pending payout</span></div>
+            </div>
+            <p class="demo-label" style="margin-top:14px">Ledger sample</p>
+            <table class="mini-table">
+              <tr><th>Client</th><th>Scheme</th><th>Txn</th><th>Brokerage %</th><th>Earned</th></tr>
+              <tr><td>Rohan Mehta</td><td>HDFC Flexi Cap</td><td>SIP</td><td>0.80%</td><td>₹40.00</td></tr>
+              <tr><td>Aisha Khan</td><td>ICICI Pru Bluechip</td><td>Purchase</td><td>1.00%</td><td>₹1,250.00</td></tr>
+              <tr><td>Vikram Shah</td><td>SBI Small Cap</td><td>SIP</td><td>0.75%</td><td>₹187.50</td></tr>
+              <tr><td>Neha Joshi</td><td>Axis Bluechip</td><td>STP-in</td><td>0.60%</td><td>₹90.00</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- M8 -->
+        <div class="module-panel" data-mod="m8">
+          <div class="panel-text">
+            <h3>Systematic Transactions (SIP/STP)</h3>
+            <p>Tracks every active and closed SIP and STP from registration to the last installment, so a missed payment or a paused plan never goes unnoticed.</p>
+            <ul class="feature-list">
+              <li>Active / closed SIP &amp; STP tracking across CAMS and Karvy</li>
+              <li>Installment-level status &amp; next-due tracking</li>
+              <li>Feeds Distributor and Investor systematic-transaction reports</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Filter by status</p>
+            <div class="toggle-row" id="sipFilter">
+              <button class="seg-btn active" data-status="all">All</button>
+              <button class="seg-btn" data-status="active">Active</button>
+              <button class="seg-btn" data-status="paused">Paused</button>
+              <button class="seg-btn" data-status="closed">Closed</button>
+            </div>
+            <table class="sip-table">
+              <tr><th>Type</th><th>Investor</th><th>Scheme</th><th>Amount</th><th></th></tr>
+              <tr data-status="active"><td>SIP</td><td>Rohan Mehta</td><td>HDFC Flexi Cap</td><td>₹5,000/mo</td><td><span class="status-pill status-active">Active</span></td></tr>
+              <tr data-status="active"><td>STP</td><td>Aisha Khan</td><td>ICICI Liquid → Bluechip</td><td>₹10,000/mo</td><td><span class="status-pill status-active">Active</span></td></tr>
+              <tr data-status="paused"><td>SIP</td><td>Vikram Shah</td><td>SBI Small Cap</td><td>₹2,500/mo</td><td><span class="status-pill status-paused">Paused</span></td></tr>
+              <tr data-status="closed"><td>SIP</td><td>Neha Joshi</td><td>Axis Bluechip</td><td>₹7,500/mo</td><td><span class="status-pill status-closed">Closed</span></td></tr>
+              <tr data-status="active"><td>STP</td><td>Karan Verma</td><td>Mirae Tax Saver → Large Cap</td><td>₹15,000/mo</td><td><span class="status-pill status-active">Active</span></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- M9 -->
+        <div class="module-panel" data-mod="m9">
+          <div class="panel-text">
+            <h3>Financial Calculators Suite</h3>
+            <p>Six fully interactive planning tools, shared by both the Distributor and Investor portals — a client conversation becomes a number on screen in seconds.</p>
+            <ul class="feature-list">
+              <li>Fixed Deposit, Goal Planning, MF Returns, Reverse EMI, STP &amp; SWP</li>
+              <li>One shared component library, used by both portals</li>
+              <li>Every calculation runs client-side, instantly, as you move a slider</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Try a calculator</p>
+            <div class="calc-tabs" id="calcTabs">
+              <button class="seg-btn active" data-calc="fd">FD</button>
+              <button class="seg-btn" data-calc="goal">Goal</button>
+              <button class="seg-btn" data-calc="mf">MF Returns</button>
+              <button class="seg-btn" data-calc="emi">Reverse EMI</button>
+              <button class="seg-btn" data-calc="stp">STP</button>
+              <button class="seg-btn" data-calc="swp">SWP</button>
+            </div>
+
+            <div class="calc-pane active" data-calc="fd">
+              <div class="field-row"><label>Principal <b id="fdPrincipalVal"></b></label><input type="range" id="fdPrincipal" min="10000" max="5000000" step="5000" value="100000"></div>
+              <div class="field-row"><label>Interest rate <b id="fdRateVal"></b></label><input type="range" id="fdRate" min="4" max="9" step="0.1" value="7.1"></div>
+              <div class="field-row"><label>Tenure <b id="fdTenureVal"></b></label><input type="range" id="fdTenure" min="0.5" max="10" step="0.5" value="3"></div>
+              <div class="calc-result" id="fdResult"></div>
+            </div>
+
+            <div class="calc-pane" data-calc="goal">
+              <div class="field-row"><label>Goal amount <b id="goalAmountVal"></b></label><input type="range" id="goalAmount" min="100000" max="50000000" step="100000" value="5000000"></div>
+              <div class="field-row"><label>Years to goal <b id="goalYearsVal"></b></label><input type="range" id="goalYears" min="1" max="30" step="1" value="10"></div>
+              <div class="field-row"><label>Expected annual return <b id="goalReturnVal"></b></label><input type="range" id="goalReturn" min="6" max="15" step="0.5" value="12"></div>
+              <div class="calc-result" id="goalResult"></div>
+            </div>
+
+            <div class="calc-pane" data-calc="mf">
+              <div class="field-row"><label>Investment amount <b id="mfAmountVal"></b></label><input type="range" id="mfAmount" min="10000" max="5000000" step="5000" value="100000"></div>
+              <div class="field-row"><label>Expected annual return <b id="mfReturnVal"></b></label><input type="range" id="mfReturn" min="4" max="20" step="0.5" value="12"></div>
+              <div class="field-row"><label>Years invested <b id="mfYearsVal"></b></label><input type="range" id="mfYears" min="1" max="20" step="1" value="5"></div>
+              <div class="calc-result" id="mfResult"></div>
+            </div>
+
+            <div class="calc-pane" data-calc="emi">
+              <div class="field-row"><label>Affordable EMI <b id="emiAmountVal"></b></label><input type="range" id="emiAmount" min="2000" max="200000" step="500" value="20000"></div>
+              <div class="field-row"><label>Interest rate <b id="emiRateVal"></b></label><input type="range" id="emiRate" min="6" max="15" step="0.1" value="9"></div>
+              <div class="field-row"><label>Loan tenure <b id="emiTenureVal"></b></label><input type="range" id="emiTenure" min="1" max="30" step="1" value="15"></div>
+              <div class="calc-result" id="emiResult"></div>
+            </div>
+
+            <div class="calc-pane" data-calc="stp">
+              <div class="field-row"><label>Source corpus <b id="stpCorpusVal"></b></label><input type="range" id="stpCorpus" min="100000" max="10000000" step="50000" value="1000000"></div>
+              <div class="field-row"><label>Monthly transfer <b id="stpTransferVal"></b></label><input type="range" id="stpTransfer" min="1000" max="100000" step="1000" value="20000"></div>
+              <div class="field-row"><label>Tenure (months) <b id="stpMonthsVal"></b></label><input type="range" id="stpMonths" min="3" max="60" step="1" value="24"></div>
+              <div class="field-row"><label>Target fund return <b id="stpReturnVal"></b></label><input type="range" id="stpReturn" min="6" max="18" step="0.5" value="12"></div>
+              <div class="calc-result" id="stpResult"></div>
+            </div>
+
+            <div class="calc-pane" data-calc="swp">
+              <div class="field-row"><label>Initial corpus <b id="swpCorpusVal"></b></label><input type="range" id="swpCorpus" min="100000" max="20000000" step="100000" value="2000000"></div>
+              <div class="field-row"><label>Monthly withdrawal <b id="swpWithdrawVal"></b></label><input type="range" id="swpWithdraw" min="1000" max="200000" step="1000" value="15000"></div>
+              <div class="field-row"><label>Expected annual return <b id="swpReturnVal"></b></label><input type="range" id="swpReturn" min="4" max="14" step="0.5" value="8"></div>
+              <div class="field-row"><label>Tenure (years) <b id="swpYearsVal"></b></label><input type="range" id="swpYears" min="1" max="30" step="1" value="10"></div>
+              <div class="calc-result" id="swpResult"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- M10 -->
+        <div class="module-panel" data-mod="m10">
+          <div class="panel-text">
+            <h3>Clients &amp; Hierarchy Management</h3>
+            <p>A CRM-lite view mapped straight to RTA folios — every client, their asset allocation, and where they sit in the sub-broker hierarchy, in one screen.</p>
+            <ul class="feature-list">
+              <li>Client list mapped to folios via investor-mapping.service</li>
+              <li>Asset allocation / fund style box per client</li>
+              <li>Sub-broker hierarchy &amp; AUM-based filtering</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Sub-broker hierarchy</p>
+            <div class="tree">
+              <div class="tree-row lvl1">Murtaza Bhaisaheb · ARN-12345<span class="aum">₹8.4 Cr</span></div>
+              <div class="tree-row lvl2">Sub-broker — Priya Nair · ARN-12345-01<span class="aum">₹3.1 Cr</span></div>
+              <div class="tree-row lvl3">Client — Rohan Mehta<span class="aum">₹42L</span></div>
+              <div class="tree-row lvl3">Client — Aisha Khan<span class="aum">₹28L</span></div>
+              <div class="tree-row lvl2">Sub-broker — Karan Verma · ARN-12345-02<span class="aum">₹2.6 Cr</span></div>
+              <div class="tree-row lvl3">Client — Neha Joshi<span class="aum">₹19L</span></div>
+            </div>
+            <p class="demo-label">Clients by AUM</p>
+            <div class="toggle-row" id="aumFilter">
+              <button class="seg-btn active" data-aum="all">All</button>
+              <button class="seg-btn" data-aum="0-10">₹0–10L</button>
+              <button class="seg-btn" data-aum="10-50">₹10–50L</button>
+              <button class="seg-btn" data-aum="50+">₹50L+</button>
+            </div>
+            <div id="clientList"></div>
+          </div>
+        </div>
+
+        <!-- M11 -->
+        <div class="module-panel" data-mod="m11">
+          <div class="panel-text">
+            <h3>Notification System</h3>
+            <p>Sends an alert the moment something needs attention — a SIP due, a capital-gains report ready, a CAMS file that failed to parse — by email or directly inside the portal.</p>
+            <ul class="feature-list">
+              <li>Email &amp; in-app notifications</li>
+              <li>SIP due, NAV-update &amp; ingestion-failure alerts</li>
+              <li>Report-ready notifications for distributors &amp; investors</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Trigger a sample notification</p>
+            <div class="notif-buttons">
+              <button class="btn btn-soft btn-sm" data-toast="sipdue">SIP installment due</button>
+              <button class="btn btn-soft btn-sm" data-toast="navupdate">NAV update complete</button>
+              <button class="btn btn-soft btn-sm" data-toast="camsfail">CAMS file failed to parse</button>
+              <button class="btn btn-soft btn-sm" data-toast="reportready">Capital gains report ready</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- M12 -->
+        <div class="module-panel" data-mod="m12">
+          <div class="panel-text">
+            <h3>Admin Control Center</h3>
+            <p>One control room for the whole platform — tenants, sub-brokers, ingestion health and audit trails, all in a single screen for super-admins.</p>
+            <ul class="feature-list">
+              <li>Tenant &amp; sub-broker / ARN management</li>
+              <li>CAMS/Karvy ingestion health monitoring</li>
+              <li>Audit logs across uploads, role changes &amp; system jobs</li>
+            </ul>
+          </div>
+          <div class="panel-demo">
+            <p class="demo-label">Platform overview</p>
+            <div class="profile-grid">
+              <div class="profile-stat"><strong>6</strong><span>Tenants</span></div>
+              <div class="profile-stat"><strong>42</strong><span>Distributors</span></div>
+              <div class="profile-stat"><strong>3,180</strong><span>Investors</span></div>
+              <div class="profile-stat"><strong>1,842</strong><span>Schemes tracked</span></div>
+            </div>
+            <p class="demo-label" style="margin-top:14px">Audit log</p>
+            <ul class="audit-log">
+              <li><span>09:41</span> CAMS file processed for <b>ARN-12345</b> (sub-broker Priya Nair)</li>
+              <li><span>09:38</span> Karvy file failed to parse — flagged for review</li>
+              <li><span>09:12</span> Nightly NAV scrape completed for <b>1,842</b> schemes</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ NFR ============================================================ -->
+<section class="section" id="trust">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Built to be trusted</span>
+      <h2>Non-functional requirements aren't an afterthought</h2>
+    </div>
+    <div class="grid grid-3 reveal">
+      <div class="nfr-card"><svg class="icon"><use href="#i-clock"/></svg><strong>10K+</strong><h3>Performance</h3><p>PaginationHelper &amp; QueryFilterBuilder stop any single API call from ever returning an entire transaction history.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-layers"/></svg><strong>Multi-tenant</strong><h3>Scalability</h3><p>Every distributor's client book is isolated by tenant, so one platform serves many distributors independently.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-lock"/></svg><strong>JWT + OTP</strong><h3>Security</h3><p>Encrypted sessions, OTP-verified logins and role-based permissions guard every endpoint.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-shield"/></svg><strong>Tenant-safe</strong><h3>Data Isolation</h3><p>Row-level and application-level checks make sure Distributor A can never fetch an Investor belonging to Distributor B.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-server"/></svg><strong>Logged</strong><h3>Reliability</h3><p>AllExceptionsFilter and email-processing-error tracking catch every CAMS/Karvy file that fails to parse.</p></div>
+      <div class="nfr-card"><svg class="icon"><use href="#i-bolt"/></svg><strong data-count="99" data-suffix="%">0</strong><h3>Availability</h3><p>Built toward a 99% uptime target across all three portals.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ STACK ============================================================ -->
+<section class="section alt" id="stack">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Technology stack</span>
+      <h2>One stack, end to end</h2>
+    </div>
+    <div class="stack-grid reveal">
+      <div class="stack-col"><h4>Frontend</h4><div class="pills"><span>Next.js</span><span>React</span><span>TypeScript</span><span>Tailwind CSS</span></div></div>
+      <div class="stack-col"><h4>Backend</h4><div class="pills"><span>NestJS</span><span>TypeORM</span><span>TypeScript</span></div></div>
+      <div class="stack-col"><h4>Database</h4><div class="pills"><span>PostgreSQL</span><span>MySQL</span></div></div>
+      <div class="stack-col"><h4>RTA &amp; Data Sources</h4><div class="pills"><span>CAMS</span><span>Karvy</span><span>NAV Scraper</span></div></div>
+      <div class="stack-col"><h4>Auth &amp; Security</h4><div class="pills"><span>JWT</span><span>OTP</span><span>Role Guards</span></div></div>
+      <div class="stack-col"><h4>Version Control</h4><div class="pills"><span>Git</span><span>GitHub</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ FUTURE ============================================================ -->
+<section class="section" id="future">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">What's next</span>
+      <h2>Future scope</h2>
+      <p class="sub">FinIQ's roadmap beyond the current 12 modules.</p>
+    </div>
+    <div class="grid grid-5 reveal" id="futureGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================================ FOOTER ============================================================ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <a href="#top" class="brand"><span class="brand-mark" aria-hidden="true"></span>FinIQ</a>
+      <p>A wealth-tech SaaS concept — built to show how CAMS and Karvy data could flow into one connected experience for distributors and their investors.</p>
+    </div>
+    <a href="#modules" class="btn btn-primary">Explore the modules</a>
+  </div>
+  <div class="container footer-bottom">
+    <span>Portfolio project · Interactive demos are simulated, not connected to live RTA data.</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+</main>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script>
+/* ============================================================ DATA HELPERS ============================================================ */
+const $  = (s, c=document) => c.querySelector(s);
+const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
+const inr = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
+
+/* ---------- Mobile nav ---------- */
+$('#navToggle').addEventListener('click', () => {
+  $('#navLinks').classList.toggle('open');
+  $('#navToggle').classList.toggle('open');
+});
+$$('#navLinks a').forEach(a => a.addEventListener('click', () => {
+  $('#navLinks').classList.remove('open');
+  $('#navToggle').classList.remove('open');
+}));
+
+/* ---------- Scroll reveal ---------- */
+const revealItems = $$('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+revealItems.forEach(el => io.observe(el));
+
+/* ---------- Animated counters ---------- */
+function animateCount(el) {
+  const target = parseInt(el.dataset.count, 10);
+  const suffix = el.dataset.suffix || '';
+  const dur = 1000;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min(1, (now - start) / dur);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = Math.round(target * eased);
+    el.textContent = val + suffix;
+    if (p < 1) requestAnimationFrame(tick); else { el.textContent = target + suffix; }
+  }
+  requestAnimationFrame(tick);
+}
+const countIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCount(e.target); countIO.unobserve(e.target); } });
+}, { threshold: 0.4 });
+$$('[data-count]').forEach(el => countIO.observe(el));
+
+/* ---------- Toasts ---------- */
+const toastData = {
+  sipdue:     { icon:'i-bell',  color:'amber', title:'SIP Installment Due',        msg:'Rohan Mehta · HDFC Flexi Cap, ₹5,000 due in 2 days.' },
+  navupdate:  { icon:'i-server',color:'green', title:'NAV Update Complete',        msg:'Latest NAV refreshed for 1,842 schemes across CAMS &amp; Karvy.' },
+  camsfail:   { icon:'i-alert', color:'red',   title:'CAMS File Failed to Parse',  msg:'brokerage_mar24.dbf — flagged for manual review.' },
+  reportready:{ icon:'i-check', color:'green', title:'Capital Gains Report Ready', msg:'FY 2025-26 statement generated for Aisha Khan.' },
+};
+function showToast(key) {
+  const d = toastData[key]; if (!d) return;
+  const el = document.createElement('div');
+  el.className = `toast toast-${d.color}`;
+  el.innerHTML = `<svg class="icon icon-sm"><use href="#${d.icon}"/></svg><div><strong>${d.title}</strong><span>${d.msg}</span></div>`;
+  $('#toastStack').appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 350); }, 4200);
+}
+$$('[data-toast]').forEach(btn => btn.addEventListener('click', () => showToast(btn.dataset.toast)));
+$('#refreshNav').addEventListener('click', () => {
+  $('#refreshNav').textContent = 'Refreshing…';
+  setTimeout(() => { $('#refreshNav').textContent = 'Refresh NAV now'; showToast('navupdate'); }, 700);
+});
+
+/* ============================================================ ARCHITECTURE ACCORDION ============================================================ */
+$$('.arch-layer').forEach(layer => {
+  layer.querySelector('.arch-head').addEventListener('click', () => {
+    const isActive = layer.classList.contains('active');
+    $$('.arch-layer').forEach(l => l.classList.remove('active'));
+    if (!isActive) layer.classList.add('active');
+  });
+});
+
+/* ============================================================ MODULE EXPLORER ============================================================ */
+const moduleTabs = $$('.module-tab');
+const modulePanels = $$('.module-panel');
+moduleTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    moduleTabs.forEach(t => t.classList.remove('active'));
+    modulePanels.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $(`.module-panel[data-mod="${tab.dataset.mod}"]`).classList.add('active');
+    initModuleCharts(tab.dataset.mod);
+  });
+});
+
+/* ---------- M1: role switcher ---------- */
+const permissions = {
+  Admin:       [['Manage tenants &amp; global config', true], ['Upload &amp; process CAMS/Karvy files', true], ['Manage clients, sub-brokers &amp; ARNs', true], ['View portfolio, reports &amp; calculators', true]],
+  Distributor: [['Manage tenants &amp; global config', false], ['Upload &amp; process CAMS/Karvy files', false], ['Manage clients, sub-brokers &amp; ARNs', true], ['View portfolio, reports &amp; calculators', true]],
+  Investor:    [['Manage tenants &amp; global config', false], ['Upload &amp; process CAMS/Karvy files', false], ['Manage clients, sub-brokers &amp; ARNs', false], ['View portfolio, reports &amp; calculators', true]],
+};
+function renderPerms(role) {
+  $('#permList').innerHTML = permissions[role].map(([label, allowed]) =>
+    `<li class="${allowed ? 'allowed' : 'denied'}"><svg class="icon icon-sm"><use href="#${allowed ? 'i-check' : 'i-cross'}"/></svg>${label}</li>`).join('');
+}
+$$('.role-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('.role-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPerms(btn.dataset.role);
+}));
+renderPerms('Admin');
+
+/* ---------- M2: CAMS ingestion stepper ---------- */
+$('#runCamsIngest').addEventListener('click', () => {
+  const steps = $$('#camsStepper li');
+  steps.forEach(s => s.classList.remove('done', 'current'));
+  steps.forEach((s, i) => setTimeout(() => {
+    steps.forEach(x => x.classList.remove('current'));
+    s.classList.add('current');
+    setTimeout(() => { s.classList.remove('current'); s.classList.add('done'); }, 380);
+  }, i * 420));
+});
+
+/* ---------- M3: CAMS / Karvy / Unified transaction toggle ---------- */
+const txnViews = {
+  cams:    { rows: [['Folio No','1234567 / 45'],['Scheme','HDFC FLEXI CAP-GR'],['Txn Type','PUR'],['Amount','10000.00'],['Txn Date','11032024']], cap:'CAMS field names, exactly as received from the RTA file.' },
+  karvy:   { rows: [['Client Code','KV99021'],['Scheme Code','SBI-BAF-G'],['Txn Type','P'],['Amount','10000'],['Txn Date','20240311']], cap:'Karvy field names — different codes, different date format.' },
+  unified: { rows: [['Investor','Rohan Mehta'],['Scheme','HDFC Flexi Cap Fund — Growth'],['Type','Purchase'],['Amount','₹10,000'],['Date','2024-03-11']], cap:'What every portal actually reads — one shape, regardless of source RTA.' },
+};
+function renderTxnTable(view) {
+  const v = txnViews[view];
+  $('#txnTable').innerHTML = '<tr><th>Field</th><th>Value</th></tr>' + v.rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+  $('#txnCap').textContent = v.cap;
+}
+$$('#txnToggle .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('#txnToggle .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTxnTable(btn.dataset.view);
+}));
+renderTxnTable('cams');
+
+/* ============================================================ CHARTS (lazy init per module, pure SVG) ============================================================ */
+let chartsInit = { m4:false };
+function initModuleCharts(mod) {
+  if (mod === 'm4' && !chartsInit.m4) { buildNavChart(180); chartsInit.m4 = true; }
+  if (mod === 'm5') renderKpis();
+  if (mod === 'm10') renderClients(currentAumFilter);
+}
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs = {}) {
+  const el = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+function showSvgTooltip(svg, x, y, lines) {
+  let tip = svg.querySelector('.chart-tooltip');
+  if (tip) tip.remove();
+  tip = svgEl('g', { class: 'chart-tooltip' });
+  const padX = 8, padY = 6, lineH = 14;
+  const w = Math.max(...lines.map(l => l.length * 6.2)) + padX * 2;
+  const h = lines.length * lineH + padY * 2 - 4;
+  let tx = x + 10, ty = y - h - 10;
+  const vb = svg.viewBox.baseVal;
+  if (tx + w > vb.width) tx = x - w - 10;
+  if (ty < 0) ty = y + 14;
+  tip.appendChild(svgEl('rect', { x: tx, y: ty, width: w, height: h }));
+  lines.forEach((line, i) => {
+    const t = svgEl('text', { x: tx + padX, y: ty + padY + (i + 1) * lineH - 4 });
+    t.textContent = line;
+    tip.appendChild(t);
+  });
+  svg.appendChild(tip);
+}
+function hideSvgTooltip(svg) {
+  const tip = svg.querySelector('.chart-tooltip');
+  if (tip) tip.remove();
+}
+
+/* ---------- M4: NAV line chart ---------- */
+let navCache = {};
+function buildNavChart(horizon) {
+  const W = 640, H = 220, padL = 44, padR = 16, padT = 14, padB = 26;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  if (!navCache[horizon]) {
+    let v = 138 + Math.random() * 6;
+    const series = [];
+    for (let i = 0; i < horizon; i++) {
+      v += (Math.sin(i / 14) * 0.18) + (Math.random() - 0.42) * 0.35;
+      series.push(Math.max(110, v));
+    }
+    navCache[horizon] = series;
+  }
+  const data = navCache[horizon];
+  const n = data.length;
+  const minV = Math.min(...data) * 0.98, maxV = Math.max(...data) * 1.02;
+  const x2px = i => padL + (i / (n - 1)) * plotW;
+  const y2px = v => padT + plotH - ((v - minV) / (maxV - minV)) * plotH;
+
+  const svg = $('#navChart');
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  for (let i = 0; i <= 4; i++) {
+    const gy = padT + (plotH / 4) * i;
+    svg.appendChild(svgEl('line', { x1: padL, x2: W - padR, y1: gy, y2: gy, class: 'chart-gridline' }));
+  }
+
+  const pts = data.map((v, i) => [x2px(i), y2px(v)]);
+  const areaPath = `M${pts[0][0]},${padT + plotH} ` + pts.map(p => `L${p[0]},${p[1]}`).join(' ') + ` L${pts[pts.length - 1][0]},${padT + plotH} Z`;
+  svg.appendChild(svgEl('path', { d: areaPath, fill: 'rgba(227,28,121,0.08)', stroke: 'none' }));
+  const linePath = 'M' + pts.map(p => p.join(',')).join(' L');
+  svg.appendChild(svgEl('path', { d: linePath, fill: 'none', stroke: '#E31C79', 'stroke-width': 2.3 }));
+
+  const hitEvery = Math.max(1, Math.round(n / 28));
+  for (let i = 0; i < n; i += hitEvery) {
+    const px = pts[i][0], py = pts[i][1];
+    const hit = svgEl('circle', { cx: px, cy: py, r: 6, fill: 'transparent', class: 'chart-dot' });
+    hit.addEventListener('mouseenter', () => showSvgTooltip(svg, px, py, [`Day ${i + 1}`, `NAV ₹${data[i].toFixed(2)}`]));
+    hit.addEventListener('mouseleave', () => hideSvgTooltip(svg));
+    svg.appendChild(hit);
+  }
+
+  const labelEvery = Math.ceil(n / 6);
+  for (let i = 0; i < n; i += labelEvery) {
+    const t = svgEl('text', { x: x2px(i), y: H - 6, 'text-anchor': 'middle', class: 'chart-axis-label' });
+    t.textContent = 'D' + (i + 1);
+    svg.appendChild(t);
+  }
+}
+$$('#navToggle .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('#navToggle .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildNavChart(parseInt(btn.dataset.horizon, 10));
+}));
+
+/* ---------- M5: holdings KPI cards with sparkline ---------- */
+const kpiData = [
+  { label: 'Portfolio Value', value: '₹18,42,650', delta: '+1.8%', up: true, points:[10,12,11,14,16,15,18] },
+  { label: "Today's Change", value: '+₹6,210', delta: '+0.34%', up: true, points:[5,6,5,7,8,7,9] },
+  { label: 'Total Folios', value: '14', delta: '+1', up: true, points:[4,4,5,5,6,6,7] },
+  { label: 'XIRR', value: '13.6%', delta: '+0.4%', up: true, points:[10,11,11,12,12,13,14] },
+  { label: 'Equity Allocation', value: '58%', delta: '+2%', up: true, points:[20,21,22,21,23,24,25] },
+  { label: 'Debt Allocation', value: '27%', delta: '-1%', up: false, points:[18,17,17,16,16,15,15] },
+];
+function sparkPath(points, w=80, h=28) {
+  const max = Math.max(...points), min = Math.min(...points);
+  const step = w / (points.length - 1);
+  return points.map((p,i) => {
+    const x = i*step;
+    const y = h - ((p-min)/(max-min || 1)) * h;
+    return `${i===0?'M':'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+}
+function renderKpis() {
+  if ($('#kpiGrid').dataset.done) return;
+  $('#kpiGrid').dataset.done = '1';
+  $('#kpiGrid').innerHTML = kpiData.map(k => `
+    <div class="kpi-card">
+      <span class="kpi-label">${k.label}</span>
+      <strong class="kpi-value">${k.value}</strong>
+      <span class="kpi-delta ${k.up ? 'up' : 'down'}">${k.delta}</span>
+      <svg viewBox="0 0 80 28" class="kpi-spark"><path d="${sparkPath(k.points)}" fill="none" stroke="${k.up ? '#119A66' : '#E5484D'}" stroke-width="2"/></svg>
+    </div>`).join('');
+}
+
+/* ---------- M8: SIP/STP status filter ---------- */
+$$('#sipFilter .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('#sipFilter .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const status = btn.dataset.status;
+  $$('.sip-table tr[data-status]').forEach(row => {
+    row.classList.toggle('hide', status !== 'all' && row.dataset.status !== status);
+  });
+}));
+
+/* ---------- M9: financial calculators ---------- */
+$$('#calcTabs .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('#calcTabs .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  $$('.calc-pane').forEach(p => p.classList.remove('active'));
+  $(`.calc-pane[data-calc="${btn.dataset.calc}"]`).classList.add('active');
+}));
+
+function bindLive(id, fn) { $('#' + id).addEventListener('input', fn); }
+
+function computeFD() {
+  const P = +$('#fdPrincipal').value, r = +$('#fdRate').value, t = +$('#fdTenure').value;
+  $('#fdPrincipalVal').textContent = inr(P);
+  $('#fdRateVal').textContent = r.toFixed(1) + '%';
+  $('#fdTenureVal').textContent = t + (t == 1 ? ' yr' : ' yrs');
+  const n = 4;
+  const maturity = P * Math.pow(1 + r / (100 * n), n * t);
+  const interest = maturity - P;
+  $('#fdResult').innerHTML = `<span class="r-label">Maturity value</span><span class="r-value">${inr(maturity)}</span>
+    <div class="r-sub"><div><span>Interest earned</span><b>${inr(interest)}</b></div><div><span>Compounding</span><b>Quarterly</b></div></div>`;
+}
+['fdPrincipal','fdRate','fdTenure'].forEach(id => bindLive(id, computeFD));
+
+function computeGoal() {
+  const G = +$('#goalAmount').value, years = +$('#goalYears').value, r = +$('#goalReturn').value;
+  $('#goalAmountVal').textContent = inr(G);
+  $('#goalYearsVal').textContent = years + (years == 1 ? ' yr' : ' yrs');
+  $('#goalReturnVal').textContent = r.toFixed(1) + '%';
+  const i = r / 1200, n = years * 12;
+  const sip = G * i / (((Math.pow(1 + i, n) - 1)) * (1 + i));
+  const totalInvested = sip * n;
+  const wealthGained = G - totalInvested;
+  $('#goalResult').innerHTML = `<span class="r-label">Required monthly SIP</span><span class="r-value">${inr(sip)}</span>
+    <div class="r-sub"><div><span>Total invested</span><b>${inr(totalInvested)}</b></div><div><span>Wealth gained</span><b>${inr(wealthGained)}</b></div></div>`;
+}
+['goalAmount','goalYears','goalReturn'].forEach(id => bindLive(id, computeGoal));
+
+function computeMF() {
+  const P = +$('#mfAmount').value, r = +$('#mfReturn').value, y = +$('#mfYears').value;
+  $('#mfAmountVal').textContent = inr(P);
+  $('#mfReturnVal').textContent = r.toFixed(1) + '%';
+  $('#mfYearsVal').textContent = y + (y == 1 ? ' yr' : ' yrs');
+  const fv = P * Math.pow(1 + r / 100, y);
+  const gain = fv - P;
+  const pct = (gain / P) * 100;
+  $('#mfResult').innerHTML = `<span class="r-label">Future value</span><span class="r-value">${inr(fv)}</span>
+    <div class="r-sub"><div><span>Total gain</span><b>${inr(gain)}</b></div><div><span>Absolute return</span><b>${pct.toFixed(1)}%</b></div></div>`;
+}
+['mfAmount','mfReturn','mfYears'].forEach(id => bindLive(id, computeMF));
+
+function computeEMI() {
+  const emi = +$('#emiAmount').value, r = +$('#emiRate').value, y = +$('#emiTenure').value;
+  $('#emiAmountVal').textContent = inr(emi) + '/mo';
+  $('#emiRateVal').textContent = r.toFixed(1) + '%';
+  $('#emiTenureVal').textContent = y + (y == 1 ? ' yr' : ' yrs');
+  const i = r / 1200, n = y * 12;
+  const principal = emi * (1 - Math.pow(1 + i, -n)) / i;
+  const totalPay = emi * n;
+  const totalInterest = totalPay - principal;
+  $('#emiResult').innerHTML = `<span class="r-label">Maximum loan eligible</span><span class="r-value">${inr(principal)}</span>
+    <div class="r-sub"><div><span>Total interest</span><b>${inr(totalInterest)}</b></div><div><span>Total repayment</span><b>${inr(totalPay)}</b></div></div>`;
+}
+['emiAmount','emiRate','emiTenure'].forEach(id => bindLive(id, computeEMI));
+
+function computeSTP() {
+  const corpus = +$('#stpCorpus').value, transfer = +$('#stpTransfer').value, months = +$('#stpMonths').value, ret = +$('#stpReturn').value;
+  $('#stpCorpusVal').textContent = inr(corpus);
+  $('#stpTransferVal').textContent = inr(transfer) + '/mo';
+  $('#stpMonthsVal').textContent = months + ' mo';
+  $('#stpReturnVal').textContent = ret.toFixed(1) + '%';
+  const i = ret / 1200;
+  let src = corpus, tgt = 0, totalTransferred = 0;
+  for (let m = 0; m < months; m++) {
+    const t = Math.min(transfer, Math.max(src, 0));
+    src -= t; totalTransferred += t;
+    tgt = (tgt + t) * (1 + i);
+  }
+  $('#stpResult').innerHTML = `<span class="r-label">Target fund value built</span><span class="r-value">${inr(tgt)}</span>
+    <div class="r-sub"><div><span>Source balance remaining</span><b>${inr(Math.max(src,0))}</b></div><div><span>Total transferred</span><b>${inr(totalTransferred)}</b></div></div>`;
+}
+['stpCorpus','stpTransfer','stpMonths','stpReturn'].forEach(id => bindLive(id, computeSTP));
+
+function computeSWP() {
+  const corpus = +$('#swpCorpus').value, withdraw = +$('#swpWithdraw').value, r = +$('#swpReturn').value, years = +$('#swpYears').value;
+  $('#swpCorpusVal').textContent = inr(corpus);
+  $('#swpWithdrawVal').textContent = inr(withdraw) + '/mo';
+  $('#swpReturnVal').textContent = r.toFixed(1) + '%';
+  $('#swpYearsVal').textContent = years + (years == 1 ? ' yr' : ' yrs');
+  const i = r / 1200, months = years * 12;
+  let bal = corpus, totalW = 0, lasted = 0;
+  for (let m = 0; m < months; m++) {
+    if (bal <= 0) break;
+    bal = bal * (1 + i) - withdraw;
+    totalW += withdraw; lasted++;
+    if (bal < 0) bal = 0;
+  }
+  const lastedLabel = lasted >= months ? `Full ${years} yr${years != 1 ? 's' : ''}` : `${(lasted/12).toFixed(1)} yrs (depleted)`;
+  $('#swpResult').innerHTML = `<span class="r-label">Final corpus balance</span><span class="r-value">${inr(Math.max(bal,0))}</span>
+    <div class="r-sub"><div><span>Total withdrawn</span><b>${inr(totalW)}</b></div><div><span>Corpus lasted</span><b>${lastedLabel}</b></div></div>`;
+}
+['swpCorpus','swpWithdraw','swpReturn','swpYears'].forEach(id => bindLive(id, computeSWP));
+
+computeFD(); computeGoal(); computeMF(); computeEMI(); computeSTP(); computeSWP();
+
+/* ---------- M10: client AUM filter ---------- */
+const clientsData = [
+  { name: 'Rohan Mehta', aum: 42 }, { name: 'Aisha Khan', aum: 28 }, { name: 'Neha Joshi', aum: 19 },
+  { name: 'Karan Singh', aum: 67 }, { name: 'Sunita Rao', aum: 8 }, { name: 'Imran Sheikh', aum: 54 },
+];
+let currentAumFilter = 'all';
+function renderClients(filter) {
+  currentAumFilter = filter;
+  const maxAum = 70;
+  const matches = (a) => filter === 'all' ? true : filter === '0-10' ? a <= 10 : filter === '10-50' ? (a > 10 && a <= 50) : a > 50;
+  const rows = clientsData.filter(c => matches(c.aum));
+  $('#clientList').innerHTML = rows.map(c => `
+    <div class="client-row"><span class="name">${c.name}</span><div class="bar"><i style="width:${Math.min(100, (c.aum/maxAum)*100)}%"></i></div><span class="amt">₹${c.aum}L</span></div>`).join('')
+    || '<p style="font-size:12.5px;color:var(--muted)">No clients in this AUM band.</p>';
+}
+$$('#aumFilter .seg-btn').forEach(btn => btn.addEventListener('click', () => {
+  $$('#aumFilter .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderClients(btn.dataset.aum);
+}));
+renderClients('all');
+
+/* ============================================================ FUTURE SCOPE ============================================================ */
+const future = [
+  ['Direct Online Investment &amp; Transact','i-bolt'], ['AI Fund Recommendation Engine','i-brain'], ['WhatsApp/SMS SIP &amp; NAV Alerts','i-message'],
+  ['Investor &amp; Distributor Mobile Apps','i-grid'], ['E-KYC &amp; Digital Onboarding','i-id'], ['AIF / PMS &amp; Insurance Integration','i-layers'],
+  ['Multi-RTA Expansion','i-database'], ['NRI &amp; Multi-Currency Support','i-globe'], ['Goal-Based Robo Advisory','i-spark'], ['Voice-Based Portfolio Assistant','i-mic'],
+];
+$('#futureGrid').innerHTML = future.map(([t,icon],i) => `
+  <div class="future-card"><span class="future-num">${String(i+1).padStart(2,'0')}</span><svg class="icon"><use href="#${icon}"/></svg><h4>${t}</h4></div>`).join('');
+</script>
+
+</body>
+</html>
