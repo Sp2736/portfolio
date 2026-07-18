@@ -12,6 +12,7 @@ import {
   Linkedin,
   Instagram,
   Mail,
+  CodeXmlIcon,
   Download,
 } from "lucide-react";
 
@@ -204,6 +205,13 @@ function HeroProfile() {
             >
               <Mail size={16} />
             </a>
+            <a
+              href="/architecture/slop-phantom.html"
+              target="_blank"
+              className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
+            >
+              <CodeXmlIcon size={16} />
+            </a>
             <button
               onClick={() =>
                 window.dispatchEvent(new CustomEvent("open-resume"))
@@ -216,6 +224,7 @@ function HeroProfile() {
                 Resume
               </span>
             </button>
+
           </div>
 
           {/* Divider (Hidden on Mobile) */}
