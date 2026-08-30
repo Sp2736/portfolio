@@ -8,7 +8,6 @@ import { SkillsOrbit } from "@/components/skills-orbit";
 import { Timeline } from "@/components/timeline";
 import { Projects } from "@/components/projects";
 import { Certifications } from "@/components/certifications";
-import { OpenInitiative } from "@/components/open-initiative";
 import { GithubActivity } from "@/components/github-activity";
 import { Blog } from "@/components/blog";
 import { CoreCapabilities } from "@/components/core-capabilities";
@@ -30,7 +29,6 @@ export default function Home() {
       <main id="main-content" className="w-full flex flex-col items-center">
         <Hero />
         <Projects />
-        <OpenInitiative />
         <SkillsOrbit />
         <Timeline />
         <CoreCapabilities />
