@@ -1,17 +1,11 @@
 # 🛰️ SP.SYS — Interactive Portfolio Environment
 
-<p align="center">
-A cinematic portfolio that behaves less like a website<br>
-and more like a <b>strange operating system accidentally running inside your browser.</b>
-</p>
+> **Note on this file:** this is a *forward-looking* draft, written before the Surface Style system is actually implemented. It merges your existing live README content with the new system so you have the finished target to build toward and to swap in once the code lands. Once Liquid Glass / Glassmorphism / Claymorphism / Brutalism / Neomorphism are actually shipped, replace any `(planned)` markers below with real screenshots/GIFs and confirm every claim against the live site before publishing.
 
-<p align="center">
-<i>Warning: You may break reality. Or at least the UI.</i>
-</p>
+A cinematic portfolio that behaves less like a website
+and more like a **strange operating system accidentally running inside your browser** — now with a fully interchangeable material system layered on top.
 
-<p align="center">
-<img src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif" width="520">
-</p>
+*Warning: You may break reality. Or at least the UI.*
 
 ---
 
@@ -19,18 +13,7 @@ and more like a <b>strange operating system accidentally running inside your bro
 
 SP.SYS is not a normal portfolio.
 
-It is an **interactive digital environment** disguised as a website.
-
-Instead of showing information through plain sections and cards, the site behaves like a **runtime system** that reacts to:
-
-* user input
-* browser telemetry
-* mouse physics
-* hidden trigger protocols
-
-The browser becomes a **simulation container**, and the portfolio becomes a **system interface**.
-
-Think of it as:
+It is an **interactive digital environment** disguised as a website. Instead of showing information through plain sections and cards, the site behaves like a **runtime system** that reacts to user input, browser telemetry, mouse physics, and hidden trigger protocols. The browser becomes a **simulation container**, and the portfolio becomes a **system interface**.
 
 ```
 Portfolio + Physics Engine + Terminal + Chaos
@@ -38,318 +21,125 @@ Portfolio + Physics Engine + Terminal + Chaos
 
 ---
 
-## Core Concept
+## Two Independent Visual Axes
 
-The idea behind SP.SYS was simple:
+SP.SYS now separates **what colors you see** from **what material everything is made of** — two orthogonal systems that combine freely.
 
-> What if a portfolio behaved like software instead of a webpage?
+### Axis 1 — Theme (color & mood)
+Controlled via `data-theme` on `<html>`, unchanged from before:
 
-The interface mimics a **living digital system** where:
+| Theme | Character |
+|---|---|
+| **Dark Angel** | White phosphor visual traces |
+| **White Devil** | High-contrast dark rendering |
+| **Solar Flare** | Burnt orange thermal fragments |
+| **Cosmic** | Blue atmospheric particles |
 
-* the page **boots like an operating system**
-* UI elements behave like **physical objects**
-* diagnostics reveal **live system telemetry**
-* hidden protocols trigger **visual anomalies**
+### Axis 2 — Surface Style (material & depth) *(planned)*
+Controlled independently via `data-surface` on `<html>`, selectable from a visible switcher in the header next to the theme toggle:
 
-The result is something halfway between:
+| Style | Character |
+|---|---|
+| **Glassmorphism** *(baseline — this is what the site already looks like today)* | Frosted, translucent, calm |
+| **Liquid Glass** | Refractive, specular-tracking, elastic — a living lens |
+| **Claymorphism** | Soft, puffy, dual-shadow, toy-like matte material |
+| **Brutalism** | Flat, sharp-cornered, hard offset shadows, raw and confrontational |
+| **Neomorphism** | Monochromatic soft-UI, depth from shadow alone, carved from one surface |
 
-```
-developer portfolio
-        +
-experimental interface lab
-        +
-browser-based simulation
-```
+Any theme × any style combination is valid — e.g. Cosmic + Brutalism, Solar Flare + Liquid Glass, White Devil + Neomorphism. Full technical specifications for each style live in `/docs/design-styles/`:
+`glassmorphism.md` · `liquid-glass.md` · `claymorphism.md` · `brutalism.md` · `neomorphism.md`
 
----
-
-# System Features
-
----
-
-## Boot Sequence Interface
-
-<p align="center">
-<img src="https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif" width="420">
-</p>
-
-The portfolio begins with a **cinematic initialization sequence** that simulates a system boot.
-
-Because clearly a website should behave like software starting up.
-
-The boot sequence includes:
-
-* **Text Decryption Animation**
-  Characters scramble and decrypt in real-time like a terminal handshake.
-
-* **Liquid Curtain Transition**
-  The interface reveals itself through a fluid motion animation.
-
-* **Theme-Aware Initialization**
-  The system reads the user's theme preference before rendering to avoid flicker.
-
-* **Motion Physics Animation Pipeline**
-  Transitions are driven by Framer Motion physics curves.
-
-The goal is simple:
-
-> The interface should feel like it is **booting**, not loading.
+Certain surfaces are intentionally **exempt** from the active style (the boot sequence, the raw terminal/JSON view) via a `data-surface-exempt` attribute, since those moments are scripted/technical rather than general UI chrome.
 
 ---
 
-## Real-Time System Telemetry
-
-SP.SYS includes a **live telemetry panel** that reads data from your browser in real time.
-
-Yes — the website is quietly inspecting your system.
-
-Displayed diagnostics include:
-
-* **GPU Renderer Detection**
-  Extracted using WebGL renderer info.
-
-* **Memory Usage**
-  Real-time JavaScript heap monitoring.
-
-* **Network Intelligence**
-
-  * downlink speed
-  * round-trip latency
-
-* **Performance Metrics**
-
-  * live FPS counter
-  * frame timing diagnostics
-
-Essentially:
-
-```
-Task Manager
-but inside a portfolio
-```
-
----
-
-## Zero-Gravity Interaction Engine
-
-One of the most experimental systems inside SP.SYS is the **Zero-G Interaction Engine**.
-
-When triggered, the site temporarily stops behaving like a webpage and starts behaving like **a physics simulation**.
-
-UI elements detach from their layout and drift through the interface.
-
-Features include:
-
-* collision simulation
-* velocity decay
-* gravity and drift mechanics
-* environmental interactions
-
-The engine runs on a **custom vector-based motion system**.
-
-In short:
-
-```
-your portfolio components
-become floating objects
-```
-
-Yes. It’s ridiculous.
-Yes. It works.
-
----
-
-# Hidden Interaction Protocols
-
-Most portfolios have visual easter eggs. I engineered **hidden functional utilities**. 
-
-The interface contains secret, terminal-style triggers that bypass the GUI and interact directly with the underlying system architecture. These protocols exist to reward curiosity and provide frictionless data access for technical reviewers.
-
-To activate, simply type the trigger words anywhere on the site (ensure you aren't focused on an input field).
-
----
-
-### Thermal Override
-
-Shake the mouse and move the arrow pointer aggressively.
-
-The interface begins to **melt like overheated hardware**.
-
----
-
-### Antigravity... antigravity??
-
-Tap the icon of Antigravity by Google in my tech arsenal... it is antigravity for icons.
-
----
-
-### Caffeinated Author
-
-Click the profile picture **4–5 times**.
-
-The system briefly demonstrates what happens when the developer drinks too much coffee.
-
----
-
-### Inversion Protocol
-
-Type:
-
-```
-invert
-```
-
-Reality tears open and the colors under the cursor invert.
-
----
-
-### Quote From My Book
-
-Typing a special word reveals a quote from my book:
-
-**“Before I Learned Goodbye”**
-
----
-
-### Ghost Script Leak
-
-Type:
-
-```
-leak
-```
-
-DOM fragments begin trailing your cursor like ghost code.
-
----
-
-### Wall Punches
-
-Hold:
-
-```
-Shift + Left Click
-```
-
-You can literally punch permanent cracks into the interface.
-
-Therapy not included.
-
-
----
-
-### The API View (JSON Override)
-**Trigger:** Type `json`
-
-The system instantly unmounts the React GUI and replaces the entire DOM with a strictly formatted, syntax-highlighted JSON object. It exposes the raw data structure powering the portfolio, complete with a 1-click clipboard copy feature. 
-
-*Press `ESC` to return to the GUI.*
-
----
-
-### The ATS Resume Engine
-**Trigger:** Type `resume` or `cv`
-
-This does not just download a static PDF. It opens a hidden, fully functional CV Generator modal. It features:
-* A live preview pane isolated via a hidden iframe.
-* Three dynamic formatting algorithms: **ATS Minimal**, **Modern Tech**, and **Executive Composite**.
-* A direct, flawlessly formatted print-to-PDF export that strips out web artifacts and background rendering.
-
----
-
-### Focus / Zen Mode
-**Trigger:** Type `zen`
-
-Web interfaces can be noisy. This protocol instantly kills all background effects, stops telemetry intervals, hides navigation overlays, and centers the project text with optimized typography. Designed for pure, distraction-free reading.
-
-*Press `ESC` to restore standard environmental rendering.*
-
-## Environment-Aware Rendering
-
-Certain visual protocols adapt to the current theme.
-
-A `MutationObserver` monitors theme changes and dynamically adjusts rendering palettes.
-
-Theme modes include:
-
-* **Dark Angel**
-  White phosphor visual traces.
-
-* **White Devil**
-  High-contrast dark rendering.
-
-* **Solar Flare**
-  Burnt orange thermal fragments.
-
-* **Cosmic**
-  Blue atmospheric particles.
-
-The environment literally **changes behavior based on the theme**.
-
----
-
-## Interaction Recovery & Stability
-
-Since the interface occasionally decides to **lose its mind**, safety systems exist.
-
-Recovery mechanisms include:
-
-* **Automatic Stabilization**
-  Effects reset after several seconds.
-
-* **Protocol Toggle**
-  Typing the trigger again disables the effect.
-
-* **Hard Reset**
-  Refreshing the page restores the original interface.
-
-Because even chaotic systems need a reset button.
+## System Features
+
+### Boot Sequence Interface
+A cinematic initialization sequence simulating a system boot:
+- **Text Decryption Animation** — characters scramble and decrypt in real time.
+- **Liquid Curtain Transition** — the interface reveals itself through fluid motion.
+- **Theme-Aware Initialization** — reads theme preference before rendering to avoid flicker.
+- **Motion Physics Animation Pipeline** — Framer Motion physics-driven transitions.
+- The boot sequence renders in a neutral, surface-style-exempt state regardless of the active `data-surface`, preserving its cold/technical identity.
+
+### Real-Time System Telemetry
+A live telemetry panel reading data from your browser: GPU renderer detection (WebGL), memory usage (JS heap), network intelligence (downlink/latency), and performance metrics (live FPS, frame timing). This same GPU-detection signal now also drives the **Surface Style tier resolver** *(planned)* — e.g. downgrading Liquid Glass's refraction layer to a cheaper fallback automatically on lower-tier GPUs.
+
+### Zero-Gravity Interaction Engine
+UI elements detach from layout and drift through the interface via a custom vector-based motion system — collision simulation, velocity decay, gravity/drift mechanics. *(Planned interaction note: Brutalist-styled elements are excluded from this engine's target selector, since continuous physics motion contradicts the flat/static Brutalist identity.)*
+
+### Hidden Interaction Protocols
+Secret, terminal-style triggers activated by typing anywhere on the page (when not focused on an input):
+
+| Trigger | Effect |
+|---|---|
+| Shake the cursor aggressively | **Thermal Override** — interface melts like overheated hardware |
+| Click Antigravity icon in tech arsenal | Antigravity easter egg |
+| Click profile picture 4–5 times | **Caffeinated Author** mode |
+| Type `invert` | **Inversion Protocol** — colors invert under the cursor |
+| Special word | Reveals a quote from *"Before I Learned Goodbye"* |
+| Type `leak` | **Ghost Script Leak** — DOM fragments trail the cursor |
+| `Shift + Left Click` | **Wall Punches** — punch permanent cracks into the interface |
+| Type `json` | **API View** — unmounts the GUI, shows raw JSON with copy-to-clipboard (`ESC` to return) |
+| Type `resume` or `cv` | **ATS Resume Engine** — live-preview CV generator, 3 formatting algorithms, print-to-PDF export |
+| Type `zen` | **Focus/Zen Mode** — kills background effects and telemetry, centers reading content (`ESC` to restore) |
+
+### Environment-Aware Rendering
+A single `MutationObserver` watches `<html>` for both `data-theme` **and** `data-surface` attribute changes *(planned extension)* and dynamically adjusts rendering palettes and material tokens accordingly — one shared observer, not two parallel ones.
+
+### Interaction Recovery & Stability
+- **Automatic Stabilization** — effects reset after several seconds.
+- **Protocol Toggle** — typing a trigger again disables the effect.
+- **Hard Reset** — refreshing the page restores the original interface.
 
 ---
 
 ## Technology Stack
 
-SP.SYS runs on a modern frontend stack focused on animation performance and modular architecture.
+- **Next.js** — application architecture
+- **React** — component composition
+- **Tailwind CSS** — styling system
+- **Framer Motion** — animation and motion physics
+- **Shadcn UI** — component framework
+- **Lucide Icons** — interface iconography
+- **Vercel** — deployment platform
 
-Core technologies include:
+Surface Style system additions *(planned)*: a shared `--surface-*` CSS custom property schema (`--surface-bg`, `--surface-border`, `--surface-blur`, `--surface-radius`, `--surface-shadow`, plus style-specific tokens) consumed by shared `.surface-panel` / `.surface-button` / `.surface-nav` utility classes, a `resolveSurfaceTier()` GPU/motion-preference-aware fallback resolver, and (for Liquid Glass) a reusable `useSpecularTracking()` pointer-tracking hook.
 
-* **Next.js** — application architecture
-* **React** — component composition
-* **Tailwind CSS** — styling system
-* **Framer Motion** — animation and motion physics
-* **Shadcn UI** — component framework
-* **Lucide Icons** — interface iconography
-* **Vercel** — deployment platform
+---
+
+## Design Documentation
+
+Full build specifications for every surface style — philosophy, exact design tokens, motion language, accessibility requirements, and where each style should and shouldn't be used across the site — live in:
+
+```
+/docs/design-styles/
+├── glassmorphism.md   ← baseline audit + hardening notes (current live style)
+├── liquid-glass.md
+├── claymorphism.md
+├── brutalism.md
+└── neomorphism.md
+```
+
+These were written as direct build specs for use with **Gemini 3.1 Pro inside Antigravity**.
 
 ---
 
 ## Why This Exists
 
 SP.SYS was built to explore a simple idea:
-
 > A portfolio does not have to behave like a webpage.
 
-It can behave like:
-
-* a **digital environment**
-* a **playground for interface physics**
-* a **browser-based simulation**
-* a **technical showcase**
-
-The project pushes the boundaries of what a **personal website can feel like**.
+It can behave like a digital environment, a playground for interface physics, a browser-based simulation, and a technical showcase — and now, a demonstration that a single interface can convincingly wear five completely different material languages without losing its underlying identity or breaking any of its existing chaos systems.
 
 ---
 
 ## Final Note
 
-SP.SYS was intentionally designed to feel **alive**.
-
-Not static.
-Not predictable.
-Not entirely stable.
+SP.SYS was intentionally designed to feel **alive**. Not static. Not predictable. Not entirely stable.
 
 Because the most interesting interfaces are the ones that make users stop and think:
-
-> “Wait… did I just break the website?”
+> "Wait… did I just break the website?"
 
 If that happens, the system is working exactly as intended.
