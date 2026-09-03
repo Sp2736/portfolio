@@ -63,7 +63,7 @@ const projectsData = [
     links: [
       {
         label: "Visit",
-        url: "https://sukoon-developer.vercel.app",
+        url: "https://sukoondeveloper.com",
         icon: ExternalLink,
         primary: true,
       },
