@@ -72,8 +72,13 @@ export function GithubActivity() {
             .filter((event: {repo: {name: string}}) => !event.repo.name.toLowerCase().includes("portfolio"));
             
           // Deduplicate by repo name to get unique repos recently pushed to
-          const uniqueRepos = Array.from(new Map(pushes.map((p: {repo: {name: string}, created_at: string}) => [p.repo.name, p])).values());
-          const recentRepos = uniqueRepos.slice(0, 4).map((p: {repo: {name: string}, created_at: string}) => ({
+          type PushEvent = { repo: { name: string }; created_at: string };
+          const uniqueRepos = Array.from(
+            new Map<string, PushEvent>(
+              pushes.map((p: PushEvent) => [p.repo.name, p])
+            ).values()
+          );
+          const recentRepos = uniqueRepos.slice(0, 4).map((p) => ({
             name: p.repo.name,
             html_url: `https://github.com/${p.repo.name}`,
             pushed_at: p.created_at,
