@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataMind — System Architecture & SRS</title>
+<style>
+:root{
+  --background:#0F1115; --surface:#171A21; --surface-muted:#1D212B;
+  --fg:#E7E9EE; --fg-muted:#9098A9; --border:#2A3040; --border-light:#3A4257;
+  --accent:#7C9CFF; --accent-dark:#4C63D2; --accent-light:#1E2540;
+  --teal:#43D9C8; --teal-bg:#123330;
+  --amber:#F2B84C; --amber-bg:#332A12;
+  --pink:#F0669B; --pink-bg:#331222;
+  --success:#4ADE80; --success-bg:#123322;
+  --danger:#F87171; --danger-bg:#331616;
+  --shadow: 0 0 0 1px var(--border), 0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0; background:var(--background); color:var(--fg); font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif; line-height:1.6;}
+h1,h2,h3,h4{font-weight:800; letter-spacing:-0.02em; margin:0 0 .4em;}
+code,.mono{font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;}
+a{color:var(--accent);}
+.wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+.tag{display:inline-block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+  padding:4px 10px; border-radius:20px; border:1px solid var(--border-light); background:var(--surface-muted); margin:2px 4px 2px 0; color:var(--fg-muted);}
+.tag.accent{background:var(--accent-light); color:var(--accent); border-color:var(--accent-dark);}
+.tag.teal{background:var(--teal-bg); color:var(--teal); border-color:#1E5952;}
+.tag.amber{background:var(--amber-bg); color:var(--amber); border-color:#5C4B1E;}
+.tag.pink{background:var(--pink-bg); color:var(--pink); border-color:#5C2140;}
+
+.topnav{position:sticky; top:0; z-index:50; background:rgba(15,17,21,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--border);}
+.topnav .wrap{display:flex; align-items:center; justify-content:space-between; padding:14px 24px; flex-wrap:wrap; gap:8px;}
+.topnav .brand{font-weight:900; font-size:18px;}
+.topnav .brand span{color:var(--accent);}
+.topnav nav{display:flex; gap:2px; flex-wrap:wrap;}
+.topnav nav a{color:var(--fg-muted); text-decoration:none; font-size:13px; font-weight:600; padding:8px 10px; border-radius:6px;}
+.topnav nav a:hover{background:var(--surface-muted); color:var(--fg);}
+
+.hero{padding:70px 0 50px; border-bottom:1px solid var(--border); background:
+  radial-gradient(circle at 88% 10%, rgba(124,156,255,.14), transparent 42%),
+  radial-gradient(circle at 6% 90%, rgba(67,217,200,.10), transparent 45%);}
+.hero .eyebrow{font-weight:700; text-transform:uppercase; letter-spacing:.14em; font-size:12px; color:var(--accent);}
+.hero h1{font-size:clamp(36px,5.5vw,58px); margin:10px 0 14px;}
+.hero p.lead{font-size:18px; color:var(--fg-muted); max-width:740px;}
+.hero-badges{margin-top:18px;}
+.hero-cta{margin-top:26px; display:flex; gap:12px; flex-wrap:wrap;}
+.btn{display:inline-block; padding:12px 20px; font-weight:700; border-radius:8px; text-decoration:none; border:1px solid var(--border-light);}
+.btn.primary{background:var(--accent); color:#0F1115; border-color:var(--accent);}
+.btn.ghost{background:var(--surface); color:var(--fg);}
+
+section{padding:58px 0; border-bottom:1px solid var(--border);}
+section:last-of-type{border-bottom:none;}
+.section-head{margin-bottom:28px;}
+.section-head .num{font-family:monospace; font-weight:700; color:var(--accent); font-size:13px;}
+.section-head h2{font-size:29px;}
+.section-head p{color:var(--fg-muted); max-width:760px; margin-top:6px;}
+
+.grid{display:grid; gap:18px;}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.grid.cols-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:900px){.grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:640px){.grid.cols-3,.grid.cols-4,.grid.cols-2{grid-template-columns:1fr;} }
+
+.card{padding:20px; background:var(--surface); border-radius:12px; box-shadow:var(--shadow);}
+.card h3{font-size:16px; display:flex; align-items:center; gap:8px;}
+.card p{color:var(--fg-muted); font-size:14px; margin:8px 0 0;}
+.card .icon{width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:17px; background:var(--surface-muted); flex-shrink:0;}
+.panel{padding:22px; background:var(--surface); border-radius:14px; box-shadow:var(--shadow);}
+
+.arch-diagram{overflow-x:auto; padding:10px 0;}
+.arch-diagram svg{display:block; min-width:960px;}
+.arch-legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:14px; font-size:12px; color:var(--fg-muted);}
+.arch-legend span{display:inline-flex; align-items:center; gap:6px;}
+.legend-swatch{width:12px; height:12px; border-radius:3px; display:inline-block;}
+
+.tabs{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px;}
+.tab-btn{padding:9px 14px; font-weight:700; font-size:13px; border-radius:8px; border:1px solid var(--border-light); background:var(--surface); color:var(--fg-muted); cursor:pointer;}
+.tab-btn.active{background:var(--accent); color:#0F1115; border-color:var(--accent);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.node-row{display:flex; gap:16px; padding:14px 0; border-bottom:1px solid var(--border);}
+.node-row:last-child{border-bottom:none;}
+.node-num{font-family:monospace; font-weight:800; color:var(--accent); min-width:34px;}
+.node-row h4{font-size:15px; margin-bottom:4px;}
+.node-row p{margin:0; font-size:13.5px; color:var(--fg-muted);}
+
+.api-filter{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px;}
+table.api-table{width:100%; border-collapse:collapse; font-size:13px;}
+table.api-table th{text-align:left; background:var(--surface-muted); color:var(--fg-muted); padding:9px 10px; font-size:11px; text-transform:uppercase; letter-spacing:.05em; border-bottom:1px solid var(--border-light);}
+table.api-table td{padding:9px 10px; border-bottom:1px solid var(--border); vertical-align:top;}
+table.api-table tr:hover td{background:var(--surface-muted);}
+.method{font-weight:800; padding:2px 8px; border-radius:5px; font-size:11px; display:inline-block;}
+.method.GET{background:var(--teal-bg); color:var(--teal);}
+.method.POST{background:var(--success-bg); color:var(--success);}
+.method.WS{background:var(--pink-bg); color:var(--pink);}
+.api-path{font-family:monospace; font-size:12.5px; color:var(--fg);}
+
+.stack-item{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:14px;}
+.stack-item:last-child{border-bottom:none;}
+.stack-item b{font-weight:700;}
+.stack-item span{color:var(--fg-muted); font-size:12.5px;}
+
+.model-chip{display:inline-block; margin:3px; padding:6px 11px; background:var(--surface-muted); border:1px solid var(--border-light); border-radius:6px; font-family:monospace; font-size:12.5px; font-weight:700;}
+
+.contrib-card{padding:22px;}
+.contrib-head{display:flex; align-items:center; gap:14px; margin-bottom:14px;}
+.avatar{width:52px; height:52px; border-radius:12px; background:var(--accent); color:#0F1115; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:20px; flex-shrink:0;}
+.contrib-stats{display:flex; gap:14px; margin:14px 0; font-size:13px;}
+.contrib-stats div{flex:1; text-align:center; background:var(--surface-muted); border-radius:8px; padding:8px 4px;}
+.contrib-stats b{display:block; font-size:18px;}
+.contrib-list{font-size:13px; color:var(--fg-muted); margin:0; padding-left:18px;}
+.contrib-list li{margin-bottom:4px;}
+.commit-bar{height:8px; background:var(--surface-muted); border-radius:6px; overflow:hidden; margin:10px 0;}
+.commit-bar-fill{height:100%; background:var(--accent);}
+
+.timeline{position:relative; padding-left:26px; border-left:2px solid var(--border); margin-left:6px;}
+.tl-item{position:relative; margin-bottom:22px;}
+.tl-item::before{content:''; position:absolute; left:-32.5px; top:3px; width:12px; height:12px; background:var(--accent); border-radius:50%; box-shadow:0 0 0 4px var(--background);}
+.tl-date{font-family:monospace; font-size:12px; color:var(--fg-muted); font-weight:700;}
+.tl-item h4{font-size:14.5px; margin:2px 0 3px;}
+.tl-item p{margin:0; font-size:13px; color:var(--fg-muted);}
+
+.preview-shell{border-radius:14px; box-shadow:var(--shadow); background:var(--surface); overflow:hidden;}
+.preview-chrome{background:var(--surface-muted); color:var(--fg-muted); padding:9px 14px; display:flex; align-items:center; gap:8px; font-size:12px; border-bottom:1px solid var(--border);}
+.preview-chrome .dot{width:10px; height:10px; border-radius:50%; background:var(--border-light);}
+.preview-tabs{display:flex; border-bottom:1px solid var(--border); background:var(--surface-muted); overflow-x:auto;}
+.preview-tabs button{flex:1; min-width:130px; padding:11px 6px; border:none; background:none; font-weight:700; font-size:12.5px; cursor:pointer; color:var(--fg-muted);}
+.preview-tabs button.active{background:var(--surface); color:var(--fg); border-bottom:2px solid var(--accent); margin-bottom:-1px;}
+.preview-body{padding:22px; min-height:380px;}
+.pv-panel{display:none;}
+.pv-panel.active{display:block;}
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px;}
+.kpi{padding:14px; background:var(--surface-muted); border-radius:10px;}
+.kpi b{font-size:22px; display:block;}
+.kpi span{font-size:11.5px; color:var(--fg-muted); text-transform:uppercase; letter-spacing:.04em;}
+.mini-table{width:100%; border-collapse:collapse; font-size:12.5px;}
+.mini-table th{text-align:left; padding:7px 8px; border-bottom:1px solid var(--border-light); color:var(--fg-muted); font-size:11px; text-transform:uppercase;}
+.mini-table td{padding:8px 8px; border-bottom:1px solid var(--border);}
+.pill{font-size:10.5px; font-weight:800; padding:2px 9px; border-radius:20px; display:inline-block;}
+.pill.ok{background:var(--success-bg); color:var(--success);}
+.pill.warn{background:var(--amber-bg); color:var(--amber);}
+.pill.bad{background:var(--danger-bg); color:var(--danger);}
+.pill.info{background:var(--teal-bg); color:var(--teal);}
+.code-block{background:#0B0D12; border:1px solid var(--border); border-radius:10px; padding:14px; font-family:monospace; font-size:12px; color:#B9C2D0; overflow-x:auto; white-space:pre;}
+.chat-bubble{max-width:78%; padding:9px 13px; border-radius:12px; font-size:13px; margin-bottom:10px; background:var(--surface-muted);}
+.chat-bubble.ai{border:1px solid var(--accent-dark); background:var(--accent-light);}
+.rq-chip{display:inline-block; padding:8px 12px; margin:4px; border-radius:8px; font-size:12.5px; border:1px solid var(--border-light); background:var(--surface-muted); cursor:default;}
+.rq-chip.pre{border-color:#5C4B1E;}
+.rq-chip.eda{border-color:#1E5952;}
+
+footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;}
+.back-to-top{position:fixed; bottom:22px; right:22px; width:42px; height:42px; background:var(--accent); color:#0F1115; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-weight:900; z-index:60;}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="wrap">
+    <div class="brand">Data<span>Mind</span> <span style="font-weight:400;font-size:11px;opacity:.7;">/ SRS &amp; Architecture</span></div>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#dataflow">Data Flow</a>
+      <a href="#modules">Modules</a>
+      <a href="#api">APIs</a>
+      <a href="#stack">Tech Stack</a>
+      <a href="#data-model">Data Model</a>
+      <a href="#contributors">Contributors</a>
+      <a href="#preview">Live Preview</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">B.Tech Research Project · CHARUSAT, DEPSTAR · CSUI301</div>
+    <h1>DataMind</h1>
+    <p class="lead">An LLM-orchestrated, self-correcting framework for autonomous exploratory data analysis. Upload a CSV/JSON dataset and a LangGraph multi-agent pipeline generates research questions, writes and repairs its own analysis code in a sandbox, picks visualizations, and produces insight narratives — evaluated as a research question about whether RAG improves question relevance and actionability.</p>
+    <div class="hero-badges">
+      <span class="tag accent">FastAPI + LangGraph</span>
+      <span class="tag">Next.js 16 frontend</span>
+      <span class="tag teal">ChromaDB RAG (local)</span>
+      <span class="tag amber">Ollama-first LLM</span>
+      <span class="tag pink">Self-correcting sandbox</span>
+      <span class="tag">2 contributors</span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn primary" href="#architecture">Explore Architecture ↓</a>
+      <a class="btn ghost" href="https://github.com/Sp2736/data-mind" target="_blank" rel="noopener">View Repository ↗</a>
+    </div>
+    
+    <div style="margin-top: 48px; border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); background: var(--surface);">
+      <div style="padding: 12px 16px; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border); font-size: 12.5px; color: var(--fg-muted); display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <i>Disclaimer: This architecture visualization was generated using Nano Banana (Beta). It is a conceptual rendering and may not be 100% authentic to the live system.</i>
+      </div>
+      <iframe src="/datamind.mp4" width="100%" height="640" style="border:none; display:block;" title="DataMind Architecture Video" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">01 / Project Overview</div>
+      <h2>What DataMind does</h2>
+      <p>DataMind takes a raw dataset from upload to explained insight with minimal human input, while doubling as a controlled research testbed comparing RAG-augmented vs. baseline question generation.</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="card"><h3><span class="icon">📁</span>Upload &amp; Profile</h3><p>Accepts CSV/JSON datasets, computes schema, stats and correlation summaries, and stores a profile before any LLM call is made.</p></div>
+      <div class="card"><h3><span class="icon">🧠</span>Autonomous Questioning</h3><p>An LLM generates dataset-specific research questions split into <b>Pre-processing</b> and <b>EDA</b> categories — optionally grounded by RAG retrieval of similarly-shaped past datasets.</p></div>
+      <div class="card"><h3><span class="icon">🔁</span>Self-Correcting Analysis</h3><p>For each question, a LangGraph pipeline writes pandas code, runs it in a sandbox, and — on failure — automatically corrects and retries before giving up.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">02 / System Architecture</div>
+      <h2>FastAPI backend, Next.js frontend, local-first AI stack</h2>
+      <p>A LangGraph <b>agent graph</b> owns the reasoning loop, a FastAPI service layer owns persistence and orchestration, and a local ChromaDB store provides zero-cost RAG grounding — deliberately Docker-free and API-budget-conscious.</p>
+    </div>
+    <div class="panel">
+      <div class="arch-diagram">
+        <svg viewBox="0 0 1120 580" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Segoe UI, sans-serif">
+          <!-- Frontend -->
+          <rect x="410" y="18" width="300" height="54" rx="10" fill="#1E2540" stroke="#4C63D2" stroke-width="1.5"/>
+          <text x="560" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#E7E9EE">Next.js 16 Frontend</text>
+          <text x="560" y="59" text-anchor="middle" font-size="10" fill="#9098A9">Upload → RQs → Runs → Insights → Report</text>
+
+          <!-- FastAPI -->
+          <rect x="330" y="106" width="460" height="52" rx="10" fill="#171A21" stroke="#2A3040" stroke-width="1.5"/>
+          <text x="560" y="137" text-anchor="middle" font-size="13" font-weight="700" fill="#E7E9EE">FastAPI (app/api/*) — auth · datasets · questions · runs · insights · reports · ws</text>
+
+          <!-- LangGraph -->
+          <rect x="80" y="200" width="500" height="92" rx="10" fill="#1E2540" stroke="#4C63D2" stroke-width="2"/>
+          <text x="330" y="224" text-anchor="middle" font-size="12.5" font-weight="800" fill="#7C9CFF">LangGraph Agent Pipeline (app/agents/*)</text>
+          <text x="330" y="244" text-anchor="middle" font-size="10.5" fill="#B9C2D0">question_generator (once/dataset) → per-RQ graph:</text>
+          <text x="330" y="262" text-anchor="middle" font-size="10.5" fill="#B9C2D0">code_generator → sandbox_execute → (retry via code_corrector)</text>
+          <text x="330" y="280" text-anchor="middle" font-size="10.5" fill="#B9C2D0">→ result_analyzer → insight_writer → visualization_builder</text>
+
+          <!-- Sandbox -->
+          <rect x="620" y="200" width="220" height="92" rx="10" fill="#331222" stroke="#5C2140" stroke-width="1.5"/>
+          <text x="730" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#F0669B">Local Sandbox</text>
+          <text x="730" y="246" text-anchor="middle" font-size="10" fill="#D89DB8">Subprocess isolation</text>
+          <text x="730" y="262" text-anchor="middle" font-size="10" fill="#D89DB8">CPU/mem rlimits, timeout,</text>
+          <text x="730" y="278" text-anchor="middle" font-size="10" fill="#D89DB8">socket disabled (best-effort)</text>
+
+          <!-- RAG -->
+          <rect x="870" y="200" width="200" height="92" rx="10" fill="#123330" stroke="#1E5952" stroke-width="1.5"/>
+          <text x="970" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#43D9C8">RAG Layer</text>
+          <text x="970" y="246" text-anchor="middle" font-size="10" fill="#9FDCD3">indexer · retriever</text>
+          <text x="970" y="262" text-anchor="middle" font-size="10" fill="#9FDCD3">store (ChromaDB local +</text>
+          <text x="970" y="278" text-anchor="middle" font-size="10" fill="#9FDCD3">sentence-transformers)</text>
+
+          <!-- LLM providers -->
+          <rect x="80" y="330" width="500" height="56" rx="10" fill="#332A12" stroke="#5C4B1E" stroke-width="1.5"/>
+          <text x="330" y="354" text-anchor="middle" font-size="12" font-weight="700" fill="#F2B84C">LLM Provider Factory (services/llm.py)</text>
+          <text x="330" y="372" text-anchor="middle" font-size="10" fill="#D9C495">Active: Ollama (local, zero API keys) · swappable: Groq / OpenAI / Gemini</text>
+
+          <!-- Storage -->
+          <rect x="330" y="424" width="460" height="52" rx="10" fill="#171A21" stroke="#2A3040" stroke-width="1.5"/>
+          <text x="560" y="455" text-anchor="middle" font-size="12.5" font-weight="700" fill="#E7E9EE">SQLite (SQLAlchemy + Alembic) — 11 tables, single file</text>
+
+          <!-- Dataset fetch -->
+          <rect x="850" y="330" width="220" height="56" rx="10" fill="#1E2540" stroke="#4C63D2" stroke-width="1.5"/>
+          <text x="960" y="354" text-anchor="middle" font-size="12" font-weight="700" fill="#7C9CFF">Dataset Fetch Service</text>
+          <text x="960" y="372" text-anchor="middle" font-size="10" fill="#9098A9">Direct URL + Kaggle API ingestion</text>
+
+          <!-- WS -->
+          <rect x="80" y="424" width="200" height="52" rx="10" fill="#331222" stroke="#5C2140" stroke-width="1.5"/>
+          <text x="180" y="450" text-anchor="middle" font-size="11.5" font-weight="700" fill="#F0669B">WebSocket (api/ws.py)</text>
+          <text x="180" y="466" text-anchor="middle" font-size="9.5" fill="#D89DB8">Live run/job status push</text>
+
+          <!-- arrows -->
+          <g stroke="#3A4257" stroke-width="1.8" fill="none" marker-end="url(#arrow2)">
+            <path d="M560,72 L560,106"/>
+            <path d="M480,158 L330,200"/>
+            <path d="M640,158 L730,200"/>
+            <path d="M780,158 L970,200"/>
+            <path d="M280,292 L280,330"/>
+            <path d="M560,386 L560,424"/>
+            <path d="M900,292 L960,330"/>
+            <path d="M180,292 L180,424"/>
+          </g>
+          <defs>
+            <marker id="arrow2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#3A4257"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <div class="arch-legend">
+        <span><i class="legend-swatch" style="background:#1E2540;"></i>Presentation / Orchestration</span>
+        <span><i class="legend-swatch" style="background:#171A21;border:1px solid #2A3040;"></i>Transport / Persistence</span>
+        <span><i class="legend-swatch" style="background:#331222;"></i>Sandbox / Realtime</span>
+        <span><i class="legend-swatch" style="background:#123330;"></i>RAG</span>
+        <span><i class="legend-swatch" style="background:#332A12;"></i>LLM provider layer</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3>🧭 The one architectural rule the codebase enforces</h3>
+      <p style="margin-top:10px;"><code>question_generator</code> is deliberately kept <b>outside</b> the per-run LangGraph graph — it runs once per dataset, while the compiled graph (<code>code_generator → sandbox_execute → result_analyzer → insight_writer → visualization_builder</code>, with a <code>code_corrector</code> retry loop) runs once per research question. This keeps "generate N questions" state from ever mixing with "answer 1 question" state.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATA FLOW -->
+<section id="dataflow" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">03 / Data Flow</div>
+      <h2>Dataset lifecycle, end to end</h2>
+      <p>The canonical path a dataset travels from upload to a downloadable report.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">STEP 1</div><h4>Upload &amp; Ingest</h4><p>A CSV/JSON file is uploaded, or fetched via direct URL / the Kaggle API through the Dataset Fetch Service. The raw file is persisted and a <code>Dataset</code> row is created.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 2</div><h4>Profiling</h4><p>The profiling service computes a <b>schema summary</b>, <b>stats summary</b>, <b>correlation summary</b> and sample rows — metadata only, never raw rows beyond a bounded sample — stored as a <code>DatasetProfile</code>.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 3</div><h4>Research Question Generation</h4><p><code>question_generator</code> calls the LLM once per dataset to produce a batch of dataset-specific questions, split into <b>Pre-processing</b> and <b>EDA</b> categories, each with target columns, expected output type and rationale. RAG retrieval can ground this call with insights from similarly-shaped past datasets.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 4</div><h4>Per-Question Analysis Run</h4><p>For each selected <code>ResearchQuestion</code>, an <code>AnalysisRun</code> starts the LangGraph pipeline: <code>code_generator</code> writes pandas code from the question + profile context.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 5</div><h4>Sandboxed Execution &amp; Self-Correction</h4><p><code>sandbox_execute</code> runs the code as an isolated subprocess (fresh working dir, CPU/memory rlimits, wall-clock timeout, network disabled best-effort). On failure, <code>code_corrector</code> rewrites the code using the traceback and loops back to execution — until success or <code>max_attempts</code> is exhausted, at which point the run is marked <code>failed</code>.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 6</div><h4>Result Analysis</h4><p><code>result_analyzer</code> is a deterministic (non-LLM) node that truncates/sanitizes stdout (max 4000 chars) so downstream LLM calls get clean, bounded input — logic kept in one place instead of duplicated across nodes.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 7</div><h4>Insight Writing &amp; Visualization</h4><p><code>insight_writer</code> turns the execution output into a narrative <code>Insight</code>. <code>visualization_builder</code> asks the LLM only for chart <i>metadata</i> (type/title/labels) — the PNG itself is rendered by the sandboxed script per the code-generator's contract (<code>./output/chart.png</code>) — and is skipped entirely if no chart was produced.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 8</div><h4>RAG Indexing (best-effort)</h4><p>On a successful run, the new insight is written into the local Chroma vector store by the RAG indexer, keyed on the dataset's "schema text" embedding — so future datasets with a similar shape can retrieve it. Indexing failure never fails the run itself.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 9</div><h4>Report &amp; Export</h4><p>Once enough runs complete, a <code>Report</code> is generated summarizing insights and visualizations for the dataset, downloadable alongside the cleaned/pre-processed dataset.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section id="modules">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">04 / Supported Modules &amp; Agent Nodes</div>
+      <h2>7 LangGraph nodes, one job each</h2>
+      <p>Each node is a focused async function operating on a shared <code>AnalysisState</code> TypedDict — LLM-calling nodes load their system prompt from a dedicated markdown file under <code>app/agents/prompts/</code>.</p>
+    </div>
+    <div class="tabs" id="nodeTabs">
+      <button class="tab-btn active" data-tab="n1">Questioning &amp; Generation</button>
+      <button class="tab-btn" data-tab="n2">Execution &amp; Correction</button>
+      <button class="tab-btn" data-tab="n3">Analysis &amp; Output</button>
+      <button class="tab-btn" data-tab="n4">RAG &amp; Services</button>
+    </div>
+    <div class="panel">
+      <div class="tab-panel active" id="n1">
+        <div class="node-row"><div class="node-num">01</div><div><h4>question_generator</h4><p>Runs once per dataset (not per run), invoked directly from <code>POST /datasets/{id}/questions</code>. Produces a structured <code>ResearchQuestionBatch</code> split into Pre-processing and EDA categories, each tagged with target columns and rationale.</p></div></div>
+        <div class="node-row"><div class="node-num">02</div><div><h4>code_generator</h4><p>First node of the per-run graph. Writes pandas analysis code for one research question, using dataset profile context (schema/stats/correlation summaries + sample rows) and, optionally, retrieved similar past insights.</p></div></div>
+      </div>
+      <div class="tab-panel" id="n2">
+        <div class="node-row"><div class="node-num">03</div><div><h4>sandbox_execute</h4><p>Runs the latest generated code in the local, Docker-free sandbox (<code>services/sandbox.py</code>) against the real dataset file, capturing stdout/stderr, exit code, duration and any produced output files (e.g. <code>chart.png</code>).</p></div></div>
+        <div class="node-row"><div class="node-num">04</div><div><h4>route_after_execution (conditional edge)</h4><p>Branches on the execution result: success → <code>result_analyzer</code>; failure with attempts remaining → <code>code_corrector</code>; attempts exhausted → <code>give_up</code>, which marks the run <code>failed</code> and stores the last stderr.</p></div></div>
+        <div class="node-row"><div class="node-num">05</div><div><h4>code_corrector</h4><p>Given the failing code and its traceback, asks the LLM for a corrected version, appends it to <code>code_history</code>, and loops back to <code>sandbox_execute</code> — the self-correction retry loop, bounded by <code>max_attempts</code>.</p></div></div>
+      </div>
+      <div class="tab-panel" id="n3">
+        <div class="node-row"><div class="node-num">06</div><div><h4>result_analyzer</h4><p>Deterministic, no LLM call. Truncates/sanitizes the successful execution's stdout to a bounded size so both <code>insight_writer</code> and <code>visualization_builder</code> receive clean input without duplicating that logic.</p></div></div>
+        <div class="node-row"><div class="node-num">07</div><div><h4>insight_writer</h4><p>Converts the sanitized execution output into a natural-language <code>Insight</code> row tied to the research question and run.</p></div></div>
+        <div class="node-row"><div class="node-num">08</div><div><h4>visualization_builder</h4><p>Asks the LLM only for structured chart metadata (type, title, axis labels) describing a chart the sandboxed script already rendered to disk; the node is skipped entirely when no chart file was produced.</p></div></div>
+      </div>
+      <div class="tab-panel" id="n4">
+        <div class="node-row"><div class="node-num">09</div><div><h4>RAG store (ChromaDB, local)</h4><p>A Docker-free, local persistent Chroma client paired with a local sentence-transformers embedding model — indexing and retrieval cost zero API tokens, which matters because RAG runs on every question-generation and insight-writing call.</p></div></div>
+        <div class="node-row"><div class="node-num">10</div><div><h4>RAG retriever</h4><p>Finds past insights whose source dataset had a similar schema shape, using a synthetic "schema text" (column names + dtypes) embedding as an approximation of dataset similarity — an intentionally simple heuristic, documented for future replacement.</p></div></div>
+        <div class="node-row"><div class="node-num">11</div><div><h4>RAG indexer</h4><p>Writes each completed insight into the local store right after its <code>AnalysisRun</code> succeeds and commits. Best-effort by design — a failure here must never fail the run itself.</p></div></div>
+        <div class="node-row"><div class="node-num">12</div><div><h4>Dataset Fetch Service</h4><p>Handles ingestion from a direct URL or the Kaggle API, normalizing both into the same on-disk raw-dataset representation the rest of the pipeline expects.</p></div></div>
+        <div class="node-row"><div class="node-num">13</div><div><h4>LLM Provider Factory</h4><p>A single <code>get_llm(model_name)</code> factory; active provider is Ollama (fully local, zero API keys, models like <code>gemma3:4b</code>/<code>phi4-mini</code>/<code>qwen2.5:3b</code>), with commented-out swap points for Groq, OpenAI and Gemini for production/evaluation runs.</p></div></div>
+      </div>
+    </div>
+
+    <div class="grid cols-4" style="margin-top:22px;">
+      <div class="card"><h3>🔐 Auth</h3><p>Lightweight local-user login (<code>LocalUser</code> model), JWT-style session for a single-user research prototype.</p></div>
+      <div class="card"><h3>📡 Live Status</h3><p>A WebSocket endpoint (<code>api/ws.py</code>) pushes job/run status updates to the frontend in real time as the graph progresses.</p></div>
+      <div class="card"><h3>📊 Run Metrics</h3><p>A dedicated <code>RunMetrics</code> table captures token cost and outcome per run — feeding the RAG-vs-baseline research comparison.</p></div>
+      <div class="card"><h3>🧹 Cleaned Export</h3><p>Downloadable cleaned/pre-processed dataset and an auto-generated summary report, per the project's stated feature set.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- API -->
+<section id="api" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">05 / APIs</div>
+      <h2>FastAPI route surface</h2>
+      <p>Grouped by <code>app/api/*</code> router modules. Filter by domain.</p>
+    </div>
+    <div class="panel">
+      <div class="api-filter" id="apiFilter">
+        <button class="tab-btn active" data-f="all">All</button>
+        <button class="tab-btn" data-f="auth">Auth</button>
+        <button class="tab-btn" data-f="datasets">Datasets</button>
+        <button class="tab-btn" data-f="rq">Research Questions</button>
+        <button class="tab-btn" data-f="runs">Runs</button>
+        <button class="tab-btn" data-f="insights">Insights / Reports</button>
+        <button class="tab-btn" data-f="ws">Realtime</button>
+      </div>
+      <div style="max-height:440px; overflow:auto;">
+      <table class="api-table" id="apiTable">
+        <thead><tr><th style="width:70px;">Method</th><th>Endpoint</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr data-g="auth"><td><span class="method POST">POST</span></td><td class="api-path">/auth/login</td><td>Authenticate local user, issue session</td></tr>
+          <tr data-g="datasets"><td><span class="method POST">POST</span></td><td class="api-path">/datasets</td><td>Upload/register a new dataset</td></tr>
+          <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets</td><td>List datasets</td></tr>
+          <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}</td><td>Fetch a single dataset</td></tr>
+          <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/profile</td><td>Schema/stats/correlation profile</td></tr>
+          <tr data-g="rq"><td><span class="method POST">POST</span></td><td class="api-path">/datasets/{dataset_id}/questions</td><td>Trigger LLM research-question generation</td></tr>
+          <tr data-g="rq"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/questions</td><td>List generated research questions</td></tr>
+          <tr data-g="runs"><td><span class="method POST">POST</span></td><td class="api-path">/datasets/{dataset_id}/runs</td><td>Kick off one or more per-question analysis runs (LangGraph)</td></tr>
+          <tr data-g="runs"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/runs</td><td>List analysis runs and their status</td></tr>
+          <tr data-g="insights"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/insights</td><td>List insights produced for the dataset</td></tr>
+          <tr data-g="insights"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/insights/{insight_id}/visualization</td><td>Fetch the chart metadata tied to an insight</td></tr>
+          <tr data-g="insights"><td><span class="method POST">POST</span></td><td class="api-path">/datasets/{dataset_id}/report</td><td>Generate the dataset summary report</td></tr>
+          <tr data-g="insights"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/report</td><td>Fetch the generated report</td></tr>
+          <tr data-g="ws"><td><span class="method WS">WS</span></td><td class="api-path">/ws</td><td>Live push of job/run status to the frontend</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">06 / Tech Stack &amp; Tooling</div>
+      <h2>Local-first by design</h2>
+      <p>Every layer was deliberately chosen to run Docker-free and token-cost-free where possible, given the project's API-budget constraints as a research prototype.</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="panel">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Frontend</h4>
+        <div class="stack-item"><b>Next.js 16.2.12</b><span>App Router</span></div>
+        <div class="stack-item"><b>React 19.2.4</b><span>+ React DOM</span></div>
+        <div class="stack-item"><b>TypeScript 5</b><span>strict typing</span></div>
+        <div class="stack-item"><b>Tailwind CSS v4</b><span>@tailwindcss/postcss</span></div>
+        <div class="stack-item"><b>next-themes</b><span>dark/light theming</span></div>
+        <div class="stack-item"><b>lucide-react</b><span>icon set</span></div>
+      </div>
+      <div class="panel">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Backend &amp; Orchestration</h4>
+        <div class="stack-item"><b>FastAPI 0.141</b><span>+ Uvicorn</span></div>
+        <div class="stack-item"><b>LangGraph 1.2.10</b><span>agent state graph</span></div>
+        <div class="stack-item"><b>LangChain 1.3.14</b><span>+ langchain-ollama/groq/openai/google-genai</span></div>
+        <div class="stack-item"><b>SQLAlchemy 2 + Alembic</b><span>async ORM + migrations</span></div>
+        <div class="stack-item"><b>SQLite (aiosqlite)</b><span>single-file DB — Postgres dropped</span></div>
+        <div class="stack-item"><b>Pydantic v2</b><span>schemas + settings</span></div>
+      </div>
+      <div class="panel">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">AI, RAG &amp; Data</h4>
+        <div class="stack-item"><b>Ollama</b><span>active local LLM provider</span></div>
+        <div class="stack-item"><b>Groq / OpenAI / Gemini</b><span>swappable cloud providers</span></div>
+        <div class="stack-item"><b>ChromaDB 0.5.23</b><span>local persistent vector store</span></div>
+        <div class="stack-item"><b>sentence-transformers</b><span>local embeddings</span></div>
+        <div class="stack-item"><b>pandas / numpy</b><span>sandboxed analysis code</span></div>
+        <div class="stack-item"><b>Kaggle API</b><span>dataset ingestion</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <h3>📝 Note on stack evolution</h3>
+      <p style="margin-top:8px;">Earlier planning targeted PostgreSQL + pgvector and a paid LLM API (per the project's own memory notes). The shipped local-pipeline milestone consolidated onto <b>SQLite + Ollama + ChromaDB</b> — a fully local, zero-API-cost stack better suited to iterating on the RAG-vs-baseline research comparison without burning a token budget, with the cloud providers kept as drop-in swaps for the final evaluation run.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATA MODEL -->
+<section id="data-model" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">07 / Data Model</div>
+      <h2>11 SQLAlchemy models</h2>
+      <p>The full schema lives in <code>backend/app/db/models.py</code>, versioned via Alembic (<code>backend/migrations/</code>).</p>
+    </div>
+    <div class="grid cols-2">
+      <div class="panel">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Identity &amp; Datasets</h4>
+        <div>
+          <span class="model-chip">LocalUser</span><span class="model-chip">Dataset</span><span class="model-chip">DatasetProfile</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Questions &amp; Runs</h4>
+        <div>
+          <span class="model-chip">ResearchQuestion</span><span class="model-chip">AnalysisRun</span><span class="model-chip">GeneratedCode</span>
+          <span class="model-chip">ExecutionAttempt</span><span class="model-chip">RunMetrics</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Outputs</h4>
+        <div>
+          <span class="model-chip">Insight</span><span class="model-chip">Visualization</span><span class="model-chip">Report</span>
+        </div>
+      </div>
+      <div class="panel">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Notes</h4>
+        <p style="font-size:13px;color:var(--fg-muted);margin:0;">Every <code>AnalysisRun</code> links to exactly one <code>ResearchQuestion</code> and accumulates one or more <code>GeneratedCode</code> / <code>ExecutionAttempt</code> rows — a full audit trail of every self-correction cycle the agent went through.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRIBUTORS -->
+<section id="contributors">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">08 / Contributors &amp; Commit History</div>
+      <h2>Two-person research build</h2>
+      <p>Derived from the full git commit tree (<code>git log --author</code>, <code>--numstat</code>, <code>--name-only</code>) across 19 commits on <code>main</code>, spanning Jul 17 – Sep 11, 2026.</p>
+    </div>
+    <div class="grid cols-2">
+      <div class="panel contrib-card">
+        <div class="contrib-head">
+          <div class="avatar">SP</div>
+          <div><h3 style="margin:0;">Swayam Patel</h3><span class="tag accent" style="margin-top:4px;">Backend &amp; agent pipeline lead</span></div>
+        </div>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:47%;"></div></div>
+        <div class="contrib-stats">
+          <div><b>9</b>commits</div>
+          <div><b>6.9k</b>+lines</div>
+          <div><b>1.1k</b>−lines</div>
+        </div>
+        <p style="font-size:13px; color:var(--fg-muted); margin:0 0 8px;">Owned the entire backend: project bootstrap, phased backend build-out, and the full LangGraph multi-agent pipeline + RAG integration.</p>
+        <ul class="contrib-list">
+          <li>Initial commit &amp; README (as "SmartBI", later renamed to DataMind)</li>
+          <li>Backend foundation — phase 1</li>
+          <li>Backend phase 3 (partial) — handed over for API integration</li>
+          <li>Full multi-agent LangGraph pipeline, RAG integration, dataset workflows</li>
+          <li>Local pipeline setup: Ollama + ChromaDB + SQLite, plus setup/testing guides</li>
+        </ul>
+      </div>
+      <div class="panel contrib-card">
+        <div class="contrib-head">
+          <div class="avatar" style="background:#43D9C8;">JM</div>
+          <div><h3 style="margin:0;">Jalisa Malik</h3><span class="tag teal" style="margin-top:4px;">Frontend &amp; API integration lead</span></div>
+        </div>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:53%; background:#43D9C8;"></div></div>
+        <div class="contrib-stats">
+          <div><b>10</b>commits</div>
+          <div><b>13.1k</b>+lines</div>
+          <div><b>0.3k</b>−lines</div>
+        </div>
+        <p style="font-size:13px; color:var(--fg-muted); margin:0 0 8px;">Built the entire frontend from scratch through to live-data integration — auth, every core screen, and the final backend-polling wire-up.</p>
+        <ul class="contrib-list">
+          <li>Frontend setup + login page, auth flow</li>
+          <li>Home screen (post-login), dataset upload screen</li>
+          <li>Dataset profile view, RQ selection panel</li>
+          <li>Job status view + insights dashboard, export panel + report summary view</li>
+          <li>UI/theme/button polish; final dataset API integration with backend polling</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px;">
+      <h3>📌 Reading the history</h3>
+      <p style="margin-top:8px;">The project began July 17, 2026 as "SmartBI" (renamed DataMind the same day). Jalisa built out the complete frontend against mocked data through late July/early August, while Swayam's backend work proceeded in phases (foundation → partial phase-3 handover) before a large Sep 11 commit landed the full LangGraph pipeline, RAG integration, and a local-only Ollama/ChromaDB/SQLite setup — bringing backend and frontend into alignment for the first time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE PREVIEW -->
+<section id="preview" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">09 / Interactive Preview</div>
+      <h2>How it works, in real time</h2>
+      <p>An illustrative walkthrough of the core screens and agent behavior, built from the actual state machine and prompts above (sample data — not a live connection to the running app).</p>
+    </div>
+
+    <div class="preview-shell">
+      <div class="preview-chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;&nbsp;datamind.local</div>
+      <div class="preview-tabs" id="pvTabs">
+        <button class="active" data-p="p1">Dataset Profile</button>
+        <button data-p="p2">Research Questions</button>
+        <button data-p="p3">Agent Run Trace</button>
+        <button data-p="p4">Insights &amp; Charts</button>
+        <button data-p="p5">RAG Retrieval</button>
+      </div>
+      <div class="preview-body">
+
+        <div class="pv-panel active" id="p1">
+          <div class="kpi-row">
+            <div class="kpi"><b>18,204</b><span>Rows</span></div>
+            <div class="kpi"><b>14</b><span>Columns</span></div>
+            <div class="kpi"><b>3.2%</b><span>Missing values</span></div>
+            <div class="kpi"><b>2</b><span>High-correlation pairs</span></div>
+          </div>
+          <table class="mini-table">
+            <thead><tr><th>Column</th><th>Dtype</th><th>Nulls</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>order_date</td><td>datetime</td><td>0%</td><td>Range: 2023-01 → 2026-06</td></tr>
+              <tr><td>unit_price</td><td>float64</td><td>0.4%</td><td>Right-skewed, 3 outliers</td></tr>
+              <tr><td>customer_segment</td><td>category</td><td>1.1%</td><td>5 unique values</td></tr>
+              <tr><td>discount_pct</td><td>float64</td><td>6.7%</td><td>Correlates with churn_flag (0.61)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pv-panel" id="p2">
+          <h4 style="margin-bottom:10px;">Generated research questions</h4>
+          <div style="margin-bottom:14px;"><span class="tag amber">Pre-processing</span>
+            <div><span class="rq-chip pre">Should rows with missing discount_pct be imputed or dropped?</span>
+            <span class="rq-chip pre">Are the 3 unit_price outliers data-entry errors or legitimate bulk orders?</span></div>
+          </div>
+          <div><span class="tag teal">EDA</span>
+            <div><span class="rq-chip eda">Does discount_pct predict churn_flag across customer segments?</span>
+            <span class="rq-chip eda">How has average order value trended month-over-month since 2023?</span></div>
+          </div>
+        </div>
+
+        <div class="pv-panel" id="p3">
+          <h4 style="margin-bottom:10px;">Run trace — "Does discount_pct predict churn_flag?"</h4>
+          <div class="code-block">attempt 1 → code_generator → sandbox_execute
+  ✗ KeyError: 'churn_flag' not found (column is 'churned')
+
+attempt 2 → code_corrector (reads traceback) → sandbox_execute
+  ✓ exit_code 0, duration 842ms, output_files: ['output/chart.png']
+
+→ result_analyzer → insight_writer → visualization_builder → END</div>
+          <div style="margin-top:12px; padding:12px; background:var(--teal-bg); border-radius:8px; font-size:13px; color:#B7ECE4;">
+            ✓ Self-correction loop recovered from a column-name mismatch in a single retry — no human intervention.
+          </div>
+        </div>
+
+        <div class="pv-panel" id="p4">
+          <h4 style="margin-bottom:10px;">Insight</h4>
+          <div class="chat-bubble ai">Customers with a discount above 20% churn at 2.3× the rate of those below it — strongest in the "SMB" segment, weakest in "Enterprise". Correlation: 0.61.</div>
+          <table class="mini-table" style="margin-top:10px;">
+            <thead><tr><th>Chart</th><th>Type</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>discount_vs_churn.png</td><td>Grouped bar</td><td><span class="pill ok">Rendered</span></td></tr>
+              <tr><td>order_value_trend.png</td><td>Line</td><td><span class="pill ok">Rendered</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pv-panel" id="p5">
+          <h4 style="margin-bottom:10px;">RAG-grounded question generation</h4>
+          <table class="mini-table">
+            <thead><tr><th>Retrieved past insight</th><th>Source dataset shape</th><th>Similarity</th></tr></thead>
+            <tbody>
+              <tr><td>"Discount depth correlates with early churn in subscription data"</td><td>12 cols, similar dtypes</td><td><span class="pill info">0.84</span></td></tr>
+              <tr><td>"Outlier prices cluster around bulk-order thresholds"</td><td>9 cols, partial overlap</td><td><span class="pill info">0.62</span></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:12px; padding:12px; background:var(--accent-light); border-radius:8px; font-size:13px; color:#C7D2FE;">
+            ℹ Retrieval is schema-shape based (column names + dtypes embedded via a local sentence-transformer) — this is the RAG condition being evaluated against a no-RAG baseline for the research paper's relevance/actionability metrics.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    DataMind · CHARUSAT DEPSTAR B.Tech Research Project · FastAPI + LangGraph + Next.js<br>
+    Architecture &amp; SRS dossier generated for the repository at
+    <a href="https://github.com/Sp2736/data-mind" target="_blank" rel="noopener">github.com/Sp2736/data-mind</a>
+  </div>
+</footer>
+
+<a href="#" class="back-to-top">↑</a>
+
+<script>
+document.querySelectorAll('#nodeTabs .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#nodeTabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('#apiFilter .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#apiFilter .tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.f;
+    document.querySelectorAll('#apiTable tbody tr').forEach(row=>{
+      row.style.display = (f==='all' || row.dataset.g===f) ? '' : 'none';
+    });
+  });
+});
+
+document.querySelectorAll('#pvTabs button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#pvTabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.pv-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.p).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

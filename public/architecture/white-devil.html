@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>White Devil — VS Code Theme by SP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAFAFA;
+  --bg-deep:#F2F3F7;
+  --surface:#FFFFFF;
+  --surface-hi:#E6E8F0;
+  --border:#DCDFE6;
+  --border-soft:#E9EBF1;
+  --ink:#1A1A1A;
+  --muted:#5A5E6B;
+  --muted-soft:#8A8DA0;
+  --amber:#CC9900;
+  --amber-soft:rgba(204,153,0,0.10);
+  --blue:#0451A5;
+  --cyan:#0C7D9D;
+  --red:#A31515;
+  --green:#098658;
+  --purple:#AF00DB;
+  --navy:#001080;
+  --teal:#267F99;
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:20px;
+  --container:1100px;
+  --ff-display:'Space Grotesk', sans-serif;
+  --ff-body:'Inter', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--ff-body);
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  position:relative;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+h1,h2,h3,h4{font-family:var(--ff-display);font-weight:600;letter-spacing:-0.01em;}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 45% at 85% -5%, rgba(204,153,0,0.10), transparent 60%),
+             radial-gradient(ellipse 55% 40% at 5% 100%, rgba(4,81,165,0.05), transparent 60%);
+}
+main,header,footer,section{position:relative;z-index:1;}
+.container{max-width:var(--container);margin:0 auto;padding:0 28px;}
+
+/* sun */
+.sun{
+  position:absolute;top:40px;right:64px;width:60px;height:60px;border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #fff7d6, var(--amber) 75%);
+  box-shadow:0 0 50px rgba(204,153,0,0.35), 0 0 100px rgba(204,153,0,0.15);
+  animation:pulse 5s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.ray{position:absolute;background:linear-gradient(90deg, rgba(204,153,0,0.18), transparent);height:1px;top:70px;right:0;}
+@media(max-width:700px){.sun{display:none;}}
+
+/* header */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(250,250,250,0.78);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border-soft);
+}
+.site-header .container{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--ff-display);font-weight:700;font-size:16.5px;}
+.brand-mark{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  background:var(--surface-hi);border:1px solid var(--border);font-size:16px;}
+.nav-links{display:flex;gap:26px;font-size:13.5px;color:var(--muted);}
+.nav-links a:hover{color:var(--ink);}
+@media(max-width:700px){.nav-links{display:none;}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:10px;transition:all .18s ease;border:1px solid transparent;}
+.btn-primary{background:var(--amber);color:#241B00;box-shadow:0 8px 22px rgba(204,153,0,0.25);}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.05);}
+.btn-ghost{background:var(--surface);border-color:var(--border);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber);}
+
+/* hero */
+.hero{padding:150px 0 90px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:#8A6600;background:var(--amber-soft);border:1px solid rgba(204,153,0,0.3);padding:6px 13px;border-radius:99px;}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber);}
+.hero h1{font-size:clamp(34px,5.2vw,58px);line-height:1.08;margin:20px 0 18px;max-width:720px;}
+.hero h1 em{font-style:normal;color:#8A6600;}
+.hero p.lede{color:var(--muted);font-size:17px;max-width:560px;line-height:1.65;}
+.hero-quote{font-family:var(--ff-display);font-style:normal;color:var(--muted);font-size:15px;margin-top:22px;padding-left:16px;border-left:2px solid var(--amber);max-width:520px;}
+.hero-actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;}
+
+/* sections */
+.section{padding:80px 0;}
+.section.alt{background:linear-gradient(180deg,transparent,rgba(0,0,0,0.012) 8%,rgba(0,0,0,0.012) 92%,transparent);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);}
+.section-head{max-width:600px;margin-bottom:40px;}
+.section-head h2{font-size:clamp(24px,3vw,34px);}
+.section-head .sub{color:var(--muted);font-size:15px;margin-top:12px;}
+
+/* editor mock */
+.editor-window{
+  background:#FAFAFA;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;
+  box-shadow:0 20px 50px rgba(0,0,0,0.10);
+}
+.editor-titlebar{background:#E6E8F0;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#FF5F56;}.dot.y{background:#FFBD2E;}.dot.g{background:#27C93F;}
+.editor-filename{margin-left:10px;font-family:var(--ff-mono);font-size:12px;color:var(--muted);}
+.editor-body{display:flex;}
+.editor-gutter{padding:16px 12px 16px 18px;font-family:var(--ff-mono);font-size:13px;line-height:1.7;color:#7A7E8A;text-align:right;user-select:none;background:#F2F3F7;border-right:1px solid var(--border);}
+.editor-code{padding:16px 20px;font-family:var(--ff-mono);font-size:13px;line-height:1.7;white-space:pre;overflow-x:auto;flex:1;color:var(--ink);}
+.tk-key{color:var(--purple);}
+.tk-fn{color:#795E26;}
+.tk-str{color:var(--red);}
+.tk-num{color:var(--green);}
+.tk-var{color:var(--navy);}
+.tk-type{color:var(--teal);}
+.tk-com{color:#6A9955;font-style:italic;}
+.tk-tag{color:var(--blue);}
+.tk-attr{color:var(--cyan);}
+
+/* palette */
+.palette-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+.swatch{border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);}
+.swatch .fill{height:64px;}
+.swatch .meta{background:var(--surface);padding:9px 10px;}
+.swatch .meta .name{font-family:var(--ff-mono);font-size:10.5px;color:var(--muted);}
+.swatch .meta .hex{font-family:var(--ff-mono);font-size:11.5px;color:var(--ink);margin-top:2px;}
+@media(max-width:900px){.palette-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:520px){.palette-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* features */
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 20px;transition:border-color .2s,transform .2s;}
+.feat-card:hover{border-color:var(--amber);transform:translateY(-3px);}
+.feat-card .ico{width:38px;height:38px;border-radius:10px;background:var(--amber-soft);color:#8A6600;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:17px;}
+.feat-card h3{font-size:15.5px;margin-bottom:6px;}
+.feat-card p{font-size:13px;color:var(--muted);line-height:1.55;}
+@media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.feat-grid{grid-template-columns:1fr;}}
+
+/* day-progress demo */
+.day-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px 26px;}
+.day-panel .label{font-family:var(--ff-mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px;}
+.day-track{position:relative;height:6px;border-radius:99px;background:linear-gradient(90deg,#FFF7D6,var(--amber));overflow:visible;}
+.day-sun-icon{position:absolute;top:-9px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#fff7d6,var(--amber) 75%);box-shadow:0 0 14px rgba(204,153,0,0.5);left:38%;transition:left .3s;}
+.day-labels{display:flex;justify-content:space-between;margin-top:10px;font-size:11.5px;color:var(--muted-soft);font-family:var(--ff-mono);}
+
+/* steps */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:0;max-width:560px;}
+.step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--border-soft);}
+.step:last-child{border-bottom:none;}
+.step .num{counter-increment:step;font-family:var(--ff-mono);font-size:13px;color:#8A6600;width:26px;height:26px;border-radius:50%;border:1px solid rgba(204,153,0,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step .num::before{content:counter(step);}
+.step h4{font-size:14.5px;margin-bottom:3px;}
+.step p{font-size:13px;color:var(--muted);}
+
+/* footer */
+footer{padding:60px 0 40px;border-top:1px solid var(--border-soft);}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.foot-links{display:flex;gap:20px;font-size:13px;color:var(--muted);}
+.foot-links a:hover{color:#8A6600;}
+.cross-promo{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+.promo-card{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;display:flex;align-items:center;gap:12px;}
+.promo-card .sw{width:34px;height:34px;border-radius:9px;flex-shrink:0;}
+.promo-card .t{font-size:13.5px;font-weight:600;}
+.promo-card .d{font-size:11.5px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="sun"></div>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand"><span class="brand-mark">🤍</span> White Devil</div>
+    <nav class="nav-links">
+      <a href="#preview">Preview</a>
+      <a href="#palette">Palette</a>
+      <a href="#install">Install</a>
+    </nav>
+    <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=sp2736.white-devil-by-sp" target="_blank" rel="noopener">Install Extension</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero container">
+    <span class="eyebrow">VS Code Theme · Light</span>
+    <h1>Code with the <em>sunrise</em>,<br>not against it.</h1>
+    <p class="lede">A crisp, modern light theme built for developers who thrive in daylight — cool tones, vibrant syntax, and zero clutter.</p>
+    <p class="hero-quote">"For every early morning grind, every sunlit sprint, and every line of code that felt like fresh air — this is your bright sanctuary."</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=sp2736.white-devil-by-sp" target="_blank" rel="noopener">Get it on the Marketplace</a>
+      <a class="btn btn-ghost" href="https://github.com/Sp2736/white-devil" target="_blank" rel="noopener">View source</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:26px;">
+      <span style="font-family:var(--ff-mono);font-size:12px;padding:6px 13px;background:var(--surface);border:1px solid var(--border);border-radius:99px;">JSON</span>
+      <span style="font-family:var(--ff-mono);font-size:12px;padding:6px 13px;background:var(--surface);border:1px solid var(--border);border-radius:99px;">VS Code Theme</span>
+      <span style="font-family:var(--ff-mono);font-size:12px;padding:6px 13px;background:var(--surface);border:1px solid var(--border);border-radius:99px;">UX Design</span>
+    </div>
+  </section>
+
+  <section class="section alt" id="preview">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Live look</span>
+        <h2>Crystal-clear, straight out of the box</h2>
+        <p class="sub">Real token colors from the theme, rendered exactly as your editor would show them.</p>
+      </div>
+      <div class="editor-window">
+        <div class="editor-titlebar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="editor-filename">extension.ts — White Devil</span>
+        </div>
+        <div class="editor-body">
+          <div class="editor-gutter" id="gutter"></div>
+          <pre class="editor-code"><span class="tk-com">// Applies the daylight theme and greets the morning coder</span>
+<span class="tk-key">export</span> <span class="tk-key">function</span> <span class="tk-fn">activate</span>(<span class="tk-var">context</span>: <span class="tk-type">ExtensionContext</span>) {
+  <span class="tk-key">const</span> <span class="tk-var">theme</span> = {
+    <span class="tk-var">background</span>: <span class="tk-str">"#FAFAFA"</span>,
+    <span class="tk-var">accent</span>:     <span class="tk-str">"#CC9900"</span>,
+    <span class="tk-var">clutter</span>:    <span class="tk-num">0</span>,
+  };
+  <span class="tk-fn">applyTheme</span>(<span class="tk-var">context</span>, <span class="tk-var">theme</span>);
+  <span class="tk-fn">console</span>.<span class="tk-fn">log</span>(<span class="tk-str">"White Devil active — code with the light on your side."</span>);
+}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="palette">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Palette</span>
+        <h2>The full color system</h2>
+        <p class="sub">Core UI tones and syntax accents that make up the theme.</p>
+      </div>
+      <div class="palette-grid">
+        <div class="swatch"><div class="fill" style="background:#FAFAFA;border-bottom:1px solid #eee"></div><div class="meta"><div class="name">editor.background</div><div class="hex">#FAFAFA</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#E6E8F0"></div><div class="meta"><div class="name">activityBar</div><div class="hex">#E6E8F0</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#CC9900"></div><div class="meta"><div class="name">cursor</div><div class="hex">#CC9900</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#AF00DB"></div><div class="meta"><div class="name">keyword</div><div class="hex">#AF00DB</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#795E26"></div><div class="meta"><div class="name">function</div><div class="hex">#795E26</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#A31515"></div><div class="meta"><div class="name">string</div><div class="hex">#A31515</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#098658"></div><div class="meta"><div class="name">numeric</div><div class="hex">#098658</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#267F99"></div><div class="meta"><div class="name">type / class</div><div class="hex">#267F99</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#001080"></div><div class="meta"><div class="name">variable</div><div class="hex">#001080</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#6A9955"></div><div class="meta"><div class="name">comment</div><div class="hex">#6A9955</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#E51400"></div><div class="meta"><div class="name">invalid</div><div class="hex">#E51400</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#1A1A1A"></div><div class="meta"><div class="name">foreground</div><div class="hex">#1A1A1A</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Why morning people keep it</span>
+        <h2>Built for daylight clarity</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="ico">☀</div><h3>Pure white canvas</h3><p>Subtle shadows and cool tones instead of a harsh, flat white.</p></div>
+        <div class="feat-card"><div class="ico">◆</div><h3>Vibrant syntax</h3><p>Colors that pop for readability without ever causing fatigue.</p></div>
+        <div class="feat-card"><div class="ico">⛅</div><h3>Daylight-optimized</h3><p>Tuned specifically for bright rooms and sunlit workspaces.</p></div>
+        <div class="feat-card"><div class="ico">▢</div><h3>Zero clutter</h3><p>A sleek, professional aesthetic with nothing extra in the way.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Try the day</span>
+        <h2>Drag through the daylight</h2>
+        <p class="sub">Slide across the day to see when this theme is at its brightest.</p>
+      </div>
+      <div class="day-panel">
+        <div class="label">Time of day</div>
+        <div class="day-track" id="dayTrack">
+          <div class="day-sun-icon" id="daySun"></div>
+        </div>
+        <div class="day-labels"><span>6 AM</span><span>Noon</span><span>6 PM</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="install">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Get started</span>
+        <h2>Bright and ready in five steps</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num"></div><div><h4>Open Visual Studio Code</h4></div></div>
+        <div class="step"><div class="num"></div><div><h4>Go to Extensions</h4><p>Press <code>Ctrl + Shift + X</code></p></div></div>
+        <div class="step"><div class="num"></div><div><h4>Search "White Devil"</h4></div></div>
+        <div class="step"><div class="num"></div><div><h4>Click Install</h4></div></div>
+        <div class="step"><div class="num"></div><div><h4>Click "Set Color Theme" when prompted</h4><p>That's it — code with the light on your side.</p></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-row">
+      <div class="brand"><span class="brand-mark">🤍</span> White Devil — by Swayam Patel</div>
+      <div class="foot-links">
+        <a href="https://github.com/Sp2736/white-devil" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://marketplace.visualstudio.com/items?itemName=sp2736.white-devil-by-sp" target="_blank" rel="noopener">Marketplace</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const gutter=document.getElementById('gutter');
+const codeLines = document.querySelector('.editor-code').textContent.split('\n').length;
+gutter.innerHTML = Array.from({length:codeLines},(_,i)=>i+1).join('<br>');
+
+const track=document.getElementById('dayTrack');
+const sun=document.getElementById('daySun');
+function setDay(pct){
+  pct=Math.max(2,Math.min(96,pct));
+  sun.style.left=pct+'%';
+}
+let dragging=false;
+track.addEventListener('pointerdown',e=>{dragging=true;updateFromEvent(e);});
+window.addEventListener('pointermove',e=>{if(dragging)updateFromEvent(e);});
+window.addEventListener('pointerup',()=>dragging=false);
+function updateFromEvent(e){
+  const rect=track.getBoundingClientRect();
+  const pct=((e.clientX-rect.left)/rect.width)*100;
+  setDay(pct);
+}
+</script>
+</body>
+</html>

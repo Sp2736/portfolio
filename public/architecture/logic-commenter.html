@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logic Commenter — AI-Powered Code Documentation by SP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A0F;
+  --bg-deep:#06060A;
+  --surface:#121218;
+  --surface-hi:#181820;
+  --border:#26262F;
+  --border-soft:#1C1C24;
+  --ink:#F4F5F7;
+  --muted:#8C8FA0;
+  --muted-soft:#5C5F70;
+  --gemini:#8E7CFF;
+  --gemini-soft:rgba(142,124,255,0.12);
+  --cyan:#3DD9D9;
+  --green:#4ADE80;
+  --amber:#F2B84B;
+  --rose:#F2596B;
+  --radius-sm:9px;
+  --radius-md:14px;
+  --radius-lg:20px;
+  --container:1100px;
+  --ff-display:'Space Grotesk', sans-serif;
+  --ff-body:'Inter', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--ff-body);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+h1,h2,h3,h4{font-family:var(--ff-display);font-weight:600;letter-spacing:-0.01em;}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle at 12% 10%, rgba(142,124,255,0.10), transparent 42%),
+                    radial-gradient(circle at 88% 20%, rgba(61,217,217,0.06), transparent 40%);
+}
+main,header,footer,section{position:relative;z-index:1;}
+.container{max-width:var(--container);margin:0 auto;padding:0 28px;}
+
+.site-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.75);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-soft);}
+.site-header .container{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--ff-display);font-weight:700;font-size:16.5px;}
+.brand-mark{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--gemini),var(--cyan));font-size:15px;color:#0A0A0F;font-weight:700;}
+.nav-links{display:flex;gap:26px;font-size:13.5px;color:var(--muted);}
+.nav-links a:hover{color:var(--ink);}
+@media(max-width:760px){.nav-links{display:none;}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:10px;transition:all .18s ease;border:1px solid transparent;}
+.btn-primary{background:var(--gemini);color:#0A0A0F;box-shadow:0 8px 22px rgba(142,124,255,0.25);}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.08);}
+.btn-ghost{background:var(--surface-hi);border-color:var(--border);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--gemini);color:var(--gemini);}
+
+.hero{padding:150px 0 70px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gemini);background:var(--gemini-soft);border:1px solid rgba(142,124,255,0.28);padding:6px 13px;border-radius:99px;}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gemini);box-shadow:0 0 8px var(--gemini);}
+.hero h1{font-size:clamp(32px,4.8vw,52px);line-height:1.1;margin:20px 0 18px;max-width:740px;}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--gemini),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero p.lede{color:var(--muted);font-size:17px;max-width:600px;line-height:1.65;}
+.hero-actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap;}
+.hero-meta{display:flex;gap:24px;margin-top:34px;flex-wrap:wrap;}
+.hero-meta .m{font-family:var(--ff-mono);font-size:12px;color:var(--muted-soft);}
+.hero-meta .m b{color:var(--ink);font-size:14px;display:block;font-family:var(--ff-display);}
+
+.section{padding:80px 0;}
+.section.alt{background:linear-gradient(180deg,transparent,rgba(255,255,255,0.012) 8%,rgba(255,255,255,0.012) 92%,transparent);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);}
+.section-head{max-width:620px;margin-bottom:40px;}
+.section-head h2{font-size:clamp(24px,3vw,34px);}
+.section-head .sub{color:var(--muted);font-size:15px;margin-top:12px;}
+
+/* ---- interactive demo editor ---- */
+.demo-wrap{display:grid;grid-template-columns:1fr;gap:0;}
+.editor-window{background:#0E0E14;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.editor-titlebar{background:#181820;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#FF5F56;}.dot.y{background:#FFBD2E;}.dot.g{background:#27C93F;}
+.editor-filename{margin-left:10px;font-family:var(--ff-mono);font-size:12px;color:var(--muted);}
+.editor-body{display:flex;position:relative;}
+.editor-gutter{padding:18px 12px 18px 18px;font-family:var(--ff-mono);font-size:13px;line-height:1.75;color:#3D3F52;text-align:right;user-select:none;background:#121218;border-right:1px solid var(--border);white-space:pre;}
+.editor-code{padding:18px 20px;font-family:var(--ff-mono);font-size:13px;line-height:1.75;white-space:pre;overflow-x:auto;flex:1;position:relative;}
+.tk-key{color:#C586C0;}
+.tk-fn{color:#DCDCAA;}
+.tk-str{color:#CE9178;}
+.tk-num{color:#B5CEA8;}
+.tk-var{color:#9CDCFE;}
+.tk-type{color:#4EC9B0;}
+.tk-com{color:#6B8FFF;}
+.selected-block{background:rgba(142,124,255,0.14);outline:1px dashed rgba(142,124,255,0.5);border-radius:3px;}
+.ai-comment{color:#6B8FFF;opacity:0;max-height:0;overflow:hidden;transition:opacity .3s ease;}
+.ai-comment.show{opacity:1;max-height:100px;}
+.ai-caret{display:inline-block;width:6px;height:13px;background:var(--gemini);animation:blink 0.9s steps(1) infinite;vertical-align:-2px;}
+@keyframes blink{50%{opacity:0;}}
+
+.ctx-menu{position:absolute;background:#1E1E28;border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,0.5);
+  padding:6px;font-size:12.5px;z-index:20;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s ease, transform .18s ease;min-width:180px;}
+.ctx-menu.show{opacity:1;pointer-events:auto;transform:translateY(0);}
+.ctx-item{padding:8px 12px;border-radius:5px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:8px;}
+.ctx-item:hover{background:var(--surface-hi);color:var(--ink);}
+.ctx-item.highlight{color:var(--gemini);font-weight:600;}
+.ctx-item.highlight svg{color:var(--gemini);}
+
+.demo-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+.demo-hint{font-size:12.5px;color:var(--muted-soft);font-family:var(--ff-mono);}
+.demo-btn{font-family:var(--ff-body);font-weight:600;font-size:13px;padding:9px 16px;border-radius:9px;background:var(--gemini);color:#0A0A0F;border:none;cursor:pointer;transition:all .15s;}
+.demo-btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.demo-btn:disabled{opacity:.5;cursor:default;transform:none;}
+.progress-toast{position:absolute;bottom:16px;left:20px;background:#1E1E28;border:1px solid var(--border);border-radius:8px;padding:9px 14px;
+  font-size:12px;color:var(--muted);display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .2s;pointer-events:none;}
+.progress-toast.show{opacity:1;}
+.spinner{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--gemini);animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* feature grid */
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 20px;transition:border-color .2s,transform .2s;}
+.feat-card:hover{border-color:var(--gemini);transform:translateY(-3px);}
+.feat-card .ico{width:38px;height:38px;border-radius:10px;background:var(--gemini-soft);color:var(--gemini);display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:17px;}
+.feat-card h3{font-size:15px;margin-bottom:6px;}
+.feat-card p{font-size:12.8px;color:var(--muted);line-height:1.55;}
+@media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.feat-grid{grid-template-columns:1fr;}}
+
+/* language chips */
+.chip-row{display:flex;flex-wrap:wrap;gap:9px;}
+.chip{font-family:var(--ff-mono);font-size:12.5px;padding:7px 13px;background:var(--surface);border:1px solid var(--border);border-radius:99px;color:var(--ink);display:flex;align-items:center;gap:7px;}
+.chip .dot2{width:7px;height:7px;border-radius:50%;}
+
+/* BYOK flow */
+.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:6px;}
+.flow-step{flex:1;min-width:190px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px 18px;position:relative;}
+.flow-step + .flow-step{margin-left:26px;}
+.flow-step + .flow-step::before{content:'→';position:absolute;left:-24px;top:50%;transform:translateY(-50%);color:var(--muted-soft);font-family:var(--ff-mono);}
+.flow-step .n{font-family:var(--ff-mono);font-size:11px;color:var(--gemini);margin-bottom:8px;}
+.flow-step h4{font-size:13.5px;margin-bottom:5px;}
+.flow-step p{font-size:12px;color:var(--muted);line-height:1.5;}
+@media(max-width:900px){.flow{flex-direction:column;} .flow-step + .flow-step{margin-left:0;margin-top:26px;} .flow-step + .flow-step::before{content:'↓';left:50%;top:-22px;transform:translateX(-50%);}}
+
+/* security */
+.sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.sec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 22px;display:flex;gap:14px;}
+.sec-card .ico{width:34px;height:34px;border-radius:9px;background:rgba(74,222,128,0.12);color:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+.sec-card h4{font-size:14px;margin-bottom:4px;}
+.sec-card p{font-size:12.5px;color:var(--muted);line-height:1.5;}
+@media(max-width:700px){.sec-grid{grid-template-columns:1fr;}}
+
+/* steps */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:0;max-width:600px;}
+.step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--border-soft);}
+.step:last-child{border-bottom:none;}
+.step .num{counter-increment:step;font-family:var(--ff-mono);font-size:13px;color:var(--gemini);width:26px;height:26px;border-radius:50%;border:1px solid rgba(142,124,255,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step .num::before{content:counter(step);}
+.step h4{font-size:14.5px;margin-bottom:3px;}
+.step p{font-size:13px;color:var(--muted);}
+.step code{font-family:var(--ff-mono);font-size:0.86em;background:var(--surface-hi);border:1px solid var(--border);padding:1px 6px;border-radius:5px;color:var(--cyan);}
+
+/* footer */
+footer{padding:60px 0 40px;border-top:1px solid var(--border-soft);}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.foot-links{display:flex;gap:20px;font-size:13px;color:var(--muted);}
+.foot-links a:hover{color:var(--gemini);}
+.cross-promo{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+.promo-card{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;display:flex;align-items:center;gap:12px;}
+.promo-card .sw{width:34px;height:34px;border-radius:9px;flex-shrink:0;}
+.promo-card .t{font-size:13.5px;font-weight:600;}
+.promo-card .d{font-size:11.5px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand"><span class="brand-mark">✦</span> Logic Commenter</div>
+    <nav class="nav-links">
+      <a href="#demo">Demo</a>
+      <a href="#features">Features</a>
+      <a href="#security">Security</a>
+      <a href="#install">Install</a>
+    </nav>
+    <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=sp2736.logic-commenter" target="_blank" rel="noopener">Install Extension</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero container">
+    <span class="eyebrow">VS Code Extension · v1.0.2 · Gemini 2.5 Flash</span>
+    <h1>Select code. Right-click.<br><em>Let AI explain the logic.</em></h1>
+    <p class="lede">Logic Commenter reads the intent behind your code — not just its syntax — and drops a precise, language-aware documentation comment exactly where you need it.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=sp2736.logic-commenter" target="_blank" rel="noopener">Install Extension</a>
+      <a class="btn btn-ghost" href="https://github.com/Sp2736/auto-comment-vscode" target="_blank" rel="noopener">View source</a>
+    </div>
+    <div class="hero-meta">
+      <div class="m"><b>BYOK</b>Bring your own Gemini key</div>
+      <div class="m"><b>7+</b>Languages auto-detected</div>
+      <div class="m"><b>0</b>Proxy servers — direct to Google</div>
+    </div>
+    <div class="chip-row" style="margin-top:22px">
+      <span class="chip"><span class="dot2" style="background:#3178C6"></span>TypeScript</span>
+      <span class="chip"><span class="dot2" style="background:#8E7CFF"></span>VS Code API</span>
+      <span class="chip"><span class="dot2" style="background:#3DD9D9"></span>Gemini AI</span>
+    </div>
+  </section>
+
+  <section class="section alt" id="demo">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Live demo</span>
+        <h2>Watch it work, right here</h2>
+        <p class="sub">This mirrors the real flow: select a block, open the context menu, run "Add Logic Comment," and watch the explanation get typed in above your code.</p>
+      </div>
+      <div class="demo-toolbar">
+        <span class="demo-hint">// a snippet is pre-selected below — click Run to simulate the command</span>
+        <button class="demo-btn" id="runDemo">▶ Add Logic Comment</button>
+      </div>
+      <div class="editor-window">
+        <div class="editor-titlebar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="editor-filename">reconcile.ts</span>
+        </div>
+        <div class="editor-body">
+          <div class="editor-gutter" id="gutter"></div>
+          <pre class="editor-code" id="codeArea"><span class="ai-comment" id="aiComment">/**
+ <span id="aiText"></span><span class="ai-caret" id="aiCaret" style="display:none"></span>
+ */</span>
+ <span id="codeBlock"><span class="tk-key">function</span> <span class="tk-fn">reconcileBalances</span>(<span class="tk-var">ledger</span>: <span class="tk-type">Entry</span>[]) {
+  <span class="tk-key">const</span> <span class="tk-var">seen</span> = <span class="tk-key">new</span> <span class="tk-fn">Map</span>&lt;<span class="tk-type">string</span>, <span class="tk-type">number</span>&gt;();
+  <span class="tk-key">for</span> (<span class="tk-key">const</span> <span class="tk-var">e</span> <span class="tk-key">of</span> <span class="tk-var">ledger</span>) {
+    <span class="tk-key">const</span> <span class="tk-var">prev</span> = <span class="tk-var">seen</span>.<span class="tk-fn">get</span>(<span class="tk-var">e</span>.<span class="tk-var">acctId</span>) ?? <span class="tk-num">0</span>;
+    <span class="tk-var">seen</span>.<span class="tk-fn">set</span>(<span class="tk-var">e</span>.<span class="tk-var">acctId</span>, <span class="tk-var">prev</span> + <span class="tk-var">e</span>.<span class="tk-var">delta</span>);
+  }
+  <span class="tk-key">return</span> [...<span class="tk-var">seen</span>].<span class="tk-fn">filter</span>(([, <span class="tk-var">bal</span>]) =&gt; <span class="tk-var">bal</span> !== <span class="tk-num">0</span>);
+}</span></pre>
+          <div class="ctx-menu" id="ctxMenu">
+            <div class="ctx-item">Cut</div>
+            <div class="ctx-item">Copy</div>
+            <div class="ctx-item highlight" id="ctxAction">✦ Add Logic Comment</div>
+            <div class="ctx-item">Format Selection</div>
+          </div>
+          <div class="progress-toast" id="progressToast"><span class="spinner"></span> Analyzing code logic…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Under the hood</span>
+        <h2>Built to explain, not restate</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="ico">◈</div><h3>Contextual logic analysis</h3><p>Interprets the intent and mechanics of your code to produce meaningful summaries, not redundant syntax descriptions.</p></div>
+        <div class="feat-card"><div class="ico">⌘</div><h3>Language-agnostic formatting</h3><p>Auto-detects the active language ID and wraps the response in the correct multiline comment syntax.</p></div>
+        <div class="feat-card"><div class="ico">⚡</div><h3>Optimized latency</h3><p>Strict token limits and a low temperature keep responses fast and near-instantaneous.</p></div>
+        <div class="feat-card"><div class="ico">◐</div><h3>Zero-telemetry</h3><p>Only the snippet you explicitly select is ever transmitted — for the sole purpose of generating that comment.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Works everywhere you code</span>
+        <h2>Detects your language automatically</h2>
+        <p class="sub">The comment syntax adapts to whatever file you're in.</p>
+      </div>
+      <div class="chip-row">
+        <span class="chip"><span class="dot2" style="background:#F0DB4F"></span>JavaScript /** */</span>
+        <span class="chip"><span class="dot2" style="background:#3178C6"></span>TypeScript /** */</span>
+        <span class="chip"><span class="dot2" style="background:#3776AB"></span>Python """ """</span>
+        <span class="chip"><span class="dot2" style="background:#B07219"></span>Java /* */</span>
+        <span class="chip"><span class="dot2" style="background:#00599C"></span>C++ /* */</span>
+        <span class="chip"><span class="dot2" style="background:#178600"></span>C# /* */</span>
+        <span class="chip"><span class="dot2" style="background:#777BB4"></span>PHP /* */</span>
+        <span class="chip"><span class="dot2" style="background:#8C8FA0"></span>+ default fallback</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">BYOK architecture</span>
+        <h2>Free and unrestricted, by design</h2>
+        <p class="sub">Logic Commenter runs on Bring-Your-Own-Key so it never has to gate features behind a paywall.</p>
+      </div>
+      <div class="flow">
+        <div class="flow-step"><div class="n">01</div><h4>Get a free key</h4><p>Grab one from Google AI Studio in under a minute.</p></div>
+        <div class="flow-step"><div class="n">02</div><h4>First run prompts you</h4><p>A secure input box asks for your Gemini API key once.</p></div>
+        <div class="flow-step"><div class="n">03</div><h4>Stored in your OS keychain</h4><p>Encrypted via VS Code's native <code>SecretStorage</code> API.</p></div>
+        <div class="flow-step"><div class="n">04</div><h4>Never asked again</h4><p>Every future run reuses the securely stored key automatically.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="security">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Security</span>
+        <h2>Your code stays yours</h2>
+      </div>
+      <div class="sec-grid">
+        <div class="sec-card"><div class="ico">🔒</div><div><h4>Credentials, never in plaintext</h4><p>API keys are managed exclusively through VS Code's secure storage mechanisms — never written to disk in the open.</p></div></div>
+        <div class="sec-card"><div class="ico">↔</div><div><h4>Direct-to-Google requests</h4><p>All calls route straight from your machine to Google's API over HTTPS. No intermediary proxy, no middleman retention.</p></div></div>
+        <div class="sec-card"><div class="ico">✂</div><div><h4>Selection-only transmission</h4><p>Only the exact snippet you highlight is ever sent — never your full file, never your whole workspace.</p></div></div>
+        <div class="sec-card"><div class="ico">🗝</div><div><h4>Self-healing key handling</h4><p>An invalid key is deleted automatically so you're cleanly re-prompted instead of silently failing.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="install">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Get started</span>
+        <h2>From install to first comment</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num"></div><div><h4>Install Logic Commenter</h4><p>From the <a href="https://marketplace.visualstudio.com/items?itemName=sp2736.logic-commenter" target="_blank" rel="noopener" style="color:var(--gemini)">VS Code Extensions Marketplace</a>.</p></div></div>
+        <div class="step"><div class="num"></div><div><h4>Highlight a code block</h4><p>Select a complete function or logic block — 10 to 50 lines works best.</p></div></div>
+        <div class="step"><div class="num"></div><div><h4>Right-click → <code>Add Logic Comment</code></h4><p>Or run it via the Command Palette with <code>Ctrl+Shift+P</code>.</p></div></div>
+        <div class="step"><div class="num"></div><div><h4>Paste your Gemini key on first run</h4><p>It's saved securely — you won't be asked again.</p></div></div>
+        <div class="step"><div class="num"></div><div><h4>Review the generated comment</h4><p>Injected directly above your selection, matching its indentation.</p></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-row">
+      <div class="brand"><span class="brand-mark">✦</span> Logic Commenter — by Swayam Patel (SP)</div>
+      <div class="foot-links">
+        <a href="https://github.com/Sp2736/auto-comment-vscode" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://marketplace.visualstudio.com/items?itemName=sp2736.logic-commenter" target="_blank" rel="noopener">Marketplace</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const gutter = document.getElementById('gutter');
+function syncGutter(){
+  const lines = document.getElementById('codeArea').innerText.split('\n').length;
+  gutter.innerHTML = Array.from({length: Math.max(lines,9)},(_,i)=>i+1).join('<br>');
+}
+syncGutter();
+
+const codeBlock = document.getElementById('codeBlock');
+const ctxMenu = document.getElementById('ctxMenu');
+const ctxAction = document.getElementById('ctxAction');
+const progressToast = document.getElementById('progressToast');
+const aiComment = document.getElementById('aiComment');
+const aiText = document.getElementById('aiText');
+const aiCaret = document.getElementById('aiCaret');
+const runBtn = document.getElementById('runDemo');
+
+const explanation = "Reconciles a ledger by netting all entries per account, then returns only accounts whose balance did not settle to zero.";
+
+let running = false;
+
+function showCtxMenu(){
+  const rect = codeBlock.getBoundingClientRect();
+  const parentRect = codeBlock.parentElement.getBoundingClientRect();
+  ctxMenu.style.left = (rect.left - parentRect.left + 30) + 'px';
+  ctxMenu.style.top = (rect.top - parentRect.top + 20) + 'px';
+  ctxMenu.classList.add('show');
+}
+function hideCtxMenu(){ ctxMenu.classList.remove('show'); }
+
+function typeText(el, text, speed, done){
+  let i = 0;
+  el.textContent = '';
+  const iv = setInterval(()=>{
+    el.textContent += text[i];
+    i++;
+    syncGutter();
+    if(i >= text.length){ clearInterval(iv); if(done) done(); }
+  }, speed);
+}
+
+async function runDemo(){
+  if(running) return;
+  running = true;
+  runBtn.disabled = true;
+  runBtn.textContent = 'Running…';
+
+  // reset
+  codeBlock.classList.add('selected-block');
+  aiComment.classList.remove('show');
+  aiText.textContent = '';
+  aiCaret.style.display = 'none';
+  syncGutter();
+
+  await sleep(450);
+  showCtxMenu();
+  await sleep(900);
+  ctxAction.style.background = 'rgba(142,124,255,0.18)';
+  await sleep(350);
+  hideCtxMenu();
+  codeBlock.classList.remove('selected-block');
+
+  progressToast.classList.add('show');
+  await sleep(1300);
+  progressToast.classList.remove('show');
+
+  aiComment.classList.add('show');
+  aiCaret.style.display = 'inline-block';
+  await new Promise(res => typeText(aiText, explanation, 16, res));
+  aiCaret.style.display = 'none';
+
+  runBtn.disabled = false;
+  runBtn.textContent = '↻ Run again';
+  running = false;
+}
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+runBtn.addEventListener('click', runDemo);
+</script>
+</body>
+</html>

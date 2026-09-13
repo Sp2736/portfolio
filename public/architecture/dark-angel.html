@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Angel — VS Code Theme by SP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E0F1A;
+  --bg-deep:#08080F;
+  --surface:#12131A;
+  --surface-hi:#1C1E2A;
+  --border:#2A2B3A;
+  --border-soft:#1C1E2A;
+  --ink:#EAEAEA;
+  --muted:#8A8DA0;
+  --muted-soft:#5C6370;
+  --gold:#FFCC00;
+  --gold-soft:rgba(255,204,0,0.12);
+  --violet:#C586C0;
+  --blue:#569CD6;
+  --teal:#4EC9B0;
+  --peach:#CE9178;
+  --olive:#DCDCAA;
+  --sage:#B5CEA8;
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:20px;
+  --container:1100px;
+  --ff-display:'Space Grotesk', sans-serif;
+  --ff-body:'Inter', sans-serif;
+  --ff-mono:'JetBrains Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--ff-body);
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  position:relative;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+img{max-width:100%;display:block;}
+h1,h2,h3,h4{font-family:var(--ff-display);font-weight:600;letter-spacing:-0.01em;}
+
+/* ---- starfield ambient ---- */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.star{position:absolute;background:#fff;border-radius:50%;opacity:0;animation:twinkle 4s ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:0;}50%{opacity:.9;}}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 50% -10%, rgba(255,204,0,0.06), transparent 60%),
+             radial-gradient(ellipse 60% 40% at 90% 100%, rgba(197,134,192,0.06), transparent 60%);
+}
+main,header,footer,section{position:relative;z-index:1;}
+.container{max-width:var(--container);margin:0 auto;padding:0 28px;}
+
+/* moon */
+.moon{
+  position:absolute;top:38px;right:60px;width:56px;height:56px;border-radius:50%;
+  background:radial-gradient(circle at 35% 32%, #fffdf0, var(--gold) 70%);
+  box-shadow:0 0 40px rgba(255,204,0,0.35), 0 0 80px rgba(255,204,0,0.12);
+}
+@media(max-width:700px){.moon{display:none;}}
+
+/* ---- header ---- */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(14,15,26,0.75);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border-soft);
+}
+.site-header .container{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--ff-display);font-weight:700;font-size:16.5px;}
+.brand-mark{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  background:var(--surface-hi);border:1px solid var(--border);font-size:16px;}
+.nav-links{display:flex;gap:26px;font-size:13.5px;color:var(--muted);}
+.nav-links a:hover{color:var(--ink);}
+@media(max-width:700px){.nav-links{display:none;}}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:10px 18px;border-radius:10px;transition:all .18s ease;border:1px solid transparent;}
+.btn-primary{background:var(--gold);color:#151600;box-shadow:0 8px 22px rgba(255,204,0,0.22);}
+.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.05);}
+.btn-ghost{background:var(--surface-hi);border-color:var(--border);color:var(--ink);}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ---- hero ---- */
+.hero{padding:150px 0 90px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--ff-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gold);background:var(--gold-soft);border:1px solid rgba(255,204,0,0.28);padding:6px 13px;border-radius:99px;}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);}
+.hero h1{font-size:clamp(34px,5.2vw,58px);line-height:1.08;margin:20px 0 18px;max-width:720px;}
+.hero h1 em{font-style:normal;color:var(--gold);}
+.hero p.lede{color:var(--muted);font-size:17px;max-width:560px;line-height:1.65;}
+.hero-quote{font-family:var(--ff-display);font-style:normal;color:var(--muted);font-size:15px;margin-top:22px;padding-left:16px;border-left:2px solid var(--gold);max-width:520px;}
+.hero-actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;}
+
+/* ---- editor mock ---- */
+.section{padding:80px 0;}
+.section.alt{background:linear-gradient(180deg,transparent,rgba(255,255,255,0.012) 8%,rgba(255,255,255,0.012) 92%,transparent);border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);}
+.section-head{max-width:600px;margin-bottom:40px;}
+.section-head h2{font-size:clamp(24px,3vw,34px);}
+.section-head .sub{color:var(--muted);font-size:15px;margin-top:12px;}
+
+.editor-window{
+  background:#0E0F1A;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.editor-titlebar{background:#1C1E2A;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#FF5F56;}.dot.y{background:#FFBD2E;}.dot.g{background:#27C93F;}
+.editor-filename{margin-left:10px;font-family:var(--ff-mono);font-size:12px;color:var(--muted);}
+.editor-body{display:flex;}
+.editor-gutter{padding:16px 12px 16px 18px;font-family:var(--ff-mono);font-size:13px;line-height:1.7;color:#4B526D;text-align:right;user-select:none;background:#12131A;border-right:1px solid var(--border);}
+.editor-code{padding:16px 20px;font-family:var(--ff-mono);font-size:13px;line-height:1.7;white-space:pre;overflow-x:auto;flex:1;}
+.tk-key{color:var(--violet);}
+.tk-fn{color:var(--olive);}
+.tk-str{color:var(--peach);}
+.tk-num{color:var(--sage);}
+.tk-var{color:#9CDCFE;}
+.tk-type{color:var(--teal);}
+.tk-com{color:var(--muted-soft);font-style:italic;}
+.tk-punc{color:var(--ink);}
+.cursor-line{background:#2A2B3A;display:inline-block;width:100%;}
+
+/* palette */
+.palette-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+.swatch{border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);}
+.swatch .fill{height:64px;}
+.swatch .meta{background:var(--surface);padding:9px 10px;}
+.swatch .meta .name{font-family:var(--ff-mono);font-size:10.5px;color:var(--muted);}
+.swatch .meta .hex{font-family:var(--ff-mono);font-size:11.5px;color:var(--ink);margin-top:2px;}
+@media(max-width:900px){.palette-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:520px){.palette-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* feature cards */
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.feat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 20px;transition:border-color .2s,transform .2s;}
+.feat-card:hover{border-color:var(--gold);transform:translateY(-3px);}
+.feat-card .ico{width:38px;height:38px;border-radius:10px;background:var(--gold-soft);color:var(--gold);display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:17px;}
+.feat-card h3{font-size:15.5px;margin-bottom:6px;}
+.feat-card p{font-size:13px;color:var(--muted);line-height:1.55;}
+@media(max-width:900px){.feat-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.feat-grid{grid-template-columns:1fr;}}
+
+/* steps */
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:0;max-width:560px;}
+.step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--border-soft);}
+.step:last-child{border-bottom:none;}
+.step .num{counter-increment:step;font-family:var(--ff-mono);font-size:13px;color:var(--gold);width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,204,0,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step .num::before{content:counter(step);}
+.step h4{font-size:14.5px;margin-bottom:3px;}
+.step p{font-size:13px;color:var(--muted);}
+
+/* toggle demo: night mood slider */
+.mood-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px 26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.mood-panel .label{font-family:var(--ff-mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.mood-track{position:relative;flex:1;min-width:200px;height:6px;border-radius:99px;background:linear-gradient(90deg,#1C1E2A,var(--gold-soft));}
+.mood-fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--gold);width:78%;transition:width .3s;}
+.mood-val{font-family:var(--ff-mono);font-size:12.5px;color:var(--gold);}
+
+/* footer */
+footer{padding:60px 0 40px;border-top:1px solid var(--border-soft);}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.foot-links{display:flex;gap:20px;font-size:13px;color:var(--muted);}
+.foot-links a:hover{color:var(--gold);}
+.cross-promo{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+.promo-card{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;display:flex;align-items:center;gap:12px;}
+.promo-card .sw{width:34px;height:34px;border-radius:9px;flex-shrink:0;}
+.promo-card .t{font-size:13.5px;font-weight:600;}
+.promo-card .d{font-size:11.5px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="moon"></div>
+
+<header class="site-header">
+  <div class="container">
+    <div class="brand"><span class="brand-mark">🖤</span> Dark Angel</div>
+    <nav class="nav-links">
+      <a href="#preview">Preview</a>
+      <a href="#palette">Palette</a>
+      <a href="#install">Install</a>
+    </nav>
+    <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=sp2736.dark-angel-by-sp" target="_blank" rel="noopener">Install Extension</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero container">
+    <span class="eyebrow">VS Code Theme · v1.2.2</span>
+    <h1>Code like it's <em>3AM</em>,<br>and it feels like poetry.</h1>
+    <p class="lede">A jet-black, minimal dark theme built for night-owls — subtle contrast, classy syntax highlighting, and zero visual noise between you and the logic.</p>
+    <p class="hero-quote">"For every sleepless night, every 3AM bug fix, and every line of code that felt like poetry — this is your dark sanctuary."</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://marketplace.visualstudio.com/items?itemName=sp2736.dark-angel-by-sp" target="_blank" rel="noopener">Get it on the Marketplace</a>
+      <a class="btn btn-ghost" href="https://github.com/Sp2736/dark-angel" target="_blank" rel="noopener">View source</a>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:26px;">
+      <span style="font-family:var(--ff-mono);font-size:12px;padding:6px 13px;background:var(--surface);border:1px solid var(--border);border-radius:99px;">JSON</span>
+      <span style="font-family:var(--ff-mono);font-size:12px;padding:6px 13px;background:var(--surface);border:1px solid var(--border);border-radius:99px;">VS Code Theme</span>
+      <span style="font-family:var(--ff-mono);font-size:12px;padding:6px 13px;background:var(--surface);border:1px solid var(--border);border-radius:99px;">UX Design</span>
+    </div>
+  </section>
+
+  <section class="section alt" id="preview">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Live look</span>
+        <h2>Exactly what your editor sees</h2>
+        <p class="sub">Every color below is pulled directly from the theme's real token rules — not a mockup approximation.</p>
+      </div>
+      <div class="editor-window">
+        <div class="editor-titlebar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="editor-filename">extension.ts — Dark Angel</span>
+        </div>
+        <div class="editor-body">
+          <div class="editor-gutter" id="gutter"></div>
+          <pre class="editor-code"><span class="tk-com">/**
+ * Activates the extension and registers the night-mode handler.
+ */</span>
+<span class="tk-key">export</span> <span class="tk-key">function</span> <span class="tk-fn">activate</span>(<span class="tk-var">context</span>: <span class="tk-type">ExtensionContext</span>) {
+  <span class="tk-key">const</span> <span class="tk-var">theme</span> = {
+    <span class="tk-var">background</span>: <span class="tk-str">"#0E0F1A"</span>,
+    <span class="tk-var">accent</span>:     <span class="tk-str">"#FFCC00"</span>,
+    <span class="tk-var">radius</span>:     <span class="tk-num">14</span>,
+  };
+  <span class="tk-fn">applyTheme</span>(<span class="tk-var">context</span>, <span class="tk-var">theme</span>);
+  <span class="tk-fn">console</span>.<span class="tk-fn">log</span>(<span class="tk-str">"Dark Angel active — welcome to the zone."</span>);
+}</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="palette">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Palette</span>
+        <h2>The full color system</h2>
+        <p class="sub">Core UI tones and syntax accents that make up the theme.</p>
+      </div>
+      <div class="palette-grid">
+        <div class="swatch"><div class="fill" style="background:#0E0F1A"></div><div class="meta"><div class="name">editor.background</div><div class="hex">#0E0F1A</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#1C1E2A"></div><div class="meta"><div class="name">activityBar</div><div class="hex">#1C1E2A</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#FFCC00"></div><div class="meta"><div class="name">cursor</div><div class="hex">#FFCC00</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#C586C0"></div><div class="meta"><div class="name">keyword</div><div class="hex">#C586C0</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#DCDCAA"></div><div class="meta"><div class="name">function</div><div class="hex">#DCDCAA</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#CE9178"></div><div class="meta"><div class="name">string</div><div class="hex">#CE9178</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#B5CEA8"></div><div class="meta"><div class="name">numeric</div><div class="hex">#B5CEA8</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#4EC9B0"></div><div class="meta"><div class="name">type / class</div><div class="hex">#4EC9B0</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#9CDCFE"></div><div class="meta"><div class="name">variable</div><div class="hex">#9CDCFE</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#5C6370"></div><div class="meta"><div class="name">comment</div><div class="hex">#5C6370</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#F44747"></div><div class="meta"><div class="name">invalid</div><div class="hex">#F44747</div></div></div>
+        <div class="swatch"><div class="fill" style="background:#EAEAEA"></div><div class="meta"><div class="name">foreground</div><div class="hex">#EAEAEA</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Why night-owls keep it</span>
+        <h2>Built for focus after dark</h2>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card"><div class="ico">◐</div><h3>Jet black canvas</h3><p>A near-true-black editor background with just enough contrast to keep structure readable.</p></div>
+        <div class="feat-card"><div class="ico">✦</div><h3>Classy highlighting</h3><p>Syntax colors chosen to be easy on the eyes without ever feeling flat or boring.</p></div>
+        <div class="feat-card"><div class="ico">☾</div><h3>Reduced eye strain</h3><p>Tuned for long, late sessions — no harsh whites, no fatiguing saturation.</p></div>
+        <div class="feat-card"><div class="ico">▣</div><h3>Zero distraction</h3><p>Just elegance, clarity, and code. Nothing fighting for your attention.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Try the mood</span>
+        <h2>How deep does it go?</h2>
+        <p class="sub">Drag to feel how contrast intensity shapes the late-night reading experience.</p>
+      </div>
+      <div class="mood-panel">
+        <span class="label">Focus</span>
+        <div class="mood-track"><div class="mood-fill" id="moodFill"></div></div>
+        <span class="label">Depth</span>
+        <span class="mood-val" id="moodVal">78% dark sanctuary</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="install">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Get started</span>
+        <h2>In the zone in five steps</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num"></div><div><h4>Open Visual Studio Code</h4></div></div>
+        <div class="step"><div class="num"></div><div><h4>Go to Extensions</h4><p>Press <code>Ctrl + Shift + X</code></p></div></div>
+        <div class="step"><div class="num"></div><div><h4>Search "Dark Angel"</h4></div></div>
+        <div class="step"><div class="num"></div><div><h4>Click Install</h4></div></div>
+        <div class="step"><div class="num"></div><div><h4>Click "Set Color Theme" when prompted</h4><p>That's it — you're in the zone.</p></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot-row">
+      <div class="brand"><span class="brand-mark">🖤</span> Dark Angel — by Swayam Patel</div>
+      <div class="foot-links">
+        <a href="https://github.com/Sp2736/dark-angel" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://marketplace.visualstudio.com/items?itemName=sp2736.dark-angel-by-sp" target="_blank" rel="noopener">Marketplace</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// starfield
+const starsEl = document.getElementById('stars');
+for(let i=0;i<70;i++){
+  const s = document.createElement('div');
+  s.className='star';
+  const size = Math.random()*2+0.6;
+  s.style.width=size+'px'; s.style.height=size+'px';
+  s.style.top=Math.random()*70+'%';
+  s.style.left=Math.random()*100+'%';
+  s.style.animationDelay=(Math.random()*4)+'s';
+  s.style.animationDuration=(3+Math.random()*3)+'s';
+  starsEl.appendChild(s);
+}
+// gutter numbers
+const gutter=document.getElementById('gutter');
+const codeLines = document.querySelector('.editor-code').textContent.split('\n').length;
+gutter.innerHTML = Array.from({length:codeLines},(_,i)=>i+1).join('<br>');
+
+// mood slider drag
+const track=document.querySelector('.mood-track');
+const fill=document.getElementById('moodFill');
+const val=document.getElementById('moodVal');
+function setMood(pct){
+  pct=Math.max(15,Math.min(100,pct));
+  fill.style.width=pct+'%';
+  val.textContent=Math.round(pct)+'% dark sanctuary';
+}
+let dragging=false;
+track.addEventListener('pointerdown',e=>{dragging=true;updateFromEvent(e);});
+window.addEventListener('pointermove',e=>{if(dragging)updateFromEvent(e);});
+window.addEventListener('pointerup',()=>dragging=false);
+function updateFromEvent(e){
+  const rect=track.getBoundingClientRect();
+  const pct=((e.clientX-rect.left)/rect.width)*100;
+  setMood(pct);
+}
+</script>
+</body>
+</html>

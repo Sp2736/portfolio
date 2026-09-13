@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DealFlow360 — System Architecture & SRS</title>
+<style>
+:root{
+  --background:#F4F3EF; --surface:#FFFFFF; --surface-muted:#ECEBE6;
+  --fg:#171717; --fg-muted:#666666; --border:#1C1C1C; --border-subtle:#D6D4CD;
+  --inverse:#171717; --inverse-text:#FFFFFF;
+  --success-bg:#E8F5EC; --success-text:#166534; --success-border:#166534;
+  --warn-bg:#FFF4D6; --warn-text:#92400E; --warn-border:#B45309;
+  --danger-bg:#FDECEC; --danger-text:#991B1B; --danger-border:#B91C1C;
+  --info-bg:#EAF1FF; --info-text:#1E40AF; --info-border:#1D4ED8;
+  --primary:#1D4ED8; --primary-dark:#1E3A8A; --primary-light:#EAF1FF;
+  --signal:#F2C94C;
+  --shadow: 4px 4px 0 var(--border);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--background); color:var(--fg);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif; line-height:1.55;
+}
+h1,h2,h3,h4{font-weight:800; letter-spacing:-0.02em; margin:0 0 .4em;}
+code, .mono{font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;}
+a{color:var(--primary);}
+.wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+.brutal-box{background:var(--surface); border:2px solid var(--border); box-shadow:var(--shadow);}
+.tag{display:inline-block; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.06em;
+  padding:3px 9px; border:2px solid var(--border); background:var(--surface); box-shadow:2px 2px 0 var(--border); margin:2px 4px 2px 0;}
+.tag.blue{background:var(--info-bg); color:var(--info-text); border-color:var(--info-border);}
+.tag.yellow{background:var(--signal); color:var(--fg);}
+.tag.green{background:var(--success-bg); color:var(--success-text); border-color:var(--success-border);}
+.tag.pink{background:#FCE7F3; color:#9D174D; border-color:#BE185D;}
+
+/* NAV */
+.topnav{position:sticky; top:0; z-index:50; background:var(--inverse); color:var(--inverse-text); border-bottom:3px solid var(--border);}
+.topnav .wrap{display:flex; align-items:center; justify-content:space-between; padding:12px 24px; flex-wrap:wrap; gap:8px;}
+.topnav .brand{font-weight:900; font-size:18px;}
+.topnav .brand span{color:var(--signal);}
+.topnav nav{display:flex; gap:2px; flex-wrap:wrap;}
+.topnav nav a{color:var(--inverse-text); text-decoration:none; font-size:13px; font-weight:700; padding:8px 10px; border-radius:2px;}
+.topnav nav a:hover{background:rgba(255,255,255,.12);}
+
+/* HERO */
+.hero{padding:64px 0 48px; border-bottom:3px solid var(--border); background:
+  radial-gradient(circle at 85% 20%, rgba(242,201,76,.35), transparent 40%),
+  radial-gradient(circle at 10% 80%, rgba(29,78,216,.12), transparent 45%), var(--background);}
+.hero .eyebrow{font-weight:800; text-transform:uppercase; letter-spacing:.12em; font-size:12px; color:var(--primary);}
+.hero h1{font-size:clamp(36px,5.5vw,58px); margin:10px 0 14px;}
+.hero p.lead{font-size:18px; color:var(--fg-muted); max-width:720px;}
+.hero-badges{margin-top:18px;}
+.hero-cta{margin-top:26px; display:flex; gap:12px; flex-wrap:wrap;}
+.btn{display:inline-block; padding:12px 20px; font-weight:800; border:2px solid var(--border); text-decoration:none; box-shadow:3px 3px 0 var(--border); transition:transform .1s;}
+.btn:hover{transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--border);}
+.btn.primary{background:var(--primary); color:#fff;}
+.btn.ghost{background:var(--surface); color:var(--fg);}
+
+section{padding:56px 0; border-bottom:3px solid var(--border);}
+section:last-of-type{border-bottom:none;}
+.section-head{margin-bottom:28px;}
+.section-head .num{font-family:monospace; font-weight:800; color:var(--fg-muted); font-size:13px;}
+.section-head h2{font-size:30px;}
+.section-head p{color:var(--fg-muted); max-width:760px; margin-top:6px;}
+
+/* GRID */
+.grid{display:grid; gap:18px;}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.grid.cols-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:900px){.grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:640px){.grid.cols-3,.grid.cols-4,.grid.cols-2{grid-template-columns:1fr;} }
+
+.card{padding:20px; background:var(--surface); border:2px solid var(--border); box-shadow:var(--shadow);}
+.card h3{font-size:16px; display:flex; align-items:center; gap:8px;}
+.card p{color:var(--fg-muted); font-size:14px; margin:8px 0 0;}
+.card .icon{width:34px; height:34px; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:17px; background:var(--surface-muted); flex-shrink:0;}
+
+/* ARCH DIAGRAM */
+.arch-diagram{overflow-x:auto; padding:10px 0;}
+.arch-diagram svg{display:block; min-width:920px;}
+.arch-legend{display:flex; gap:16px; flex-wrap:wrap; margin-top:14px; font-size:12px; color:var(--fg-muted);}
+.arch-legend span{display:inline-flex; align-items:center; gap:6px;}
+.legend-swatch{width:12px; height:12px; border:2px solid var(--border); display:inline-block;}
+
+/* MODULE TABS */
+.tabs{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px;}
+.tab-btn{padding:9px 14px; font-weight:700; font-size:13px; border:2px solid var(--border); background:var(--surface); cursor:pointer; box-shadow:2px 2px 0 var(--border);}
+.tab-btn.active{background:var(--fg); color:#fff;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.engine-row{display:flex; gap:16px; padding:14px 0; border-bottom:1px solid var(--border-subtle);}
+.engine-row:last-child{border-bottom:none;}
+.engine-num{font-family:monospace; font-weight:800; color:var(--primary); min-width:34px;}
+.engine-row h4{font-size:15px; margin-bottom:4px;}
+.engine-row p{margin:0; font-size:13.5px; color:var(--fg-muted);}
+
+/* API TABLE */
+.api-filter{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px;}
+table.api-table{width:100%; border-collapse:collapse; font-size:13px;}
+table.api-table th{text-align:left; background:var(--fg); color:#fff; padding:9px 10px; font-size:11px; text-transform:uppercase; letter-spacing:.05em;}
+table.api-table td{padding:9px 10px; border-bottom:1px solid var(--border-subtle); vertical-align:top;}
+table.api-table tr:hover td{background:var(--surface-muted);}
+.method{font-weight:800; padding:2px 7px; border:1.5px solid var(--border); font-size:11px; display:inline-block;}
+.method.GET{background:var(--info-bg); color:var(--info-text);}
+.method.POST{background:var(--success-bg); color:var(--success-text);}
+.method.PATCH{background:var(--warn-bg); color:var(--warn-text);}
+.method.PUT{background:var(--warn-bg); color:var(--warn-text);}
+.method.DELETE{background:var(--danger-bg); color:var(--danger-text);}
+.api-path{font-family:monospace; font-size:12.5px;}
+
+/* TECH STACK */
+.stack-col h4{font-size:13px; text-transform:uppercase; letter-spacing:.05em; color:var(--fg-muted); margin-bottom:10px;}
+.stack-item{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-subtle); font-size:14px;}
+.stack-item:last-child{border-bottom:none;}
+.stack-item b{font-weight:700;}
+.stack-item span{color:var(--fg-muted); font-size:12.5px;}
+
+/* DATA MODEL */
+.model-chip{display:inline-block; margin:3px; padding:6px 11px; background:var(--surface-muted); border:1.5px solid var(--border); font-family:monospace; font-size:12.5px; font-weight:700;}
+
+/* CONTRIBUTORS */
+.contrib-card{padding:22px;}
+.contrib-head{display:flex; align-items:center; gap:14px; margin-bottom:14px;}
+.avatar{width:52px; height:52px; border:2px solid var(--border); background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:20px; flex-shrink:0;}
+.contrib-stats{display:flex; gap:14px; margin:14px 0; font-size:13px;}
+.contrib-stats div{flex:1; text-align:center; background:var(--surface-muted); border:1.5px solid var(--border); padding:8px 4px;}
+.contrib-stats b{display:block; font-size:18px;}
+.contrib-list{font-size:13px; color:var(--fg-muted); margin:0; padding-left:18px;}
+.contrib-list li{margin-bottom:4px;}
+.commit-bar{height:8px; background:var(--surface-muted); border:1.5px solid var(--border); overflow:hidden; margin:10px 0;}
+.commit-bar-fill{height:100%; background:var(--primary);}
+
+/* TIMELINE */
+.timeline{position:relative; padding-left:26px; border-left:3px solid var(--border); margin-left:6px;}
+.tl-item{position:relative; margin-bottom:22px;}
+.tl-item::before{content:''; position:absolute; left:-32.5px; top:3px; width:12px; height:12px; background:var(--signal); border:2px solid var(--border); border-radius:50%;}
+.tl-date{font-family:monospace; font-size:12px; color:var(--fg-muted); font-weight:700;}
+.tl-item h4{font-size:14.5px; margin:2px 0 3px;}
+.tl-item p{margin:0; font-size:13px; color:var(--fg-muted);}
+
+/* PREVIEW / MOCKUP */
+.preview-shell{border:2px solid var(--border); box-shadow:var(--shadow); background:var(--surface); overflow:hidden;}
+.preview-chrome{background:var(--fg); color:#fff; padding:8px 12px; display:flex; align-items:center; gap:8px; font-size:12px;}
+.preview-chrome .dot{width:10px; height:10px; border-radius:50%; background:#666;}
+.preview-tabs{display:flex; border-bottom:2px solid var(--border); background:var(--surface-muted);}
+.preview-tabs button{flex:1; padding:11px 6px; border:none; background:none; font-weight:700; font-size:12.5px; cursor:pointer; border-right:1px solid var(--border-subtle); color:var(--fg-muted);}
+.preview-tabs button.active{background:var(--surface); color:var(--fg); border-bottom:3px solid var(--primary); margin-bottom:-2px;}
+.preview-body{padding:22px; min-height:360px;}
+.pv-panel{display:none;}
+.pv-panel.active{display:block;}
+.kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px;}
+.kpi{padding:14px; background:var(--surface-muted); border:1.5px solid var(--border);}
+.kpi b{font-size:22px; display:block;}
+.kpi span{font-size:11.5px; color:var(--fg-muted); text-transform:uppercase; letter-spacing:.04em;}
+.mini-table{width:100%; border-collapse:collapse; font-size:12.5px;}
+.mini-table th{text-align:left; padding:7px 8px; border-bottom:2px solid var(--border); color:var(--fg-muted); font-size:11px; text-transform:uppercase;}
+.mini-table td{padding:8px 8px; border-bottom:1px solid var(--border-subtle);}
+.pill{font-size:10.5px; font-weight:800; padding:2px 8px; border:1.5px solid; display:inline-block;}
+.pill.ok{background:var(--success-bg); color:var(--success-text); border-color:var(--success-border);}
+.pill.warn{background:var(--warn-bg); color:var(--warn-text); border-color:var(--warn-border);}
+.pill.bad{background:var(--danger-bg); color:var(--danger-text); border-color:var(--danger-border);}
+.pill.info{background:var(--info-bg); color:var(--info-text); border-color:var(--info-border);}
+.health-bar{width:70px; height:7px; background:#eee; border:1px solid var(--border); display:inline-block; overflow:hidden; vertical-align:middle; margin-right:6px;}
+.health-fill{height:100%;}
+.chat-bubble{max-width:70%; padding:9px 13px; border:1.5px solid var(--border); font-size:13px; margin-bottom:10px;}
+.chat-bubble.them{background:var(--surface-muted);}
+.chat-bubble.me{background:var(--primary-light); margin-left:auto;}
+
+footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;}
+.back-to-top{position:fixed; bottom:22px; right:22px; width:42px; height:42px; background:var(--fg); color:#fff; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:3px 3px 0 var(--border); font-weight:900; z-index:60;}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="wrap">
+    <div class="brand">DealFlow<span>360</span> <span style="font-weight:400;font-size:11px;opacity:.7;">/ SRS &amp; Architecture</span></div>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#dataflow">Data Flow</a>
+      <a href="#modules">Modules</a>
+      <a href="#api">APIs</a>
+      <a href="#stack">Tech Stack</a>
+      <a href="#data-model">Data Model</a>
+      <a href="#contributors">Contributors</a>
+      <a href="#preview">Live Preview</a>
+    </nav>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Team 488 · Hackathon Build · Software Requirements &amp; Architecture Dossier</div>
+    <h1>DealFlow360</h1>
+    <p class="lead">An AI-assisted, neo-brutalist B2B Deal &amp; Quotation Management platform — pricing, discount governance, risk-scored approvals, warehouse-aware fulfillment, hybrid billing, live negotiation and deal-health monitoring, unified in one Next.js modular monolith.</p>
+    <div class="hero-badges">
+      <span class="tag blue">Next.js 16 · App Router</span>
+      <span class="tag">TypeScript</span>
+      <span class="tag">Prisma + PostgreSQL</span>
+      <span class="tag yellow">Neo-Brutalist UI</span>
+      <span class="tag green">12 Business Engines</span>
+      <span class="tag pink">3 Contributors</span>
+    </div>
+    <div class="hero-cta">
+      <a class="btn primary" href="#architecture">Explore Architecture ↓</a>
+      <a class="btn ghost" href="https://github.com/Sp2736/team-488-dealflow360" target="_blank" rel="noopener">View Repository ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">01 / Project Overview</div>
+      <h2>What DealFlow360 does</h2>
+      <p>Three access surfaces — Admin, Sales/Agent, and a dedicated Customer Portal — replace fragmented spreadsheets and quote tools with one system that enforces real business rules in application logic, not the UI.</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="card"><h3><span class="icon">🛠</span>Admin Dashboard</h3><p>Configure discount ceilings, upsell rules, warehouse inventory, approval thresholds and subscription plans.</p></div>
+      <div class="card"><h3><span class="icon">📊</span>Sales / Agent Dashboard</h3><p>Build quotes, track deal health, evaluate risk, manage orders, invoices, fulfillment and reports.</p></div>
+      <div class="card"><h3><span class="icon">🤝</span>Customer Portal</h3><p>Secure, token-based portal where clients review quotes, counter-negotiate, confirm orders and manage their profile — with a deliberately restricted data shape (no margin/risk leakage).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">02 / System Architecture</div>
+      <h2>Modular monolith on Next.js</h2>
+      <p>A single Next.js deployment serves the UI, the API route handlers, and — critically — a dedicated <b>Engine Layer</b> that owns all business logic, kept separate from both the transport layer (routes) and the persistence layer (services + Prisma).</p>
+    </div>
+    <div class="brutal-box" style="padding:22px;">
+      <div class="arch-diagram">
+        <svg viewBox="0 0 1100 560" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, sans-serif">
+          <!-- Clients -->
+          <rect x="30" y="20" width="200" height="56" fill="#EAF1FF" stroke="#1C1C1C" stroke-width="2"/>
+          <text x="130" y="44" text-anchor="middle" font-size="13" font-weight="700">Sales / Admin UI</text>
+          <text x="130" y="60" text-anchor="middle" font-size="10" fill="#666">React 19 dashboard</text>
+
+          <rect x="870" y="20" width="200" height="56" fill="#EAF1FF" stroke="#1C1C1C" stroke-width="2"/>
+          <text x="970" y="44" text-anchor="middle" font-size="13" font-weight="700">Customer Portal</text>
+          <text x="970" y="60" text-anchor="middle" font-size="10" fill="#666">Token-based, restricted shape</text>
+
+          <!-- Middleware -->
+          <rect x="420" y="100" width="260" height="46" fill="#F2C94C" stroke="#1C1C1C" stroke-width="2"/>
+          <text x="550" y="128" text-anchor="middle" font-size="12.5" font-weight="800">Middleware · RBAC + JWT session</text>
+
+          <!-- Route handlers -->
+          <rect x="330" y="180" width="440" height="52" fill="#171717" stroke="#1C1C1C" stroke-width="2"/>
+          <text x="550" y="211" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Next.js API Route Handlers (src/app/api/**)</text>
+
+          <!-- Service layer -->
+          <rect x="90" y="270" width="920" height="56" fill="#FFFFFF" stroke="#1C1C1C" stroke-width="2"/>
+          <text x="550" y="294" text-anchor="middle" font-size="12.5" font-weight="800">Service Layer — src/lib/services/*  (approval · audit · billing · deal-health · fulfillment · negotiation · quote · upsell)</text>
+          <text x="550" y="312" text-anchor="middle" font-size="10.5" fill="#666">DB reads/writes, orchestration, transactional boundaries</text>
+
+          <!-- Engine layer -->
+          <rect x="90" y="356" width="920" height="86" fill="#EAF1FF" stroke="#1D4ED8" stroke-width="2.5"/>
+          <text x="550" y="378" text-anchor="middle" font-size="12.5" font-weight="800" fill="#1E3A8A">Engine Layer (pure functions) — src/lib/engines/*</text>
+          <text x="550" y="398" text-anchor="middle" font-size="10.5" fill="#1E3A8A">Pricing · Discount · Margin · Risk · Approval · Fulfillment · Billing · Upsell · Negotiation · Deal Health</text>
+          <text x="550" y="416" text-anchor="middle" font-size="10.5" fill="#1E3A8A">→ AI Explanation Layer sits on top, translating engine output to natural language (never decides)</text>
+
+          <!-- DB + AI -->
+          <rect x="150" y="480" width="300" height="58" fill="#ECEBE6" stroke="#1C1C1C" stroke-width="2"/>
+          <text x="300" y="504" text-anchor="middle" font-size="12.5" font-weight="700">PostgreSQL via Prisma ORM</text>
+          <text x="300" y="522" text-anchor="middle" font-size="10.5" fill="#666">32 models · migrations · seed scripts</text>
+
+          <rect x="650" y="480" width="300" height="58" fill="#FCE7F3" stroke="#BE185D" stroke-width="2"/>
+          <text x="800" y="504" text-anchor="middle" font-size="12.5" font-weight="700" fill="#9D174D">Groq LLM API</text>
+          <text x="800" y="522" text-anchor="middle" font-size="10.5" fill="#9D174D">AI Copilot + AI Explanation Engine</text>
+
+          <!-- arrows -->
+          <g stroke="#1C1C1C" stroke-width="2" fill="none" marker-end="url(#arrow)">
+            <path d="M130,76 L400,100"/>
+            <path d="M970,76 L700,100"/>
+            <path d="M550,146 L550,180"/>
+            <path d="M550,232 L550,270"/>
+            <path d="M550,326 L550,356"/>
+            <path d="M300,442 L300,480"/>
+            <path d="M800,442 L800,480"/>
+          </g>
+          <defs>
+            <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="#1C1C1C"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+      <div class="arch-legend">
+        <span><i class="legend-swatch" style="background:#EAF1FF;"></i>Presentation</span>
+        <span><i class="legend-swatch" style="background:#F2C94C;"></i>Auth / Middleware</span>
+        <span><i class="legend-swatch" style="background:#171717;"></i>Transport (routes)</span>
+        <span><i class="legend-swatch" style="background:#fff;"></i>Service layer</span>
+        <span><i class="legend-swatch" style="background:#EAF1FF;border-color:#1D4ED8;"></i>Engine layer (business rules)</span>
+        <span><i class="legend-swatch" style="background:#ECEBE6;"></i>Persistence</span>
+        <span><i class="legend-swatch" style="background:#FCE7F3;border-color:#BE185D;"></i>External AI</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h3>🧭 The one architectural rule the codebase enforces</h3>
+      <p style="margin-top:10px;"><b>Route handlers never contain business logic.</b> Every route delegates to a service, which delegates to one or more pure-function engines. This keeps <code>pricing</code>, <code>discount</code>, <code>margin</code>, <code>risk</code>, and <code>approval</code> calculations unit-testable in isolation and guarantees the customer-portal negotiation flow runs through the <i>exact same</i> pipeline as internal quotes — no "simplified portal version" of the math exists.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATA FLOW -->
+<section id="dataflow" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">03 / Data Flow</div>
+      <h2>Quote lifecycle, end to end</h2>
+      <p>The canonical path a quotation travels — from draft to cash — touching every engine in sequence.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">STEP 1</div><h4>Draft &amp; Price</h4><p>Sales rep builds a multi-line quote. <b>Pricing Engine</b> resolves server-side base price × qty + tax per line (client-supplied unit price is never trusted).</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 2</div><h4>Discount &amp; Margin Check</h4><p><b>Discount Engine</b> resolves the binding ceiling (tier vs. category, whichever is lower) per line. <b>Margin Engine</b> computes margin against revenue (not cost) per line and blended for the quote.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 3</div><h4>Risk Scoring</h4><p><b>Risk Engine</b> blends revenue-weighted discount violations, thin-margin flags (&lt;15%), and multi-warehouse fulfillment risk into a LOW → CRITICAL band.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 4</div><h4>Approval Routing</h4><p><b>Approval Engine</b> maps risk band to a sequential approval chain (Sales Manager → Finance for HIGH/CRITICAL), with a hard-violation floor that closes the "dilute one bad line across many good lines" loophole.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 5</div><h4>Customer Negotiation</h4><p>Quote is shared via a tokenized portal link. Customer counter-offers re-enter the <i>identical</i> pricing → discount → margin → risk → approval pipeline. Portal responses strip margin, risk score and approval reasoning before leaving the server.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 6</div><h4>Confirmation → Order</h4><p>Quote confirmation auto-creates an <b>Order</b>. <b>Fulfillment Engine</b> greedily allocates stock across warehouses (largest-available-first), recording backorders explicitly rather than silently under-filling.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 7</div><h4>Billing &amp; Invoicing</h4><p><b>Billing Engine</b> splits order lines into ONE_TIME (single invoice) vs. RECURRING (subscription + billing schedule with proration on plan/quantity changes). Invoices move DRAFT → ISSUED → PAID.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 8</div><h4>Deal Health &amp; Upsell (continuous)</h4><p><b>Deal Health Engine</b> scores stall risk, discount anomalies, approval delays and negotiation churn over the deal's lifetime. <b>Upsell Engine</b> ranks co-purchase candidates, hard-filtering anything below a 15% margin floor. <b>AI Explanation Layer</b> narrates all of the above in plain English — it never decides anything itself.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES / ENGINES -->
+<section id="modules">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">04 / Supported Modules &amp; Features</div>
+      <h2>12 business engines, one contract each</h2>
+      <p>Every engine is a pure function: same input → same output, independently testable, no side effects. Click a tab to inspect a group.</p>
+    </div>
+    <div class="tabs" id="engineTabs">
+      <button class="tab-btn active" data-tab="t1">Pricing &amp; Discount</button>
+      <button class="tab-btn" data-tab="t2">Risk &amp; Approval</button>
+      <button class="tab-btn" data-tab="t3">Fulfillment &amp; Billing</button>
+      <button class="tab-btn" data-tab="t4">Negotiation, Health &amp; AI</button>
+    </div>
+    <div class="brutal-box" style="padding:22px;">
+      <div class="tab-panel active" id="t1">
+        <div class="engine-row"><div class="engine-num">01</div><div><h4>Pricing Engine</h4><p>Resolves subtotal, tax amount and line subtotal server-side per line. Client-supplied prices are never trusted — base price always comes from the product/price-list record.</p></div></div>
+        <div class="engine-row"><div class="engine-num">02</div><div><h4>Discount Engine</h4><p>Computes the binding discount ceiling per line — minimum of customer-tier ceiling and product-category ceiling — and records overage independently per line rather than collapsing to a worst-case.</p></div></div>
+        <div class="engine-row"><div class="engine-num">03</div><div><h4>Margin Engine</h4><p>Margin is always calculated against revenue, not cost. Supports negative margins (deceptively thin/undercut lines) and blended quote-level margin across multiple lines.</p></div></div>
+      </div>
+      <div class="tab-panel" id="t2">
+        <div class="engine-row"><div class="engine-num">04</div><div><h4>Risk Engine</h4><p>Additive scoring: revenue-weighted discount violations + thin-margin flag (&lt;15%) + inventory/warehouse-split risk. Produces LOW / MEDIUM / HIGH / CRITICAL bands.</p></div></div>
+        <div class="engine-row"><div class="engine-num">05</div><div><h4>Approval Engine</h4><p>LOW needs no approval; MEDIUM needs Sales Manager; HIGH/CRITICAL need Sales Manager then Finance, sequentially. A hard-violation floor forces at least Sales Manager approval if any single line breaches its ceiling by &gt;5%, even if the blended score looks fine.</p></div></div>
+      </div>
+      <div class="tab-panel" id="t3">
+        <div class="engine-row"><div class="engine-num">06</div><div><h4>Fulfillment / Warehouse Allocation Engine</h4><p>Deterministic greedy allocator: sorts warehouses by available stock descending and fills from the largest first, minimizing shipment count. Remaining unmet demand is recorded as an explicit backorder.</p></div></div>
+        <div class="engine-row"><div class="engine-num">07</div><div><h4>Billing Engine</h4><p>Splits order lines into ONE_TIME vs RECURRING. Recurring lines spin up a Subscription + BillingSchedule. Mid-cycle quantity/plan changes are prorated using a daily-rate formula against the current partial period only.</p></div></div>
+        <div class="engine-row"><div class="engine-num">08</div><div><h4>Upsell / Cross-Sell Engine</h4><p>Ranks candidates by <code>0.6×co-purchase frequency + 0.25×promotion bonus + 0.15×margin delta</code>, with a non-negotiable pre-filter excluding anything under a 15% margin floor — framed to reps as "customers who bought X also bought Y".</p></div></div>
+      </div>
+      <div class="tab-panel" id="t4">
+        <div class="engine-row"><div class="engine-num">09</div><div><h4>Negotiation Engine</h4><p>Customer counter-offers run through the exact same pricing→discount→margin→risk→approval pipeline as internal quotes. Portal responses are network-level restricted — no margin, internal risk score, or approval reasoning ever leaves the server for DRAFT/PENDING_APPROVAL/UNDER_NEGOTIATION quotes.</p></div></div>
+        <div class="engine-row"><div class="engine-num">10</div><div><h4>Deal Health Engine</h4><p>A separate, time-aware score from Risk: stall/inactivity (+5/7-day block, max 20), discount anomaly vs. rep average (+8), approval delay &gt;24h (+10), multi-warehouse/slipped delivery (+10/+15), negotiation churn beyond the 3rd counter (+5/counter, max 20).</p></div></div>
+        <div class="engine-row"><div class="engine-num">11</div><div><h4>Audit &amp; Alerts</h4><p>Every state transition (approvals, negotiations, fulfillment overrides) is written to an immutable AuditLog, surfaced as in-app Notifications and Alerts.</p></div></div>
+        <div class="engine-row"><div class="engine-num">12</div><div><h4>AI Explanation Layer</h4><p>Sits above every other engine and only translates already-computed structured facts into natural language via the Groq API, with a deterministic sentence-builder fallback if the AI call fails, times out, or returns malformed output — never a single point of failure for the demo.</p></div></div>
+      </div>
+    </div>
+
+    <div class="grid cols-4" style="margin-top:22px;">
+      <div class="card"><h3>🔐 Auth &amp; RBAC</h3><p>JWT sessions, bcrypt hashing, role-based access control, per-route rate limiting, tokenized customer invites &amp; onboarding.</p></div>
+      <div class="card"><h3>📦 Product Catalog</h3><p>Categories, products, variants (SKU generation), price lists &amp; price-list items, bulk product actions.</p></div>
+      <div class="card"><h3>📈 Analytics &amp; Reports</h3><p>Dashboard summaries, filterable reports, PDF export (pdfkit) and XLS export (exceljs) with bulk invoice actions.</p></div>
+      <div class="card"><h3>🏬 Warehouses &amp; Inventory</h3><p>Multi-warehouse inventory records, bulk allocation, manual fulfillment overrides per order.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- API -->
+<section id="api" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">05 / APIs</div>
+      <h2>55 Next.js Route Handlers</h2>
+      <p>All endpoints live under <code>src/app/api/**</code> as colocated <code>route.ts</code> files, grouped below by domain. Filter by module.</p>
+    </div>
+    <div class="brutal-box" style="padding:22px;">
+      <div class="api-filter" id="apiFilter">
+        <button class="tab-btn active" data-f="all">All (55)</button>
+        <button class="tab-btn" data-f="auth">Auth</button>
+        <button class="tab-btn" data-f="quotes">Quotes</button>
+        <button class="tab-btn" data-f="admin">Admin</button>
+        <button class="tab-btn" data-f="orders">Orders / Fulfillment</button>
+        <button class="tab-btn" data-f="billing">Billing / Invoices</button>
+        <button class="tab-btn" data-f="portal">Portal</button>
+        <button class="tab-btn" data-f="other">Products / Reports / Misc</button>
+      </div>
+      <div style="max-height:480px; overflow:auto;">
+      <table class="api-table" id="apiTable">
+        <thead><tr><th style="width:70px;">Method</th><th>Endpoint</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr data-g="auth"><td><span class="method POST">POST</span></td><td class="api-path">/api/auth/login</td><td>Authenticate user, issue JWT session</td></tr>
+          <tr data-g="auth"><td><span class="method POST">POST</span></td><td class="api-path">/api/auth/register</td><td>Register a new account</td></tr>
+          <tr data-g="auth"><td><span class="method POST">POST</span></td><td class="api-path">/api/auth/logout</td><td>Invalidate current session</td></tr>
+          <tr data-g="auth"><td><span class="method GET">GET</span></td><td class="api-path">/api/auth/me</td><td>Fetch current session user</td></tr>
+          <tr data-g="quotes"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/quotes</td><td>List / create quotes</td></tr>
+          <tr data-g="quotes"><td><span class="method GET">GET</span>/<span class="method PATCH">PATCH</span></td><td class="api-path">/api/quotes/[id]</td><td>Fetch / update a quote</td></tr>
+          <tr data-g="quotes"><td><span class="method POST">POST</span></td><td class="api-path">/api/quotes/[id]/evaluate</td><td>Run pricing → discount → margin → risk pipeline</td></tr>
+          <tr data-g="quotes"><td><span class="method POST">POST</span></td><td class="api-path">/api/quotes/[id]/submit</td><td>Submit quote for approval</td></tr>
+          <tr data-g="quotes"><td><span class="method POST">POST</span></td><td class="api-path">/api/quotes/[id]/confirm</td><td>Confirm quote → auto-create order</td></tr>
+          <tr data-g="quotes"><td><span class="method POST">POST</span></td><td class="api-path">/api/quotes/[id]/negotiate</td><td>Process a counter-offer through the negotiation engine</td></tr>
+          <tr data-g="quotes"><td><span class="method POST">POST</span></td><td class="api-path">/api/quotes/[id]/upsell</td><td>Get ranked upsell suggestions for a quote</td></tr>
+          <tr data-g="quotes"><td><span class="method GET">GET</span></td><td class="api-path">/api/quotes/[id]/audit</td><td>Full audit trail for a quote</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/admin/discount-rules(/[id])</td><td>CRUD discount-ceiling rules</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/admin/approval-rules(/[id])</td><td>CRUD approval thresholds</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/admin/upsell-rules(/[id])</td><td>CRUD upsell / co-purchase rules</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span></td><td class="api-path">/api/analytics</td><td>Aggregate dashboard metrics</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span></td><td class="api-path">/api/deal-health</td><td>Deal-health scores across active deals</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/approvals(/[id])</td><td>List / act on pending approval requests</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/users</td><td>User management</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span></td><td class="api-path">/api/customers/[id]/discount-ceiling</td><td>Resolve effective discount ceiling for a customer</td></tr>
+          <tr data-g="admin"><td><span class="method POST">POST</span></td><td class="api-path">/api/customers/[id]/invite</td><td>Send secure customer-portal invite</td></tr>
+          <tr data-g="admin"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/customers</td><td>List / create customers</td></tr>
+          <tr data-g="orders"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/orders(/[id])</td><td>List / fetch orders</td></tr>
+          <tr data-g="orders"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/orders/[id]/fulfillment</td><td>Fulfillment status for an order</td></tr>
+          <tr data-g="orders"><td><span class="method POST">POST</span></td><td class="api-path">/api/orders/[id]/fulfillment/override</td><td>Manually override warehouse allocation</td></tr>
+          <tr data-g="orders"><td><span class="method POST">POST</span></td><td class="api-path">/api/fulfillment/bulk-allocate</td><td>Bulk-run the greedy allocator</td></tr>
+          <tr data-g="orders"><td><span class="method GET">GET</span></td><td class="api-path">/api/fulfillment</td><td>Fulfillment queue overview</td></tr>
+          <tr data-g="orders"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/warehouses(/[id])</td><td>CRUD warehouses</td></tr>
+          <tr data-g="orders"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/warehouses/[id]/inventory</td><td>Manage per-warehouse stock</td></tr>
+          <tr data-g="billing"><td><span class="method GET">GET</span></td><td class="api-path">/api/billing</td><td>Billing schedules overview</td></tr>
+          <tr data-g="billing"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/invoices(/[invoiceId])</td><td>List / fetch invoices</td></tr>
+          <tr data-g="billing"><td><span class="method POST">POST</span></td><td class="api-path">/api/invoices/bulk</td><td>Bulk invoice actions</td></tr>
+          <tr data-g="billing"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/subscriptions(/[id])</td><td>List / manage subscriptions</td></tr>
+          <tr data-g="billing"><td><span class="method POST">POST</span></td><td class="api-path">/api/subscriptions/[id]/cancel</td><td>Cancel + prorate a subscription</td></tr>
+          <tr data-g="billing"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/subscriptions/plans</td><td>List / create subscription plans</td></tr>
+          <tr data-g="portal"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/portal/quote, /api/portal/quotes(/[token])</td><td>Customer-facing restricted quote views</td></tr>
+          <tr data-g="portal"><td><span class="method POST">POST</span></td><td class="api-path">/api/portal/quotes/[token]/confirm</td><td>Customer confirms a quote</td></tr>
+          <tr data-g="portal"><td><span class="method GET">GET</span>/<span class="method PATCH">PATCH</span></td><td class="api-path">/api/portal/profile</td><td>Customer profile self-service</td></tr>
+          <tr data-g="portal"><td><span class="method PATCH">PATCH</span></td><td class="api-path">/api/portal/profile/password</td><td>Customer password update</td></tr>
+          <tr data-g="portal"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/onboard/[token]</td><td>Token-based customer onboarding</td></tr>
+          <tr data-g="other"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/products(/[id]), /api/products/bulk</td><td>Product CRUD + bulk actions</td></tr>
+          <tr data-g="other"><td><span class="method GET">GET</span>/<span class="method POST">POST</span></td><td class="api-path">/api/products/[id]/variants(/[variantId])</td><td>Product variant CRUD, SKU generation</td></tr>
+          <tr data-g="other"><td><span class="method GET">GET</span></td><td class="api-path">/api/price-lists</td><td>Price list &amp; item lookups</td></tr>
+          <tr data-g="other"><td><span class="method GET">GET</span></td><td class="api-path">/api/reports/summary</td><td>Filtered report data</td></tr>
+          <tr data-g="other"><td><span class="method GET">GET</span></td><td class="api-path">/api/reports/export/pdf</td><td>PDF export (pdfkit)</td></tr>
+          <tr data-g="other"><td><span class="method GET">GET</span></td><td class="api-path">/api/reports/export/xls</td><td>Excel export (exceljs)</td></tr>
+          <tr data-g="other"><td><span class="method POST">POST</span></td><td class="api-path">/api/ai/explain</td><td>AI Explanation Layer → Groq API call with deterministic fallback</td></tr>
+          <tr data-g="other"><td><span class="method GET">GET</span></td><td class="api-path">/api/debug</td><td>Internal diagnostics endpoint</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">06 / Tech Stack &amp; Tooling</div>
+      <h2>What it's built with</h2>
+    </div>
+    <div class="grid cols-3">
+      <div class="brutal-box" style="padding:20px;" class="stack-col">
+        <h4>Frontend</h4>
+        <div class="stack-item"><b>Next.js 16.3.4</b><span>App Router</span></div>
+        <div class="stack-item"><b>React 19.2.8</b><span>+ React DOM</span></div>
+        <div class="stack-item"><b>TypeScript 5</b><span>strict typing</span></div>
+        <div class="stack-item"><b>Tailwind CSS v4</b><span>@tailwindcss/postcss</span></div>
+        <div class="stack-item"><b>TanStack Query 5</b><span>server-state caching</span></div>
+        <div class="stack-item"><b>Zod 4</b><span>schema validation</span></div>
+        <div class="stack-item"><b>Neo-Brutalist theme</b><span>custom design system</span></div>
+      </div>
+      <div class="brutal-box" style="padding:20px;">
+        <h4>Backend &amp; Data</h4>
+        <div class="stack-item"><b>Next.js Route Handlers</b><span>API layer</span></div>
+        <div class="stack-item"><b>Prisma ORM 5.22</b><span>schema + migrations</span></div>
+        <div class="stack-item"><b>PostgreSQL</b><span>primary datastore</span></div>
+        <div class="stack-item"><b>jose</b><span>JWT signing/verification</span></div>
+        <div class="stack-item"><b>bcryptjs</b><span>password hashing</span></div>
+        <div class="stack-item"><b>@faker-js/faker</b><span>seed data generation</span></div>
+      </div>
+      <div class="brutal-box" style="padding:20px;">
+        <h4>AI, Exports &amp; DevOps</h4>
+        <div class="stack-item"><b>Groq API</b><span>AI Copilot + explanation layer</span></div>
+        <div class="stack-item"><b>pdfkit</b><span>PDF report generation</span></div>
+        <div class="stack-item"><b>exceljs</b><span>XLS report generation</span></div>
+        <div class="stack-item"><b>ESLint 9</b><span>linting</span></div>
+        <div class="stack-item"><b>tsx / ts-node</b><span>db reset &amp; seed scripts</span></div>
+        <div class="stack-item"><b>Docker</b><span>Postgres + migrations</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <h3>📝 Note on planning vs. implementation</h3>
+      <p style="margin-top:8px;">The team's <code>architecture.md</code> planning doc originally scoped Supabase (Auth + Postgres + Realtime) and shadcn/ui. The shipped build consolidated onto a self-managed <b>PostgreSQL + Prisma + custom JWT/RBAC</b> stack and Groq for AI — same architectural boundaries (routes → services → engines), different infra choices made during execution.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATA MODEL -->
+<section id="data-model" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">07 / Data Model</div>
+      <h2>32 Prisma models</h2>
+      <p>Grouped by domain. The full relational schema lives in <code>frontend/prisma/schema.prisma</code>.</p>
+    </div>
+    <div class="grid cols-2">
+      <div class="brutal-box" style="padding:18px;">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Identity, Catalog &amp; Pricing</h4>
+        <div>
+          <span class="model-chip">User</span><span class="model-chip">Customer</span><span class="model-chip">CustomerTier</span>
+          <span class="model-chip">CustomerInvite</span><span class="model-chip">ProductCategory</span><span class="model-chip">Product</span>
+          <span class="model-chip">ProductVariant</span><span class="model-chip">PriceList</span><span class="model-chip">PriceListItem</span>
+          <span class="model-chip">DiscountRule</span><span class="model-chip">ApprovalRule</span><span class="model-chip">UpsellRule</span>
+          <span class="model-chip">ProductCoPurchase</span>
+        </div>
+      </div>
+      <div class="brutal-box" style="padding:18px;">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Quoting, Approvals &amp; Negotiation</h4>
+        <div>
+          <span class="model-chip">Quote</span><span class="model-chip">QuoteLine</span><span class="model-chip">ApprovalRequest</span>
+          <span class="model-chip">ApprovalAction</span><span class="model-chip">Negotiation</span><span class="model-chip">NegotiationMessage</span>
+          <span class="model-chip">DealHealthEvent</span><span class="model-chip">Alert</span>
+        </div>
+      </div>
+      <div class="brutal-box" style="padding:18px;">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Fulfillment &amp; Inventory</h4>
+        <div>
+          <span class="model-chip">Warehouse</span><span class="model-chip">Inventory</span><span class="model-chip">Order</span>
+          <span class="model-chip">FulfillmentAllocation</span>
+        </div>
+      </div>
+      <div class="brutal-box" style="padding:18px;">
+        <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Billing, Ops &amp; Audit</h4>
+        <div>
+          <span class="model-chip">SubscriptionPlan</span><span class="model-chip">Subscription</span><span class="model-chip">BillingSchedule</span>
+          <span class="model-chip">Invoice</span><span class="model-chip">Payment</span><span class="model-chip">CreditNote</span>
+          <span class="model-chip">AuditLog</span><span class="model-chip">Notification</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRIBUTORS -->
+<section id="contributors">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">08 / Contributors &amp; Commit History</div>
+      <h2>Team 488 — who built what</h2>
+      <p>Derived from the full git commit tree (<code>git log --author</code>, <code>--numstat</code>, <code>--name-only</code>) across 44 commits on <code>main</code>.</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="brutal-box contrib-card">
+        <div class="contrib-head">
+          <div class="avatar">SP</div>
+          <div><h3 style="margin:0;">Swayam Patel</h3><span class="tag blue" style="margin-top:4px;">Lead engineer</span></div>
+        </div>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:50%;"></div></div>
+        <div class="contrib-stats">
+          <div><b>22</b>commits</div>
+          <div><b>31.6k</b>+lines</div>
+          <div><b>3.0k</b>−lines</div>
+        </div>
+        <p style="font-size:13px; color:var(--fg-muted); margin:0 0 8px;">Owned the engine layer, service layer, Prisma schema/migrations, and auth — the backend spine of the product.</p>
+        <ul class="contrib-list">
+          <li>All 12 business engines (<code>src/lib/engines/</code>) &amp; services layer</li>
+          <li>Prisma schema, migrations, seed &amp; reset scripts</li>
+          <li>JWT/RBAC auth, rate limiting, invite/onboarding flow</li>
+          <li>Subscriptions, invoices, bulk actions, CSV/report exports</li>
+          <li>Merge-conflict resolution across approval &amp; middleware branches</li>
+        </ul>
+      </div>
+      <div class="brutal-box contrib-card">
+        <div class="contrib-head">
+          <div class="avatar" style="background:#166534;">JM</div>
+          <div><h3 style="margin:0;">Jalisa Malik</h3><span class="tag green" style="margin-top:4px;">Frontend &amp; API integration</span></div>
+        </div>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:34%; background:#166534;"></div></div>
+        <div class="contrib-stats">
+          <div><b>15</b>commits</div>
+          <div><b>6.3k</b>+lines</div>
+          <div><b>3.5k</b>−lines</div>
+        </div>
+        <p style="font-size:13px; color:var(--fg-muted); margin:0 0 8px;">Repository owner; drove frontend templates, auth-facing API routes and UI polish/theme consistency.</p>
+        <ul class="contrib-list">
+          <li>Frontend page templates &amp; component structure</li>
+          <li>Auth API routes: <code>/me</code>, <code>/logout</code>, <code>/demo-login</code></li>
+          <li>Approvals &amp; admin-config API integration</li>
+          <li>New-quote page fixes (customer field, price list), session mgmt UI</li>
+          <li>Server-side search / multi-status filtering, DB reset script, auth-bypass removal</li>
+        </ul>
+      </div>
+      <div class="brutal-box contrib-card">
+        <div class="contrib-head">
+          <div class="avatar" style="background:#92400E;">TR</div>
+          <div><h3 style="margin:0;">Trupal</h3><span class="tag yellow" style="margin-top:4px;">Frontend implementation</span></div>
+        </div>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:16%; background:#92400E;"></div></div>
+        <div class="contrib-stats">
+          <div><b>7</b>commits</div>
+          <div><b>10.2k</b>+lines</div>
+          <div><b>0.3k</b>−lines</div>
+        </div>
+        <p style="font-size:13px; color:var(--fg-muted); margin:0 0 8px;">Delivered the initial full frontend screen set and project documentation/tooling.</p>
+        <ul class="contrib-list">
+          <li>"Screens 1–4" initial UI implementation</li>
+          <li>Complete frontend implementation pass</li>
+          <li>Project README authored</li>
+          <li>.gitignore hardening for Next builds, static files, docker-compose</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px;">
+      <h3>📌 Reading the history</h3>
+      <p style="margin-top:8px;">The repo shows a compressed hackathon timeline (Sep 5–6, 2026): an initial architecture/problem-breakdown commit, parallel frontend template work from Jalisa and Trupal, then Swayam building out the full engine/service/schema layer and wiring the frontend to live data — with several explicit merge-conflict-resolution commits as the three branches converged on <code>main</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE PREVIEW -->
+<section id="preview" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">09 / Interactive Preview</div>
+      <h2>How it works, in real time</h2>
+      <p>An illustrative walkthrough of the core screens, built from the actual data model and business rules above (sample data — not a live connection to the deployed app).</p>
+    </div>
+
+    <div class="preview-shell">
+      <div class="preview-chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;&nbsp;dealflow360.app</div>
+      <div class="preview-tabs" id="pvTabs">
+        <button class="active" data-p="p1">Sales Dashboard</button>
+        <button data-p="p2">Quote Builder</button>
+        <button data-p="p3">Approval Pipeline</button>
+        <button data-p="p4">Customer Portal</button>
+        <button data-p="p5">Deal Health</button>
+      </div>
+      <div class="preview-body">
+
+        <div class="pv-panel active" id="p1">
+          <div class="kpi-row">
+            <div class="kpi"><b>₹42.8L</b><span>Pipeline value</span></div>
+            <div class="kpi"><b>18</b><span>Open quotes</span></div>
+            <div class="kpi"><b>5</b><span>Pending approval</span></div>
+            <div class="kpi"><b>91%</b><span>Fulfillment rate</span></div>
+          </div>
+          <table class="mini-table">
+            <thead><tr><th>Quote</th><th>Customer</th><th>Value</th><th>Risk</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Q-1042</td><td>Orbit Retail Co.</td><td>₹6,40,000</td><td><span class="pill bad">CRITICAL</span></td><td><span class="pill warn">Pending Finance</span></td></tr>
+              <tr><td>Q-1041</td><td>Nimbus Hardware</td><td>₹2,10,000</td><td><span class="pill ok">LOW</span></td><td><span class="pill ok">Approved</span></td></tr>
+              <tr><td>Q-1038</td><td>Vertex Traders</td><td>₹8,90,000</td><td><span class="pill warn">HIGH</span></td><td><span class="pill info">Under Negotiation</span></td></tr>
+              <tr><td>Q-1035</td><td>Solstice Foods</td><td>₹1,15,000</td><td><span class="pill ok">LOW</span></td><td><span class="pill ok">Confirmed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pv-panel" id="p2">
+          <h4 style="margin-bottom:14px;">New Quote — Vertex Traders</h4>
+          <table class="mini-table">
+            <thead><tr><th>Line</th><th>Qty</th><th>Base ₹</th><th>Disc. Req.</th><th>Ceiling</th><th>Margin</th></tr></thead>
+            <tbody>
+              <tr><td>Industrial Sensor X2</td><td>40</td><td>1,200</td><td>18%</td><td><span class="pill warn">10% cat.</span></td><td>29%</td></tr>
+              <tr><td>Smart Controller Pro</td><td>15</td><td>4,500</td><td>12%</td><td><span class="pill ok">15% tier</span></td><td>37%</td></tr>
+              <tr><td>Extended Warranty (svc)</td><td>1</td><td>9,000</td><td>5%</td><td><span class="pill ok">20% cat.</span></td><td>61%</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px; padding:12px; background:var(--warn-bg); border:1.5px solid var(--warn-border); font-size:13px;">
+            ⚠ Line 1 exceeds category ceiling by 8pp → hard-violation floor triggers <b>mandatory Sales Manager approval</b>, even though blended discount looks acceptable.
+          </div>
+        </div>
+
+        <div class="pv-panel" id="p3">
+          <h4 style="margin-bottom:14px;">Approval Pipeline — Q-1042</h4>
+          <table class="mini-table">
+            <thead><tr><th>Step</th><th>Approver Role</th><th>Status</th><th>Time in queue</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Sales Manager</td><td><span class="pill ok">Approved</span></td><td>3h 12m</td></tr>
+              <tr><td>2</td><td>Finance</td><td><span class="pill warn">Pending</span></td><td>26h 40m ⚠ SLA breach</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px; padding:12px; background:var(--danger-bg); border:1.5px solid var(--danger-border); font-size:13px;">
+            🩺 Approval delay &gt; 24h detected by Deal Health Engine → <b>+10 pts</b> added to deal-health score.
+          </div>
+        </div>
+
+        <div class="pv-panel" id="p4">
+          <h4 style="margin-bottom:14px;">Customer Portal — Negotiation Thread</h4>
+          <div class="chat-bubble them">Could we get the Smart Controller Pro line down to 15% off instead of 12%?</div>
+          <div class="chat-bubble me">Sure — checking against your tier ceiling now…</div>
+          <div class="chat-bubble them">New counter submitted: 15% on Line 2, quantities unchanged.</div>
+          <div style="margin-top:12px; padding:12px; background:var(--info-bg); border:1.5px solid var(--info-border); font-size:13px;">
+            ℹ Portal view intentionally hides margin %, internal risk score and approval notes — only price, quantity and status are exposed to the customer.
+          </div>
+        </div>
+
+        <div class="pv-panel" id="p5">
+          <h4 style="margin-bottom:14px;">Deal Health Monitor</h4>
+          <table class="mini-table">
+            <thead><tr><th>Deal</th><th>Health Score</th><th>Signals</th></tr></thead>
+            <tbody>
+              <tr><td>Vertex Traders</td><td><span class="health-bar"><span class="health-fill" style="width:70%;background:#B91C1C;"></span></span>52 pts</td><td>Approval delay, 4 negotiation rounds</td></tr>
+              <tr><td>Orbit Retail Co.</td><td><span class="health-bar"><span class="health-fill" style="width:40%;background:#B45309;"></span></span>28 pts</td><td>Discount anomaly, slipped delivery</td></tr>
+              <tr><td>Nimbus Hardware</td><td><span class="health-bar"><span class="health-fill" style="width:12%;background:#166534;"></span></span>8 pts</td><td>Healthy — no active flags</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    DealFlow360 · Team 488 · Built with Next.js, TypeScript, Prisma &amp; a neo-brutalist design system<br>
+    Architecture &amp; SRS dossier generated for the repository at
+    <a href="https://github.com/Sp2736/team-488-dealflow360" target="_blank" rel="noopener">github.com/Sp2736/team-488-dealflow360</a>
+  </div>
+</footer>
+
+<a href="#" class="back-to-top">↑</a>
+
+<script>
+// Engine tabs
+document.querySelectorAll('#engineTabs .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#engineTabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// API filter
+document.querySelectorAll('#apiFilter .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#apiFilter .tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.f;
+    document.querySelectorAll('#apiTable tbody tr').forEach(row=>{
+      row.style.display = (f==='all' || row.dataset.g===f) ? '' : 'none';
+    });
+  });
+});
+
+// Preview tabs
+document.querySelectorAll('#pvTabs button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#pvTabs button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.pv-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.p).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

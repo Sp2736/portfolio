@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AssetFlow — System Reference &amp; Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#0b1520;
+  --navy-900:#0f1c2b;
+  --navy-800:#152840;
+  --navy-700:#1d3453;
+  --steel-500:#3a5a78;
+  --steel-300:#7fa0bd;
+  --paper:#eee9df;
+  --paper-dim:#c9c3b6;
+  --amber:#d98e3d;
+  --amber-soft:#e9b877;
+  --teal:#4c8a76;
+  --red:#c1503f;
+  --line:rgba(238,233,223,0.14);
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--navy-950);
+  color:var(--paper);
+  font-family:var(--sans);
+  min-height:100vh;
+}
+::selection{background:var(--amber);color:var(--navy-950);}
+a{color:var(--amber-soft);}
+
+/* ---- Shell layout mirrors AssetFlow's own sidebar+content shell ---- */
+.shell{display:flex;min-height:100vh;}
+
+.sidebar{
+  width:250px;flex-shrink:0;
+  background:var(--navy-900);
+  border-right:1px solid var(--line);
+  padding:22px 0 20px;
+  position:sticky;top:0;height:100vh;
+  overflow-y:auto;
+}
+.brand{
+  padding:0 20px 18px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:14px;
+}
+.brand .tag{
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  color:var(--amber);background:rgba(217,142,61,0.12);
+  border:1px solid rgba(217,142,61,0.4);
+  padding:2px 7px;border-radius:3px;display:inline-block;margin-bottom:9px;
+}
+.brand h1{font-size:19px;margin:0 0 3px;font-weight:700;letter-spacing:-.01em;}
+.brand p{font-size:12.5px;color:var(--steel-300);margin:0;line-height:1.4;}
+
+.nav-group-label{
+  font-size:10.5px;color:var(--paper-dim);opacity:.6;
+  padding:14px 20px 6px;font-weight:600;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 20px;font-size:13.5px;color:var(--paper-dim);
+  cursor:pointer;border-left:2px solid transparent;
+  transition:background .12s, color .12s;
+}
+.nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.75;}
+.nav-item:hover{background:rgba(255,255,255,0.03);color:var(--paper);}
+.nav-item.active{
+  color:var(--paper);background:rgba(217,142,61,0.09);
+  border-left-color:var(--amber);font-weight:600;
+}
+.nav-item.active svg{opacity:1;}
+
+.main{flex:1;min-width:0;}
+.topbar{
+  position:sticky;top:0;z-index:5;
+  background:rgba(11,21,32,0.88);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+  padding:14px 34px;display:flex;align-items:center;justify-content:space-between;
+}
+.topbar .crumb{font-family:var(--mono);font-size:12px;color:var(--steel-300);}
+.topbar .crumb b{color:var(--paper);}
+.status-pill{
+  font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:20px;
+  background:rgba(76,138,118,0.15);color:var(--teal);border:1px solid rgba(76,138,118,0.4);
+}
+
+.section{display:none;padding:38px 42px 70px;max-width:1180px;}
+.section.active{display:block;animation:fadein .25s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+h2.section-title{
+  font-size:28px;margin:0 0 6px;font-weight:700;letter-spacing:-.01em;
+}
+.section-sub{color:var(--steel-300);font-size:14.5px;margin:0 0 30px;max-width:640px;line-height:1.55;}
+
+.card{
+  background:var(--navy-900);border:1px solid var(--line);border-radius:8px;
+  padding:20px 22px;
+}
+.grid{display:grid;gap:16px;}
+.grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:900px){.grid.cols-4,.grid.cols-3,.grid.cols-2{grid-template-columns:1fr 1fr;}}
+
+/* KPI cards */
+.kpi{padding:16px 18px;}
+.kpi .num{font-family:var(--mono);font-size:30px;font-weight:600;color:var(--amber-soft);line-height:1;}
+.kpi .label{font-size:12px;color:var(--steel-300);margin-top:7px;}
+
+/* feature / module cards */
+.mod-card{padding:18px 20px;}
+.mod-card .idx{font-family:var(--mono);font-size:11px;color:var(--amber);opacity:.85;}
+.mod-card h3{margin:6px 0 8px;font-size:15.5px;}
+.mod-card p{margin:0;font-size:13px;color:var(--paper-dim);line-height:1.55;}
+.mod-card ul{margin:10px 0 0;padding-left:16px;font-size:12.5px;color:var(--paper-dim);line-height:1.6;}
+
+/* tech stack chips */
+.stack-group{margin-bottom:20px;}
+.stack-group h4{
+  font-size:11px;text-transform:none;color:var(--steel-300);
+  margin:0 0 9px;font-family:var(--mono);
+}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{
+  font-family:var(--mono);font-size:12.5px;padding:6px 11px;
+  background:var(--navy-800);border:1px solid var(--line);border-radius:5px;
+  color:var(--paper);
+}
+.chip b{color:var(--amber-soft);font-weight:600;}
+
+/* db schema */
+.table-card{margin-bottom:14px;}
+.table-card summary{
+  cursor:pointer;padding:13px 18px;list-style:none;
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--mono);font-size:13.5px;
+}
+.table-card summary::-webkit-details-marker{display:none;}
+.table-card summary .arrow{transition:transform .15s;color:var(--steel-300);}
+.table-card[open] summary .arrow{transform:rotate(90deg);}
+.table-card .body{padding:0 18px 16px;font-size:12.8px;color:var(--paper-dim);}
+.table-card .body table{width:100%;border-collapse:collapse;margin-top:6px;}
+.table-card .body td, .table-card .body th{
+  text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);font-size:12px;
+}
+.table-card .body th{color:var(--steel-300);font-weight:500;}
+.table-card .badge{
+  font-size:10.5px;padding:2px 7px;border-radius:10px;background:rgba(58,90,120,0.3);color:var(--steel-300);
+}
+
+/* API list */
+.api-group{margin-bottom:22px;}
+.api-group h4{font-family:var(--mono);font-size:12.5px;color:var(--amber-soft);margin:0 0 9px;text-transform:capitalize;}
+.api-row{
+  display:flex;gap:12px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line);
+  font-size:12.8px;
+}
+.api-row:last-child{border-bottom:none;}
+.http{font-family:var(--mono);font-size:11px;font-weight:700;width:44px;flex-shrink:0;}
+.http.get{color:#7fa0bd;} .http.post{color:var(--teal);} .http.patch{color:var(--amber-soft);}
+.api-path{font-family:var(--mono);color:var(--paper);flex-shrink:0;}
+.api-desc{color:var(--paper-dim);}
+.stub-tag{font-family:var(--mono);font-size:10px;color:var(--red);opacity:.85;margin-left:auto;flex-shrink:0;}
+
+/* contributors */
+.contrib-card{padding:20px;}
+.contrib-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--navy-700);display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;color:var(--amber-soft);font-size:14px;
+}
+.contrib-card h3{margin:0;font-size:15px;}
+.contrib-card .role{font-size:11.5px;color:var(--steel-300);}
+.commit-list{margin:0;padding:0;list-style:none;}
+.commit-list li{
+  font-size:12.3px;color:var(--paper-dim);padding:6px 0 6px 16px;position:relative;
+  border-bottom:1px solid var(--line);
+}
+.commit-list li:last-child{border-bottom:none;}
+.commit-list li::before{
+  content:'';position:absolute;left:0;top:13px;width:6px;height:6px;border-radius:50%;background:var(--steel-500);
+}
+.commit-list .sha{font-family:var(--mono);color:var(--steel-300);font-size:10.5px;margin-right:6px;}
+
+/* roadmap */
+.status-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px;}
+.status-row:last-child{border-bottom:none;}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.dot.done{background:var(--teal);}
+.dot.partial{background:var(--amber);}
+.dot.todo{background:var(--red);opacity:.6;}
+.status-row .tag2{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--steel-300);}
+
+/* ---- Live preview mock screens ---- */
+.preview-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.ptab{
+  font-family:var(--mono);font-size:11.5px;padding:6px 12px;border-radius:5px;
+  background:var(--navy-800);border:1px solid var(--line);color:var(--paper-dim);cursor:pointer;
+}
+.ptab.active{background:rgba(217,142,61,0.14);color:var(--amber-soft);border-color:rgba(217,142,61,0.4);}
+.preview-frame{
+  background:var(--paper);color:var(--navy-950);border-radius:9px;overflow:hidden;
+  border:1px solid var(--line);min-height:420px;
+}
+.pf-inner{display:none;padding:26px 28px;}
+.pf-inner.active{display:block;animation:fadein .2s ease;}
+.pf-inner h5{margin:0 0 4px;font-size:15px;font-family:var(--sans);}
+.pf-inner .pf-sub{font-size:11.5px;color:#6b6455;margin-bottom:18px;}
+
+.badge2{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:9px;font-weight:600;}
+.b-avail{background:#dcecdf;color:#2f6b41;}
+.b-alloc{background:#dce6f2;color:#2b5480;}
+.b-maint{background:#f3e3c4;color:#8a611a;}
+.b-lost{background:#f2d7d1;color:#9c3a2a;}
+.b-retired{background:#e4e1d8;color:#68625a;}
+
+.mock-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.mock-table th{text-align:left;padding:8px 10px;border-bottom:2px solid #d8d2c4;color:#77705f;font-weight:600;font-size:11px;}
+.mock-table td{padding:8px 10px;border-bottom:1px solid #e3ddce;}
+
+.kpi-mini{background:#f8f5ee;border:1px solid #e3ddce;border-radius:6px;padding:12px 14px;}
+.kpi-mini .n{font-family:var(--mono);font-size:22px;font-weight:600;}
+.kpi-mini .l{font-size:11px;color:#77705f;margin-top:3px;}
+
+.banner-conflict{
+  background:#f7e9e6;border:1px solid #e3b8ac;color:#8a3524;border-radius:6px;
+  padding:12px 14px;font-size:12.5px;line-height:1.5;margin-bottom:14px;
+}
+.banner-conflict b{display:block;font-size:13px;margin-bottom:2px;}
+
+.kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.kcol{background:#f4f0e6;border-radius:6px;padding:9px;min-height:150px;}
+.kcol h6{font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;color:#82786a;margin:0 0 8px;font-weight:700;}
+.kcard{background:#fff;border:1px solid #e3ddce;border-radius:5px;padding:8px 9px;font-size:11px;margin-bottom:7px;}
+.kcard b{display:block;font-family:var(--mono);font-size:10.5px;color:#3a5a78;}
+.kcard.resolved{background:#e6f2e8;}
+
+.notif-item{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid #e3ddce;font-size:12.3px;}
+.notif-item:last-child{border:none;}
+.ndot{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.ntime{margin-left:auto;color:#948d7c;font-size:10.5px;white-space:nowrap;}
+
+.cal-row{display:flex;border-bottom:1px solid #e3ddce;font-size:11px;}
+.cal-hour{width:52px;color:#948d7c;padding:8px 0;font-family:var(--mono);font-size:10.5px;flex-shrink:0;}
+.cal-slot{flex:1;position:relative;padding:6px 0;}
+.slot-block{background:#dce6f2;border-left:3px solid #3a5a78;border-radius:3px;padding:4px 8px;font-size:11px;color:#2b5480;}
+.slot-conflict{
+  background:repeating-linear-gradient(45deg,#f7e9e6,#f7e9e6 5px,#f2d7d1 5px,#f2d7d1 10px);
+  border:1.5px dashed #c1503f;border-radius:3px;padding:4px 8px;font-size:11px;color:#9c3a2a;margin-top:4px;
+}
+
+/* diagram */
+.diagram-wrap{background:var(--navy-900);border:1px solid var(--line);border-radius:8px;padding:22px;}
+
+/* footer note */
+.note{font-size:12px;color:var(--steel-300);border-left:2px solid var(--steel-500);padding:8px 14px;margin-top:16px;line-height:1.6;}
+.note b{color:var(--paper);}
+
+.mono{font-family:var(--mono);}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- SIDEBAR (mirrors AssetFlow's own dashboard nav — repurposed as this report's section index) -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="tag">AF · SRS v1</span>
+      <h1>AssetFlow</h1>
+      <p>Enterprise Asset &amp; Resource Management — system reference, generated from the actual repo.</p>
+    </div>
+
+    <div class="nav-group-label">Overview</div>
+    <div class="nav-item active" data-target="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+    <div class="nav-item" data-target="architecture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.3"/><circle cx="5" cy="19" r="2.3"/><circle cx="19" cy="19" r="2.3"/><path d="M12 7.3v5M12 12.3 6 17M12 12.3l6 4.7"/></svg>Architecture</div>
+
+    <div class="nav-group-label">Product</div>
+    <div class="nav-item" data-target="modules"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 16l9 5 9-5M3 12l9 5 9-5"/></svg>Modules &amp; Features</div>
+    <div class="nav-item" data-target="preview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>Live Preview</div>
+
+    <div class="nav-group-label">Engineering</div>
+    <div class="nav-item" data-target="stack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg>Tech Stack</div>
+    <div class="nav-item" data-target="database"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Database Schema</div>
+    <div class="nav-item" data-target="api"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3 4 12l4 9M16 3l4 9-4 9"/></svg>API Surface</div>
+
+    <div class="nav-group-label">Project</div>
+    <div class="nav-item" data-target="contributors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.5 2.9-6 6.5-6s6.5 2.5 6.5 6"/><circle cx="18" cy="7" r="2.4"/><path d="M15.6 14.3c2.8.4 4.9 2.6 4.9 5.7"/></svg>Contributors</div>
+    <div class="nav-item" data-target="roadmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V4M4 4h13l-2.5 3.5L17 11H4"/></svg>Status &amp; Roadmap</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">asset-flow / <b id="crumb-current">Dashboard</b></div>
+      <div class="status-pill">● scaffold stage — auth implemented</div>
+    </div>
+
+    <!-- ===================== OVERVIEW ===================== -->
+    <section class="section active" id="sec-overview">
+      <h2 class="section-title">AssetFlow</h2>
+      <p class="section-sub">An enterprise asset &amp; resource management ERP module, built for the Odoo Hackathon (July 2026, 8-hour online format). Tracks physical assets and shared resources end-to-end — departments, categories, employees, allocation, booking, maintenance, and audit — for any organization: offices, schools, hospitals, or factories.</p>
+
+      <div style="margin: 28px 0; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); background: var(--navy-900);">
+        <div style="padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 12.5px; color: var(--paper-dim); display: flex; align-items: center; gap: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <i>Disclaimer: This architecture visualization was generated using Nano Banana (Beta). It is a conceptual rendering and may not be 100% authentic to the live system.</i>
+        </div>
+        <iframe src="/assetflow.mp4" width="100%" height="560" style="border:none; display:block;" title="AssetFlow Architecture Video" allowfullscreen></iframe>
+      </div>
+
+      <div class="grid cols-4" style="margin-bottom:26px;">
+        <div class="card kpi"><div class="num">9</div><div class="label">domain tables (10 migrations)</div></div>
+        <div class="card kpi"><div class="num">10</div><div class="label">screens specified</div></div>
+        <div class="card kpi"><div class="num">26</div><div class="label">API routes scaffolded</div></div>
+        <div class="card kpi"><div class="num">3</div><div class="label">contributors, 11 commits</div></div>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="card">
+          <h3 style="margin-top:0;font-size:15.5px;">Mission</h3>
+          <p style="font-size:13.3px;color:var(--paper-dim);line-height:1.65;">Reduce manual asset-tracking overhead by giving an organization one place to register assets, allocate and transfer them without double-booking, run maintenance and audit workflows with server-enforced rules, and see utilization through reporting — rather than spreadsheets and word-of-mouth.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0;font-size:15.5px;">Explicitly out of scope</h3>
+          <p style="font-size:13.3px;color:var(--paper-dim);line-height:1.65;">Purchasing, invoicing, and accounting. Acquisition cost is stored on each asset only for reporting/ranking — it is deliberately never wired into any accounting logic.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3 style="margin-top:0;font-size:15.5px;">Basic operating workflow</h3>
+        <p style="font-size:13.3px;color:var(--paper-dim);line-height:1.7;margin:0;">
+          Admin sets up departments, categories and roles → Asset Manager registers assets (status: Available) → assets are allocated, or flagged as shared resources subject to booking → transfer requests resolve reallocation conflicts → maintenance requests move a damaged asset through an approval workflow before it's marked Under Maintenance → periodic audit cycles verify presence/condition per department → every state change writes to the activity log and can trigger a notification.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================== ARCHITECTURE ===================== -->
+    <section class="section" id="sec-architecture">
+      <h2 class="section-title">System architecture &amp; data flow</h2>
+      <p class="section-sub">Single Next.js repository for both frontend and backend. Supabase provides Postgres, Auth, and row-level security — there is no separate backend service by design.</p>
+
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 980 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0L10 5L0 10z" fill="#7fa0bd"/>
+            </marker>
+          </defs>
+          <style>
+            .box{fill:#152840;stroke:#2a4260;stroke-width:1.2;rx:8;}
+            .boxlabel{font-family:'IBM Plex Mono',monospace;font-size:12px;fill:#eee9df;font-weight:600;}
+            .subtext{font-family:'IBM Plex Sans',sans-serif;font-size:10.3px;fill:#7fa0bd;}
+            .flow{fill:none;stroke:#3a5a78;stroke-width:1.6;marker-end:url(#arrow);}
+            .flowlabel{font-family:'IBM Plex Mono',monospace;font-size:10px;fill:#d98e3d;}
+          </style>
+
+          <!-- Browser -->
+          <rect class="box" x="30" y="40" width="200" height="85"/>
+          <text class="boxlabel" x="48" y="70">Browser Client</text>
+          <text class="subtext" x="48" y="88">React 19 · shadcn/ui</text>
+          <text class="subtext" x="48" y="103">react-hook-form + zod</text>
+
+          <!-- Next.js server -->
+          <rect class="box" x="370" y="40" width="240" height="115" fill="#1d3453"/>
+          <text class="boxlabel" x="388" y="68">Next.js App Router</text>
+          <text class="subtext" x="388" y="86">Server Components (default)</text>
+          <text class="subtext" x="388" y="101">Route Handlers — /src/app/api/*</text>
+          <text class="subtext" x="388" y="116">middleware.ts — session refresh</text>
+          <text class="subtext" x="388" y="131">+ route protection</text>
+
+          <!-- Supabase -->
+          <rect class="box" x="740" y="20" width="210" height="160" fill="#152840"/>
+          <text class="boxlabel" x="758" y="48">Supabase</text>
+          <text class="subtext" x="758" y="66">Postgres (9 domain tables)</text>
+          <text class="subtext" x="758" y="81">Supabase Auth (auth.users)</text>
+          <text class="subtext" x="758" y="96">Row-Level Security policies</text>
+          <text class="subtext" x="758" y="111">Triggers: updated_at, status</text>
+          <text class="subtext" x="758" y="126">transitions, new-user profile</text>
+          <text class="subtext" x="758" y="141">pg_cron: overdue rollovers</text>
+          <text class="subtext" x="758" y="156">btree_gist: booking overlap</text>
+
+          <!-- Zustand -->
+          <rect class="box" x="30" y="185" width="200" height="60"/>
+          <text class="boxlabel" x="48" y="210">Zustand store</text>
+          <text class="subtext" x="48" y="228">UI-only state (sidebar, modals)</text>
+
+          <!-- lib layer -->
+          <rect class="box" x="370" y="220" width="240" height="95" fill="#1d3453"/>
+          <text class="boxlabel" x="388" y="245">src/lib/</text>
+          <text class="subtext" x="388" y="262">validators/*.schema.ts (zod)</text>
+          <text class="subtext" x="388" y="277">permissions.ts (RBAC gate)</text>
+          <text class="subtext" x="388" y="292">supabase/client.ts · server.ts · admin.ts</text>
+
+          <!-- sonner -->
+          <rect class="box" x="30" y="270" width="200" height="55"/>
+          <text class="boxlabel" x="48" y="293">sonner toasts</text>
+          <text class="subtext" x="48" y="309">transient UI feedback</text>
+
+          <!-- Roles -->
+          <rect class="box" x="740" y="220" width="210" height="120" fill="#152840"/>
+          <text class="boxlabel" x="758" y="245">Roles (RLS-enforced)</text>
+          <text class="subtext" x="758" y="263">Admin</text>
+          <text class="subtext" x="758" y="278">Asset Manager</text>
+          <text class="subtext" x="758" y="293">Department Head</text>
+          <text class="subtext" x="758" y="308">Employee</text>
+          <text class="subtext" x="758" y="325">(promotion: Admin-only, one place)</text>
+
+          <!-- bottom flow -->
+          <rect class="box" x="370" y="380" width="580" height="105" fill="#1d3453"/>
+          <text class="boxlabel" x="390" y="405">Server-enforced domain rules</text>
+          <text class="subtext" x="390" y="424">no double allocation → forces Transfer Request path</text>
+          <text class="subtext" x="390" y="440">booking overlap blocked at DB level (EXCLUDE constraint via btree_gist)</text>
+          <text class="subtext" x="390" y="456">asset status transitions validated by trigger, not client PATCH</text>
+          <text class="subtext" x="390" y="472">every mutation appends to activity_log</text>
+
+          <!-- arrows -->
+          <path class="flow" d="M230 82 L370 90"/>
+          <text class="flowlabel" x="255" y="76">fetch / server actions</text>
+
+          <path class="flow" d="M610 95 L740 90"/>
+          <text class="flowlabel" x="630" y="83">supabase-js (SSR)</text>
+
+          <path class="flow" d="M230 245 L370 255" />
+          <text class="flowlabel" x="250" y="240">read-only client state</text>
+
+          <path class="flow" d="M490 155 L490 220"/>
+          <text class="flowlabel" x="498" y="190">validate → call</text>
+
+          <path class="flow" d="M610 270 L740 270"/>
+          <text class="flowlabel" x="628" y="262">gate by role</text>
+
+          <path class="flow" d="M660 315 L660 380"/>
+          <text class="flowlabel" x="668" y="352">enforced in</text>
+          <text class="flowlabel" x="668" y="365">migrations 0004–0010</text>
+        </svg>
+      </div>
+
+      <div class="grid cols-3" style="margin-top:18px;">
+        <div class="card">
+          <h4 style="margin:0 0 8px;font-size:13px;color:var(--amber-soft);">Auth flow</h4>
+          <p style="font-size:12.5px;color:var(--paper-dim);line-height:1.6;margin:0;">Signup only ever creates an <span class="mono">Employee</span>-role row (DB trigger <span class="mono">handle_new_user()</span> on <span class="mono">auth.users</span> insert). Role escalation to Department Head / Asset Manager happens in exactly one screen, gated to Admin.</p>
+        </div>
+        <div class="card">
+          <h4 style="margin:0 0 8px;font-size:13px;color:var(--amber-soft);">Conflict prevention</h4>
+          <p style="font-size:12.5px;color:var(--paper-dim);line-height:1.6;margin:0;">Booking overlap is rejected by a Postgres <span class="mono">EXCLUDE</span> constraint using <span class="mono">btree_gist</span> — not a client-side calendar check. Touching slots (one ends exactly as another starts) are valid.</p>
+        </div>
+        <div class="card">
+          <h4 style="margin:0 0 8px;font-size:13px;color:var(--amber-soft);">Lifecycle integrity</h4>
+          <p style="font-size:12.5px;color:var(--paper-dim);line-height:1.6;margin:0;">A <span class="mono">before update</span> trigger on <span class="mono">assets</span> whitelists valid status transitions (e.g. <span class="mono">Disposed</span> is terminal) — an arbitrary client PATCH can't skip states.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MODULES ===================== -->
+    <section class="section" id="sec-modules">
+      <h2 class="section-title">Modules &amp; features</h2>
+      <p class="section-sub">Ten functional areas, mapped 1:1 to the ten screens under <span class="mono">src/app/(dashboard)/</span>.</p>
+      <div class="grid cols-3" id="modules-grid"></div>
+    </section>
+
+    <!-- ===================== LIVE PREVIEW ===================== -->
+    <section class="section" id="sec-preview">
+      <h2 class="section-title">Live preview</h2>
+      <p class="section-sub">A working mock-up of every screen, built directly from <span class="mono">2-ui-reference.md</span> with representative sample data. Only the auth screens exist as real code today (see Status &amp; Roadmap) — everything else below renders the specified interaction design, not the live app.</p>
+
+      <div class="preview-tabs" id="preview-tabs"></div>
+      <div class="preview-frame" id="preview-frame"></div>
+    </section>
+
+    <!-- ===================== TECH STACK ===================== -->
+    <section class="section" id="sec-stack">
+      <h2 class="section-title">Tech stack &amp; tooling</h2>
+      <p class="section-sub">Pulled directly from <span class="mono">package.json</span> and <span class="mono">AGENTS.md</span>'s stack contract — a fixed set the project deliberately doesn't deviate from.</p>
+
+      <div class="stack-group">
+        <h4>framework &amp; language</h4>
+        <div class="chip-row">
+          <span class="chip"><b>Next.js 16.2</b> — App Router</span>
+          <span class="chip"><b>React 19.2</b></span>
+          <span class="chip"><b>TypeScript 5</b> — strict</span>
+          <span class="chip">Turbopack (dev default)</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>data &amp; auth</h4>
+        <div class="chip-row">
+          <span class="chip"><b>Supabase</b> (Postgres + Auth + RLS)</span>
+          <span class="chip">@supabase/ssr 0.12</span>
+          <span class="chip">@supabase/supabase-js 2.110</span>
+          <span class="chip">pg_cron (scheduled overdue jobs)</span>
+          <span class="chip">btree_gist (overlap constraints)</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>forms &amp; validation</h4>
+        <div class="chip-row">
+          <span class="chip">react-hook-form 7.81</span>
+          <span class="chip">zod 4.4</span>
+          <span class="chip">@hookform/resolvers 5.4</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>ui &amp; styling</h4>
+        <div class="chip-row">
+          <span class="chip">Tailwind CSS 4</span>
+          <span class="chip">shadcn/ui</span>
+          <span class="chip">@base-ui/react 1.6</span>
+          <span class="chip">lucide-react (icons)</span>
+          <span class="chip">class-variance-authority</span>
+          <span class="chip">tailwind-merge / clsx</span>
+          <span class="chip">tw-animate-css</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>state &amp; feedback</h4>
+        <div class="chip-row">
+          <span class="chip">zustand 5.0 — UI-only state</span>
+          <span class="chip">sonner — toast notifications</span>
+          <span class="chip">date-fns 4.4</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <h4>tooling</h4>
+        <div class="chip-row">
+          <span class="chip">ESLint 9 + eslint-config-next</span>
+          <span class="chip">Excalidraw — UI/UX mockup source</span>
+          <span class="chip">Git / GitHub — Sp2736/asset-flow</span>
+        </div>
+      </div>
+
+      <div class="note"><b>Deliberately excluded</b> per <span class="mono">AGENTS.md</span>: no separate Express/Nest backend, no MongoDB, no alternate ORM — the domain is fully relational (self-referencing department hierarchy, FK-heavy allocations/bookings), so a second datastore or service layer was ruled out up front rather than discovered later.</div>
+    </section>
+
+    <!-- ===================== DATABASE ===================== -->
+    <section class="section" id="sec-database">
+      <h2 class="section-title">Database schema</h2>
+      <p class="section-sub">10 migration files, applied in dependency order. All tables share <span class="mono">id uuid</span>, <span class="mono">created_at</span>, <span class="mono">updated_at</span> (auto-touched by a shared trigger) — omitted below for brevity.</p>
+      <div id="db-list"></div>
+    </section>
+
+    <!-- ===================== API ===================== -->
+    <section class="section" id="sec-api">
+      <h2 class="section-title">API surface</h2>
+      <p class="section-sub">26 Route Handlers under <span class="mono">src/app/api/</span>, one group per domain entity. <span style="color:var(--red);">All 26 are currently 1-line placeholder files</span> — routes and their contracts are fully specified in the migration/UI docs but not yet implemented in code.</p>
+      <div id="api-list"></div>
+    </section>
+
+    <!-- ===================== CONTRIBUTORS ===================== -->
+    <section class="section" id="sec-contributors">
+      <h2 class="section-title">Contributors</h2>
+      <p class="section-sub">Reconstructed from the full commit history (11 commits, <span class="mono">Sp2736/asset-flow</span>).</p>
+      <div class="grid cols-3" id="contrib-grid"></div>
+    </section>
+
+    <!-- ===================== ROADMAP ===================== -->
+    <section class="section" id="sec-roadmap">
+      <h2 class="section-title">Status &amp; roadmap</h2>
+      <p class="section-sub">An honest read of what's actually implemented in code today versus what's fully specified but not yet built.</p>
+      <div class="card">
+        <div id="roadmap-list"></div>
+      </div>
+      <div class="note" style="margin-top:18px;"><b>Read literally from the codebase:</b> the entire product surface beyond auth (dashboard KPIs, org setup, asset directory, allocation/transfer, booking calendar, maintenance kanban, audits, reports, notifications) exists today as route/page stubs (each file is a single placeholder line) plus a fully designed database schema — the hard design decisions are made, the implementation work is still ahead.</div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+// ---------- NAV ----------
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.section');
+const crumb = document.getElementById('crumb-current');
+navItems.forEach(item=>{
+  item.addEventListener('click', ()=>{
+    navItems.forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    sections.forEach(s=>s.classList.remove('active'));
+    document.getElementById('sec-'+item.dataset.target).classList.add('active');
+    crumb.textContent = item.textContent.trim();
+  });
+});
+
+// ---------- MODULES DATA ----------
+const modules = [
+  {n:'01',t:'Authentication & Onboarding',d:'Signup always creates an Employee account — no self-assigned roles. Admins promote users to Department Head or Asset Manager from one screen only.',f:['Login / signup','Forgot password','Role promotion (Admin-gated)']},
+  {n:'02',t:'Operational Dashboard',d:'Real-time KPI cards, overdue-item banner, quick actions, and a lightweight recent-activity feed.',f:['Available / Allocated / Reserved counts','Overdue returns banner','+Register, Book, Raise-request shortcuts']},
+  {n:'03',t:'Organization Master Setup',d:'Admin-only setup for the three master data types every other screen depends on.',f:['Departments (with hierarchy)','Asset categories (+ custom fields)','Employee directory & role promotion']},
+  {n:'04',t:'Asset Registration & Directory',d:'Register and search assets with auto-generated tags and full lifecycle tracking.',f:['Auto tag AF-0001 style','7-state lifecycle','Search by tag / serial / QR']},
+  {n:'05',t:'Allocation & Transfer Management',d:'Blocks double-allocation; the only path forward on conflict is a transfer request.',f:['Conflict banner + inline transfer form','Approval workflow','Check-in with condition notes']},
+  {n:'06',t:'Resource Booking',d:'Time-slot booking for shared resources with server-side, DB-enforced overlap validation.',f:['Hourly calendar view','Overlap rejection rendered inline','Automated pre-slot reminders']},
+  {n:'07',t:'Maintenance Workflows',d:'A Kanban-driven approval flow — not a list — that gates the asset status transition.',f:['Pending → Approved → Assigned → In Progress → Resolved','Priority + photo attachments','Per-asset history']},
+  {n:'08',t:'Structured Audit Cycles',d:'Scoped, time-boxed verification with an irreversible close action.',f:['Per-department / date-range scope','Verified / Missing / Damaged','Auto-generated discrepancy report']},
+  {n:'09',t:'Reports & Analytics',d:'Read-only aggregate views — no forms, no mutations.',f:['Utilization by department (bar)','Maintenance frequency (line)','Most-used / idle asset lists']},
+  {n:'10',t:'Activity Logs & Notifications',d:'Cross-cutting: every state-changing action anywhere in the app appends here.',f:['Filter pills (All/Unread/type)','Color-coded per notification type','Full audit trail']},
+];
+document.getElementById('modules-grid').innerHTML = modules.map(m=>`
+  <div class="card mod-card">
+    <div class="idx">MODULE ${m.n}</div>
+    <h3>${m.t}</h3>
+    <p>${m.d}</p>
+    <ul>${m.f.map(x=>`<li>${x}</li>`).join('')}</ul>
+  </div>
+`).join('');
+
+// ---------- DATABASE ----------
+const tables = [
+  {name:'departments', file:'0001', cols:[['name','text, unique'],['head_employee_id','uuid → employee_profiles'],['parent_department_id','uuid, self-FK (hierarchy)'],['status','Active / Inactive']]},
+  {name:'asset_categories', file:'0002', cols:[['name','text, unique'],['extra_fields','jsonb — e.g. warranty_period_months']]},
+  {name:'employee_profiles', file:'0003', cols:[['id','uuid = auth.users.id'],['department_id','uuid → departments'],['role','enum: Admin / Asset Manager / Department Head / Employee'],['status','Active / Inactive']], note:'Auto-inserted by handle_new_user() trigger on auth.users insert — always role=Employee.'},
+  {name:'assets', file:'0004', cols:[['asset_tag','auto: AF-0001 (sequence)'],['category_id','uuid → asset_categories'],['status','enum, 7 states'],['is_bookable','boolean — shared/bookable flag'],['qr_code','text, unique'],['document_urls','text[]']], note:'Full-text search index (GIN) across tag/name/serial. Status transitions validated by trigger.'},
+  {name:'allocations + transfer_requests', file:'0005', cols:[['allocation_status','Active / Returned / Transferred'],['transfer_status','Requested / Approved / Rejected / Reallocated']]},
+  {name:'resource_bookings', file:'0006', cols:[['status','Upcoming / Ongoing / Completed / Cancelled']], note:'Overlap prevented by a Postgres EXCLUDE constraint (btree_gist) — DB-level, not app-level.'},
+  {name:'maintenance_requests', file:'0007', cols:[['status','Pending → Resolved (5 states)'],['priority','Low / Medium / High / Critical']]},
+  {name:'audit_cycles + audit_cycle_auditors + audit_items', file:'0008', cols:[['audit_cycle_status','Open / Closed'],['audit_verification','Pending / Verified / Missing / Damaged']]},
+  {name:'notifications + activity_log', file:'0009', cols:[['notification_type','enum, per-type icon/color map']]},
+  {name:'RLS policies', file:'0010', cols:[['—','Row-level security across all tables, role-aware']], note:'Also defines the pg_cron scheduled jobs for overdue detection/rollover and the seed.sql demo dataset.'},
+];
+document.getElementById('db-list').innerHTML = tables.map(t=>`
+  <details class="card table-card">
+    <summary>
+      <span>${t.name} <span class="badge">migrations/${t.file}_*.sql</span></span>
+      <span class="arrow">▸</span>
+    </summary>
+    <div class="body">
+      ${t.cols.length && t.cols[0][0]!=='—' ? `<table><tbody>${t.cols.map(c=>`<tr><td class="mono">${c[0]}</td><td>${c[1]}</td></tr>`).join('')}</tbody></table>` : ''}
+      ${t.note ? `<div style="margin-top:8px;">${t.note}</div>` : ''}
+    </div>
+  </details>
+`).join('');
+
+// ---------- API ----------
+const apiGroups = {
+  assets: [['GET/POST','/api/assets','list (search/filter) & register'],['GET/PATCH','/api/assets/[assetId]','read / update single asset'],['PATCH','/api/assets/[assetId]/status','lifecycle transition (server-validated)']],
+  allocations: [['POST','/api/allocations','allocate (server-side conflict check)'],['POST','/api/allocations/[id]/return','check-in / return'],['GET/POST','/api/allocations/transfers','list / raise transfer request'],['POST','/api/allocations/transfers/[id]/approve','approve transfer']],
+  bookings: [['GET/POST','/api/bookings','list / create (server-side overlap check)'],['POST','/api/bookings/[id]/cancel','cancel booking'],['POST','/api/bookings/[id]/reschedule','reschedule booking']],
+  maintenance: [['GET/POST','/api/maintenance','list / raise request'],['POST','/api/maintenance/[id]/approve','approve request'],['POST','/api/maintenance/[id]/assign','assign technician'],['POST','/api/maintenance/[id]/resolve','resolve → asset back to Available']],
+  audits: [['GET/POST','/api/audits','list / create audit cycle'],['POST','/api/audits/[id]/verify','set per-asset verification'],['POST','/api/audits/[id]/close','close cycle (final, non-undoable)']],
+  organization: [['GET/POST','/api/departments','manage departments'],['GET/POST','/api/categories','manage asset categories'],['GET/POST','/api/employees','list employees'],['POST','/api/employees/[id]/promote','promote to Dept Head / Asset Manager']],
+  'notifications & reports': [['GET','/api/notifications','activity feed'],['GET','/api/reports/utilization','utilization by department'],['GET','/api/reports/maintenance-frequency','maintenance frequency series'],['GET','/api/reports/booking-heatmap','resource booking heatmap']],
+};
+document.getElementById('api-list').innerHTML = Object.entries(apiGroups).map(([g,rows])=>`
+  <div class="api-group card">
+    <h4>${g}</h4>
+    ${rows.map(r=>`
+      <div class="api-row">
+        <span class="http ${r[0].toLowerCase().includes('post')&&!r[0].includes('/')?'post':(r[0].toLowerCase().startsWith('get')?'get':'patch')}">${r[0]}</span>
+        <span class="api-path">${r[1]}</span>
+        <span class="api-desc">${r[2]}</span>
+        <span class="stub-tag">stub</span>
+      </div>
+    `).join('')}
+  </div>
+`).join('');
+
+// ---------- CONTRIBUTORS ----------
+const contributors = [
+  {name:'Swayam Patel', init:'SP', role:'Project scaffold, database & infra', commits:[
+    ['4c2a074','Merge branch "jalisa2106:main" into main'],
+    ['3e7377d','feat: implemented the schema and migration sql files (all 10 migrations + doc)'],
+    ['dec208c','chore: added the svg layouts as per excalidraw layouts'],
+    ['bd22855','Merge pull request #1 from jalisa2106/main'],
+    ['a20cb5b','chore: scraped to remove unnecessary files'],
+    ['e3ec6a0','chore: scaffold AssetFlow project structure (Next.js + Supabase)'],
+  ]},
+  {name:'Jalisa Malik', init:'JM', role:'Auth frontend, docs, README', commits:[
+    ['571182f','login/signup frontend'],
+    ['877d168','docs: 2-ui-reference.md'],
+    ['8b04788','Revise README with project details and features (as jalisa2106)'],
+    ['6e82b37','Initial commit (as jalisa2106)'],
+  ]},
+  {name:'Trupal', init:'TR', role:'Agent workflow docs', commits:[
+    ['b3dac89','Add files via upload — SKILLS.md'],
+  ]},
+];
+document.getElementById('contrib-grid').innerHTML = contributors.map(c=>`
+  <div class="card contrib-card">
+    <div class="contrib-head">
+      <div class="avatar">${c.init}</div>
+      <div><h3>${c.name}</h3><div class="role">${c.role}</div></div>
+    </div>
+    <ul class="commit-list">
+      ${c.commits.map(cm=>`<li><span class="sha">${cm[0]}</span>${cm[1]}</li>`).join('')}
+    </ul>
+  </div>
+`).join('');
+
+// ---------- ROADMAP ----------
+const roadmap = [
+  ['done','Login / signup / forgot-password UI', '571182f, 137–342 LOC'],
+  ['done','Full 10-migration DB schema + RLS + triggers + seed data (designed)', '3e7377d'],
+  ['done','Excalidraw UI/UX mockup for all 10 screens', 'dec208c'],
+  ['partial','Project scaffold: routes, folders, empty page/route files for all 10 screens', 'e3ec6a0'],
+  ['todo','Dashboard KPI cards + overdue banner', 'page.tsx = 1 line'],
+  ['todo','Organization setup (departments/categories/employees)', 'page.tsx = 1 line'],
+  ['todo','Asset registration & directory', 'page.tsx = 1 line'],
+  ['todo','Allocation & transfer conflict flow', 'page.tsx = 1 line'],
+  ['todo','Booking calendar + overlap UI', 'page.tsx = 1 line'],
+  ['todo','Maintenance Kanban board', 'page.tsx = 1 line'],
+  ['todo','Audit cycle screens', 'page.tsx = 1 line'],
+  ['todo','Reports & analytics charts', 'page.tsx = 1 line'],
+  ['todo','Notifications / activity feed UI', 'page.tsx = 1 line'],
+  ['todo','All 26 API route handlers (business logic)', 'route.ts = 1 line each'],
+];
+document.getElementById('roadmap-list').innerHTML = roadmap.map(r=>`
+  <div class="status-row">
+    <span class="dot ${r[0]}"></span>
+    <span>${r[1]}</span>
+    <span class="tag2">${r[2]}</span>
+  </div>
+`).join('');
+
+// ---------- LIVE PREVIEW ----------
+const previews = [
+  {id:'login', label:'01 · Login', render:()=>`
+    <div class="pf-inner active" style="max-width:380px;margin:20px auto;background:#fff;border:1px solid #e3ddce;border-radius:10px;padding:26px;">
+      <h5>Sign in to AssetFlow</h5>
+      <div class="pf-sub">Enterprise Asset &amp; Resource Management</div>
+      <div style="font-size:12px;color:#6b6455;margin-bottom:6px;">Email</div>
+      <div style="border:1px solid #d8d2c4;border-radius:5px;padding:9px 10px;font-size:12px;margin-bottom:12px;color:#948d7c;">priya.shah@company.com</div>
+      <div style="font-size:12px;color:#6b6455;margin-bottom:6px;">Password</div>
+      <div style="border:1px solid #d8d2c4;border-radius:5px;padding:9px 10px;font-size:12px;margin-bottom:6px;color:#948d7c;">••••••••••</div>
+      <div style="text-align:right;font-size:11px;color:#3a5a78;margin-bottom:16px;">Forgot password?</div>
+      <div style="background:#152840;color:#fff;text-align:center;padding:10px;border-radius:6px;font-size:12.5px;margin-bottom:10px;">Sign in</div>
+      <div style="border:1px solid #d8d2c4;text-align:center;padding:10px;border-radius:6px;font-size:12.5px;color:#3a5a78;margin-bottom:14px;">Create account</div>
+      <div style="font-size:10.8px;color:#948d7c;line-height:1.5;border-top:1px solid #e3ddce;padding-top:10px;">Signup creates an Employee account — admin roles are assigned later, from Organization → Employees.</div>
+    </div>`},
+  {id:'dashboard', label:'02 · Dashboard', render:()=>`
+    <h5>Today's Overview</h5>
+    <div class="pf-sub">Welcome back, Priya Shah — Asset Manager, Engineering</div>
+    <div class="grid cols-4" style="margin-bottom:14px;">
+      <div class="kpi-mini"><div class="n">312</div><div class="l">Available</div></div>
+      <div class="kpi-mini"><div class="n">184</div><div class="l">Allocated</div></div>
+      <div class="kpi-mini"><div class="n">27</div><div class="l">Active bookings</div></div>
+      <div class="kpi-mini"><div class="n">9</div><div class="l">Pending transfers</div></div>
+    </div>
+    <div class="banner-conflict" style="background:#f7e9e6;color:#8a3524;border-color:#e3b8ac;">
+      <b>4 assets overdue for return</b> — flagged for follow-up
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <div style="flex:1;background:#152840;color:#fff;text-align:center;padding:9px;border-radius:6px;font-size:12px;">+ Register asset</div>
+      <div style="flex:1;background:#152840;color:#fff;text-align:center;padding:9px;border-radius:6px;font-size:12px;">Book resource</div>
+      <div style="flex:1;background:#152840;color:#fff;text-align:center;padding:9px;border-radius:6px;font-size:12px;">Raise request</div>
+    </div>
+    <div style="font-size:11.5px;color:#77705f;font-weight:600;margin-bottom:6px;">RECENT ACTIVITY</div>
+    <div style="font-size:12px;color:#4a453b;line-height:1.9;">
+      Laptop AF-0114 assigned to Priya Shah — 2h ago<br>
+      Transfer approved: AF-0033 to Facilities dept — 5h ago<br>
+      Audit discrepancy flagged: AF-0891 damaged — 2d ago
+    </div>`},
+  {id:'org', label:'03 · Organization', render:()=>`
+    <h5>Organization setup</h5>
+    <div class="pf-sub">Departments · Categories · Employees</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <span style="background:#152840;color:#fff;padding:6px 14px;border-radius:5px;font-size:12px;">Departments</span>
+      <span style="border:1px solid #d8d2c4;padding:6px 14px;border-radius:5px;font-size:12px;color:#6b6455;">Categories</span>
+      <span style="border:1px solid #d8d2c4;padding:6px 14px;border-radius:5px;font-size:12px;color:#6b6455;">Employees</span>
+      <span style="margin-left:auto;background:#d98e3d;color:#fff;padding:6px 14px;border-radius:5px;font-size:12px;">+ Add department</span>
+    </div>
+    <table class="mock-table">
+      <tr><th>Department</th><th>Head</th><th>Parent dept</th><th>Status</th></tr>
+      <tr><td>Engineering</td><td>Priya Shah</td><td>—</td><td><span class="badge2 b-avail">Active</span></td></tr>
+      <tr><td>QA</td><td>Arjun Nair</td><td>Engineering</td><td><span class="badge2 b-avail">Active</span></td></tr>
+      <tr><td>Facilities</td><td>S. Iqbal</td><td>—</td><td><span class="badge2 b-avail">Active</span></td></tr>
+      <tr><td>Legacy Ops</td><td>—</td><td>—</td><td><span class="badge2 b-retired">Inactive</span></td></tr>
+    </table>`},
+  {id:'assets', label:'04 · Assets', render:()=>`
+    <h5>Asset directory</h5>
+    <div class="pf-sub">Search by tag, serial, or QR code…</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <span style="border:1px solid #d8d2c4;padding:6px 12px;border-radius:5px;font-size:11.5px;color:#6b6455;">Category ▾</span>
+      <span style="border:1px solid #d8d2c4;padding:6px 12px;border-radius:5px;font-size:11.5px;color:#6b6455;">Status ▾</span>
+      <span style="border:1px solid #d8d2c4;padding:6px 12px;border-radius:5px;font-size:11.5px;color:#6b6455;">Department ▾</span>
+      <span style="margin-left:auto;background:#d98e3d;color:#fff;padding:6px 14px;border-radius:5px;font-size:12px;">+ Register asset</span>
+    </div>
+    <table class="mock-table">
+      <tr><th>Tag</th><th>Name</th><th>Category</th><th>Status</th><th>Location</th></tr>
+      <tr><td class="mono">AF-0114</td><td>Dell Latitude 7440</td><td>Laptop</td><td><span class="badge2 b-alloc">Allocated</span></td><td>Eng · Floor 3</td></tr>
+      <tr><td class="mono">AF-0062</td><td>Epson Projector</td><td>AV Equipment</td><td><span class="badge2 b-maint">Under Maintenance</span></td><td>Conf B2</td></tr>
+      <tr><td class="mono">AF-0891</td><td>Steel Filing Cabinet</td><td>Furniture</td><td><span class="badge2 b-lost">Lost</span></td><td>Facilities</td></tr>
+      <tr><td class="mono">AF-0201</td><td>Herman Miller Chair</td><td>Furniture</td><td><span class="badge2 b-avail">Available</span></td><td>Warehouse</td></tr>
+    </table>`},
+  {id:'allocation', label:'05 · Allocation', render:()=>`
+    <h5>Allocate asset</h5>
+    <div class="pf-sub">AF-0114 — Dell Latitude 7440</div>
+    <div class="banner-conflict">
+      <b>Already allocated to Priya Shah (Engineering)</b>
+      Direct re-allocation is blocked — submit a transfer request below.
+    </div>
+    <div style="border:1px solid #e3ddce;border-radius:6px;padding:14px;margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;">Transfer request</div>
+      <div style="font-size:11.5px;color:#6b6455;margin-bottom:4px;">From (current holder)</div>
+      <div style="border:1px solid #e3ddce;border-radius:4px;padding:7px 9px;font-size:12px;color:#948d7c;margin-bottom:10px;">Priya Shah — Engineering</div>
+      <div style="font-size:11.5px;color:#6b6455;margin-bottom:4px;">To</div>
+      <div style="border:1px solid #d8d2c4;border-radius:4px;padding:7px 9px;font-size:12px;color:#948d7c;margin-bottom:10px;">Select employee…</div>
+      <div style="background:#152840;color:#fff;text-align:center;padding:8px;border-radius:5px;font-size:12px;">Submit request</div>
+    </div>
+    <div style="font-size:11.5px;color:#77705f;font-weight:600;margin-bottom:6px;">ALLOCATION HISTORY</div>
+    <div style="font-size:12px;color:#4a453b;line-height:1.9;">Mar 12 — Allocated to Priya Shah — Engineering<br>Jan 09 — Returned by Arjun Nair — condition: good</div>`},
+  {id:'booking', label:'06 · Booking', render:()=>`
+    <h5>Conference Room B2</h5>
+    <div class="pf-sub">Tue, 7 Jul</div>
+    ${[9,10,11,12].map(h=>`
+      <div class="cal-row">
+        <div class="cal-hour">${h}:00</div>
+        <div class="cal-slot">
+          ${h===9?'<div class="slot-block">Booked — Procurement Team — 9 to 10</div><div class="slot-conflict">Requested 9:30–10:30 — conflict, slot unavailable</div>':''}
+          ${h===11?'<div class="slot-block">Booked — Design Team — 11 to 12</div>':''}
+        </div>
+      </div>`).join('')}
+    <div style="margin-top:14px;background:#152840;color:#fff;text-align:center;padding:9px;border-radius:6px;font-size:12.5px;max-width:160px;">Book a slot</div>`},
+  {id:'maintenance', label:'07 · Maintenance', render:()=>`
+    <h5>Maintenance workflow</h5>
+    <div class="pf-sub">Kanban board</div>
+    <div class="kanban">
+      ${[
+        ['Pending',['AF-0062 · Projector bulb not turning on']],
+        ['Approved',['AF-0201 · Chair — armrest loose']],
+        ['Technician Assigned',['AF-0450 · AC unit — no cooling']],
+        ['In Progress',['AF-0033 · Printer — paper jam recurring']],
+        ['Resolved',['AF-0873 · Chair repair resolved 7 Jul']],
+      ].map(([title,cards],i)=>`
+        <div class="kcol"><h6>${title}</h6>
+        ${cards.map(c=>{const [tag,rest]=c.split(' · ');return `<div class="kcard ${title==='Resolved'?'resolved':''}"><b>${tag}</b>${rest}</div>`;}).join('')}
+        </div>`).join('')}
+    </div>`},
+  {id:'audit', label:'08 · Audit', render:()=>`
+    <h5>Q3 audit — Engineering dept</h5>
+    <div class="pf-sub">1–15 Jul · Auditors: A. Rao, S. Iqbal</div>
+    <table class="mock-table">
+      <tr><th>Asset</th><th>Expected location</th><th>Verification</th></tr>
+      <tr><td class="mono">AF-0114</td><td>Eng · Floor 3</td><td><span class="badge2 b-avail">Verified</span></td></tr>
+      <tr><td class="mono">AF-0891</td><td>Facilities</td><td><span class="badge2 b-lost">Missing</span></td></tr>
+      <tr><td class="mono">AF-0450</td><td>Eng · Floor 2</td><td><span class="badge2 b-maint">Damaged</span></td></tr>
+      <tr><td class="mono">AF-0201</td><td>Warehouse</td><td><span class="badge2 b-avail">Verified</span></td></tr>
+    </table>
+    <div class="banner-conflict" style="margin-top:14px;">2 assets flagged — discrepancy report generated automatically</div>
+    <div style="background:#152840;color:#fff;text-align:center;padding:9px;border-radius:6px;font-size:12.5px;max-width:160px;margin-top:6px;">Close audit cycle</div>`},
+  {id:'reports', label:'09 · Reports', render:()=>`
+    <h5>Reports &amp; analytics</h5>
+    <div class="grid cols-2" style="margin-bottom:14px;">
+      <div class="kpi-mini" style="height:120px;display:flex;align-items:flex-end;gap:8px;padding:12px;">
+        ${[40,70,55,90,60].map(h=>`<div style="flex:1;background:#3a5a78;height:${h}%;border-radius:3px 3px 0 0;"></div>`).join('')}
+      </div>
+      <div class="kpi-mini" style="height:120px;position:relative;padding:12px;">
+        <svg viewBox="0 0 200 80" style="width:100%;height:100%;"><polyline points="0,60 40,45 80,50 120,20 160,30 200,10" fill="none" stroke="#d98e3d" stroke-width="2.5"/></svg>
+      </div>
+    </div>
+    <div class="grid cols-2">
+      <div><div style="font-size:11.5px;font-weight:600;color:#77705f;margin-bottom:6px;">MOST-USED ASSETS</div><div style="font-size:12px;line-height:1.9;">Room B2 — 39 bookings this month<br>AF-0114 — 8 allocations YTD</div></div>
+      <div><div style="font-size:11.5px;font-weight:600;color:#77705f;margin-bottom:6px;">IDLE ASSETS</div><div style="font-size:12px;line-height:1.9;">AF-0762 — unused 94 days<br>AF-0510 — unused 61 days</div></div>
+    </div>`},
+  {id:'notifications', label:'10 · Notifications', render:()=>`
+    <h5>Notifications &amp; activity log</h5>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <span style="background:#152840;color:#fff;padding:5px 12px;border-radius:14px;font-size:11px;">All</span>
+      <span style="border:1px solid #d8d2c4;padding:5px 12px;border-radius:14px;font-size:11px;color:#6b6455;">Unread</span>
+      <span style="border:1px solid #d8d2c4;padding:5px 12px;border-radius:14px;font-size:11px;color:#6b6455;">Overdue</span>
+    </div>
+    ${[
+      ['#4c8a76','Laptop AF-0114 assigned to Priya Shah','2h ago'],
+      ['#3a5a78','Transfer approved: AF-0033 to Facilities dept','5h ago'],
+      ['#c1503f','Audit discrepancy flagged: AF-0891 damaged','2d ago'],
+      ['#d98e3d','Booking reminder: Conference Room B2 in 30 min','3d ago'],
+    ].map(n=>`<div class="notif-item"><span class="ndot" style="background:${n[0]}"></span><span>${n[1]}</span><span class="ntime">${n[2]}</span></div>`).join('')}
+    `},
+];
+document.getElementById('preview-tabs').innerHTML = previews.map((p,i)=>`<span class="ptab ${i===0?'active':''}" data-i="${i}">${p.label}</span>`).join('');
+function renderPreview(i){
+  document.getElementById('preview-frame').innerHTML = `<div class="pf-inner active">${previews[i].render()}</div>`;
+}
+document.querySelectorAll('.ptab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    renderPreview(+tab.dataset.i);
+  });
+});
+renderPreview(0);
+</script>
+</body>
+</html>
