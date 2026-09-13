@@ -143,6 +143,16 @@ const skillsData = [
   //   category: "Frameworks",
   //   icon: "https://skillicons.dev/icons?i=express",
   // },
+  {
+    name: "Django",
+    category: "Frameworks",
+    icon: "https://skillicons.dev/icons?i=django",
+  },
+  {
+    name: "Zustand",
+    category: "Frameworks",
+    icon: "https://upload.wikimedia.org/wikipedia/commons/1/18/React_Native_Logo.png",
+  },
 
   // Databases
   {
@@ -191,6 +201,11 @@ const skillsData = [
     icon: "https://cdn.simpleicons.org/xampp",
     invertDark: true,
   },
+  {
+    name: "Prisma",
+    category: "Databases",
+    icon: "https://skillicons.dev/icons?i=prisma",
+  },
 
   // Cloud & DevOps
   {
@@ -218,12 +233,7 @@ const skillsData = [
     category: "Cloud & DevOps",
     icon: "https://skillicons.dev/icons?i=github",
   },
-  {
-    name: "n8n",
-    category: "Cloud & DevOps",
-    icon: "https://cdn.simpleicons.org/n8n",
-    invertDark: true,
-  },
+
 
   // Data & Analytics
   {
@@ -303,6 +313,22 @@ const skillsData = [
     icon: "https://cdn.simpleicons.org/ollama",
     invertDark: true,
   },
+  {
+    name: "Langchain",
+    category: "AI & LLMs",
+    icon: "https://avatars.githubusercontent.com/u/126733259?v=4",
+  },
+  {
+    name: "Langgraph",
+    category: "AI & LLMs",
+    icon: "https://avatars.githubusercontent.com/u/126733259?v=4",
+  },
+  {
+    name: "n8n",
+    category: "AI & LLMs",
+    icon: "https://cdn.simpleicons.org/n8n",
+    invertDark: true,
+  },
 
   // Generative AI
   {
@@ -341,6 +367,12 @@ const skillsData = [
     category: "Generative AI",
     icon: "https://skillicons.dev/icons?i=notion",
   },
+  {
+    name: "v0 by Vercel",
+    category: "Generative AI",
+    icon: "https://cdn.simpleicons.org/vercel",
+    invertDark: true,
+  },
 
   // Dev Tools & IDEs
   {
@@ -358,12 +390,12 @@ const skillsData = [
   //   category: "Dev Tools & IDEs",
   //   icon: "https://skillicons.dev/icons?i=postman",
   // },
-  // {
-  //   name: "Cursor AI",
-  //   category: "Dev Tools & IDEs",
-  //   icon: "https://cdn.simpleicons.org/cursor",
-  //   invertDark: true,
-  // },
+  {
+    name: "Cursor AI",
+    category: "Dev Tools & IDEs",
+    icon: "https://cdn.simpleicons.org/cursor",
+    invertDark: true,
+  },
   {
     name: "Antigravity",
     category: "Dev Tools & IDEs",

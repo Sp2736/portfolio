@@ -7,8 +7,10 @@ import { Hero } from "@/components/hero";
 import { SkillsOrbit } from "@/components/skills-orbit";
 import { Timeline } from "@/components/timeline";
 import { Projects } from "@/components/projects";
-import { Certifications } from "@/components/certifications";
+import { Freelance } from "@/components/freelance";
+
 import { GithubActivity } from "@/components/github-activity";
+import { PracticeFeed } from "@/components/practice-feed";
 import { Blog } from "@/components/blog";
 import { CoreCapabilities } from "@/components/core-capabilities";
 import { PoeticOverride } from "@/components/poetic-override";
@@ -29,10 +31,12 @@ export default function Home() {
       <main id="main-content" className="w-full flex flex-col items-center">
         <Hero />
         <Projects />
+        <Freelance />
         <SkillsOrbit />
         <Timeline />
         <CoreCapabilities />
-        <Certifications />
+        <PracticeFeed />
+
         <GithubActivity />
         <Blog />
         <ResumeOverride />

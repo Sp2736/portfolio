@@ -15,6 +15,10 @@ import {
   History,
   Coffee,
   Award,
+  Code2,
+  Briefcase,
+  Target,
+  FlaskConical,
 } from "lucide-react";
 import { useLenis } from "lenis/react";
 
@@ -46,10 +50,11 @@ export function Header() {
 
   const navLinks = [
     { name: "deployments", id: "#projects", icon: Layers },
+    { name: "freelance", id: "#freelance", icon: Briefcase },
     { name: "arsenal", id: "#skills", icon: Cpu },
     { name: "chronology", id: "#chronology", icon: History },
     { name: "un-professional", id: "#capabilities", icon: Coffee },
-    { name: "certifications", id: "#certifications", icon: Award },
+    { name: "algos", id: "#algos", icon: Code2 },
     { name: "blogs", id: "#blog", icon: BookOpen },
   ];
 

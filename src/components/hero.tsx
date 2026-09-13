@@ -14,6 +14,7 @@ import {
   Mail,
   CodeXmlIcon,
   Download,
+  Briefcase,
 } from "lucide-react";
 
 function HeroProfile() {
@@ -190,6 +191,14 @@ function HeroProfile() {
               className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
             >
               <Linkedin size={16} />
+            </a>
+            <a
+              href="https://www.fiverr.com/swayampatel440"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-full bg-background/5 border border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--primary),0.3)] transition-all"
+            >
+              <Briefcase size={16} />
             </a>
             <a
               href="https://instagram.com/sp_27.03"

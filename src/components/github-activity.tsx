@@ -51,7 +51,7 @@ export function GithubActivity() {
     createdAt: "",
     updatedAt: "",
   });
-  const [recentPushes, setRecentPushes] = useState<any[]>([]);
+  const [recentPushes, setRecentPushes] = useState<{name: string, html_url: string, pushed_at: string}[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -60,23 +60,35 @@ export function GithubActivity() {
         const userRes = await fetch("https://api.github.com/users/Sp2736");
         const userData = await userRes.json();
 
-        const reposRes = await fetch(
-          "https://api.github.com/users/Sp2736/repos?sort=pushed&per_page=4",
+        const eventsRes = await fetch(
+          "https://api.github.com/users/Sp2736/events/public?per_page=30"
         );
-        const reposData = await reposRes.json();
+        const eventsData = await eventsRes.json();
 
-        if (userRes.ok && reposRes.ok) {
+        if (userRes.ok && eventsRes.ok) {
+          // Filter for PushEvents and exclude any repo with "portfolio" in its name
+          const pushes = eventsData
+            .filter((event: {type: string}) => event.type === "PushEvent")
+            .filter((event: {repo: {name: string}}) => !event.repo.name.toLowerCase().includes("portfolio"));
+            
+          // Deduplicate by repo name to get unique repos recently pushed to
+          const uniqueRepos = Array.from(new Map(pushes.map((p: {repo: {name: string}, created_at: string}) => [p.repo.name, p])).values());
+          const recentRepos = uniqueRepos.slice(0, 4).map((p: {repo: {name: string}, created_at: string}) => ({
+            name: p.repo.name,
+            html_url: `https://github.com/${p.repo.name}`,
+            pushed_at: p.created_at,
+          }));
+
           setGitData({
             repos: userData.public_repos,
             followers: userData.followers,
             following: userData.following,
             location: userData.location || "Remote",
-            // Real data points from GitHub API
             name: userData.name || userData.login,
             createdAt: userData.created_at,
             updatedAt: userData.updated_at,
           });
-          setRecentPushes(reposData);
+          setRecentPushes(recentRepos);
         }
       } catch (error) {
         console.error("Failed to fetch live GitHub data.", error);
