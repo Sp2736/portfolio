@@ -5,6 +5,7 @@ import { FileText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { Terminal as TerminalWindow } from "./terminal";
+import { NowPlayingWidget } from "./now-playing-widget";
 import {
   MapPin,
   ShieldCheck,
@@ -97,8 +98,8 @@ function HeroProfile() {
         </div>
       </div>
 
-      {/* RIGHT: Profile Data & Identity */}
-      <div className="flex flex-col items-center md:items-start text-center md:text-left w-full z-10">
+      {/* MIDDLE: Profile Data & Identity */}
+      <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left w-full z-10">
         {/* Verification & Location Row */}
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 md:gap-4 mb-2">
           <div className="flex items-center gap-1 text-[10px] md:text-xs font-mono text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
@@ -240,6 +241,11 @@ function HeroProfile() {
           {/* Divider (Hidden on Mobile) */}
           <div className="hidden sm:block w-[1px] h-6 bg-border/50" />
         </div>
+      </div>
+
+      {/* RIGHT: Now Playing */}
+      <div className="w-full md:w-auto flex justify-center mt-4 md:mt-0 z-10 hidden md:block">
+        <NowPlayingWidget />
       </div>
     </motion.div>
   );
