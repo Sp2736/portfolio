@@ -165,7 +165,6 @@ export function NowPlayingWidget() {
                   height="352"
                   frameBorder="0"
                   allowFullScreen={false}
-                  allowtransparency="true"
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"
                   title="Spotify track"
