@@ -197,7 +197,7 @@ export function LeetCodeWidget() {
           className="rounded-2xl bg-background/5 backdrop-blur-md border border-border/30 overflow-hidden shadow-2xl"
         >
           {/* Terminal-style top bar */}
-          <div className="flex items-center px-5 py-3 bg-muted/30 border-b border-border/30">
+          <div className="flex items-center px-5 py-3 bg-muted/30 backdrop-blur-sm border-b border-border/30">
             <div className="flex gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
               <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
@@ -289,7 +289,7 @@ export function LeetCodeWidget() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: i * 0.08 }}
-                        className="flex flex-col gap-1.5 p-3 rounded-xl bg-card border border-border shadow-sm"
+                        className="flex flex-col gap-1.5 p-3 rounded-xl bg-card/40 backdrop-blur-md border border-border shadow-sm"
                       >
                         <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
                           <Icon size={10} className={s.color} />
@@ -303,7 +303,7 @@ export function LeetCodeWidget() {
                   })}
 
                   {/* Difficulty breakdown bars */}
-                  <div className="sm:col-span-2 flex flex-col gap-2 p-3 rounded-xl bg-card border border-border shadow-sm">
+                  <div className="sm:col-span-2 flex flex-col gap-2 p-3 rounded-xl bg-card/40 backdrop-blur-md border border-border shadow-sm">
                     <p className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground">
                       Difficulty Breakdown
                     </p>
@@ -316,7 +316,7 @@ export function LeetCodeWidget() {
                         <span className={`text-[10px] font-mono font-bold w-12 ${bar.text}`}>
                           {bar.label}
                         </span>
-                        <div className="flex-1 h-1.5 rounded-full bg-muted/50 overflow-hidden">
+                        <div className="flex-1 h-1.5 rounded-full bg-muted/50 backdrop-blur-sm overflow-hidden">
                           <motion.div
                             className={`h-full rounded-full ${bar.color}`}
                             initial={{ width: 0 }}

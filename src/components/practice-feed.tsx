@@ -215,7 +215,7 @@ export function PracticeFeed() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.07 }}
-                className="p-4 rounded-xl bg-card border border-border shadow-sm flex items-center justify-between"
+                className="p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border shadow-sm flex items-center justify-between"
               >
                 <div>
                   <p className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest">
@@ -238,10 +238,10 @@ export function PracticeFeed() {
               initial={{ opacity: 0, scale: 0.97 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="w-full h-full rounded-2xl bg-card border border-border shadow-xl overflow-hidden font-mono text-xs flex flex-col"
+              className="w-full h-full rounded-2xl bg-card/40 backdrop-blur-md border border-border shadow-xl overflow-hidden font-mono text-xs flex flex-col"
             >
               {/* Mac-style title bar */}
-              <div className="flex items-center px-4 py-3 bg-muted/50 border-b border-border">
+              <div className="flex items-center px-4 py-3 bg-muted/50 backdrop-blur-sm border-b border-border">
                 <div className="flex gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
                   <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
@@ -280,7 +280,7 @@ export function PracticeFeed() {
                           href={c.html_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-border/40 hover:bg-muted/20 transition-colors group px-2 -mx-2 rounded-sm gap-0.5"
+                          className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-border/40 hover:bg-muted/20 backdrop-blur-sm transition-colors group px-2 -mx-2 rounded-sm gap-0.5"
                         >
                           <span className="flex items-center gap-2">
                             <span className="text-muted-foreground/60 text-[9px]">
@@ -313,14 +313,14 @@ export function PracticeFeed() {
             className="lg:w-1/2 w-full flex flex-col gap-6"
           >
             {/* Language distribution */}
-            <div className="flex flex-col gap-4 p-6 rounded-2xl bg-card border border-border shadow-xl grow">
+            <div className="flex flex-col gap-4 p-6 rounded-2xl bg-card/40 backdrop-blur-md border border-border shadow-xl grow">
               <div className="flex items-center gap-2 font-mono text-sm text-primary uppercase tracking-widest font-bold">
                 <Code2 size={18} /> Language Stats
               </div>
 
               {loading && (
                 <div className="flex flex-col gap-3">
-                  <div className="h-3 w-full rounded-full bg-muted/50 animate-pulse" />
+                  <div className="h-3 w-full rounded-full bg-muted/50 backdrop-blur-sm animate-pulse" />
                   <div className="flex flex-wrap gap-3">
                     {[...Array(5)].map((_, i) => (
                       <div key={i} className="h-4 w-20 rounded bg-muted/40 animate-pulse" />
@@ -346,7 +346,7 @@ export function PracticeFeed() {
                 href={repo.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between p-5 rounded-2xl border border-border bg-card hover:bg-muted/50 hover:border-primary/50 transition-all shadow-sm"
+                className="group flex items-center justify-between p-5 rounded-2xl border border-border bg-card/40 backdrop-blur-md hover:bg-muted/50 backdrop-blur-sm hover:border-primary/50 transition-all shadow-sm"
               >
                 <div className="flex items-center gap-3">
                   <Github size={22} className="text-primary/70 group-hover:text-primary transition-colors" />

@@ -162,7 +162,7 @@ export function GithubActivity() {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="p-4 rounded-xl bg-card border border-border shadow-sm flex items-center justify-between"
+              className="p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border shadow-sm flex items-center justify-between"
             >
               <div>
                 <p className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest">
@@ -183,9 +183,9 @@ export function GithubActivity() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="w-full h-full rounded-2xl bg-card border border-border shadow-xl overflow-hidden font-mono text-xs md:text-sm flex flex-col"
+              className="w-full h-full rounded-2xl bg-card/40 backdrop-blur-md border border-border shadow-xl overflow-hidden font-mono text-xs md:text-sm flex flex-col"
             >
-              <div className="flex items-center px-4 py-3 bg-muted/50 border-b border-border">
+              <div className="flex items-center px-4 py-3 bg-muted/50 backdrop-blur-sm border-b border-border">
                 <div className="flex gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
                   <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
@@ -241,7 +241,7 @@ export function GithubActivity() {
                           href={repo.html_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex justify-between items-center py-2 border-b border-border/50 hover:bg-muted/30 transition-colors group px-2 -mx-2 rounded-sm"
+                          className="flex justify-between items-center py-2 border-b border-border/50 hover:bg-muted/30 backdrop-blur-sm transition-colors group px-2 -mx-2 rounded-sm"
                         >
                           <span className="text-foreground font-bold group-hover:text-primary transition-colors">
                             {repo.name}
@@ -280,7 +280,7 @@ export function GithubActivity() {
                   href={repo.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group p-5 rounded-2xl border border-border bg-card hover:bg-muted/50 hover:border-primary/50 transition-all flex flex-col shadow-sm hover:shadow-md"
+                  className="group p-5 rounded-2xl border border-border bg-card/40 backdrop-blur-md hover:bg-muted/50 backdrop-blur-sm hover:border-primary/50 transition-all flex flex-col shadow-sm hover:shadow-md"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h4 className="font-bold text-foreground font-mono text-xs group-hover:text-primary transition-colors line-clamp-1">

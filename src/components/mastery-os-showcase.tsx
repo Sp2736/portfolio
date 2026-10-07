@@ -64,7 +64,7 @@ function SkillCard({ skill, index }: { skill: LeetcodeSkill; index: number }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06, duration: 0.4 }}
-      className="flex flex-col gap-3 p-4 rounded-xl bg-card border border-border shadow-sm"
+      className="flex flex-col gap-3 p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border shadow-sm"
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-2">
@@ -82,7 +82,7 @@ function SkillCard({ skill, index }: { skill: LeetcodeSkill; index: number }) {
       </div>
 
       {/* Progress bar */}
-      <div className="h-1 rounded-full bg-muted/50 overflow-hidden">
+      <div className="h-1 rounded-full bg-muted/50 backdrop-blur-sm overflow-hidden">
         <motion.div
           className="h-full rounded-full bg-primary"
           initial={{ width: 0 }}
@@ -152,7 +152,7 @@ export function MasteryOSShowcase() {
       className="w-full rounded-2xl border border-border/40 bg-background/40 backdrop-blur-xl shadow-2xl overflow-hidden"
     >
       {/* Terminal bar */}
-      <div className="flex items-center justify-between px-5 py-3 bg-muted/20 border-b border-border/30">
+      <div className="flex items-center justify-between px-5 py-3 bg-muted/20 backdrop-blur-sm border-b border-border/30">
         <div className="flex gap-1.5">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 shadow-[0_0_5px_rgba(239,68,68,0.5)]" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 shadow-[0_0_5px_rgba(234,179,8,0.5)]" />
@@ -208,7 +208,7 @@ export function MasteryOSShowcase() {
               <p className="text-[10px] font-mono text-muted-foreground text-center max-w-[160px]">{error}</p>
               <button
                 onClick={fetchStats}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono font-bold rounded-lg bg-card border border-border hover:border-primary/40 transition-all text-foreground"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-mono font-bold rounded-lg bg-card/40 backdrop-blur-md border border-border hover:border-primary/40 transition-all text-foreground"
               >
                 <RefreshCw size={11} />
                 Retry
@@ -219,7 +219,7 @@ export function MasteryOSShowcase() {
           {!loading && !error && stats && (
             <div className="flex gap-3 shrink-0">
               {/* Streak */}
-              <div className="flex flex-col items-center justify-center gap-1 p-4 rounded-xl bg-card border border-border shadow-sm min-w-[100px]">
+              <div className="flex flex-col items-center justify-center gap-1 p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border shadow-sm min-w-[100px]">
                 <TrendingUp size={16} className="text-primary/60" />
                 <span className="text-2xl font-extrabold font-mono text-foreground leading-none">
                   {stats.streak.current}
@@ -233,7 +233,7 @@ export function MasteryOSShowcase() {
               </div>
 
               {/* Skill count */}
-              <div className="flex flex-col items-center justify-center gap-1 p-4 rounded-xl bg-card border border-border shadow-sm min-w-[100px]">
+              <div className="flex flex-col items-center justify-center gap-1 p-4 rounded-xl bg-card/40 backdrop-blur-md border border-border shadow-sm min-w-[100px]">
                 <Code2 size={16} className="text-primary/60" />
                 <span className="text-2xl font-extrabold font-mono text-foreground leading-none">
                   {stats.leetcode.totalSkills}
@@ -286,7 +286,7 @@ export function MasteryOSShowcase() {
             {["Next.js 16", "TypeScript", "Tailwind CSS", "Framer Motion", "GitHub REST API", "Vercel"].map((t) => (
               <span
                 key={t}
-                className="px-2 py-0.5 rounded text-[9px] font-mono text-muted-foreground/60 bg-muted/20 border border-border/40"
+                className="px-2 py-0.5 rounded text-[9px] font-mono text-muted-foreground/60 bg-muted/20 backdrop-blur-sm border border-border/40"
               >
                 {t}
               </span>
