@@ -151,29 +151,28 @@ export function LeetCodeWidget() {
         setLoading(true);
         setError(null);
 
-        const [userRes, solvedRes] = await Promise.all([
-          fetch(`${API_URL}/solved`),
-          fetch(`${API_URL}`),
-        ]);
+        const res = await fetch(`${API_URL}/profile`);
+        if (!res.ok) throw new Error("API unavailable");
 
-        if (!userRes.ok || !solvedRes.ok) throw new Error("API unavailable");
+        const data = await res.json();
 
-        const solvedData = await userRes.json();
-        const userData = await solvedRes.json();
+        const totalSubmissions = data.matchedUserStats?.totalSubmissionNum?.find((d: any) => d.difficulty === "All")?.submissions || 0;
+        const acSubmissions = data.matchedUserStats?.acSubmissionNum?.find((d: any) => d.difficulty === "All")?.submissions || 0;
+        const acceptanceRate = totalSubmissions > 0 ? (acSubmissions / totalSubmissions) * 100 : 0;
 
         setStats({
-          totalSolved: solvedData.solvedProblem ?? 0,
-          totalQuestions: solvedData.totalSubmissionNum?.[0]?.count ?? 0,
-          easySolved: solvedData.easySolved ?? 0,
-          totalEasy: solvedData.totalEasySubmissions ?? 0,
-          mediumSolved: solvedData.mediumSolved ?? 0,
-          totalMedium: solvedData.totalMediumSubmissions ?? 0,
-          hardSolved: solvedData.hardSolved ?? 0,
-          totalHard: solvedData.totalHardSubmissions ?? 0,
-          acceptanceRate: userData.acceptanceRate ?? 0,
-          ranking: userData.ranking ?? 0,
-          contributionPoints: userData.contributionPoints ?? 0,
-          reputation: userData.reputation ?? 0,
+          totalSolved: data.totalSolved ?? 0,
+          totalQuestions: data.totalQuestions ?? 0,
+          easySolved: data.easySolved ?? 0,
+          totalEasy: data.totalEasy ?? 0,
+          mediumSolved: data.mediumSolved ?? 0,
+          totalMedium: data.totalMedium ?? 0,
+          hardSolved: data.hardSolved ?? 0,
+          totalHard: data.totalHard ?? 0,
+          acceptanceRate: acceptanceRate,
+          ranking: data.ranking ?? 0,
+          contributionPoints: data.contributionPoint ?? 0,
+          reputation: data.reputation ?? 0,
         });
       } catch {
         setError(
