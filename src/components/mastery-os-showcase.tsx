@@ -13,6 +13,7 @@ import {
   Code2,
   CheckCircle2,
   ChevronRight,
+  Mail,
 } from "lucide-react";
 
 // ── TYPES ─────────────────────────────────────────────────────────────────────
@@ -186,25 +187,14 @@ export function MasteryOSShowcase() {
               section by section. Every task completion commits directly to Git — discipline
               reflected on the GitHub contribution graph.
             </p>
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-3 flex-wrap mt-2">
               <a
-                href={MASTERY_OS_BASE}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:swayampatel2736@gmail.com?subject=Inquiry about Mastery OS"
                 className="group flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-mono font-bold hover:opacity-90 transition-all shadow-sm hover:-translate-y-0.5"
               >
-                <ExternalLink size={12} />
-                Live App
+                <Mail size={13} />
+                Want this for yourself? Let's talk
                 <ArrowUpRight size={11} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-              <a
-                href="https://github.com/Sp2736/mastery-os"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border text-foreground text-xs font-mono font-bold hover:border-primary/40 hover:bg-muted/40 transition-all"
-              >
-                <Github size={12} />
-                Source Code
               </a>
             </div>
           </div>
