@@ -131,7 +131,7 @@ export function PracticeFeed() {
 
         const [repoRes, commitsRes, langsRes] = await Promise.all([
           fetch(`${GITHUB_API}/repos/${PRACTICE_REPO}`),
-          fetch(`${GITHUB_API}/repos/${PRACTICE_REPO}/commits?per_page=8`),
+          fetch(`${GITHUB_API}/repos/${PRACTICE_REPO}/commits?per_page=3`),
           fetch(`${GITHUB_API}/repos/${PRACTICE_REPO}/languages`),
         ]);
 
