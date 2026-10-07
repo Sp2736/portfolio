@@ -13,6 +13,7 @@ import {
   Terminal as TerminalIcon,
 } from "lucide-react";
 import { LeetCodeWidget } from "./leetcode";
+import { MasteryOSShowcase } from "./mastery-os-showcase";
 
 const PRACTICE_REPO = "Sp2736/practice";
 const GITHUB_API = "https://api.github.com";
@@ -363,6 +364,19 @@ export function PracticeFeed() {
             )}
           </motion.div>
         </div>
+
+        {/* Mastery OS Showcase */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="w-full mt-4"
+        >
+          <div className="flex items-center gap-2 mb-4 font-mono text-sm text-primary uppercase tracking-widest font-bold">
+            <BookOpen size={18} /> The Tooling Behind The Practice
+          </div>
+          <MasteryOSShowcase />
+        </motion.div>
 
         {/* LeetCode Widget integration */}
         <motion.div
