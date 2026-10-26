@@ -4,12 +4,12 @@ import { useEffect } from "react";
 
 export function ResumeOverride() {
   const handleDownload = () => {
-    // Replace this string with your actual Google Drive PDF link
-    const driveLink = "https://drive.google.com/file/d/1NKXxL9-klq0G05ACii1Ic0EqWIknW_o_/view?usp=drive_link";
+    const driveLink = "https://drive.google.com/drive/folders/1ObplkBI68RhaXJcWjxY4sDdxKi8M3irI_o_/view?usp=drive_link";
     
-    // Automatically convert a standard Google Drive viewing link into a direct download link
-    const fileIdMatch = driveLink.match(/\/d\/(.*?)\//);
-    
+    // Check if it's a direct file or folder link
+    const fileIdMatch = driveLink.match(/\/d\/(.*?)(?:\/|\?|$)/);
+    const folderIdMatch = driveLink.match(/\/folders\/(.*?)(?:\/|\?|$)/);
+
     if (fileIdMatch && fileIdMatch[1]) {
       const fileId = fileIdMatch[1];
       const directDownloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
@@ -21,8 +21,10 @@ export function ResumeOverride() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    } else if (folderIdMatch && folderIdMatch[1]) {
+      // If it's a folder, open it directly so the user can access/download files inside
+      window.open(driveLink, "_blank");
     } else {
-      // Fallback just in case you use a different hosting provider
       window.open(driveLink, "_blank");
     }
   };
