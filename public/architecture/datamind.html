@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DataMind — System Architecture & SRS</title>
+<title>DataMind — Architecture, SRS & Research Results</title>
 <style>
 :root{
   --background:#0F1115; --surface:#171A21; --surface-muted:#1D212B;
@@ -96,6 +96,7 @@ table.api-table tr:hover td{background:var(--surface-muted);}
 .method.GET{background:var(--teal-bg); color:var(--teal);}
 .method.POST{background:var(--success-bg); color:var(--success);}
 .method.WS{background:var(--pink-bg); color:var(--pink);}
+.method.DELETE{background:var(--danger-bg); color:var(--danger);}
 .api-path{font-family:monospace; font-size:12.5px; color:var(--fg);}
 
 .stack-item{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:14px;}
@@ -133,6 +134,8 @@ table.api-table tr:hover td{background:var(--surface-muted);}
 .pv-panel{display:none;}
 .pv-panel.active{display:block;}
 .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px;}
+@media(max-width:640px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+.scroll-x{overflow-x:auto;}
 .kpi{padding:14px; background:var(--surface-muted); border-radius:10px;}
 .kpi b{font-size:22px; display:block;}
 .kpi span{font-size:11.5px; color:var(--fg-muted); text-transform:uppercase; letter-spacing:.04em;}
@@ -168,6 +171,8 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       <a href="#api">APIs</a>
       <a href="#stack">Tech Stack</a>
       <a href="#data-model">Data Model</a>
+      <a href="#evaluation">Evaluation</a>
+      <a href="#results">Results</a>
       <a href="#contributors">Contributors</a>
       <a href="#preview">Live Preview</a>
     </nav>
@@ -176,16 +181,16 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
 
 <div class="hero">
   <div class="wrap">
-    <div class="eyebrow">B.Tech Research Project · CHARUSAT, DEPSTAR · CSUI301</div>
+    <div class="eyebrow">Research Project &amp; Paper · CHARUSAT, DEPSTAR · Dr. Parth Goel, Swayam G. Patel, Jalisa S. Malik</div>
     <h1>DataMind</h1>
-    <p class="lead">An LLM-orchestrated, self-correcting framework for autonomous exploratory data analysis. Upload a CSV/JSON dataset and a LangGraph multi-agent pipeline generates research questions, writes and repairs its own analysis code in a sandbox, picks visualizations, and produces insight narratives — evaluated as a research question about whether RAG improves question relevance and actionability.</p>
+    <p class="lead">A local-first, self-correcting, RAG-augmented multi-agent framework for autonomous exploratory data analysis. It profiles a dataset, has an LLM propose research questions, writes and repairs analysis code inside a network-isolated Docker sandbox, and turns verified output into grounded insights, charts and a PDF report. It is also a controlled testbed: every pipeline stage is logged so the effect of retrieval (RAG vs. baseline) can be measured, not guessed. Evaluated on 24 paired datasets and 322 end-to-end trials.</p>
     <div class="hero-badges">
       <span class="tag accent">FastAPI + LangGraph</span>
-      <span class="tag">Next.js 16 frontend</span>
-      <span class="tag teal">ChromaDB RAG (local)</span>
-      <span class="tag amber">Ollama-first LLM</span>
-      <span class="tag pink">Self-correcting sandbox</span>
-      <span class="tag">2 contributors</span>
+      <span class="tag">Next.js 16 · React 19</span>
+      <span class="tag teal">Chroma + MiniLM RAG (local)</span>
+      <span class="tag amber">Gemini 3.1 Flash Lite</span>
+      <span class="tag pink">Docker sandbox · --network none</span>
+      <span class="tag">81 commits · Jul 17 – Oct 10, 2026</span>
     </div>
     <div class="hero-cta">
       <a class="btn primary" href="#architecture">Explore Architecture ↓</a>
@@ -207,9 +212,12 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       <p>DataMind takes a raw dataset from upload to explained insight with minimal human input, while doubling as a controlled research testbed comparing RAG-augmented vs. baseline question generation.</p>
     </div>
     <div class="grid cols-3">
-      <div class="card"><h3><span class="icon">📁</span>Upload &amp; Profile</h3><p>Accepts CSV/JSON datasets, computes schema, stats and correlation summaries, and stores a profile before any LLM call is made.</p></div>
-      <div class="card"><h3><span class="icon">🧠</span>Autonomous Questioning</h3><p>An LLM generates dataset-specific research questions split into <b>Pre-processing</b> and <b>EDA</b> categories — optionally grounded by RAG retrieval of similarly-shaped past datasets.</p></div>
-      <div class="card"><h3><span class="icon">🔁</span>Self-Correcting Analysis</h3><p>For each question, a LangGraph pipeline writes pandas code, runs it in a sandbox, and — on failure — automatically corrects and retries before giving up.</p></div>
+      <div class="card"><h3><span class="icon">📁</span>Upload &amp; Profile</h3><p>CSV, TSV, JSON, Excel or Parquet via upload, URL, Kaggle or GitHub. A pandas profile (schema, nulls, stats, correlations, 10 sample rows) is the only thing the LLM sees; raw data never leaves the machine.</p></div>
+      <div class="card"><h3><span class="icon">🧠</span>Autonomous Questioning</h3><p>One LLM call per dataset proposes research questions across six categories (data cleaning, distribution, correlation, trend, anomaly, segmentation). A gatekeeper scores each 1–5 and drops anything below 3.</p></div>
+      <div class="card"><h3><span class="icon">🔁</span>Self-Correcting Analysis</h3><p>Per question, a LangGraph state machine writes code, runs it in Docker, reads the traceback on failure and rewrites it (3-attempt budget). Self-correction lifts success from 82.0% to 99.1%.</p></div>
+      <div class="card"><h3><span class="icon">🔎</span>Switchable RAG</h3><p>Schema-similarity retrieval (k=5) over past insights feeds question generation only. One on/off switch makes RAG the single experimental variable.</p></div>
+      <div class="card"><h3><span class="icon">📄</span>Insights, Charts, Report</h3><p>Numerically grounded insights, up to three chart specs, a system-profile dashboard, a cleaned-dataset export and a Puppeteer-rendered executive PDF report.</p></div>
+      <div class="card"><h3><span class="icon">📊</span>Measured Per Stage</h3><p>Immutable per-trial JSONL telemetry plus offline LLM-judge scoring grade the questions, code, insights and token cost, not just the final answer.</p></div>
     </div>
   </div>
 </section>
@@ -220,7 +228,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     <div class="section-head">
       <div class="num">02 / System Architecture</div>
       <h2>FastAPI backend, Next.js frontend, local-first AI stack</h2>
-      <p>A LangGraph <b>agent graph</b> owns the reasoning loop, a FastAPI service layer owns persistence and orchestration, and a local ChromaDB store provides zero-cost RAG grounding — deliberately Docker-free and API-budget-conscious.</p>
+      <p>A LangGraph <b>agent graph</b> owns the reasoning loop, a FastAPI service layer owns persistence and orchestration, and a local ChromaDB store provides zero-cost RAG grounding — sandboxed in Docker for untrusted code, with Gemini as the supported LLM provider.</p>
     </div>
     <div class="panel">
       <div class="arch-diagram">
@@ -243,10 +251,10 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
 
           <!-- Sandbox -->
           <rect x="620" y="200" width="220" height="92" rx="10" fill="#331222" stroke="#5C2140" stroke-width="1.5"/>
-          <text x="730" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#F0669B">Local Sandbox</text>
-          <text x="730" y="246" text-anchor="middle" font-size="10" fill="#D89DB8">Subprocess isolation</text>
-          <text x="730" y="262" text-anchor="middle" font-size="10" fill="#D89DB8">CPU/mem rlimits, timeout,</text>
-          <text x="730" y="278" text-anchor="middle" font-size="10" fill="#D89DB8">socket disabled (best-effort)</text>
+          <text x="730" y="228" text-anchor="middle" font-size="12" font-weight="700" fill="#F0669B">Docker Sandbox</text>
+          <text x="730" y="246" text-anchor="middle" font-size="10" fill="#D89DB8">Docker: --rm · --network none</text>
+          <text x="730" y="262" text-anchor="middle" font-size="10" fill="#D89DB8">1 GB / 1 CPU · pids 128 · cap-drop ALL</text>
+          <text x="730" y="278" text-anchor="middle" font-size="10" fill="#D89DB8">60 s timeout (subprocess dev mode)</text>
 
           <!-- RAG -->
           <rect x="870" y="200" width="200" height="92" rx="10" fill="#123330" stroke="#1E5952" stroke-width="1.5"/>
@@ -258,7 +266,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
           <!-- LLM providers -->
           <rect x="80" y="330" width="500" height="56" rx="10" fill="#332A12" stroke="#5C4B1E" stroke-width="1.5"/>
           <text x="330" y="354" text-anchor="middle" font-size="12" font-weight="700" fill="#F2B84C">LLM Provider Factory (services/llm.py)</text>
-          <text x="330" y="372" text-anchor="middle" font-size="10" fill="#D9C495">Active: Ollama (local, zero API keys) · swappable: Groq / OpenAI / Gemini</text>
+          <text x="330" y="372" text-anchor="middle" font-size="10" fill="#D9C495">Supported: Google Gemini (per-node "google:model" specs) · tenacity rate-limit retry</text>
 
           <!-- Storage -->
           <rect x="330" y="424" width="460" height="52" rx="10" fill="#171A21" stroke="#2A3040" stroke-width="1.5"/>
@@ -303,7 +311,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
 
     <div class="card" style="margin-top:20px;">
       <h3>🧭 The one architectural rule the codebase enforces</h3>
-      <p style="margin-top:10px;"><code>question_generator</code> is deliberately kept <b>outside</b> the per-run LangGraph graph — it runs once per dataset, while the compiled graph (<code>code_generator → sandbox_execute → result_analyzer → insight_writer → visualization_builder</code>, with a <code>code_corrector</code> retry loop) runs once per research question. This keeps "generate N questions" state from ever mixing with "answer 1 question" state.</p>
+      <p style="margin-top:10px;"><code>question_generator</code> is deliberately kept <b>outside</b> the per-run LangGraph graph — it runs once per dataset, while the compiled graph (<code>code_generator → sandbox_execute → result_analyzer → insight_writer → visualization_builder</code>, with a <code>code_corrector</code> retry loop) runs once per research question. This keeps "generate N questions" state from ever mixing with "answer 1 question" state. All categories, including the <code>system_profile</code> dashboard question, go through <code>code_generator</code> and the sandbox with no bypass.</p>
     </div>
   </div>
 </section>
@@ -319,13 +327,13 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     <div class="timeline">
       <div class="tl-item"><div class="tl-date">STEP 1</div><h4>Upload &amp; Ingest</h4><p>A CSV/JSON file is uploaded, or fetched via direct URL / the Kaggle API through the Dataset Fetch Service. The raw file is persisted and a <code>Dataset</code> row is created.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 2</div><h4>Profiling</h4><p>The profiling service computes a <b>schema summary</b>, <b>stats summary</b>, <b>correlation summary</b> and sample rows — metadata only, never raw rows beyond a bounded sample — stored as a <code>DatasetProfile</code>.</p></div>
-      <div class="tl-item"><div class="tl-date">STEP 3</div><h4>Research Question Generation</h4><p><code>question_generator</code> calls the LLM once per dataset to produce a batch of dataset-specific questions, split into <b>Pre-processing</b> and <b>EDA</b> categories, each with target columns, expected output type and rationale. RAG retrieval can ground this call with insights from similarly-shaped past datasets.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 3</div><h4>Research Question Generation</h4><p><code>question_generator</code> calls the LLM once per dataset to produce a batch of dataset-specific questions, spread over six categories (data cleaning is mandatory when nulls or extreme outliers exist), each with target columns, expected output type and rationale. RAG can ground the call with insights from similarly-shaped past datasets (the query dataset itself is excluded). <code>rq_quality_scorer</code> then rates each question 1–5 and drops those below 3.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 4</div><h4>Per-Question Analysis Run</h4><p>For each selected <code>ResearchQuestion</code>, an <code>AnalysisRun</code> starts the LangGraph pipeline: <code>code_generator</code> writes pandas code from the question + profile context.</p></div>
-      <div class="tl-item"><div class="tl-date">STEP 5</div><h4>Sandboxed Execution &amp; Self-Correction</h4><p><code>sandbox_execute</code> runs the code as an isolated subprocess (fresh working dir, CPU/memory rlimits, wall-clock timeout, network disabled best-effort). On failure, <code>code_corrector</code> rewrites the code using the traceback and loops back to execution — until success or <code>max_attempts</code> is exhausted, at which point the run is marked <code>failed</code>.</p></div>
-      <div class="tl-item"><div class="tl-date">STEP 6</div><h4>Result Analysis</h4><p><code>result_analyzer</code> is a deterministic (non-LLM) node that truncates/sanitizes stdout (max 4000 chars) so downstream LLM calls get clean, bounded input — logic kept in one place instead of duplicated across nodes.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 5</div><h4>Sandboxed Execution &amp; Self-Correction</h4><p><code>sandbox_execute</code> runs the code in a fresh Docker container (<code>--rm --network none</code>, 1 GB / 1 CPU, read-only script and data, 60 s timeout; subprocess mode is for dev only). On failure, <code>code_corrector</code> rewrites the code using the traceback and loops back to execution — until success or <code>max_attempts</code> is exhausted, at which point the run is marked <code>failed</code>.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 6</div><h4>Result Analysis</h4><p><code>result_analyzer</code> is a deterministic (non-LLM) node that truncates/sanitizes stdout so downstream LLM calls get clean, bounded input — logic kept in one place instead of duplicated across nodes.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 7</div><h4>Insight Writing &amp; Visualization</h4><p><code>insight_writer</code> turns the execution output into a narrative <code>Insight</code>. <code>visualization_builder</code> asks the LLM only for chart <i>metadata</i> (type/title/labels) — the PNG itself is rendered by the sandboxed script per the code-generator's contract (<code>./output/chart.png</code>) — and is skipped entirely if no chart was produced.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 8</div><h4>RAG Indexing (best-effort)</h4><p>On a successful run, the new insight is written into the local Chroma vector store by the RAG indexer, keyed on the dataset's "schema text" embedding — so future datasets with a similar shape can retrieve it. Indexing failure never fails the run itself.</p></div>
-      <div class="tl-item"><div class="tl-date">STEP 9</div><h4>Report &amp; Export</h4><p>Once enough runs complete, a <code>Report</code> is generated summarizing insights and visualizations for the dataset, downloadable alongside the cleaned/pre-processed dataset.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 9</div><h4>Report &amp; Export</h4><p>A structured markdown <code>Report</code> (per-category sections, numbered findings, key takeaways) is generated and exported as an A4 PDF by a server-side Puppeteer route, alongside the cleaned dataset and a before/after cleaning comparison. Every run also appends one record to <code>trials.jsonl</code> (experiments) or <code>app_trials.jsonl</code> (app use).</p></div>
     </div>
   </div>
 </section>
@@ -335,7 +343,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
   <div class="wrap">
     <div class="section-head">
       <div class="num">04 / Supported Modules &amp; Agent Nodes</div>
-      <h2>7 LangGraph nodes, one job each</h2>
+      <h2>7 graph nodes plus 2 pre-graph agents</h2>
       <p>Each node is a focused async function operating on a shared <code>AnalysisState</code> TypedDict — LLM-calling nodes load their system prompt from a dedicated markdown file under <code>app/agents/prompts/</code>.</p>
     </div>
     <div class="tabs" id="nodeTabs">
@@ -347,32 +355,33 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     <div class="panel">
       <div class="tab-panel active" id="n1">
         <div class="node-row"><div class="node-num">01</div><div><h4>question_generator</h4><p>Runs once per dataset (not per run), invoked directly from <code>POST /datasets/{id}/questions</code>. Produces a structured <code>ResearchQuestionBatch</code> split into Pre-processing and EDA categories, each tagged with target columns and rationale.</p></div></div>
+        <div class="node-row"><div class="node-num">01b</div><div><h4>rq_quality_scorer</h4><p>Gatekeeper called right after generation. One structured LLM call scores every question 1–5; questions below 3 are dropped in both experiment arms.</p></div></div>
         <div class="node-row"><div class="node-num">02</div><div><h4>code_generator</h4><p>First node of the per-run graph. Writes pandas analysis code for one research question, using dataset profile context (schema/stats/correlation summaries + sample rows) and, optionally, retrieved similar past insights.</p></div></div>
       </div>
       <div class="tab-panel" id="n2">
-        <div class="node-row"><div class="node-num">03</div><div><h4>sandbox_execute</h4><p>Runs the latest generated code in the local, Docker-free sandbox (<code>services/sandbox.py</code>) against the real dataset file, capturing stdout/stderr, exit code, duration and any produced output files (e.g. <code>chart.png</code>).</p></div></div>
+        <div class="node-row"><div class="node-num">03</div><div><h4>sandbox_execute</h4><p>Runs the latest generated code in the sandbox (<code>services/sandbox.py</code>; Docker with <code>--network none</code>, <code>--cap-drop ALL</code>, no-new-privileges, tmpfs <code>/tmp</code>) against the real dataset file, capturing stdout/stderr, exit code, duration and any produced output files (e.g. <code>chart.png</code>).</p></div></div>
         <div class="node-row"><div class="node-num">04</div><div><h4>route_after_execution (conditional edge)</h4><p>Branches on the execution result: success → <code>result_analyzer</code>; failure with attempts remaining → <code>code_corrector</code>; attempts exhausted → <code>give_up</code>, which marks the run <code>failed</code> and stores the last stderr.</p></div></div>
         <div class="node-row"><div class="node-num">05</div><div><h4>code_corrector</h4><p>Given the failing code and its traceback, asks the LLM for a corrected version, appends it to <code>code_history</code>, and loops back to <code>sandbox_execute</code> — the self-correction retry loop, bounded by <code>max_attempts</code>.</p></div></div>
       </div>
       <div class="tab-panel" id="n3">
-        <div class="node-row"><div class="node-num">06</div><div><h4>result_analyzer</h4><p>Deterministic, no LLM call. Truncates/sanitizes the successful execution's stdout to a bounded size so both <code>insight_writer</code> and <code>visualization_builder</code> receive clean input without duplicating that logic.</p></div></div>
-        <div class="node-row"><div class="node-num">07</div><div><h4>insight_writer</h4><p>Converts the sanitized execution output into a natural-language <code>Insight</code> row tied to the research question and run.</p></div></div>
+        <div class="node-row"><div class="node-num">06</div><div><h4>result_analyzer</h4><p>Deterministic, no LLM call. Truncates the successful execution's stdout to a bounded size so both <code>insight_writer</code> and <code>visualization_builder</code> receive clean input without duplicating that logic.</p></div></div>
+        <div class="node-row"><div class="node-num">07</div><div><h4>insight_writer</h4><p>Writes a brief summary, key takeaways and a confidence score from the question, cleaned output and profile stats, forbidden from using numbers absent from stdout. Requires non-empty stdout.</p></div></div>
         <div class="node-row"><div class="node-num">08</div><div><h4>visualization_builder</h4><p>Asks the LLM only for structured chart metadata (type, title, axis labels) describing a chart the sandboxed script already rendered to disk; the node is skipped entirely when no chart file was produced.</p></div></div>
       </div>
       <div class="tab-panel" id="n4">
-        <div class="node-row"><div class="node-num">09</div><div><h4>RAG store (ChromaDB, local)</h4><p>A Docker-free, local persistent Chroma client paired with a local sentence-transformers embedding model — indexing and retrieval cost zero API tokens, which matters because RAG runs on every question-generation and insight-writing call.</p></div></div>
-        <div class="node-row"><div class="node-num">10</div><div><h4>RAG retriever</h4><p>Finds past insights whose source dataset had a similar schema shape, using a synthetic "schema text" (column names + dtypes) embedding as an approximation of dataset similarity — an intentionally simple heuristic, documented for future replacement.</p></div></div>
+        <div class="node-row"><div class="node-num">09</div><div><h4>RAG store (ChromaDB, local)</h4><p>A local persistent Chroma client (no server) with <code>all-MiniLM-L6-v2</code> embeddings, so indexing and retrieval cost zero API tokens. An RLock guards client initialization against concurrent crashes.</p></div></div>
+        <div class="node-row"><div class="node-num">10</div><div><h4>RAG retriever</h4><p>Embeds the target schema text and returns the top-5 most similar past records (question, summary, category) by cosine similarity, excluding the query dataset. An audit confirmed 0.0% leakage. Used only as inspiration, never for copying columns or numbers.</p></div></div>
         <div class="node-row"><div class="node-num">11</div><div><h4>RAG indexer</h4><p>Writes each completed insight into the local store right after its <code>AnalysisRun</code> succeeds and commits. Best-effort by design — a failure here must never fail the run itself.</p></div></div>
         <div class="node-row"><div class="node-num">12</div><div><h4>Dataset Fetch Service</h4><p>Handles ingestion from a direct URL or the Kaggle API, normalizing both into the same on-disk raw-dataset representation the rest of the pipeline expects.</p></div></div>
-        <div class="node-row"><div class="node-num">13</div><div><h4>LLM Provider Factory</h4><p>A single <code>get_llm(model_name)</code> factory; active provider is Ollama (fully local, zero API keys, models like <code>gemma3:4b</code>/<code>phi4-mini</code>/<code>qwen2.5:3b</code>), with commented-out swap points for Groq, OpenAI and Gemini for production/evaluation runs.</p></div></div>
+        <div class="node-row"><div class="node-num">13</div><div><h4>LLM Provider Factory</h4><p>A single <code>get_llm</code> factory taking per-node <code>provider:model</code> specs (default <code>google:gemini-3.1-flash-lite</code>, temperature 0.2). Wraps calls in tenacity retry and counts rate-limit retries. Gemini is the supported path; OpenRouter exists as an undocumented secondary.</p></div></div>
       </div>
     </div>
 
     <div class="grid cols-4" style="margin-top:22px;">
-      <div class="card"><h3>🔐 Auth</h3><p>Lightweight local-user login (<code>LocalUser</code> model), JWT-style session for a single-user research prototype.</p></div>
-      <div class="card"><h3>📡 Live Status</h3><p>A WebSocket endpoint (<code>api/ws.py</code>) pushes job/run status updates to the frontend in real time as the graph progresses.</p></div>
-      <div class="card"><h3>📊 Run Metrics</h3><p>A dedicated <code>RunMetrics</code> table captures token cost and outcome per run — feeding the RAG-vs-baseline research comparison.</p></div>
-      <div class="card"><h3>🧹 Cleaned Export</h3><p>Downloadable cleaned/pre-processed dataset and an auto-generated summary report, per the project's stated feature set.</p></div>
+      <div class="card"><h3>🔐 Auth</h3><p>Local single-user login with a JWT session; startup refuses a weak secret outside development.</p></div>
+      <div class="card"><h3>📡 Live Status</h3><p>A token-authenticated WebSocket fed by an in-process pub/sub bus pushes run status; the UI also auto-polls and stops once the pipeline completes.</p></div>
+      <div class="card"><h3>📊 Run Metrics</h3><p><code>RunMetrics</code> plus per-node token and call breakdowns and rate-limit retry counts feed the RAG-vs-baseline comparison.</p></div>
+      <div class="card"><h3>🧹 Cleaned Export</h3><p>Cleaned CSV download, before/after null comparison, charts as PNGs and an executive PDF report.</p></div>
     </div>
   </div>
 </section>
@@ -412,7 +421,12 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
           <tr data-g="insights"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/insights/{insight_id}/visualization</td><td>Fetch the chart metadata tied to an insight</td></tr>
           <tr data-g="insights"><td><span class="method POST">POST</span></td><td class="api-path">/datasets/{dataset_id}/report</td><td>Generate the dataset summary report</td></tr>
           <tr data-g="insights"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/report</td><td>Fetch the generated report</td></tr>
-          <tr data-g="ws"><td><span class="method WS">WS</span></td><td class="api-path">/ws</td><td>Live push of job/run status to the frontend</td></tr>
+          <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/system-profile</td><td>System-profile dashboard insight and chart</td></tr>
+          <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/cleaned</td><td>Download the cleaned dataset CSV</td></tr>
+          <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/comparison</td><td>Before/after cleaning row and null statistics</td></tr>
+          <tr data-g="datasets"><td><span class="method DELETE">DELETE</span></td><td class="api-path">/datasets/{dataset_id}</td><td>Delete a dataset with cascading cleanup</td></tr>
+          <tr data-g="insights"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/insights/{insight_id}/visualization/image</td><td>Serve the rendered chart PNG</td></tr>
+          <tr data-g="ws"><td><span class="method WS">WS</span></td><td class="api-path">/ws/datasets/{dataset_id}/status?token=</td><td>Live push of run status for one dataset</td></tr>
         </tbody>
       </table>
       </div>
@@ -426,7 +440,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     <div class="section-head">
       <div class="num">06 / Tech Stack &amp; Tooling</div>
       <h2>Local-first by design</h2>
-      <p>Every layer was deliberately chosen to run Docker-free and token-cost-free where possible, given the project's API-budget constraints as a research prototype.</p>
+      <p>Retrieval, storage and embeddings run locally at zero API cost. The only paid dependency is the LLM API, and generated code is always treated as untrusted.</p>
     </div>
     <div class="grid cols-3">
       <div class="panel">
@@ -436,30 +450,31 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
         <div class="stack-item"><b>TypeScript 5</b><span>strict typing</span></div>
         <div class="stack-item"><b>Tailwind CSS v4</b><span>@tailwindcss/postcss</span></div>
         <div class="stack-item"><b>next-themes</b><span>dark/light theming</span></div>
-        <div class="stack-item"><b>lucide-react</b><span>icon set</span></div>
+        <div class="stack-item"><b>recharts · react-markdown</b><span>charts, report rendering</span></div>
+        <div class="stack-item"><b>Puppeteer</b><span>server-side PDF export</span></div>
       </div>
       <div class="panel">
         <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Backend &amp; Orchestration</h4>
         <div class="stack-item"><b>FastAPI 0.141</b><span>+ Uvicorn</span></div>
         <div class="stack-item"><b>LangGraph 1.2.10</b><span>agent state graph</span></div>
-        <div class="stack-item"><b>LangChain 1.3.14</b><span>+ langchain-ollama/groq/openai/google-genai</span></div>
+        <div class="stack-item"><b>LangChain 1.3.14</b><span>+ langchain-google-genai</span></div>
         <div class="stack-item"><b>SQLAlchemy 2 + Alembic</b><span>async ORM + migrations</span></div>
-        <div class="stack-item"><b>SQLite (aiosqlite)</b><span>single-file DB — Postgres dropped</span></div>
+        <div class="stack-item"><b>SQLite (aiosqlite)</b><span>single-file DB</span></div>
+        <div class="stack-item"><b>Docker</b><span>python:3.12-slim sandbox image</span></div>
         <div class="stack-item"><b>Pydantic v2</b><span>schemas + settings</span></div>
       </div>
       <div class="panel">
         <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">AI, RAG &amp; Data</h4>
-        <div class="stack-item"><b>Ollama</b><span>active local LLM provider</span></div>
-        <div class="stack-item"><b>Groq / OpenAI / Gemini</b><span>swappable cloud providers</span></div>
-        <div class="stack-item"><b>ChromaDB 0.5.23</b><span>local persistent vector store</span></div>
-        <div class="stack-item"><b>sentence-transformers</b><span>local embeddings</span></div>
-        <div class="stack-item"><b>pandas / numpy</b><span>sandboxed analysis code</span></div>
+        <div class="stack-item"><b>Gemini 3.1 Flash Lite</b><span>generator and judge model</span></div>
+        <div class="stack-item"><b>ChromaDB 0.6.3</b><span>local vector store (k=5)</span></div>
+        <div class="stack-item"><b>sentence-transformers</b><span>all-MiniLM-L6-v2 embeddings</span></div>
+        <div class="stack-item"><b>pandas · numpy · scipy · sklearn</b><span>sandboxed analysis code</span></div>
         <div class="stack-item"><b>Kaggle API</b><span>dataset ingestion</span></div>
       </div>
     </div>
     <div class="card" style="margin-top:18px;">
       <h3>📝 Note on stack evolution</h3>
-      <p style="margin-top:8px;">Earlier planning targeted PostgreSQL + pgvector and a paid LLM API (per the project's own memory notes). The shipped local-pipeline milestone consolidated onto <b>SQLite + Ollama + ChromaDB</b> — a fully local, zero-API-cost stack better suited to iterating on the RAG-vs-baseline research comparison without burning a token budget, with the cloud providers kept as drop-in swaps for the final evaluation run.</p>
+      <p style="margin-top:8px;">Early planning targeted PostgreSQL + pgvector, then an Ollama-first local LLM setup (Sep 11). The shipped system runs <b>SQLite + Chroma</b> and, since Sep 14, <b>Gemini via structured outputs</b>. The sandbox moved from a subprocess-only design to a real <b>Docker</b> sandbox, which is used for every reported experiment.</p>
     </div>
   </div>
 </section>
@@ -494,8 +509,69 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       </div>
       <div class="panel">
         <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Notes</h4>
-        <p style="font-size:13px;color:var(--fg-muted);margin:0;">Every <code>AnalysisRun</code> links to exactly one <code>ResearchQuestion</code> and accumulates one or more <code>GeneratedCode</code> / <code>ExecutionAttempt</code> rows — a full audit trail of every self-correction cycle the agent went through.</p>
+        <p style="font-size:13px;color:var(--fg-muted);margin:0;">Experiment telemetry lives outside the DB in append-only <code>trials.jsonl</code>, <code>rq_batches.jsonl</code> and judged variants. Every <code>AnalysisRun</code> links to exactly one <code>ResearchQuestion</code> and accumulates one or more <code>GeneratedCode</code> / <code>ExecutionAttempt</code> rows — a full audit trail of every self-correction cycle the agent went through.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVALUATION -->
+<section id="evaluation" style="background:var(--surface-muted);">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">08 / Evaluation Framework</div>
+      <h2>Grading every stage, not just the answer</h2>
+      <p>A paired design: 24 datasets, 2 arms (Baseline vs RAG), 48 question batches, 322 end-to-end trials. Same model (gemini-3.1-flash-lite), temperature 0.2, 3 attempts, 60 s timeout. Retrieval is confined to <code>question_generator</code>, so it is the only variable.</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="card"><h3>❓ Question quality</h3><p>Column grounding, category coverage, redundancy (cosine &gt; 0.80) and semantic diversity, computed automatically. Relevance, specificity and actionability (1–5) come from an offline LLM judge.</p></div>
+      <div class="card"><h3>💻 Code quality</h3><p>FPSR, ESR, mean attempts, latency, static signals (complexity, <code>.iterrows()</code>, guard clauses, syntax) and a 5-dimension rubric (0.20 weight each).</p></div>
+      <div class="card"><h3>💡 Insight and cost</h3><p>Numerical faithfulness, takeaway groundedness, Flesch–Kincaid readability, caveat coverage, tokens per successful insight, LLM calls, latency and a failure taxonomy.</p></div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <h3>🧪 Method details</h3>
+      <p style="margin-top:8px;">Datasets were sampled from a catalogue of 134 public Kaggle/GitHub sets across 29 domains (569 to 32.4M rows, 4 to 40 columns). The vector store held 78 deduplicated insights and was frozen during runs. Tests are two-sided Wilcoxon signed-rank on per-dataset means (n=24), Holm–Bonferroni across 29 metrics, with 95% bootstrap CIs (B=10,000). Judging is offline over the append-only log, so it adds no live cost. Reproduce with <code>seed_datasets.py</code> → <code>experiment.run_experiment</code> → <code>judge_trials</code> → <code>analyze_results</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="num">09 / Research Results</div>
+      <h2>RAG gave directional gains at small cost; self-correction carried reliability</h2>
+      <p>From the paper draft "DataMind: A Self-Correcting, RAG-Augmented Multi-Agent Framework for Autonomous Exploratory Data Analysis".</p>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><b>82.0% → 99.1%</b><span>Success: first pass → eventual</span></div>
+      <div class="kpi"><b>94.8%</b><span>First-attempt failures recovered (55 of 58)</span></div>
+      <div class="kpi"><b>+5.3%</b><span>Tokens per insight with RAG (14,881 → 15,662)</span></div>
+      <div class="kpi"><b>3 / 322</b><span>Runs never recovered</span></div>
+    </div>
+    <div class="panel scroll-x">
+      <table class="mini-table">
+        <thead><tr><th>Metric</th><th>Baseline</th><th>RAG</th><th>p (raw)</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>Relevance (1–5)</td><td>2.90</td><td>3.24</td><td>0.203</td><td><span class="pill warn">n.s. (Holm 1.0)</span></td></tr>
+          <tr><td>Specificity (1–5)</td><td>4.21</td><td>4.35</td><td>0.191</td><td><span class="pill warn">n.s.</span></td></tr>
+          <tr><td>Actionability (1–5)</td><td>3.57</td><td>3.70</td><td>0.183</td><td><span class="pill warn">n.s.</span></td></tr>
+          <tr><td>Column grounding</td><td>0.992</td><td>0.993</td><td>0.317</td><td><span class="pill ok">No harm</span></td></tr>
+          <tr><td>First-pass success</td><td>0.850</td><td>0.773</td><td>0.001</td><td><span class="pill bad">Lower (Holm 0.026)</span></td></tr>
+          <tr><td>Eventual success</td><td>0.995</td><td>0.984</td><td>0.180</td><td><span class="pill ok">n.s.</span></td></tr>
+          <tr><td>Numerical faithfulness</td><td>0.959</td><td>0.953</td><td>0.421</td><td><span class="pill ok">No harm</span></td></tr>
+          <tr><td>Tokens per insight</td><td>14,881</td><td>15,662</td><td>0.006</td><td><span class="pill warn">Holm 0.159</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid cols-3" style="margin-top:18px;">
+      <div class="card"><h3>H1 · Not supported</h3><p>RAG scored higher on average, but no difference survived correction. Relevance improved on 11 of 24 datasets (tied 8, lower 5); effects are small (dz 0.24–0.28).</p></div>
+      <div class="card"><h3>H2 · Holds on cost</h3><p>The token increase is small and prompt-driven (question generation +4.2%, insight writing +13.5%), but no quality gain offsets it.</p></div>
+      <div class="card"><h3>H3 · Partly supported</h3><p>Retrieval did not hurt grounding or faithfulness, and self-correction recovered most failures, but retrieval significantly lowered first-pass success.</p></div>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <h3>⚠ Limitations and future work</h3>
+      <p style="margin-top:8px;">The judge shares a model with the generator and has no human calibration. With n=24, one batch per arm and no repeats, tests are underpowered. Generalisation is limited by 24 public datasets, a 78-insight seed corpus and one low-cost model; the 1 GB / 60 s sandbox strains the largest sets (two Bitcoin first attempts timed out, then self-corrected). Next: retrieve successful code snippets, add human review of questions, and test stronger models, multi-table data and multiple judges.</p>
     </div>
   </div>
 </section>
@@ -504,55 +580,52 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
 <section id="contributors">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">08 / Contributors &amp; Commit History</div>
-      <h2>Two-person research build</h2>
-      <p>Derived from the full git commit tree (<code>git log --author</code>, <code>--numstat</code>, <code>--name-only</code>) across 19 commits on <code>main</code>, spanning Jul 17 – Sep 11, 2026.</p>
+      <div class="num">10 / Contributors &amp; Commit History</div>
+      <h2>Teamwork Insights</h2>
+      <p>From the git history of <code>main</code>: 81 commits across 16 active days, Jul 17 – Oct 10, 2026 (7 in July, 10 in August, 54 in September, 10 in October). Line counts exclude lockfiles and SVGs.</p>
     </div>
     <div class="grid cols-2">
       <div class="panel contrib-card">
         <div class="contrib-head">
           <div class="avatar">SP</div>
-          <div><h3 style="margin:0;">Swayam Patel</h3><span class="tag accent" style="margin-top:4px;">Backend &amp; agent pipeline lead</span></div>
+          <div><h3 style="margin:0;">Swayam Patel</h3><span class="tag accent" style="margin-top:4px;">Backend, pipeline &amp; PDF reports</span></div>
         </div>
-        <div class="commit-bar"><div class="commit-bar-fill" style="width:47%;"></div></div>
-        <div class="contrib-stats">
-          <div><b>9</b>commits</div>
-          <div><b>6.9k</b>+lines</div>
-          <div><b>1.1k</b>−lines</div>
-        </div>
-        <p style="font-size:13px; color:var(--fg-muted); margin:0 0 8px;">Owned the entire backend: project bootstrap, phased backend build-out, and the full LangGraph multi-agent pipeline + RAG integration.</p>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:64%;"></div></div>
+        <div class="contrib-stats"><div><b>52</b>commits</div><div><b>13.4k</b>+lines</div><div><b>5.3k</b>−lines</div></div>
         <ul class="contrib-list">
-          <li>Initial commit &amp; README (as "SmartBI", later renamed to DataMind)</li>
-          <li>Backend foundation — phase 1</li>
-          <li>Backend phase 3 (partial) — handed over for API integration</li>
-          <li>Full multi-agent LangGraph pipeline, RAG integration, dataset workflows</li>
-          <li>Local pipeline setup: Ollama + ChromaDB + SQLite, plus setup/testing guides</li>
+          <li>Backend foundation and the full LangGraph pipeline with RAG integration</li>
+          <li>Docker sandbox, RQ quality scorer, Gemini structured-output migration</li>
+          <li>Puppeteer PDF export and McKinsey-style executive report template</li>
+          <li>Reliability fixes: Chroma RLock, run-status sync, system-profile handling, stuck-run resume script</li>
+          <li>README with animated architecture SVGs; offline experiment scripts and tests</li>
         </ul>
       </div>
       <div class="panel contrib-card">
         <div class="contrib-head">
           <div class="avatar" style="background:#43D9C8;">JM</div>
-          <div><h3 style="margin:0;">Jalisa Malik</h3><span class="tag teal" style="margin-top:4px;">Frontend &amp; API integration lead</span></div>
+          <div><h3 style="margin:0;">Jalisa Malik</h3><span class="tag teal" style="margin-top:4px;">Frontend &amp; evaluation instrumentation</span></div>
         </div>
-        <div class="commit-bar"><div class="commit-bar-fill" style="width:53%; background:#43D9C8;"></div></div>
-        <div class="contrib-stats">
-          <div><b>10</b>commits</div>
-          <div><b>13.1k</b>+lines</div>
-          <div><b>0.3k</b>−lines</div>
-        </div>
-        <p style="font-size:13px; color:var(--fg-muted); margin:0 0 8px;">Built the entire frontend from scratch through to live-data integration — auth, every core screen, and the final backend-polling wire-up.</p>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:36%; background:#43D9C8;"></div></div>
+        <div class="contrib-stats"><div><b>29</b>commits</div><div><b>9.8k</b>+lines</div><div><b>1.2k</b>−lines</div></div>
         <ul class="contrib-list">
-          <li>Frontend setup + login page, auth flow</li>
-          <li>Home screen (post-login), dataset upload screen</li>
-          <li>Dataset profile view, RQ selection panel</li>
-          <li>Job status view + insights dashboard, export panel + report summary view</li>
-          <li>UI/theme/button polish; final dataset API integration with backend polling</li>
+          <li>Entire Next.js frontend: auth, upload, profile, RQ selection, status, insights, report</li>
+          <li>Replaced mocks with live API calls and polling; fixed endless-polling loop</li>
+          <li>Evaluation modules: RQ quality, code quality, insight quality</li>
+          <li>Structured JSONL telemetry, experiment runner and trial judge scripts</li>
+          <li>Markdown executive report view and PDF styling</li>
         </ul>
       </div>
     </div>
-    <div class="card" style="margin-top:20px;">
-      <h3>📌 Reading the history</h3>
-      <p style="margin-top:8px;">The project began July 17, 2026 as "SmartBI" (renamed DataMind the same day). Jalisa built out the complete frontend against mocked data through late July/early August, while Swayam's backend work proceeded in phases (foundation → partial phase-3 handover) before a large Sep 11 commit landed the full LangGraph pipeline, RAG integration, and a local-only Ollama/ChromaDB/SQLite setup — bringing backend and frontend into alignment for the first time.</p>
+    <h3 style="margin:30px 0 14px;font-size:18px;">Project timeline</h3>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-date">JUL 17</div><h4>Project starts as "SmartBI", renamed DataMind</h4><p>README added and renamed the same day.</p></div>
+      <div class="tl-item"><div class="tl-date">JUL 31 – AUG 8</div><h4>Frontend built against mock data</h4><p>Login, home, upload, profile, RQ panel, job status, insights dashboard, export panel, theme polish.</p></div>
+      <div class="tl-item"><div class="tl-date">AUG 9 – 29</div><h4>Backend foundation and API handover</h4><p>Phase 1 backend, partial phase 3, then frontend wired to backend polling.</p></div>
+      <div class="tl-item"><div class="tl-date">SEP 11</div><h4>Multi-agent pipeline, RAG and local setup land</h4><p>Full LangGraph pipeline, Ollama + Chroma + SQLite, setup and testing guides.</p></div>
+      <div class="tl-item"><div class="tl-date">SEP 13 – 14</div><h4>Quality scoring, deletion, Gemini migration</h4><p>RQ quality scorer, cascading dataset deletion, real API calls, structured-output LLM migration.</p></div>
+      <div class="tl-item"><div class="tl-date">SEP 18 – 20</div><h4>Evaluation and telemetry</h4><p>RQ, code and insight quality modules, JSONL trial logging, experiment runner, PDF pipeline, architecture README.</p></div>
+      <div class="tl-item"><div class="tl-date">SEP 21</div><h4>Experiment fixes</h4><p>Fixed a silent 0% grounding bug (column key lookup), run-id uniqueness, per-node token breakdown, structured reports.</p></div>
+      <div class="tl-item"><div class="tl-date">OCT 10</div><h4>Final hardening for the paper</h4><p>Docker sandbox config, RAG Chroma lock, status-transition fixes, updated metrics and rubric logic, tests, docs.</p></div>
     </div>
   </div>
 </section>
@@ -561,7 +634,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
 <section id="preview" style="background:var(--surface-muted);">
   <div class="wrap">
     <div class="section-head">
-      <div class="num">09 / Interactive Preview</div>
+      <div class="num">11 / Interactive Preview</div>
       <h2>How it works, in real time</h2>
       <p>An illustrative walkthrough of the core screens and agent behavior, built from the actual state machine and prompts above (sample data — not a live connection to the running app).</p>
     </div>
@@ -597,11 +670,11 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
 
         <div class="pv-panel" id="p2">
           <h4 style="margin-bottom:10px;">Generated research questions</h4>
-          <div style="margin-bottom:14px;"><span class="tag amber">Pre-processing</span>
+          <div style="margin-bottom:14px;"><span class="tag amber">data_cleaning</span>
             <div><span class="rq-chip pre">Should rows with missing discount_pct be imputed or dropped?</span>
             <span class="rq-chip pre">Are the 3 unit_price outliers data-entry errors or legitimate bulk orders?</span></div>
           </div>
-          <div><span class="tag teal">EDA</span>
+          <div><span class="tag teal">correlation · trend</span>
             <div><span class="rq-chip eda">Does discount_pct predict churn_flag across customer segments?</span>
             <span class="rq-chip eda">How has average order value trended month-over-month since 2023?</span></div>
           </div>
@@ -643,7 +716,7 @@ attempt 2 → code_corrector (reads traceback) → sandbox_execute
             </tbody>
           </table>
           <div style="margin-top:12px; padding:12px; background:var(--accent-light); border-radius:8px; font-size:13px; color:#C7D2FE;">
-            ℹ Retrieval is schema-shape based (column names + dtypes embedded via a local sentence-transformer) — this is the RAG condition being evaluated against a no-RAG baseline for the research paper's relevance/actionability metrics.
+            ℹ Retrieval embeds the schema text with all-MiniLM-L6-v2 and returns the top-5 records (k=5). This is the RAG arm compared against a no-RAG baseline for relevance, specificity and actionability.
           </div>
         </div>
 
@@ -654,8 +727,8 @@ attempt 2 → code_corrector (reads traceback) → sandbox_execute
 
 <footer>
   <div class="wrap">
-    DataMind · CHARUSAT DEPSTAR B.Tech Research Project · FastAPI + LangGraph + Next.js<br>
-    Architecture &amp; SRS dossier generated for the repository at
+    DataMind · CHARUSAT DEPSTAR research project and paper · FastAPI + LangGraph + Next.js<br>
+    Architecture, SRS and results dossier for the repository at
     <a href="https://github.com/Sp2736/data-mind" target="_blank" rel="noopener">github.com/Sp2736/data-mind</a>
   </div>
 </footer>
