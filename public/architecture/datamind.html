@@ -190,7 +190,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       <span class="tag teal">Chroma + MiniLM RAG (local)</span>
       <span class="tag amber">Gemini 3.1 Flash Lite</span>
       <span class="tag pink">Docker sandbox · --network none</span>
-      <span class="tag">81 commits · Jul 17 – Oct 10, 2026</span>
+      <span class="tag">93 commits · Jul 17 – Oct 18, 2026</span>
     </div>
     <div class="hero-cta">
       <a class="btn primary" href="#architecture">Explore Architecture ↓</a>
@@ -215,7 +215,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       <div class="card"><h3><span class="icon">📁</span>Upload &amp; Profile</h3><p>CSV, TSV, JSON, Excel or Parquet via upload, URL, Kaggle or GitHub. A pandas profile (schema, nulls, stats, correlations, 10 sample rows) is the only thing the LLM sees; raw data never leaves the machine.</p></div>
       <div class="card"><h3><span class="icon">🧠</span>Autonomous Questioning</h3><p>One LLM call per dataset proposes research questions across six categories (data cleaning, distribution, correlation, trend, anomaly, segmentation). A gatekeeper scores each 1–5 and drops anything below 3.</p></div>
       <div class="card"><h3><span class="icon">🔁</span>Self-Correcting Analysis</h3><p>Per question, a LangGraph state machine writes code, runs it in Docker, reads the traceback on failure and rewrites it (3-attempt budget). Self-correction lifts success from 82.0% to 99.1%.</p></div>
-      <div class="card"><h3><span class="icon">🔎</span>Switchable RAG</h3><p>Schema-similarity retrieval (k=5) over past insights feeds question generation only. One on/off switch makes RAG the single experimental variable.</p></div>
+      <div class="card"><h3><span class="icon">🔎</span>Switchable RAG</h3><p>Schema-similarity retrieval (k=5) over past insights, with one on/off switch so RAG is the single experimental variable. A new <code>RAG_IN_APP_RUNS</code> setting also lets baseline runs disable retrieval and indexing in the web app path.</p></div>
       <div class="card"><h3><span class="icon">📄</span>Insights, Charts, Report</h3><p>Numerically grounded insights, up to three chart specs, a system-profile dashboard, a cleaned-dataset export and a Puppeteer-rendered executive PDF report.</p></div>
       <div class="card"><h3><span class="icon">📊</span>Measured Per Stage</h3><p>Immutable per-trial JSONL telemetry plus offline LLM-judge scoring grade the questions, code, insights and token cost, not just the final answer.</p></div>
     </div>
@@ -228,11 +228,11 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     <div class="section-head">
       <div class="num">02 / System Architecture</div>
       <h2>FastAPI backend, Next.js frontend, local-first AI stack</h2>
-      <p>A LangGraph <b>agent graph</b> owns the reasoning loop, a FastAPI service layer owns persistence and orchestration, and a local ChromaDB store provides zero-cost RAG grounding — sandboxed in Docker for untrusted code, with Gemini as the supported LLM provider.</p>
+      <p>A LangGraph <b>agent graph</b> owns the reasoning loop, a FastAPI service layer owns persistence and orchestration, and a local ChromaDB store provides zero-cost RAG grounding — sandboxed in Docker for untrusted code, with Gemini as the supported LLM provider. An offline experiment toolchain (<code>backend/experiment</code> + <code>backend/scripts</code>) sits beside the app and consumes its logs.</p>
     </div>
     <div class="panel">
       <div class="arch-diagram">
-        <svg viewBox="0 0 1120 580" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Segoe UI, sans-serif">
+        <svg viewBox="0 0 1120 640" xmlns="http://www.w3.org/2000/svg" font-family="Inter, Segoe UI, sans-serif">
           <!-- Frontend -->
           <rect x="410" y="18" width="300" height="54" rx="10" fill="#1E2540" stroke="#4C63D2" stroke-width="1.5"/>
           <text x="560" y="42" text-anchor="middle" font-size="13" font-weight="700" fill="#E7E9EE">Next.js 16 Frontend</text>
@@ -262,6 +262,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
           <text x="970" y="246" text-anchor="middle" font-size="10" fill="#9FDCD3">indexer · retriever</text>
           <text x="970" y="262" text-anchor="middle" font-size="10" fill="#9FDCD3">store (ChromaDB local +</text>
           <text x="970" y="278" text-anchor="middle" font-size="10" fill="#9FDCD3">sentence-transformers)</text>
+          <text x="970" y="306" text-anchor="middle" font-size="9.5" fill="#43D9C8">gated by RAG_IN_APP_RUNS</text>
 
           <!-- LLM providers -->
           <rect x="80" y="330" width="500" height="56" rx="10" fill="#332A12" stroke="#5C4B1E" stroke-width="1.5"/>
@@ -282,6 +283,12 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
           <text x="180" y="450" text-anchor="middle" font-size="11.5" font-weight="700" fill="#F0669B">WebSocket (api/ws.py)</text>
           <text x="180" y="466" text-anchor="middle" font-size="9.5" fill="#D89DB8">Live run/job status push</text>
 
+          <!-- Experiment toolchain -->
+          <rect x="80" y="520" width="990" height="84" rx="10" fill="#332A12" stroke="#5C4B1E" stroke-width="1.5" stroke-dasharray="6 4"/>
+          <text x="575" y="544" text-anchor="middle" font-size="12" font-weight="700" fill="#F2B84C">Offline Experiment Toolchain (backend/experiment + backend/scripts) — reads logs and SQLite, no live cost</text>
+          <text x="575" y="566" text-anchor="middle" font-size="10.5" fill="#D9C495">run_experiment → prepare_judging (canonical pairing) → judge_trials (incremental, resumable) → fix_zero_metrics</text>
+          <text x="575" y="584" text-anchor="middle" font-size="10.5" fill="#D9C495">→ wilcoxon_tests / analyze_results · sync_data (export / import-merge bundles between machines)</text>
+
           <!-- arrows -->
           <g stroke="#3A4257" stroke-width="1.8" fill="none" marker-end="url(#arrow2)">
             <path d="M560,72 L560,106"/>
@@ -292,6 +299,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
             <path d="M560,386 L560,424"/>
             <path d="M900,292 L960,330"/>
             <path d="M180,292 L180,424"/>
+            <path d="M560,476 L560,520"/>
           </g>
           <defs>
             <marker id="arrow2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
@@ -305,7 +313,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
         <span><i class="legend-swatch" style="background:#171A21;border:1px solid #2A3040;"></i>Transport / Persistence</span>
         <span><i class="legend-swatch" style="background:#331222;"></i>Sandbox / Realtime</span>
         <span><i class="legend-swatch" style="background:#123330;"></i>RAG</span>
-        <span><i class="legend-swatch" style="background:#332A12;"></i>LLM provider layer</span>
+        <span><i class="legend-swatch" style="background:#332A12;"></i>LLM provider layer / offline experiment tooling</span>
       </div>
     </div>
 
@@ -327,13 +335,14 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     <div class="timeline">
       <div class="tl-item"><div class="tl-date">STEP 1</div><h4>Upload &amp; Ingest</h4><p>A CSV/JSON file is uploaded, or fetched via direct URL / the Kaggle API through the Dataset Fetch Service. The raw file is persisted and a <code>Dataset</code> row is created.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 2</div><h4>Profiling</h4><p>The profiling service computes a <b>schema summary</b>, <b>stats summary</b>, <b>correlation summary</b> and sample rows — metadata only, never raw rows beyond a bounded sample — stored as a <code>DatasetProfile</code>.</p></div>
-      <div class="tl-item"><div class="tl-date">STEP 3</div><h4>Research Question Generation</h4><p><code>question_generator</code> calls the LLM once per dataset to produce a batch of dataset-specific questions, spread over six categories (data cleaning is mandatory when nulls or extreme outliers exist), each with target columns, expected output type and rationale. RAG can ground the call with insights from similarly-shaped past datasets (the query dataset itself is excluded). <code>rq_quality_scorer</code> then rates each question 1–5 and drops those below 3.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 3</div><h4>Research Question Generation</h4><p><code>question_generator</code> calls the LLM once per dataset to produce a batch of dataset-specific questions, spread over six categories (data cleaning is mandatory when nulls or extreme outliers exist), each with target columns, expected output type and rationale. RAG can ground the call with insights from similarly-shaped past datasets (the query dataset itself is excluded); the effective switch is the request's <code>use_rag</code> flag AND the <code>RAG_IN_APP_RUNS</code> setting, and the logged batch records which arm actually ran. <code>rq_quality_scorer</code> then rates each question 1–5 and drops those below 3.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 4</div><h4>Per-Question Analysis Run</h4><p>For each selected <code>ResearchQuestion</code>, an <code>AnalysisRun</code> starts the LangGraph pipeline: <code>code_generator</code> writes pandas code from the question + profile context.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 5</div><h4>Sandboxed Execution &amp; Self-Correction</h4><p><code>sandbox_execute</code> runs the code in a fresh Docker container (<code>--rm --network none</code>, 1 GB / 1 CPU, read-only script and data, 60 s timeout; subprocess mode is for dev only). On failure, <code>code_corrector</code> rewrites the code using the traceback and loops back to execution — until success or <code>max_attempts</code> is exhausted, at which point the run is marked <code>failed</code>.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 6</div><h4>Result Analysis</h4><p><code>result_analyzer</code> is a deterministic (non-LLM) node that truncates/sanitizes stdout so downstream LLM calls get clean, bounded input — logic kept in one place instead of duplicated across nodes.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 7</div><h4>Insight Writing &amp; Visualization</h4><p><code>insight_writer</code> turns the execution output into a narrative <code>Insight</code>. <code>visualization_builder</code> asks the LLM only for chart <i>metadata</i> (type/title/labels) — the PNG itself is rendered by the sandboxed script per the code-generator's contract (<code>./output/chart.png</code>) — and is skipped entirely if no chart was produced.</p></div>
-      <div class="tl-item"><div class="tl-date">STEP 8</div><h4>RAG Indexing (best-effort)</h4><p>On a successful run, the new insight is written into the local Chroma vector store by the RAG indexer, keyed on the dataset's "schema text" embedding — so future datasets with a similar shape can retrieve it. Indexing failure never fails the run itself.</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 8</div><h4>RAG Indexing (best-effort)</h4><p>On a successful run, the new insight is written into the local Chroma vector store by the RAG indexer, keyed on the dataset's "schema text" embedding — so future datasets with a similar shape can retrieve it. Indexing is skipped when <code>RAG_IN_APP_RUNS=false</code>, and a failure never fails the run itself.</p></div>
       <div class="tl-item"><div class="tl-date">STEP 9</div><h4>Report &amp; Export</h4><p>A structured markdown <code>Report</code> (per-category sections, numbered findings, key takeaways) is generated and exported as an A4 PDF by a server-side Puppeteer route, alongside the cleaned dataset and a before/after cleaning comparison. Every run also appends one record to <code>trials.jsonl</code> (experiments) or <code>app_trials.jsonl</code> (app use).</p></div>
+      <div class="tl-item"><div class="tl-date">STEP 10</div><h4>Offline Judging &amp; Statistics</h4><p>App-path logs (<code>app_rq_batches.jsonl</code>, <code>app_trials.jsonl</code>) are bridged into experiment-path logs by <code>prepare_judging.py</code>, judged offline, patched for zero-value metrics, and tested with paired Wilcoxon signed-rank statistics. See the Evaluation section.</p></div>
     </div>
   </div>
 </section>
@@ -351,6 +360,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       <button class="tab-btn" data-tab="n2">Execution &amp; Correction</button>
       <button class="tab-btn" data-tab="n3">Analysis &amp; Output</button>
       <button class="tab-btn" data-tab="n4">RAG &amp; Services</button>
+      <button class="tab-btn" data-tab="n5">Experiment Tooling</button>
     </div>
     <div class="panel">
       <div class="tab-panel active" id="n1">
@@ -374,6 +384,15 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
         <div class="node-row"><div class="node-num">11</div><div><h4>RAG indexer</h4><p>Writes each completed insight into the local store right after its <code>AnalysisRun</code> succeeds and commits. Best-effort by design — a failure here must never fail the run itself.</p></div></div>
         <div class="node-row"><div class="node-num">12</div><div><h4>Dataset Fetch Service</h4><p>Handles ingestion from a direct URL or the Kaggle API, normalizing both into the same on-disk raw-dataset representation the rest of the pipeline expects.</p></div></div>
         <div class="node-row"><div class="node-num">13</div><div><h4>LLM Provider Factory</h4><p>A single <code>get_llm</code> factory taking per-node <code>provider:model</code> specs (default <code>google:gemini-3.1-flash-lite</code>, temperature 0.2). Wraps calls in tenacity retry and counts rate-limit retries. Gemini is the supported path; OpenRouter exists as an undocumented secondary.</p></div></div>
+        <div class="node-row"><div class="node-num">14</div><div><h4>RAG_IN_APP_RUNS toggle <span class="pill info">new</span></h4><p>A <code>config.py</code> setting (default <code>true</code>). When <code>false</code>, the web-app path skips retrieval in <code>api/research_questions.py</code> and <code>api/runs.py</code> and skips indexing after a successful run, so baseline-arm insights cannot influence each other. The batch log records the effective arm (<code>use_rag AND rag_in_app_runs</code>). Covered by <code>tests/test_e04_rag_toggle.py</code>.</p></div></div>
+      </div>
+      <div class="tab-panel" id="n5">
+        <div class="node-row"><div class="node-num">E1</div><div><h4>prepare_judging.py <span class="pill info">new</span></h4><p>Bridges app-path logs to experiment-path logs. Reads SQLite read-only to map <code>dataset_id</code> to filename, groups batches by (filename, arm), keeps the best representative (most questions, latest timestamp), assigns a deterministic canonical id (<code>ds_canonical_</code> + SHA-256 of the lowercased filename, 12 chars) so RAG and baseline uploads of the same file pair up, and re-infers each trial's arm. Writes <code>rq_batches.jsonl</code>, <code>trials.jsonl</code> and an audit file, <code>dataset_pairing.json</code>.</p></div></div>
+        <div class="node-row"><div class="node-num">E2</div><div><h4>judge_trials.py (upgraded)</h4><p>Now logs progress per batch and trial, flushes to the judged JSONL after every record, and resumes idempotently by skipping already-judged items, so a rate-limit or Ctrl+C no longer loses work. <code>check_reproducibility</code> was added to <code>evaluation/code_quality.py</code> to fix an import failure.</p></div></div>
+        <div class="node-row"><div class="node-num">E3</div><div><h4>fix_zero_metrics.py <span class="pill info">new</span></h4><p>Offline patch with no LLM calls: repopulates RQ column-grounding rate from stored dataset profiles, derives trial status from the last attempt, and derives a code-correctness score from execution success, attempt count and static-analysis signals.</p></div></div>
+        <div class="node-row"><div class="node-num">E4</div><div><h4>wilcoxon_tests.py <span class="pill info">new</span></h4><p>Computes per-dataset paired (RAG, baseline) means for each evaluation metric, then runs a two-sided <code>scipy.stats.wilcoxon</code> signed-rank test. Accepts <code>--logs-dir</code>.</p></div></div>
+        <div class="node-row"><div class="node-num">E5</div><div><h4>sync_data.py <span class="pill info">new</span></h4><p>Bidirectional export / import-merge for working across two machines. Export bundles SQLite rows, Chroma vectors (read straight from <code>chromadb.PersistentClient</code>), generated code (CSV copies excluded) and logs; raw datasets are opt-in via <code>--include-raw</code>. A full-size working set that was ~14 GB shrinks to a bundle of a few MB. Import takes an automatic backup first, merges SQLite with <code>INSERT OR IGNORE</code>, upserts vectors, dedupes JSONL by id, supports <code>--dry-run</code> and nested archive layouts.</p></div></div>
+        <div class="node-row"><div class="node-num">E6</div><div><h4>analyze_results.py (fixed)</h4><p>No longer relies on a hardcoded relative log path: it reads <code>settings.logs_dir</code> and accepts <code>--logs-dir</code>, so it runs from any working directory.</p></div></div>
       </div>
     </div>
 
@@ -413,7 +432,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
           <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets</td><td>List datasets</td></tr>
           <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}</td><td>Fetch a single dataset</td></tr>
           <tr data-g="datasets"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/profile</td><td>Schema/stats/correlation profile</td></tr>
-          <tr data-g="rq"><td><span class="method POST">POST</span></td><td class="api-path">/datasets/{dataset_id}/questions</td><td>Trigger LLM research-question generation</td></tr>
+          <tr data-g="rq"><td><span class="method POST">POST</span></td><td class="api-path">/datasets/{dataset_id}/questions</td><td>Trigger LLM research-question generation (honours <code>use_rag</code> and <code>RAG_IN_APP_RUNS</code>)</td></tr>
           <tr data-g="rq"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/questions</td><td>List generated research questions</td></tr>
           <tr data-g="runs"><td><span class="method POST">POST</span></td><td class="api-path">/datasets/{dataset_id}/runs</td><td>Kick off one or more per-question analysis runs (LangGraph)</td></tr>
           <tr data-g="runs"><td><span class="method GET">GET</span></td><td class="api-path">/datasets/{dataset_id}/runs</td><td>List analysis runs and their status</td></tr>
@@ -468,13 +487,13 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
         <div class="stack-item"><b>Gemini 3.1 Flash Lite</b><span>generator and judge model</span></div>
         <div class="stack-item"><b>ChromaDB 0.6.3</b><span>local vector store (k=5)</span></div>
         <div class="stack-item"><b>sentence-transformers</b><span>all-MiniLM-L6-v2 embeddings</span></div>
-        <div class="stack-item"><b>pandas · numpy · scipy · sklearn</b><span>sandboxed analysis code</span></div>
+        <div class="stack-item"><b>pandas · numpy · scipy · sklearn</b><span>sandboxed analysis code, Wilcoxon tests</span></div>
         <div class="stack-item"><b>Kaggle API</b><span>dataset ingestion</span></div>
       </div>
     </div>
     <div class="card" style="margin-top:18px;">
       <h3>📝 Note on stack evolution</h3>
-      <p style="margin-top:8px;">Early planning targeted PostgreSQL + pgvector, then an Ollama-first local LLM setup (Sep 11). The shipped system runs <b>SQLite + Chroma</b> and, since Sep 14, <b>Gemini via structured outputs</b>. The sandbox moved from a subprocess-only design to a real <b>Docker</b> sandbox, which is used for every reported experiment.</p>
+      <p style="margin-top:8px;">Early planning targeted PostgreSQL + pgvector, then an Ollama-first local LLM setup (Sep 11). The shipped system runs <b>SQLite + Chroma</b> and, since Sep 14, <b>Gemini via structured outputs</b>. The sandbox moved from a subprocess-only design to a real <b>Docker</b> sandbox, which is used for every reported experiment. From Oct 15–18 the work shifted to evaluation infrastructure on the <code>experiment-prep</code> branch: the <code>RAG_IN_APP_RUNS</code> switch, log bridging, resumable judging, cross-machine data sync and the Wilcoxon suite.</p>
     </div>
   </div>
 </section>
@@ -509,7 +528,7 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       </div>
       <div class="panel">
         <h4 style="font-size:13px;text-transform:uppercase;color:var(--fg-muted);">Notes</h4>
-        <p style="font-size:13px;color:var(--fg-muted);margin:0;">Experiment telemetry lives outside the DB in append-only <code>trials.jsonl</code>, <code>rq_batches.jsonl</code> and judged variants. Every <code>AnalysisRun</code> links to exactly one <code>ResearchQuestion</code> and accumulates one or more <code>GeneratedCode</code> / <code>ExecutionAttempt</code> rows — a full audit trail of every self-correction cycle the agent went through.</p>
+        <p style="font-size:13px;color:var(--fg-muted);margin:0;">Experiment telemetry lives outside the DB in append-only JSONL: <code>trials.jsonl</code> and <code>rq_batches.jsonl</code> (experiment path), <code>app_trials.jsonl</code> and <code>app_rq_batches.jsonl</code> (web-app path), judged variants, and <code>dataset_pairing.json</code> mapping filenames to canonical ids. Every <code>AnalysisRun</code> links to exactly one <code>ResearchQuestion</code> and accumulates one or more <code>GeneratedCode</code> / <code>ExecutionAttempt</code> rows — a full audit trail of every self-correction cycle the agent went through. All primary keys are UUIDs, which is what makes cross-machine <code>INSERT OR IGNORE</code> merges collision-free.</p>
       </div>
     </div>
   </div>
@@ -530,7 +549,11 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     </div>
     <div class="card" style="margin-top:18px;">
       <h3>🧪 Method details</h3>
-      <p style="margin-top:8px;">Datasets were sampled from a catalogue of 134 public Kaggle/GitHub sets across 29 domains (569 to 32.4M rows, 4 to 40 columns). The vector store held 78 deduplicated insights and was frozen during runs. Tests are two-sided Wilcoxon signed-rank on per-dataset means (n=24), Holm–Bonferroni across 29 metrics, with 95% bootstrap CIs (B=10,000). Judging is offline over the append-only log, so it adds no live cost. Reproduce with <code>seed_datasets.py</code> → <code>experiment.run_experiment</code> → <code>judge_trials</code> → <code>analyze_results</code>.</p>
+      <p style="margin-top:8px;">Datasets were sampled from a catalogue of 134 public Kaggle/GitHub sets across 29 domains (569 to 32.4M rows, 4 to 40 columns). The vector store held 78 deduplicated insights and was frozen during runs. Tests are two-sided Wilcoxon signed-rank on per-dataset means (n=24), Holm–Bonferroni across 29 metrics, with 95% bootstrap CIs (B=10,000). Judging is offline over the append-only log, so it adds no live cost. Reproduce with <code>seed_datasets.py</code> → <code>experiment.run_experiment</code> → <code>scripts/prepare_judging.py</code> → <code>experiment.judge_trials</code> → <code>scripts/fix_zero_metrics.py</code> → <code>scripts/wilcoxon_tests.py</code> / <code>experiment.analyze_results</code>.</p>
+    </div>
+    <div class="card" style="margin-top:18px;">
+      <h3>🔗 Two-machine data collection</h3>
+      <p style="margin-top:8px;">Datasets were run through the web app on two machines and merged afterwards. Because the app assigns a fresh UUID on every upload, the RAG and baseline uploads of one CSV have different <code>dataset_id</code>s; <code>prepare_judging.py</code> restores pairing through the canonical filename hash, and also corrects a logging gap where app-path trials were all labelled <code>baseline</code>. <code>sync_data.py</code> exports and merges SQLite rows, Chroma vectors, generated code and logs between machines with an automatic pre-merge backup.</p>
     </div>
   </div>
 </section>
@@ -582,22 +605,23 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
     <div class="section-head">
       <div class="num">10 / Contributors &amp; Commit History</div>
       <h2>Teamwork Insights</h2>
-      <p>From the git history of <code>main</code>: 81 commits across 16 active days, Jul 17 – Oct 10, 2026 (7 in July, 10 in August, 54 in September, 10 in October). Line counts exclude lockfiles and SVGs.</p>
+      <p>From the git history of <code>main</code> plus the <code>experiment-prep</code> branch: 93 commits across 19 active days, Jul 17 – Oct 18, 2026 (7 in July, 10 in August, 54 in September, 22 in October). Line counts exclude lockfiles and SVGs. <code>main</code> itself stands at 81 commits (last: Oct 10); the 12 newer commits live on <code>experiment-prep</code> and are not yet merged.</p>
     </div>
     <div class="grid cols-2">
       <div class="panel contrib-card">
         <div class="contrib-head">
           <div class="avatar">SP</div>
-          <div><h3 style="margin:0;">Swayam Patel</h3><span class="tag accent" style="margin-top:4px;">Backend, pipeline &amp; PDF reports</span></div>
+          <div><h3 style="margin:0;">Swayam Patel</h3><span class="tag accent" style="margin-top:4px;">Backend, pipeline, reports &amp; experiment tooling</span></div>
         </div>
-        <div class="commit-bar"><div class="commit-bar-fill" style="width:64%;"></div></div>
-        <div class="contrib-stats"><div><b>52</b>commits</div><div><b>13.4k</b>+lines</div><div><b>5.3k</b>−lines</div></div>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:68%;"></div></div>
+        <div class="contrib-stats"><div><b>63</b>commits</div><div><b>14.8k</b>+lines</div><div><b>6.1k</b>−lines</div></div>
         <ul class="contrib-list">
           <li>Backend foundation and the full LangGraph pipeline with RAG integration</li>
           <li>Docker sandbox, RQ quality scorer, Gemini structured-output migration</li>
           <li>Puppeteer PDF export and McKinsey-style executive report template</li>
           <li>Reliability fixes: Chroma RLock, run-status sync, system-profile handling, stuck-run resume script</li>
           <li>README with animated architecture SVGs; offline experiment scripts and tests</li>
+          <li>Oct 15–18: <code>RAG_IN_APP_RUNS</code> baseline toggle with tests, <code>prepare_judging</code> and <code>sync_data</code> scripts, resumable <code>judge_trials</code>, paired Wilcoxon suite, data-sharing and context docs</li>
         </ul>
       </div>
       <div class="panel contrib-card">
@@ -605,14 +629,15 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
           <div class="avatar" style="background:#43D9C8;">JM</div>
           <div><h3 style="margin:0;">Jalisa Malik</h3><span class="tag teal" style="margin-top:4px;">Frontend &amp; evaluation instrumentation</span></div>
         </div>
-        <div class="commit-bar"><div class="commit-bar-fill" style="width:36%; background:#43D9C8;"></div></div>
-        <div class="contrib-stats"><div><b>29</b>commits</div><div><b>9.8k</b>+lines</div><div><b>1.2k</b>−lines</div></div>
+        <div class="commit-bar"><div class="commit-bar-fill" style="width:32%; background:#43D9C8;"></div></div>
+        <div class="contrib-stats"><div><b>30</b>commits</div><div><b>10.7k</b>+lines</div><div><b>1.2k</b>−lines</div></div>
         <ul class="contrib-list">
           <li>Entire Next.js frontend: auth, upload, profile, RQ selection, status, insights, report</li>
           <li>Replaced mocks with live API calls and polling; fixed endless-polling loop</li>
           <li>Evaluation modules: RQ quality, code quality, insight quality</li>
           <li>Structured JSONL telemetry, experiment runner and trial judge scripts</li>
           <li>Markdown executive report view and PDF styling</li>
+          <li>Oct 18: offline fix for zero-value evaluation metrics and the evaluation-context write-up</li>
         </ul>
       </div>
     </div>
@@ -626,6 +651,9 @@ footer{padding:34px 0; text-align:center; color:var(--fg-muted); font-size:13px;
       <div class="tl-item"><div class="tl-date">SEP 18 – 20</div><h4>Evaluation and telemetry</h4><p>RQ, code and insight quality modules, JSONL trial logging, experiment runner, PDF pipeline, architecture README.</p></div>
       <div class="tl-item"><div class="tl-date">SEP 21</div><h4>Experiment fixes</h4><p>Fixed a silent 0% grounding bug (column key lookup), run-id uniqueness, per-node token breakdown, structured reports.</p></div>
       <div class="tl-item"><div class="tl-date">OCT 10</div><h4>Final hardening for the paper</h4><p>Docker sandbox config, RAG Chroma lock, status-transition fixes, updated metrics and rubric logic, tests, docs.</p></div>
+      <div class="tl-item"><div class="tl-date">OCT 15</div><h4>Baseline-arm control (E-04)</h4><p>Added the <code>RAG_IN_APP_RUNS</code> toggle, unit tests, a fix so baseline runs disable RAG in both question generation and indexing, and data-sharing instructions.</p></div>
+      <div class="tl-item"><div class="tl-date">OCT 16</div><h4>Judging bridge and sync tooling</h4><p><code>prepare_judging</code> and <code>sync_data</code> scripts, <code>analyze_results</code> log-path fix, <code>check_reproducibility</code> import fix, incremental resumable <code>judge_trials</code>, and a full context and changelog guide.</p></div>
+      <div class="tl-item"><div class="tl-date">OCT 18</div><h4>Statistics and zero-metric fixes</h4><p>Paired Wilcoxon signed-rank test suite, offline zero-value metric fix with evaluation-context docs, nested-archive support in <code>sync_data</code>, and archive bundles git-ignored.</p></div>
     </div>
   </div>
 </section>
@@ -716,7 +744,7 @@ attempt 2 → code_corrector (reads traceback) → sandbox_execute
             </tbody>
           </table>
           <div style="margin-top:12px; padding:12px; background:var(--accent-light); border-radius:8px; font-size:13px; color:#C7D2FE;">
-            ℹ Retrieval embeds the schema text with all-MiniLM-L6-v2 and returns the top-5 records (k=5). This is the RAG arm compared against a no-RAG baseline for relevance, specificity and actionability.
+            ℹ Retrieval embeds the schema text with all-MiniLM-L6-v2 and returns the top-5 records (k=5). This is the RAG arm compared against a no-RAG baseline for relevance, specificity and actionability. Setting <code>RAG_IN_APP_RUNS=false</code> turns this step off for baseline runs.
           </div>
         </div>
 
