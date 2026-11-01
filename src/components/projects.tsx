@@ -213,6 +213,12 @@ const projectsData = [
         primary: false,
       },
       {
+        label: "Demo",
+        url: "https://sp2736.github.io/counseling-reports-portal/",
+        icon: ExternalLink,
+        primary: true,
+      },
+      {
         label: "Architecture",
         url: "/architecture/swot.html",
         icon: ArrowUpRight,
