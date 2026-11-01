@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mastery OS — A Field Guide to the Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f0e6;--card:#ece6d6;--ink:#1c2b22;--soft:#5a655c;--forest:#1f3d2f;--sage:#cddcc4;--peach:#f2cdb8;--clay:#c9694a;--line:#d9d2bf;--code:#e4ddca;
+--serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace}
+@media(prefers-color-scheme:dark){:root{--bg:#141a16;--card:#1d2620;--ink:#ece8da;--soft:#9ba89e;--forest:#bfe0c9;--sage:#2b3b2f;--peach:#43302a;--clay:#e48a6b;--line:#2f3b32;--code:#222d25}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 var(--sans)}
+a{color:inherit}
+.wrap{display:grid;grid-template-columns:220px minmax(0,1fr);max-width:1180px;margin:0 auto;gap:48px;padding:0 24px}
+nav.rail{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:36px 0;font-size:13px}
+.rail .brand{font:700 15px var(--serif);color:var(--forest);margin-bottom:4px}
+.rail .tag{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:22px}
+.rail a{display:flex;gap:10px;padding:5px 0;text-decoration:none;color:var(--soft)}
+.rail a b{font:500 11px var(--mono);color:var(--clay);min-width:20px;padding-top:2px}
+.rail a:hover{color:var(--ink)}
+main{padding:36px 0 90px}
+.eyebrow{font:500 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+h1{font:700 clamp(44px,7vw,84px)/.98 var(--serif);color:var(--forest);margin:14px 0 18px;letter-spacing:-.02em}
+h1 em{font-style:italic;font-weight:500;color:var(--clay)}
+.lede{font-size:19px;max-width:640px;color:var(--soft)}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:30px 0 6px}
+.chip{background:var(--card);border-radius:14px;padding:14px 16px}
+.chip b{display:block;font:700 26px var(--serif);color:var(--forest)}
+.chip span{font-size:12px;color:var(--soft)}
+section{margin-top:84px;scroll-margin-top:20px}
+.num{font:500 12px var(--mono);color:var(--clay);letter-spacing:.1em}
+h2{font:700 clamp(28px,4vw,40px)/1.1 var(--serif);color:var(--forest);margin:6px 0 14px;letter-spacing:-.01em}
+h2 em{font-weight:500}
+h3{font:700 18px var(--serif);margin:28px 0 8px;color:var(--forest)}
+p{margin:10px 0;max-width:720px}
+code{font:13px var(--mono);background:var(--code);padding:2px 6px;border-radius:5px}
+pre{background:var(--code);border-radius:12px;padding:16px 18px;overflow-x:auto;font:13px/1.6 var(--mono);margin:14px 0}
+pre code{background:none;padding:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin:18px 0}
+.card{background:var(--card);border-radius:18px;padding:20px 22px}
+.card.p{background:var(--peach)}.card.s{background:var(--sage)}
+.card h4{font:700 17px var(--serif);margin:0 0 6px;color:var(--forest)}
+.card p{font-size:14.5px;margin:6px 0}
+.card .k{font:500 10.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+ul.t{padding-left:18px;margin:8px 0}ul.t li{margin:4px 0;font-size:14.5px}
+.tbl{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th{text-align:left;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--soft);padding:12px 14px;border-bottom:1px solid var(--line);background:var(--card)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:500;white-space:nowrap}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;counter-reset:s;margin:22px 0}
+.flow div{background:var(--card);border-radius:16px;padding:16px;font-size:13.5px;position:relative;counter-increment:s}
+.flow div::before{content:counter(s);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--forest);color:var(--bg);font:700 12px var(--mono);margin-bottom:8px}
+.flow b{display:block;font:700 15px var(--serif);color:var(--forest)}
+.pill{display:inline-block;font:500 11px var(--mono);padding:3px 10px;border-radius:99px;margin:2px 4px 2px 0;background:var(--sage)}
+.pill.r{background:#bfd3ee;color:#1d3557}.pill.e{background:#dccdf0;color:#3b2563}.pill.l{background:#f7dc8a;color:#5a4000}
+.note{border-left:4px solid var(--clay);background:var(--peach);padding:14px 18px;border-radius:0 12px 12px 0;margin:18px 0;font-size:14.5px;max-width:760px}
+svg text{font-family:var(--mono)}
+.diagram{margin:34px 0 0}
+.diagram .frame{position:relative;border-radius:22px;border:1.5px dashed var(--line);background:var(--card);min-height:260px;overflow:hidden;display:grid;place-items:center}
+.diagram .ph{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:24px;color:var(--soft);font-size:14px}
+.diagram .ph b{display:block;font:700 20px var(--serif);color:var(--forest);margin-bottom:6px}
+.diagram img{position:relative;display:block;width:100%;height:auto;background:var(--card)}
+.diagram figcaption{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-top:10px}
+footer{margin-top:90px;padding-top:20px;border-top:1px solid var(--line);font:12px var(--mono);color:var(--soft)}
+@media(max-width:860px){.wrap{grid-template-columns:1fr;gap:0}nav.rail{position:static;height:auto;padding:20px 0 0;border-bottom:1px solid var(--line)}.rail a{display:inline-flex;margin-right:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="rail" aria-label="Chapters">
+<div class="brand">Mastery OS</div><div class="tag">Field guide · v2.0</div>
+<a href="#idea"><b>01</b>The big idea</a><a href="#stack"><b>02</b>Stack</a><a href="#layers"><b>03</b>Layers &amp; lifecycle</a><a href="#gate"><b>04</b>Headless auth gate</a><a href="#storage"><b>05</b>Git-backed storage</a><a href="#parser"><b>06</b>Roadmap parser</a><a href="#schedule"><b>07</b>Rollover scheduler</a><a href="#pages"><b>08</b>Every screen</a><a href="#game"><b>09</b>Game engine</a><a href="#insights"><b>10</b>Local insights</a><a href="#public"><b>11</b>Public widgets</a><a href="#feel"><b>12</b>Look, motion, voice</a><a href="#api"><b>13</b>API map</a><a href="#data"><b>14</b>Data model</a><a href="#ops"><b>15</b>Ops &amp; onboarding</a><a href="#notes"><b>16</b>Sharp edges</a>
+</nav>
+
+<main>
+<header>
+<div class="eyebrow">Architecture explainer · Sp2736/mastery-os</div>
+<h1>A learning OS that <em>commits</em> to you.</h1>
+<p class="lede">Mastery OS is a gamified upskilling tracker with no database and no AI calls. Every task you finish becomes a real Git commit, and every screen, score and badge is computed locally from flat JSON.</p>
+<div class="chips">
+<div class="chip"><b>0</b><span>databases</span></div>
+<div class="chip"><b>0</b><span>external LLM calls</span></div>
+<div class="chip"><b>9</b><span>app screens</span></div>
+<div class="chip"><b>248</b><span>roadmap nodes (192 + 56)</span></div>
+<div class="chip"><b>23</b><span>achievements</span></div>
+<div class="chip"><b>6</b><span>embeddable SVG badges</span></div>
+</div>
+<figure class="diagram">
+<div class="frame">
+<div class="ph"><b>Architecture diagram</b>Place <code>mastery-os.png</code> in the same folder as this file and it will appear here.</div>
+<img src="/mastery-os.png" alt="Mastery OS full architecture diagram" onerror="this.style.display='none'">
+</div>
+<figcaption>Fig. 0 · Mastery OS system architecture</figcaption>
+</figure>
+</header>
+
+<section id="idea"><div class="num">01</div><h2>The big idea: <em>Git is the database</em></h2>
+<p>Mastery OS targets Vercel’s free tier, so instead of Postgres or Supabase it keeps state in <code>/data/**/*.json</code>. In development it reads and writes the local disk. In production it commits the changed JSON back to the repo through Octokit, so your discipline shows up on your GitHub contribution graph.</p>
+<div class="grid">
+<div class="card s"><span class="k">Reads</span><h4>Bundled JSON</h4><p>Typed loaders in <code>lib/storage/readJson.ts</code> read roadmaps, user files, quotes and achievement definitions straight from <code>/data</code>.</p></div>
+<div class="card p"><span class="k">Writes</span><h4>fs in dev, commits in prod</h4><p><code>NODE_ENV</code> picks the adapter. Same call signature either way, so route handlers never know which one ran.</p></div>
+<div class="card"><span class="k">Rules (AGENTS.md / CLAUDE.md)</span><h4>Guardrails for coding agents</h4><p>No DB or ORM, no external LLM APIs, no visible login form, userId validated before any path is built, motion wrapped in a reduced-motion hook.</p></div>
+</div></section>
+
+<section id="stack"><div class="num">02</div><h2>The <em>stack</em></h2>
+<div class="tbl"><table><tr><th>Concern</th><th>Choice</th><th>Role in the project</th></tr>
+<tr><td>Framework</td><td>Next.js 16.2 App Router, React 19.2</td><td>Server components for data loading, route handlers for the API, <code>proxy.ts</code> as the request gate</td></tr>
+<tr><td>Language</td><td>TypeScript 5, Zod 4</td><td>Typed models; every mutating route validates its body with Zod and returns 400 on failure</td></tr>
+<tr><td>State</td><td>Zustand 5</td><td><code>authStore</code>, <code>progressStore</code> (nodes, streak, XP, level, mastery score, level-up flag), <code>uiStore</code></td></tr>
+<tr><td>Styling</td><td>Tailwind CSS 4, clsx, tailwind-merge</td><td>Glassmorphism dark UI, near-black <code>#08090c</code> base and <code>#101319</code> panels</td></tr>
+<tr><td>Motion</td><td>Framer Motion 12</td><td>Entrances, count-ups, typewriter gate, shimmer on legendary badges</td></tr>
+<tr><td>Charts / graph</td><td>Recharts 3, @xyflow/react 12 + dagre</td><td>Analytics suite; auto-laid-out knowledge graph</td></tr>
+<tr><td>Auth</td><td>jose 6</td><td>HS256 JWT signing and verification</td></tr>
+<tr><td>Persistence</td><td>octokit 5</td><td>GitHub Contents and Git Data APIs</td></tr>
+<tr><td>Images</td><td>@vercel/og</td><td>Satori-based stat cards and OG imagery</td></tr>
+<tr><td>Icons</td><td>lucide-react</td><td>Nav icons and per-track icons (<code>trackIcons.ts</code>)</td></tr>
+<tr><td>Hosting</td><td>Vercel (Hobby)</td><td><code>vercel.json</code>: <code>npm run build</code>, output <code>.next</code></td></tr></table></div></section>
+
+<section id="layers"><div class="num">03</div><h2>Layers &amp; the <em>life of a click</em></h2>
+<svg viewBox="0 0 700 330" width="100%" role="img" aria-label="Layer diagram from browser to Git commit">
+<g stroke="currentColor" stroke-width="1.2" fill="none" style="color:var(--forest)">
+<rect x="10" y="10" width="680" height="46" rx="12" fill="var(--sage)"/><rect x="10" y="66" width="680" height="46" rx="12" fill="var(--card)"/><rect x="10" y="122" width="680" height="46" rx="12" fill="var(--peach)"/><rect x="10" y="178" width="680" height="46" rx="12" fill="var(--card)"/><rect x="10" y="234" width="680" height="46" rx="12" fill="var(--sage)"/><rect x="10" y="290" width="680" height="34" rx="12" fill="var(--forest)"/></g>
+<g fill="var(--ink)" font-size="12"><text x="26" y="30" font-weight="700">BROWSER</text><text x="26" y="46" fill="var(--soft)">AccessGate · Zustand stores · Framer Motion · Recharts · React Flow · Web Speech API</text>
+<text x="26" y="86" font-weight="700">proxy.ts</text><text x="26" y="102" fill="var(--soft)">JWT cookie check · injects x-user-id · public/flex/auth routes bypass</text>
+<text x="26" y="142" font-weight="700">APP ROUTER</text><text x="26" y="158" fill="var(--soft)">(app) pages + *Client.tsx · /p/[userId] · /api/user/* · /api/public/* · /api/flex/*</text>
+<text x="26" y="198" font-weight="700">lib/</text><text x="26" y="214" fill="var(--soft)">storage · parser · scoring · insights · theme · motion · quotes · audio · store</text>
+<text x="26" y="254" font-weight="700">/data</text><text x="26" y="270" fill="var(--soft)">roadmaps · roadmap-sources (md) · users/&lt;id&gt; · achievements · quotes</text>
+<text x="26" y="311" fill="var(--bg)" font-weight="700">GitHub REST (Contents + Git Data) → commit on main → contribution graph</text></g></svg>
+<h3>One task completion, end to end</h3>
+<div class="flow">
+<div><b>Tick</b>User completes a node on the dashboard; store updates optimistically.</div>
+<div><b>PATCH</b>Body goes to <code>/api/user/progress</code>; Zod accepts completed, in-progress or skipped.</div>
+<div><b>Gate</b><code>proxy.ts</code> verifies the cookie and stamps <code>x-user-id</code>.</div>
+<div><b>Compute</b>Route finds the node, XP = base × difficulty multiplier, no double XP on repeats.</div>
+<div><b>Persist</b><code>writeUserJson</code> writes disk in dev or commits to GitHub in prod.</div>
+<div><b>React</b>Store hydrates; level-up and achievement toasts fire.</div>
+</div></section>
+
+<section id="gate"><div class="num">04</div><h2>The headless <em>access gate</em></h2>
+<p>There is no login form, password or OAuth. Visiting <code>/</code> unauthenticated renders <code>AccessGate</code>: a generic “Access Denied” shield with the real dashboard never mounted. Authentication happens only through a function the gate registers on the window.</p>
+<pre><code>window.getAccess('your-username')   // run in the browser console
+// → POST /api/auth/session → sets httpOnly cookie "mastery_session"</code></pre>
+<div class="grid">
+<div class="card"><span class="k">Token</span><h4>Signed JWT</h4><p><code>lib/auth.ts</code> signs <code>{userId}</code> with HS256 via jose, 7-day expiry, using <code>SESSION_SECRET</code>. <code>createSession</code>, <code>verifySession</code>, <code>clearSession</code>.</p></div>
+<div class="card"><span class="k">Cookie</span><h4>Hardened flags</h4><p><code>httpOnly</code>, <code>secure</code> in production, <code>sameSite=lax</code>, path <code>/</code>, 7-day expiry. <code>DELETE /api/auth/session</code> logs out (<code>LogoutButton</code>).</p></div>
+<div class="card"><span class="k">Request gate</span><h4>proxy.ts rules</h4><ul class="t"><li>Skips <code>/_next</code>, <code>/api/public</code>, <code>/api/flex</code>, <code>/api/auth/session</code>, and any path containing a dot</li><li>No cookie: API gets 401 JSON, pages redirect to <code>/</code></li><li>Valid cookie on <code>/</code> redirects to <code>/dashboard</code></li><li>Invalid token: cookie deleted, redirect or 401</li></ul></div>
+<div class="card"><span class="k">Isolation</span><h4>Path-traversal shield</h4><p>Private routes take the user from the verified JWT only, never from URL or query. <code>validateUserId</code> allowlists the id before any file path is built.</p></div>
+<div class="card p"><span class="k">Gate theatre</span><h4>Quote on the shield</h4><p>The gate types out a daily quote letter by letter, can speak it aloud, has a mute toggle, and fades out into the dashboard once access is granted (states: denied, authenticating, granted).</p></div>
+</div></section>
+
+<section id="storage"><div class="num">05</div><h2>The Git-backed <em>storage engine</em></h2>
+<p>Everything funnels through <code>lib/storage/writeJson.ts</code>. Two shapes of write exist, and both switch on <code>NODE_ENV</code>.</p>
+<div class="grid">
+<div class="card s"><span class="k">Single file</span><h4>writeJson / writeUserJson</h4><p>Dev: <code>fs.writeFileSync</code> with directories created as needed. Prod: look up the file’s blob SHA, then update via the Contents API under <code>data/&lt;path&gt;</code>.</p></div>
+<div class="card p"><span class="k">Many files</span><h4>writeBatchJson / writeMultipleUserJson</h4><p>One atomic commit for several files, so a single user action never leaves a half-written state.</p></div>
+</div>
+<pre><code>getRef(heads/main) → getCommit → createTree(base_tree, blobs)
+  → createCommit(parents:[latest]) → updateRef</code></pre>
+<ul class="t"><li>Octokit is a lazy module-level singleton, created only on the first production write and reused on warm instances.</li><li>Env: <code>GITHUB_TOKEN</code> (required), <code>GITHUB_OWNER</code>, <code>GITHUB_REPO</code>, optional <code>GITHUB_BRANCH</code> (defaults to main).</li><li>Default commit message lists the touched files plus a timestamp; callers can pass their own.</li><li>The README also documents a 3–5 second write-through cache to avoid redundant commits on rapid UI updates.</li></ul></section>
+
+<section id="parser"><div class="num">06</div><h2>Markdown → <em>roadmap AST</em></h2>
+<p>You write a roadmap in Markdown and the parser (<code>lib/parser/index.ts</code>, driven by <code>scripts/parse-roadmaps.ts</code>) turns it into JSON the app can score and schedule.</p>
+<div class="grid">
+<div class="card"><span class="k">Structure</span><h4>Heading → hierarchy</h4><ul class="t"><li><code># </code> roadmap title</li><li><code>## </code> phase (<code>phase-1</code>, …)</li><li><code>### </code> week, then task lines become nodes</li></ul></div>
+<div class="card"><span class="k">Node fields</span><h4>What a node carries</h4><p>id, title, track, type, estimatedMinutes, difficulty (easy/medium/hard), dependencies, resources, checkpoint flag. Weeks list their tracks; roadmaps list all tracks.</p></div>
+<div class="card s"><span class="k">Stable IDs</span><h4>History survives edits</h4><pre><code>"node-" + sha1(roadmapId + phaseTitle
+ + weekTitle + rawLineText).slice(0,10)</code></pre><p>Unchanged lines keep their progress. Renamed or deleted tasks are archived into <code>progress.json.archived[]</code>, never dropped.</p></div>
+</div>
+<div class="tbl"><table><tr><th>Roadmap</th><th>Weeks</th><th>Nodes</th><th>Accent</th><th>Source markdown</th></tr>
+<tr><td>6-Month Mastery</td><td>24</td><td>192</td><td>#f59e0b</td><td>Swayam_6Month_Mastery_Roadmap.md</td></tr>
+<tr><td>8-Week Web Dev</td><td>8</td><td>56</td><td>#6366f1</td><td>web-dev-roadmap.md</td></tr></table></div>
+<p>A manifest (<code>_manifest.json</code>) indexes roadmaps; <code>RoadmapSwitcher</code> on the dashboard flips between them. The 6-month plan spans DSA/CP, business, finance and critical thinking.</p></section>
+
+<section id="schedule"><div class="num">07</div><h2>The rollover <em>scheduler</em></h2>
+<p><code>lib/storage/dateShift.ts</code> computes “today’s tasks” on the fly instead of storing a calendar. Nodes are flattened in roadmap order and mapped to days from each roadmap’s start date.</p>
+<ul class="t"><li><b>Rollover:</b> incomplete tasks from earlier days carry forward, flagged <code>isRolledOver</code> with <code>daysOverdue</code> and <code>originalDate</code>.</li><li><b>Cascade:</b> future target dates shift by the number of overdue tasks, so the plan slides rather than piles up.</li><li><b>Persistence:</b> shifted schedule and profile metadata are saved in one atomic commit via <code>writeMultipleUserJson</code>.</li><li><b>Display order in <code>TodaysTasks</code>:</b> overdue first (most overdue on top), then today’s tasks, then completed.</li></ul></section>
+
+<section id="pages"><div class="num">08</div><h2>Every <em>screen</em></h2>
+<p>The sidebar (<code>SidebarNav</code>) lists nine destinations. Each page is a server component that loads data and hands it to a <code>*Client.tsx</code>. A top bar shows XP and level (<code>TopBarXP</code>) and the daily quote (<code>TopBarQuote</code>).</p>
+<div class="tbl"><table><tr><th>Route</th><th>What it does</th></tr>
+<tr><td>/dashboard</td><td>Animated <b>ProgressRing</b>, <b>Mastery Score</b>, <b>Overall Mastery</b>, <b>Track Breakdown</b>, <b>TodaysTasks</b> with rollover, <b>RoadmapSwitcher</b> between roadmaps; per-roadmap completion and predicted finish date.</td></tr>
+<tr><td>/journey</td><td>Level, day streak, achievement catalog with rarity styling, shimmer on legendaries, locked vs unlocked states, filters, and drag-and-drop pinning (up to 6) for the public showcase.</td></tr>
+<tr><td>/review</td><td>Daily Review with tabs: <b>Reflection</b>, <b>Wellbeing</b>, <b>Free Journal</b>, <b>Insights</b>. Sliders for Mood, Energy, Focus, Confidence; prompts “What did you learn today?”, “What was most difficult?”, “What blocked you?”. Insights tab shows the correlations.</td></tr>
+<tr><td>/retro</td><td>Weekly Retrospective: <b>Week at a Glance</b>, hours studied, nodes done, pace vs scheduled, weakest track, streak maintained; saved entries via <code>/api/user/retrospectives</code>.</td></tr>
+<tr><td>/analytics</td><td>Recharts suite: cumulative nodes growth curve, track radar, weekly velocity, heatmap, completion forecast from linear regression, wellbeing trends from journal data.</td></tr>
+<tr><td>/graph</td><td>Interactive <b>Knowledge Graph</b> with React Flow and dagre auto-layout; filter by status (completed, in-progress, pending) and by track; edges follow node dependencies.</td></tr>
+<tr><td>/resources</td><td>Resources Library: filter by type (articles, courses, …), bookmarks, completion flag, per-resource notes, track tag, addedAt.</td></tr>
+<tr><td>/leetcode</td><td>Problem tracker grouped by skill (e.g. Programming Fundamentals) or as a flat list; filter all / completed / incomplete; completing a problem awards XP and updates the streak.</td></tr>
+<tr><td>/settings</td><td>Profile (display name, avatar initials, theme accent), working hours, preferred study duration, roadmap start dates, XP multipliers and base XP, public profile switch, per-widget toggles, notification toggles (daily reminder, streak alert, achievement toasts).</td></tr>
+<tr><td>/p/[userId]</td><td>Public profile page embedding the badge SVGs; visible only when <code>publicProfile</code> is true.</td></tr>
+<tr><td>/daily-review, /retrospective</td><td>Alias routes alongside <code>/review</code> and <code>/retro</code>.</td></tr></table></div></section>
+
+<section id="game"><div class="num">09</div><h2>The <em>game engine</em></h2>
+<div class="grid">
+<div class="card p"><span class="k">XP per node</span><h4>floor(baseXP × multiplier)</h4><p>Defaults: base 20, easy ×2, medium ×5, hard ×8, so 40 / 100 / 160 XP. Both are editable in Settings (base 5–100). Repeat completions award 0.</p></div>
+<div class="card s"><span class="k">Levels</span><h4>100 · n<sup>1.5</sup></h4><p><code>xpForLevel(n) = floor(100 × n^1.5)</code>; <code>levelFromXP</code> climbs until the next threshold exceeds total XP. Crossing a level sets <code>lastLevelUp</code> in the store.</p></div>
+<div class="card"><span class="k">Streak</span><h4>Daily chain</h4><p>Tracks current, longest and <code>lastActiveDate</code>; updated by node and LeetCode completions.</p></div>
+</div>
+<h3>Mastery Score (0–100, fully documented)</h3>
+<div class="tbl"><table><tr><th>Component</th><th>Max</th><th>Formula</th></tr>
+<tr><td>Completion</td><td>40</td><td>weighted completed ÷ weighted total × 40; weights easy 1, medium 1.5, hard 2</td></tr>
+<tr><td>Streak</td><td>20</td><td>min(streak ÷ 30, 1) × 20, halved if last active more than 1 day ago</td></tr>
+<tr><td>Consistency</td><td>20</td><td>days with a session ÷ days since start × 20</td></tr>
+<tr><td>XP pace</td><td>20</td><td>min(total XP ÷ projected XP, 1) × 20</td></tr></table></div>
+<h3>Trophy catalog (23 achievements)</h3>
+<p><span class="pill">common</span> first-day · first-week · streak-7 · first-contest · first-retro<br>
+<span class="pill r">rare</span> streak-14 · first-book · dsa-phase-1 · todo-rebuilt · night-owl (task between 00:00 and 04:00) · journal-7 · level-10<br>
+<span class="pill e">epic</span> streak-30 · 100-problems · dp-master · full-stack-crud · all-roadmaps (both active in one week) · level-25<br>
+<span class="pill l">legendary</span> streak-60 · streak-100 · 6month-complete · solo-build · webdev-complete</p></section>
+
+<section id="insights"><div class="num">10</div><h2>Local <em>insights</em>, no AI</h2>
+<ul class="t"><li><b>Pearson correlations</b> (<code>lib/insights/correlations.ts</code>): mood ↔ focus, sleep ↔ nodes completed, energy ↔ focus, days active ↔ nodes per day. Needs at least 3 journal entries; returns values in [-1, 1] plus human-readable summary lines.</li><li><b>Finish-date forecast</b> (<code>predictFinishDate</code>): per-roadmap velocity in nodes per day projects remaining nodes forward; with zero progress it falls back to the roadmap’s planned duration.</li><li><b>Pace status</b> in retrospectives: actual vs expected completion; at least 105% is ahead, at least 90% is on-track, otherwise behind.</li><li><b>Weekly reports</b> are compiled from tracked metrics only, so nothing is hallucinated and no data leaves the app.</li></ul></section>
+
+<section id="public"><div class="num">11</div><h2>The public <em>widget surface</em></h2>
+<p>Routes under <code>/api/public/[userId]/…</code> and <code>/api/flex/…</code> bypass the auth gate and return cache-controlled SVGs, so they work in GitHub READMEs and portfolios.</p>
+<div class="grid">
+<div class="card"><h4>Badges</h4><ul class="t"><li><code>/badge/heatmap</code></li><li><code>/badge/stats</code> (level, XP, tasks)</li><li><code>/badge/streak</code></li><li><code>/badge/completion</code></li><li><code>/badge/masteryLevel</code></li><li><code>/badge/showcase</code> (pinned trophies)</li></ul></div>
+<div class="card"><h4>Other endpoints</h4><ul class="t"><li><code>/api/public/[userId]/stats</code> (JSON)</li><li><code>/api/flex/[userId]/showcase</code> (SVG: roadmap bars, streak, level, XP)</li><li><code>/p/[userId]</code> profile page</li></ul></div>
+<div class="card p"><h4>Privacy</h4><p>Each route validates the user id (404 if unknown). <code>publicProfile</code> off returns 403 “Private”; each widget also has its own switch in <code>publicWidgets</code>.</p></div>
+</div>
+<pre><code>![Streak](https://your-domain.com/api/public/your-username/badge/streak)</code></pre></section>
+
+<section id="feel"><div class="num">12</div><h2>Look, motion &amp; <em>voice</em></h2>
+<div class="grid">
+<div class="card s"><h4>Dynamic accent palette</h4><p><code>deriveAccentPalette.ts</code> derives a full HSL palette from the profile’s <code>themeAccent</code> {h,s,l}; the default hue is 238.</p></div>
+<div class="card"><h4>Track colours &amp; icons</h4><p><code>trackPalette.ts</code> hashes the track name into a curated 12-colour dark-mode palette, so a track’s colour is always stable. <code>trackIcons.ts</code> maps tracks to lucide icons.</p></div>
+<div class="card p"><h4>Motion system</h4><p><code>easings.ts</code>: <code>easeOutExpo</code>, <code>easeInOutCubic</code>, a playful spring, and <code>usePrefersReducedMotion</code>. Animations downgrade to fades or instant changes for reduced-motion users.</p></div>
+<div class="card"><h4>Daily quotes</h4><p><code>getDailyQuote.ts</code> picks deterministically from <code>quotes.json</code> and tracks shown indexes so quotes do not repeat until the pool is exhausted. Categories: discipline, consistency, entrepreneurship, wealth, leadership, engineering, software, stoicism, fitness, ambition. Falls back to “Discipline equals freedom.”</p></div>
+<div class="card s"><h4>Spoken quotes</h4><p><code>speakQuote.ts</code> uses the Web Speech API and prefers deep English male voices by name priority, filtering out known female voices when no match exists.</p></div>
+<div class="card"><h4>Shared components</h4><p>AccessGate, SidebarNav, TopBarXP, TopBarQuote, LogoutButton, ProgressRing, RoadmapSwitcher, TodaysTasks.</p></div>
+</div></section>
+
+<section id="api"><div class="num">13</div><h2>The <em>API map</em></h2>
+<div class="tbl"><table><tr><th>Endpoint</th><th>Methods</th><th>Purpose</th></tr>
+<tr><td>/api/auth/session</td><td>POST · DELETE</td><td>Issue or clear the session cookie (userId validated by Zod enum)</td></tr>
+<tr><td>/api/user/progress</td><td>GET · PATCH</td><td>Progress, XP, streak, roadmap completion, achievements; PATCH sets node status and awards XP</td></tr>
+<tr><td>/api/user/profile</td><td>GET · PATCH</td><td>Display name, accent, hours, roadmap start dates, active roadmaps</td></tr>
+<tr><td>/api/user/settings</td><td>GET · PATCH</td><td>XP multipliers, base XP, public toggles, notifications</td></tr>
+<tr><td>/api/user/journal</td><td>GET · POST</td><td>Daily review entries</td></tr>
+<tr><td>/api/user/retrospectives</td><td>GET · POST</td><td>Weekly stats and saved retros with pace status</td></tr>
+<tr><td>/api/user/sessions</td><td>GET · POST</td><td>Study sessions that feed consistency and hours</td></tr>
+<tr><td>/api/user/leetcode</td><td>GET · PATCH</td><td>Problem completion by skill; awards medium-tier XP once</td></tr>
+<tr><td>/api/public/[userId]/…</td><td>GET</td><td>Six badge SVGs plus public stats JSON</td></tr>
+<tr><td>/api/flex/[userId]/showcase</td><td>GET</td><td>Showcase SVG card</td></tr></table></div></section>
+
+<section id="data"><div class="num">14</div><h2>The <em>data model</em></h2>
+<div class="grid">
+<div class="card"><span class="k">/data/users/&lt;id&gt;/</span><ul class="t"><li><code>progress.json</code> node status, streak, XP, archived</li><li><code>profile.json</code> name, accent, hours, start dates</li><li><code>settings.json</code> multipliers, widgets, notifications</li><li><code>journal.json</code> daily reviews</li><li><code>retrospectives.json</code> weekly reflections</li><li><code>sessions.json</code> study sessions</li><li><code>leetcode.json</code> skills → problems</li><li><code>resources.json</code> library with bookmarks and notes</li><li><code>achievements.json</code> unlocks and pins</li></ul></div>
+<div class="card s"><span class="k">Global</span><ul class="t"><li><code>roadmaps/_manifest.json</code> and per-roadmap JSON</li><li><code>roadmap-sources/*.md</code> editable source of truth</li><li><code>achievements/definitions.json</code></li><li><code>quotes/quotes.json</code></li></ul></div>
+<div class="card p"><span class="k">Scripts</span><ul class="t"><li><code>scripts/parse-roadmaps.ts</code> re-parse markdown</li><li><code>scripts/seed-data.ts</code> seed data</li></ul></div>
+</div></section>
+
+<section id="ops"><div class="num">15</div><h2>Ops &amp; <em>onboarding</em></h2>
+<pre><code>GITHUB_TOKEN=…    # fine-grained PAT, contents read/write
+SESSION_SECRET=…  # long random string
+GITHUB_OWNER=Sp2736
+GITHUB_REPO=mastery-os</code></pre>
+<ul class="t"><li><b>Local:</b> <code>npm install</code>, create <code>.env.local</code>, <code>npm run dev</code>, then <code>window.getAccess('…')</code> in the console.</li><li><b>Deploy:</b> import into Vercel, add the four env vars, deploy; <code>NODE_ENV=production</code> turns writes into commits.</li><li><b>New user (<code>for-new-user.md</code>):</b> fork the repo, add the lowercase username to the allowlists in <code>readJson.ts</code>, <code>writeJson.ts</code>, <code>AccessGate.tsx</code> and the <code>/api/auth/session</code> Zod enum, copy <code>data/users/swayam</code> to the new name and fix each <code>userId</code>, create a PAT, set env vars, deploy.</li><li><b>Dev commands:</b> <code>npm run dev | build | start | lint</code>.</li></ul></section>
+
+<section id="notes"><div class="num">16</div><h2>Sharp <em>edges</em></h2>
+<div class="note"><b>Worth knowing when you extend it.</b>
+<ul class="t"><li>The user allowlist is hard-coded to <code>'swayam'</code> in several places, so multi-user needs code edits, not config.</li><li><code>SESSION_SECRET</code> has a dev fallback string in both <code>proxy.ts</code> and <code>auth.ts</code>; production must set a real one.</li><li>The README mentions an <code>/api/admin/reparse</code> route and a <code>(gate)</code> route group that are not in the current tree; reparsing is done via <code>scripts/parse-roadmaps.ts</code>.</li><li>CLAUDE.md references <code>scripts/generate-quotes.ts</code>, but only <code>parse-roadmaps.ts</code> and <code>seed-data.ts</code> exist in <code>scripts/</code>.</li><li>CLAUDE.md and AGENTS.md say <code>middleware.ts</code>; the project uses <code>proxy.ts</code>, the Next.js 16 name.</li><li>Every write is a real commit, so heavy UI activity means many commits; batch writes help but do not remove this.</li></ul></div></section>
+
+<footer>Mastery OS architecture field guide · derived from the repository source · standalone HTML, no scripts, hosting separate</footer>
+</main>
+</div>
+</body>
+</html>

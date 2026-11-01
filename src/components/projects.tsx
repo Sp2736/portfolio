@@ -88,6 +88,29 @@ const projectsData = [
 
   // 2. Tools & Extensions
   {
+    id: "mastery-os",
+    title: "MASTERY OS",
+    category: "tools",
+    description:
+      "A database-free, gamified upskilling tracker where every completed task commits directly to Git. Features dynamic roadmaps, rollover scheduling, and local analytics.",
+    image: "./mastery-os.png",
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "GitHub API"],
+    links: [
+      {
+        label: "Code",
+        url: "https://github.com/Sp2736/mastery-os",
+        icon: Github,
+        primary: false,
+      },
+      {
+        label: "Architecture",
+        url: "/architecture/mastery-os.html",
+        icon: ArrowUpRight,
+        primary: true,
+      },
+    ],
+  },
+  {
     id: "logic-commenter",
     title: "AI LOGIC COMMENTER",
     category: "tools",
