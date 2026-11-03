@@ -74,7 +74,7 @@ const timelineData = [
         hit. A team of other ambitious students, including myself, were chosen
         to draft, document, and develop a detailed C++ theory and practical
         handbook based on Bloom's Taxonomy for Education. Check it out{" "}
-        <a href="https://drive.google.com/file/d/1l82y6hqfTRxqi7XBwC3UvEOTBa72PC1G/view">
+        <a href="https://drive.google.com/file/d/1l82y6hqfTRxqi7XBwC3UvEOTBa72PC1G/view" target="_blank">
           <u>here</u>
         </a>
         .
@@ -97,7 +97,7 @@ const timelineData = [
         then pivoted to modern Web Dev (React, Next.js, Node.js) and integrated
         DBMS essentials. <b>PS:</b> made a similar Java handbook with the same team!!
         Check it out{" "}
-        <a href="https://drive.google.com/file/d/1JheCqqipdOTqLDSx-lRKKs9wjlqJhA-G/view">
+        <a href="https://drive.google.com/file/d/1JheCqqipdOTqLDSx-lRKKs9wjlqJhA-G/view" target="_blank">
           <u>here</u>
         </a>
         .

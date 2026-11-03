@@ -82,7 +82,7 @@ function HeroProfile() {
           title="Click me 5 times"
         >
           <Image
-            src="/profile.jpg"
+            src="/profile.png"
             alt="Profile"
             fill
             className={`object-cover ${isCaffeinated ? "hue-rotate-[180deg] contrast-150 saturate-200" : ""}`}
