@@ -90,7 +90,7 @@ const projectsData = [
   {
     id: "mastery-os",
     title: "MASTERY OS",
-    category: "tools",
+    category: "college",
     description:
       "A database-free, gamified upskilling tracker where every completed task commits directly to Git. Features dynamic roadmaps, rollover scheduling, and local analytics.",
     image: "./mastery-os.png",
@@ -101,6 +101,12 @@ const projectsData = [
         url: "https://github.com/Sp2736/mastery-os",
         icon: Github,
         primary: false,
+      },
+      {
+        label: "Demo",
+        url: "https://sp2736.github.io/mastery-os/",
+        icon: ExternalLink,
+        primary: true,
       },
       {
         label: "Architecture",
