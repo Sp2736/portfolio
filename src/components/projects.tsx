@@ -11,6 +11,7 @@ import {
   Linkedin,
   BookOpenCheck,
   ArrowUpRight,
+  type LucideIcon,
 } from "lucide-react";
 
 // DATA MAPPING
@@ -30,6 +31,12 @@ const projectsData = [
         url: "https://github.com/Sp2736/arcade",
         icon: Github,
         primary: false,
+      },
+      {
+        label: "Demo",
+        url: "https://sp2736.github.io/arcade/",
+        icon: ExternalLink,
+        primary: true,
       },
       {
         label: "Architecture",
@@ -399,7 +406,7 @@ const cardVariants: Variants = {
 };
 
 // REUSABLE PROJECT CARD
-function ProjectCard({ project }: { project: { title: string; description: string; image: string | string[]; techStack: string[]; links: { label: string; url: string; icon: any; primary: boolean }[]; category: string; id: string } }) {
+function ProjectCard({ project }: { project: { title: string; description: string; image: string | string[]; techStack: string[]; links: { label: string; url: string; icon: LucideIcon; primary: boolean }[]; category: string; id: string } }) {
   const isArray = Array.isArray(project.image);
   const images = (isArray ? project.image : [project.image]) as string[];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
