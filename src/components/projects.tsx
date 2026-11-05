@@ -266,6 +266,12 @@ const projectsData = [
     techStack: ["Next.js", "Node.js", "Express", "SQL", "AWS"],
     links: [
       {
+        label: "Demo",
+        url: "https://sp2736.github.io/finiq/",
+        icon: ExternalLink,
+        primary: true,
+      },
+      {
         label: "Architecture",
         url: "/architecture/finiq.html",
         icon: ArrowUpRight,
