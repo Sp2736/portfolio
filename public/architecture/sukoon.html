@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sukoon Developer — Backend & Admin Architecture</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --b: #0ea5e9;
+        --bd: #0369a1;
+        --bl: #e0f2fe;
+        --bg: #f8fafc;
+        --s: #334155;
+        --ink: #0f172a;
+        --mut: #64748b;
+        --ln: #e2e8f0;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Google Sans Flex", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--s);
+        line-height: 1.6;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 9;
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 5vw;
+        gap: 16px;
+      }
+      nav b {
+        color: #fff;
+        font-size: 18px;
+        letter-spacing: 0.3px;
+      }
+      nav b i {
+        color: var(--b);
+        font-style: normal;
+      }
+      nav div {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      nav a {
+        color: #cbd5e1;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      nav a:hover {
+        color: var(--b);
+      }
+      .hero {
+        background:
+          radial-gradient(
+            circle at 80% 10%,
+            rgba(14, 165, 233, 0.35),
+            transparent 50%
+          ),
+          linear-gradient(160deg, #0b1424, #0f2744 60%, #0369a1);
+        color: #fff;
+        padding: 90px 5vw 110px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero:after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        bottom: 0;
+        width: 340px;
+        height: 240px;
+        opacity: 0.18;
+        background:
+          linear-gradient(#fff, #fff) 20px 60px/50px 180px,
+          linear-gradient(#fff, #fff) 90px 20px/60px 220px,
+          linear-gradient(#fff, #fff) 170px 100px/50px 140px,
+          linear-gradient(#fff, #fff) 240px 50px/60px 190px;
+        background-repeat: no-repeat;
+      }
+      .tag {
+        display: inline-block;
+        background: rgba(14, 165, 233, 0.2);
+        border: 1px solid rgba(14, 165, 233, 0.5);
+        color: #7dd3fc;
+        padding: 5px 14px;
+        border-radius: 99px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+      }
+      h1 {
+        font-size: clamp(34px, 6vw, 64px);
+        line-height: 1.08;
+        margin: 18px 0;
+        font-weight: 700;
+        max-width: 820px;
+      }
+      h1 span {
+        color: var(--b);
+      }
+      .hero p {
+        max-width: 640px;
+        color: #cbd5e1;
+        font-size: 18px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 14px;
+        max-width: 900px;
+        margin-top: 40px;
+      }
+      .stats div {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 16px 18px;
+      }
+      .stats b {
+        font-size: 28px;
+        display: block;
+        color: #fff;
+      }
+      .stats small {
+        color: #94a3b8;
+        font-size: 12px;
+      }
+      section {
+        padding: 80px 5vw;
+        max-width: 1240px;
+        margin: auto;
+      }
+      .eyebrow {
+        color: var(--b);
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+      }
+      h2 {
+        font-size: clamp(26px, 4vw, 40px);
+        color: var(--ink);
+        margin: 8px 0 12px;
+        line-height: 1.15;
+      }
+      .lead {
+        color: var(--mut);
+        max-width: 720px;
+        margin-bottom: 38px;
+        font-size: 17px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--ln);
+        border-radius: 20px;
+        padding: 26px;
+        transition: 0.3s;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 40px rgba(14, 165, 233, 0.15);
+        border-color: var(--b);
+      }
+      .card h3 {
+        color: var(--ink);
+        font-size: 19px;
+        margin: 10px 0 8px;
+      }
+      .ic {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--bl);
+        display: grid;
+        place-items: center;
+        font-size: 22px;
+      }
+      .card p {
+        font-size: 14.5px;
+        color: var(--mut);
+      }
+      .card ul {
+        margin: 10px 0 0 18px;
+        font-size: 14px;
+      }
+      .card li {
+        margin: 4px 0;
+      }
+      .dark {
+        background: linear-gradient(160deg, #0b1424, #0f2744);
+        max-width: none;
+      }
+      .dark > div {
+        max-width: 1240px;
+        margin: auto;
+      }
+      .dark h2 {
+        color: #fff;
+      }
+      .dark .lead {
+        color: #94a3b8;
+      }
+      .flow {
+        display: grid;
+        grid-template-columns: 1fr 60px 1fr 60px 1fr;
+        gap: 0;
+        align-items: stretch;
+      }
+      .node {
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(125, 211, 252, 0.3);
+        border-radius: 18px;
+        padding: 22px;
+        color: #e2e8f0;
+      }
+      .node h4 {
+        color: #7dd3fc;
+        font-size: 13px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+      .node li {
+        font-size: 14px;
+        margin: 5px 0 5px 16px;
+      }
+      .node.hl {
+        background: linear-gradient(
+          160deg,
+          rgba(14, 165, 233, 0.3),
+          rgba(3, 105, 161, 0.25)
+        );
+        border-color: var(--b);
+      }
+      .arrow {
+        display: grid;
+        place-items: center;
+        color: var(--b);
+        font-size: 26px;
+        position: relative;
+      }
+      .arrow small {
+        position: absolute;
+        bottom: -4px;
+        font-size: 10px;
+        color: #7dd3fc;
+        white-space: nowrap;
+      }
+      .row2 {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--ln);
+        font-size: 14px;
+      }
+      th {
+        background: var(--ink);
+        color: #fff;
+        text-align: left;
+        padding: 13px 16px;
+        font-size: 12px;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+      }
+      td {
+        padding: 13px 16px;
+        border-top: 1px solid var(--ln);
+        vertical-align: top;
+      }
+      .wrap {
+        overflow-x: auto;
+        border-radius: 16px;
+      }
+      code {
+        background: var(--bl);
+        color: var(--bd);
+        padding: 2px 7px;
+        border-radius: 6px;
+        font-size: 13px;
+      }
+      .m {
+        background: #dcfce7;
+        color: #166534;
+        padding: 2px 9px;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .pill {
+        display: inline-block;
+        background: var(--bl);
+        color: var(--bd);
+        padding: 4px 12px;
+        border-radius: 99px;
+        font-size: 12.5px;
+        font-weight: 600;
+        margin: 3px 3px 3px 0;
+      }
+      .steps {
+        counter-reset: s;
+        display: grid;
+        gap: 14px;
+      }
+      .steps div {
+        counter-increment: s;
+        background: #fff;
+        border: 1px solid var(--ln);
+        border-left: 4px solid var(--b);
+        border-radius: 14px;
+        padding: 16px 20px 16px 62px;
+        position: relative;
+        font-size: 14.5px;
+      }
+      .steps div:before {
+        content: counter(s);
+        position: absolute;
+        left: 16px;
+        top: 14px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--b);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+      }
+      .steps b {
+        color: var(--ink);
+      }
+      .cta {
+        background: linear-gradient(120deg, var(--bd), var(--b));
+        color: #fff;
+        text-align: center;
+        padding: 70px 5vw;
+      }
+      .cta h2 {
+        color: #fff;
+      }
+      footer {
+        background: #0b1424;
+        color: #94a3b8;
+        text-align: center;
+        padding: 28px;
+        font-size: 13px;
+      }
+      @media (max-width: 860px) {
+        .flow {
+          grid-template-columns: 1fr;
+        }
+        .arrow {
+          height: 44px;
+          transform: rotate(90deg);
+        }
+        .arrow small {
+          display: none;
+        }
+        section {
+          padding: 56px 5vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <b>Sukoon<i>.</i>Developer</b>
+      <div>
+        <a href="#overview">Overview</a><a href="#arch">Architecture</a
+        ><a href="#admin">Admin Features</a><a href="#property">Listings</a
+        ><a href="#api">Public API</a><a href="#data">Data</a
+        ><a href="#security">Security</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <span class="tag">Backend & Admin Panel · Architecture</span>
+      <h1>The engine behind <span>sukoondeveloper.com</span></h1>
+      <p>
+        Everything the builder/owner of Sukoon Developer can manage on the
+        website — properties, projects, testimonials and finances — from one
+        secure admin panel, served to the public site through a protected API.
+      </p>
+      <div class="stats">
+        <div><b>5</b><small>Property categories</small></div>
+        <div><b>5</b><small>Admin modules</small></div>
+        <div><b>4</b><small>Public API endpoints</small></div>
+        <div><b>0</b><small>Code needed to update the site</small></div>
+      </div>
+    </header>
+
+    <section id="overview">
+      <span class="eyebrow">Overview</span>
+      <h2>One panel. Whole website.</h2>
+      <p class="lead">
+        Sukoon Developer is a Gujarat real estate consultancy and development
+        firm (residential, commercial, industrial and land). The public website
+        has Home, About, Property Listing, Our Works and Contact pages. The
+        admin panel (repo <code>sukoon-api</code>) is the backend that feeds all
+        dynamic content on those pages.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <div class="ic">🏠</div>
+          <h3>Property Listing page</h3>
+          <p>
+            Every listing, filter, gallery and detail page is created in the
+            admin panel and delivered live through the API.
+          </p>
+        </div>
+        <div class="card">
+          <div class="ic">🏗️</div>
+          <h3>Our Works page</h3>
+          <p>
+            Completed, ongoing and upcoming projects with photos and videos,
+            managed by the owner.
+          </p>
+        </div>
+        <div class="card">
+          <div class="ic">⭐</div>
+          <h3>Home page testimonials</h3>
+          <p>
+            The "Trusted by Property Buyers & Investors" carousel reads directly
+            from the testimonials module.
+          </p>
+        </div>
+        <div class="card">
+          <div class="ic">💼</div>
+          <h3>Business accounts</h3>
+          <p>
+            A private ledger for revenue, expenses and net balance — never
+            exposed to the public site.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark" id="arch">
+      <div>
+        <span class="eyebrow">System Architecture</span>
+        <h2>How the pieces connect</h2>
+        <p class="lead">
+          A single Next.js application hosts both the admin interface and the
+          public REST API. Supabase provides the database, authentication and
+          file storage.
+        </p>
+        <div class="flow">
+          <div class="node">
+            <h4>Clients</h4>
+            <ul>
+              <li>
+                <b>Public website</b> — visitors browse listings, works, reviews
+              </li>
+              <li><b>Admin panel</b> — owner logs in at <code>/admin</code></li>
+            </ul>
+          </div>
+          <div class="arrow">⇄<small>HTTPS</small></div>
+          <div class="node hl">
+            <h4>Next.js 16 · React 19 · TypeScript</h4>
+            <ul>
+              <li>
+                <b>/api/*</b> — read-only REST endpoints, secured by API key
+              </li>
+              <li>
+                <b>Server Actions</b> — all admin create / update / delete
+              </li>
+              <li><b>Zod</b> validation on every form</li>
+              <li><b>Auth guard</b> on every admin page + session refresh</li>
+              <li>Cache revalidation after each change</li>
+            </ul>
+          </div>
+          <div class="arrow">⇄<small>Supabase SDK</small></div>
+          <div class="node">
+            <h4>Supabase</h4>
+            <ul>
+              <li>
+                <b>PostgreSQL</b> — properties, images, inquiries, works,
+                reviews, transactions
+              </li>
+              <li><b>Auth</b> — email + password admin sign-in</li>
+              <li>
+                <b>Storage</b> — <code>properties</code> and
+                <code>works</code> buckets
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="node">
+            <h4>Admin write path</h4>
+            <p style="font-size: 14px">
+              Owner fills form → Zod validates → Server Action writes to
+              Postgres → images go to Storage → pages revalidate → website shows
+              the change.
+            </p>
+          </div>
+          <div class="node">
+            <h4>Public read path</h4>
+            <p style="font-size: 14px">
+              Website sends <code>x-api-key</code> → API checks key → only
+              <b>published</b> data is queried → internal IDs stripped → clean
+              JSON returned.
+            </p>
+          </div>
+          <div class="node">
+            <h4>Styling & UI</h4>
+            <p style="font-size: 14px">
+              Tailwind CSS 4, Google Sans Flex, sky-blue brand palette,
+              react-hook-form, lucide icons — matching the website's look.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="admin">
+      <span class="eyebrow">Admin Panel</span>
+      <h2>What the owner can do</h2>
+      <p class="lead">
+        A sidebar gives one-click access to five modules. Everything works on
+        desktop and mobile.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <div class="ic">📊</div>
+          <h3>1. Dashboard</h3>
+          <p>Portfolio overview at a glance.</p>
+          <ul>
+            <li>
+              Total listed + count per category (Residential, Industrial,
+              Commercial, Agricultural, Non-Agri)
+            </li>
+            <li>Click a stat card to filter the list instantly</li>
+            <li>
+              Table: title, location, category badge, price in INR, Published /
+              Draft status
+            </li>
+            <li>Quick edit and delete on every row</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ic">🏢</div>
+          <h3>2. Properties</h3>
+          <p>Add, edit, publish and remove listings.</p>
+          <ul>
+            <li>Full listing form (see next section)</li>
+            <li>Draft → publish toggle controls website visibility</li>
+            <li>Delete removes the listing, its images and storage files</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ic">⭐</div>
+          <h3>3. Testimonials</h3>
+          <p>Control the client reviews on the home page.</p>
+          <ul>
+            <li>Add name, role and quote</li>
+            <li>Avatar shown when available</li>
+            <li>Delete outdated reviews</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ic">🏗️</div>
+          <h3>4. Our Works</h3>
+          <p>Showcase projects on the Works page.</p>
+          <ul>
+            <li>Title, category, location, description</li>
+            <li>
+              Status: <span class="pill">Completed</span
+              ><span class="pill">Ongoing</span
+              ><span class="pill">Upcoming</span>
+            </li>
+            <li>Up to 5 media files, max 1 video (MP4 / WebM)</li>
+            <li>Deleting a work also wipes its files</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ic">💰</div>
+          <h3>5. Accounts & Ledger</h3>
+          <p>Private financial tracking.</p>
+          <ul>
+            <li>KPIs: Total Revenue, Total Expenses, Net Balance</li>
+            <li>Credits (money in) and Debits (money out)</li>
+            <li>
+              Debits link to a specific credit and track its remaining balance
+            </li>
+            <li>Paginated history, 8 per page, with delete</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ic">🔐</div>
+          <h3>Login & Session</h3>
+          <p>Secure owner-only access.</p>
+          <ul>
+            <li>Email + password via Supabase Auth</li>
+            <li>Auto-logout 2 minutes before the session expires</li>
+            <li>Logout button in the sidebar</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="property" style="padding-top: 0">
+      <span class="eyebrow">Property Management</span>
+      <h2>Smart listing form</h2>
+      <p class="lead">
+        The form adapts to the property type so the owner only fills what's
+        relevant.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>Primary information</h3>
+          <ul>
+            <li>Title, category, price (INR), full description</li>
+            <li>
+              Categories: Residential, Commercial, Industrial, Agricultural
+              Land, Non-agricultural Land
+            </li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Dynamic specifications</h3>
+          <ul>
+            <li>
+              <b>Residential:</b> configuration (e.g. 3 BHK), floor number
+            </li>
+            <li><b>Land:</b> zone type (Green / Yellow), fencing (Yes / No)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Amenities</h3>
+          <p style="margin-bottom: 8px">For Residential listings:</p>
+          <span class="pill">Gymnasium</span
+          ><span class="pill">Swimming Pool</span
+          ><span class="pill">Clubhouse</span
+          ><span class="pill">Children Park</span
+          ><span class="pill">Power Backup</span
+          ><span class="pill">Security</span><span class="pill">Parking</span
+          ><span class="pill">Yoga Center</span><span class="pill">+ more</span>
+        </div>
+        <div class="card">
+          <h3>Location & area</h3>
+          <ul>
+            <li>Address, city, village, survey number</li>
+            <li>Area size in Sq. ft, Sq. mtr or Acre</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Media gallery</h3>
+          <ul>
+            <li>Up to 5 photos (JPEG, PNG, WebP, AVIF), 5 MB each</li>
+            <li>Auto-compressed to WebP (max 1920×1080)</li>
+            <li>First image becomes the cover; reorder anytime</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Related properties & publishing</h3>
+          <ul>
+            <li>Pick up to 3 related listings to cross-promote</li>
+            <li>
+              Unique public ID auto-generated (<code>PROP-XXXXXXXX</code>)
+            </li>
+            <li>Save as Draft or Publish live</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="api" style="padding-top: 0">
+      <span class="eyebrow">Public API</span>
+      <h2>How the website gets its data</h2>
+      <p class="lead">
+        All endpoints are <span class="m">GET</span>. Property and works
+        endpoints require an <code>x-api-key</code> header; only published
+        listings are ever returned.
+      </p>
+      <div class="wrap">
+        <table>
+          <tr>
+            <th>Endpoint</th>
+            <th>Purpose</th>
+            <th>Details</th>
+          </tr>
+          <tr>
+            <td><code>/api/properties</code></td>
+            <td>Property Listing page</td>
+            <td>
+              Pagination (<code>page</code>, <code>limit</code>); filters:
+              category, city, min/max price, configuration, furnished,
+              exclude_id; sort: latest, price_asc, price_desc. Returns cover
+              image + gallery + page meta.
+            </td>
+          </tr>
+          <tr>
+            <td><code>/api/properties/grouped</code></td>
+            <td>Home page "What are you investing in?"</td>
+            <td>
+              Latest 3 published listings for each of the 5 categories in one
+              call.
+            </td>
+          </tr>
+          <tr>
+            <td><code>/api/properties/[publicId]</code></td>
+            <td>Property detail page</td>
+            <td>
+              Single listing by public ID with all images; 404 if missing or
+              unpublished.
+            </td>
+          </tr>
+          <tr>
+            <td><code>/api/works</code></td>
+            <td>Our Works page</td>
+            <td>Projects newest first, with media (images / videos).</td>
+          </tr>
+          <tr>
+            <td><code>/api/reviews</code></td>
+            <td>Home testimonials</td>
+            <td>
+              Name, quote, avatar, newest first. CORS-enabled for the frontend.
+            </td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="data" style="padding-top: 0">
+      <span class="eyebrow">Data Model</span>
+      <h2>What's stored</h2>
+      <p class="lead">Six tables in PostgreSQL plus two storage buckets.</p>
+      <div class="grid">
+        <div class="card">
+          <h3>properties</h3>
+          <p>
+            Title, description, price, location, city, village, area, survey
+            no., category, amenities, configuration, floor, zone, fencing,
+            related listings, published flag, timestamps.
+          </p>
+        </div>
+        <div class="card">
+          <h3>property_images</h3>
+          <p>
+            Image URL + display order, linked to a property. Removed
+            automatically with it.
+          </p>
+        </div>
+        <div class="card">
+          <h3>inquiries</h3>
+          <p>
+            Visitor name, phone, email, message, linked property. Validated
+            server-side.
+          </p>
+        </div>
+        <div class="card">
+          <h3>works</h3>
+          <p>
+            Title, category, location, status, description and a media list
+            (URL, type, storage path).
+          </p>
+        </div>
+        <div class="card">
+          <h3>reviews</h3>
+          <p>Name, role, quote, avatar URL.</p>
+        </div>
+        <div class="card">
+          <h3>transactions</h3>
+          <p>
+            Credit / debit, title, source, amount, date, and link to the credit
+            it draws from.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="security" style="padding-top: 0">
+      <span class="eyebrow">Security & Reliability</span>
+      <h2>Built to be trusted</h2>
+      <br />
+      <div class="steps">
+        <div>
+          <b>Protected admin.</b> Every admin page checks the signed-in user;
+          visitors only ever see the login screen.
+        </div>
+        <div>
+          <b>API key gate.</b> Public data endpoints reject requests without a
+          valid <code>x-api-key</code> (401), and fail safe if the key is not
+          configured.
+        </div>
+        <div>
+          <b>Published-only exposure.</b> Drafts never leave the admin; internal
+          database IDs are stripped from API responses.
+        </div>
+        <div>
+          <b>Validated input.</b> Zod schemas enforce lengths, formats and
+          positive numbers for properties, inquiries, reviews, works and
+          transactions.
+        </div>
+        <div>
+          <b>Clean deletes.</b> Removing a listing or work also deletes its
+          files from storage — no orphaned media.
+        </div>
+        <div>
+          <b>Session safety.</b> Sessions refresh on every request and the panel
+          logs itself out before expiry.
+        </div>
+      </div>
+      <p class="lead" style="margin-top: 34px">
+        <b>Tech stack:</b> <span class="pill">Next.js 16</span
+        ><span class="pill">React 19</span><span class="pill">TypeScript</span
+        ><span class="pill">Tailwind CSS 4</span
+        ><span class="pill">Supabase</span><span class="pill">Zod</span
+        ><span class="pill">React Hook Form</span
+        ><span class="pill">Lucide</span>
+      </p>
+    </section>
+
+    <div class="cta">
+      <h2>Run the whole business from one dashboard</h2>
+      <p style="color: #e0f2fe; max-width: 560px; margin: auto">
+        Build, invest and grow — with zero brokerage and full transparency,
+        powered by Sukoon's admin panel.
+      </p>
+    </div>
+    <footer>
+      © 2026 Sukoon Developer · Architecture overview for sukoondeveloper.com
+    </footer>
+  </body>
+</html>

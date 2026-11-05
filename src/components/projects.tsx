@@ -249,6 +249,12 @@ const projectsData = [
     techStack: ["Next.js", "React", "Tailwind CSS"],
     links: [
       {
+        label: "Architecture",
+        url: "/architecture/sukoon.html",
+        icon: ArrowUpRight,
+        primary: true,
+      },
+      {
         label: "Visit",
         url: "https://sukoondeveloper.com",
         icon: ExternalLink,
