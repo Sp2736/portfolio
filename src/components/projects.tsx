@@ -303,6 +303,12 @@ const projectsData = [
         primary: false,
       },
       {
+        label: "Demo",
+        url: "https://sp2736.github.io/asset-flow/",
+        icon: ExternalLink,
+        primary: true,
+      },
+      {
         label: "Architecture",
         url: "/architecture/asset-flow.html",
         icon: ArrowUpRight,
