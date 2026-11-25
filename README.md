@@ -143,3 +143,12 @@ Because the most interesting interfaces are the ones that make users stop and th
 > "Wait… did I just break the website?"
 
 If that happens, the system is working exactly as intended.
+
+
+---
+
+## 📊 Live Stats
+
+<!--LIVE_STATS_START-->
+<!-- auto-generated — do not edit manually -->
+<!--LIVE_STATS_END-->
